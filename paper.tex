@@ -1,7 +1,53 @@
 \documentclass[runningheads]{llncs}
 
+\usepackage{booktabs} % For formal tables
+\usepackage{amsmath,bm}
+\usepackage{stmaryrd}
+\usepackage{dsfont}
+\usepackage[normalem]{ulem}
+\usepackage{array}
+\usepackage{listings}
+\usepackage{xspace}
+\usepackage{paralist}
+\usepackage{enumitem}
+\usepackage{multirow}
+\usepackage{xcolor,colortbl}
+\usepackage{flushend}
+\usepackage{makecell}
+\usepackage{caption}
+\usepackage{arydshln}
+\usepackage{mdframed}
+\usepackage{flushend}
+\usepackage{multirow}
+\usepackage{url}
+\usepackage{subcaption}
+\usepackage[utf8]{inputenc}
 \usepackage[T1]{fontenc}
-\usepackage{graphicx}
+\usepackage{microtype}
+\usepackage{algorithm}
+\usepackage[noend]{algpseudocode}
+\usepackage[most]{tcolorbox}
+\usepackage{proof}
+\usepackage{tikz}
+\usepackage{hyphenat}
+\usepackage{cleveref} % Must be included last
+
+\lstset{
+    language=C,
+    numberstyle=\scriptsize\color{gray},
+    numbers=left,
+    numbersep=5pt,
+    numberblanklines=true,
+    captionpos=b,
+    basicstyle=\footnotesize\ttfamily,
+    columns=flexible,
+    xleftmargin=16pt,
+    frame=none,
+    tabsize=2,
+    escapeinside={/*@}{@*/},
+}
+
+\input{macros.tex}
 
 \begin{document}
 
@@ -15,6 +61,11 @@
 \end{abstract}
 
 \input{introduction.tex}
+\input{background.tex}
+\input{core.tex}
+\input{proof-generation.tex}
+\input{implementation.tex}
+\input{evaluation.tex}
 \input{related.tex}
 
 \end{document}
