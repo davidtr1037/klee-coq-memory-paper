@@ -1,0 +1,38 @@
+\section{Implementation}
+
+% TODO: prototype?
+
+Our prototype implementation consists of two components:
+A formalization of the concrete and symbolic semantics (\Cref{sec:concrete-semantics,sec:symbolic-semantics}) and an extension of the \SE engine.
+Our formalization is manually written in \coq (8.19.1) and consists of roughly TBD lines of code, excluding third-party dependencies.
+Our proof-generation approach (\Cref{sec:proof-generation}) is implemented on top of \klee~\cite{klee},
+a \emph{state-of-the-art} \SE engine that operates on \llvm bitcode~\cite{llvm}.
+During the implementation of our prototype,
+we found several implementation issues in \klee that relate to memory modeling.
+We now give a detailed overview of these issues.
+
+\subsection{Implementation Issues in \klee}
+...
+
+\subsubsection{Incorrect interpretation of GEP}
+...
+
+\subsubsection{Allocation}
+According to the \llvm semantics,
+if the allocation size exceeds the largest signed integer that fits into the index type,
+then the result is undefined behavior.
+However, \klee does not perform this check.
+Moreover, \klee silently truncates the allocation size to the \code{uint32\_t} type, without reporting any error to the user.
+To illustrate this issue, consider the code snippet from~\Cref{figure:issue-alloc}.
+When executing~\Cref{line:alloc-overflow},
+the allocation size (\code{UINT32\_MAX + 1 + 10}) is internally casted to the \code{uint32\_t} type,
+so the actual allocation size is 10.
+
+\begin{figure}[t]
+\lstinputlisting[basicstyle=\scriptsize\ttfamily,language=c,mathescape=true,breaklines=false]{code/alloc.c}
+\caption{...}
+\label{figure:issue-alloc}
+\end{figure}
+
+%Discrepancies related to the index type: ... \\
+%interger overflow when setting the size of a memory object (in KLEE's representation): ...
