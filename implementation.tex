@@ -1,6 +1,7 @@
 \section{Implementation}
 
 % TODO: prototype?
+% TODO: we fixed the issues in our version
 
 Our prototype implementation consists of two components:
 A formalization of the concrete and symbolic semantics (\Cref{sec:concrete-semantics,sec:symbolic-semantics}) and an extension of the \SE engine.
@@ -12,10 +13,29 @@ we found several implementation issues in \klee that relate to memory modeling.
 We now give a detailed overview of these issues.
 
 \subsection{Implementation Issues in \klee}
-...
+% TODO: mention that different parts assume different index types
+To represent the contents of a memory object, \klee uses SMT arrays of sort:
+\[ \smtsort{32} \rightarrow \smtsort{8} \]
+Based on this, we conclude that the index type is assumed to be \bvsort{32}.
 
-\subsubsection{Incorrect interpretation of GEP}
-...
+\subsubsection{Incorrect Interpretation of GEP}
+The algorithm used in \klee to handle the $\tgep$ instruction is given in~\Cref{alg:gep-klee}.
+As can be seen,
+the offset computed at each iteration is converted to an expression of sort $\smtsort{64}$,
+while the index type is assumed to be \bvsort{32}.
+Even if we assume that the index type is \bvsort{64},
+the algorithm does not check overflows when computing the resulting pointer.
+
+\begin{algorithm}[t]
+\caption{algorithm for handling \tgep in \klee.}
+\label{alg:gep-klee}
+\begin{algorithmic}[1]
+
+\Function{compute-pointer}{$...$}
+\EndFunction
+
+\end{algorithmic}
+\end{algorithm}
 
 \subsubsection{Allocation}
 According to the \llvm semantics,
