@@ -35,15 +35,16 @@ so the actual allocation size is 10.
 \label{figure:klee-issue}
 \end{figure}
 
-\subsubsection{Incorrect Interpretation of GEP}
+\subsubsection{GEP}
 The algorithm used in \klee to handle the $\tgep$ instruction is given in~\Cref{alg:gep-klee}.
 As can be seen,
 the offset computed at each iteration is converted to an expression of sort $\smtsort{64}$,
 while the index type is assumed to be \bvsort{32}.
-Even if we assume that the index type is \bvsort{64},
-the algorithm does not check overflows when computing the resulting pointer.
+%Even if we assume that the index type is \bvsort{64},
+In addition,
+the algorithm does not account for overflows when computing the resulting pointer.
 
-The lack of an overflow check has some additional consequences.
+The lack of overflow checks has some additional consequences.
 When \klee accesses a memory object (\ie $\tload$ and $\tstore$),
 the SMT expression of the offset is always truncated to an SMT expression of sort $\smtsort{32}$.
 This, in turn, can lead to unexpected behavior.

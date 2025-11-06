@@ -60,6 +60,7 @@
 \newcommand\tret{\opcode{ret}}
 \newcommand\tload{\opcode{load}}
 \newcommand\tstore{\opcode{store}}
+\newcommand\tgep{\opcode{getelementptr}}
 \newcommand\talloca{\opcode{alloca}}
 \newcommand\tdef{\opcode{def}}
 \newcommand\tunreachable{\opcode{unreachable}}
@@ -112,6 +113,10 @@
 \newcommand{\transform}{\mathit{transform}}
 \newcommand{\subexpr}{\sqsubseteq}
 \newcommand{\evalmodel}[2]{#1[#2]}
+\newcommand{\smtsort}[1]{\textsf{bv}_{#1}}
+\newcommand{\bvadd}{\textsf{bvadd}}
+\newcommand{\bvmul}{\textsf{bvmul}}
+\newcommand{\bvsext}{\textsf{bvsext}}
 
 % symbolic semantics
 \newcommand{\SymStores}{\tilde\Sigma}
