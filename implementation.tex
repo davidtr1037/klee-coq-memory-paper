@@ -54,6 +54,7 @@ When \klee accesses a memory object (\ie $\tload$ and $\tstore$),
 the SMT expression of the offset is always truncated to an SMT expression of sort $\smtsort{32}$.
 This, in turn, can lead to unexpected behavior.
 For exmaple, consider again the code snippet from~\Cref{figure:klee-issue}.
+% TODO: mention that the type of (n + 1) is i64?
 When executing~\cref{line:issue-store},
 the SMT expression corresponding to $\code{n + 1}$ is truncated to an SMT expression of sort $\smtsort{32}$,
 which results in the SMT expression 0.
