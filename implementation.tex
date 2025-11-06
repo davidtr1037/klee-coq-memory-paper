@@ -31,7 +31,11 @@ the algorithm does not check overflows when computing the resulting pointer.
 \label{alg:gep-klee}
 \begin{algorithmic}[1]
 
-\Function{compute-pointer}{$...$}
+\Function{compute-pointer}{$p : \smtsort{64}$}
+    \For {$i : ...$}
+        \State $p \gets \bvadd \ b \ (\bvsext \ i \ \bvsort{64})$
+    \EndFor
+    \Return $p$
 \EndFunction
 
 \end{algorithmic}
