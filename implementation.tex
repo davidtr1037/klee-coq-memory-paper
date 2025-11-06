@@ -19,14 +19,20 @@ We now give a detailed overview of these issues.
 
 \subsubsection{Allocation}
 According to the \llvm semantics,
-if the allocation size exceeds the largest signed integer that fits into the index type,
+if the allocation size exceeds the largest \emph{signed integer} that fits into the index type,
 then the result is undefined behavior.
-However, \klee does not perform this check.
-Moreover, \klee silently truncates the allocation size to the \code{uint32\_t} type, without reporting any error to the user.
-To illustrate this issue, consider the code snippet from~\Cref{figure:issue-alloc}.
-When executing~\Cref{line:alloc-overflow},
+However, \klee currently does not check this condition.
+In fact, \klee silently truncates the allocation size to the \code{uint32\_t} type, without reporting any error to the user.
+To illustrate this behavior, consider the code snippet from~\Cref{figure:issue-alloc}.
+When executing~\cref{line:alloc-overflow},
 the allocation size (\code{UINT32\_MAX + 1 + 10}) is internally casted to the \code{uint32\_t} type,
 so the actual allocation size is 10.
+
+We found a similar issue in the implementation of $\tload$ and $\tstore$.
+When a memory object is accessed,
+the SMT expression corresponding to the offset is always truncated to an SMT expression of sort BV32.
+As a result, when \code{p} is accessed at~\cref{line:alloc-store}, the computed offset is the SMT expression 0.
+% which means that...
 
 \begin{figure}[t]
 \lstinputlisting[basicstyle=\scriptsize\ttfamily,language=c,mathescape=true,breaklines=false]{code/alloc.c}
