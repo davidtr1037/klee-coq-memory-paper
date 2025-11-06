@@ -18,6 +18,29 @@ To represent the contents of a memory object, \klee uses SMT arrays of sort:
 \[ \smtsort{32} \rightarrow \smtsort{8} \]
 Based on this, we conclude that the index type is assumed to be \bvsort{32}.
 
+\subsubsection{Allocation}
+According to the \llvm semantics,
+if the allocation size exceeds the largest \emph{signed integer} that fits into the index type,
+then the result is undefined behavior.
+However, \klee currently does not check this condition.
+In fact, \klee silently truncates the allocation size to the \code{uint32\_t} type, without reporting any error to the user.
+To illustrate this behavior, consider the code snippet from~\Cref{figure:klee-issue}.
+When executing~\cref{line:issue-malloc},
+the allocation size (\code{UINT32\_MAX + 1 + 10}) is internally casted to the \code{uint32\_t} type,
+so the actual allocation size is 10.
+
+We found a similar issue in the implementation of $\tload$ and $\tstore$.
+When a memory object is accessed,
+the SMT expression corresponding to the offset is always truncated to an SMT expression of sort BV32.
+As a result, when \code{p} is accessed at~\cref{line:issue-malloc}, the computed offset is the SMT expression 0.
+% which means that...
+
+\begin{figure}[t]
+\lstinputlisting[basicstyle=\scriptsize\ttfamily,language=c,mathescape=true,breaklines=false]{code/alloc.c}
+\caption{...}
+\label{figure:klee-issue}
+\end{figure}
+
 \subsubsection{Incorrect Interpretation of GEP}
 The algorithm used in \klee to handle the $\tgep$ instruction is given in~\Cref{alg:gep-klee}.
 As can be seen,
@@ -25,6 +48,17 @@ the offset computed at each iteration is converted to an expression of sort $\sm
 while the index type is assumed to be \bvsort{32}.
 Even if we assume that the index type is \bvsort{64},
 the algorithm does not check overflows when computing the resulting pointer.
+
+The lack of an overflow check has some additional consequences.
+When \klee accesses a memory object (\ie $\tload$ and $\tstore$),
+the SMT expression of the offset is always truncated to an SMT expression of sort $\smtsort{32}$.
+This, in turn, can lead to unexpected behavior.
+For exmaple, consider again the code snippet from~\Cref{figure:klee-issue}.
+When executing~\cref{line:issue-store},
+the SMT expression corresponding to $\code{n + 1}$ is truncated to an SMT expression of sort $\smtsort{32}$,
+which results in the SMT expression 0.
+Therefore, this $\tstore$ instruction actually updates the first byte of the memory object allocated at~\cref{line:issue-malloc}.
+We note that this behavior occurs in \klee without reporting any errors to the user.
 
 \begin{algorithm}[t]
 \caption{algorithm for handling \tgep in \klee.}
@@ -40,29 +74,3 @@ the algorithm does not check overflows when computing the resulting pointer.
 
 \end{algorithmic}
 \end{algorithm}
-
-\subsubsection{Allocation}
-According to the \llvm semantics,
-if the allocation size exceeds the largest \emph{signed integer} that fits into the index type,
-then the result is undefined behavior.
-However, \klee currently does not check this condition.
-In fact, \klee silently truncates the allocation size to the \code{uint32\_t} type, without reporting any error to the user.
-To illustrate this behavior, consider the code snippet from~\Cref{figure:issue-alloc}.
-When executing~\cref{line:alloc-overflow},
-the allocation size (\code{UINT32\_MAX + 1 + 10}) is internally casted to the \code{uint32\_t} type,
-so the actual allocation size is 10.
-
-We found a similar issue in the implementation of $\tload$ and $\tstore$.
-When a memory object is accessed,
-the SMT expression corresponding to the offset is always truncated to an SMT expression of sort BV32.
-As a result, when \code{p} is accessed at~\cref{line:alloc-store}, the computed offset is the SMT expression 0.
-% which means that...
-
-\begin{figure}[t]
-\lstinputlisting[basicstyle=\scriptsize\ttfamily,language=c,mathescape=true,breaklines=false]{code/alloc.c}
-\caption{...}
-\label{figure:issue-alloc}
-\end{figure}
-
-%Discrepancies related to the index type: ... \\
-%interger overflow when setting the size of a memory object (in KLEE's representation): ...
