@@ -14,7 +14,7 @@ We now give a detailed overview of these issues.
 
 \subsection{Implementation Issues in \klee}
 % TODO: mention that different parts assume different index types
-To represent the contents of a memory object, \klee uses SMT arrays of sort:
+To represent the contents of a memory object, \klee uses an SMT array of sort:
 \[ \smtsort{32} \rightarrow \smtsort{8} \]
 Based on this, we conclude that the index type is assumed to be \bvsort{32}.
 
@@ -28,12 +28,6 @@ To illustrate this behavior, consider the code snippet from~\Cref{figure:klee-is
 When executing~\cref{line:issue-malloc},
 the allocation size (\code{UINT32\_MAX + 1 + 10}) is internally casted to the \code{uint32\_t} type,
 so the actual allocation size is 10.
-
-We found a similar issue in the implementation of $\tload$ and $\tstore$.
-When a memory object is accessed,
-the SMT expression corresponding to the offset is always truncated to an SMT expression of sort BV32.
-As a result, when \code{p} is accessed at~\cref{line:issue-malloc}, the computed offset is the SMT expression 0.
-% which means that...
 
 \begin{figure}[t]
 \lstinputlisting[basicstyle=\scriptsize\ttfamily,language=c,mathescape=true,breaklines=false]{code/alloc.c}
