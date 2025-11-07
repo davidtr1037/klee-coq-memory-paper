@@ -1,9 +1,17 @@
 \section{Evaluation}
-...
-RQs:
+\label{sec:evaluation}
+
+In our evaluation, we use the following modes:
+\proofopt is the proof-generating mode, and \base is vanilla \klee.
+As mentioned in~\Cref{sec:implementation},
+some of the SMT transformations are not supported by our formalization.
+Therefore, these transformations are disabled in \proofopt.
+
+The following research questions guide our evaluation:
 \begin{itemize}
-    \item ...
-    \item ...
+    \item \textbf{RQ1}: Can our approach generate valid proofs?
+    \item \textbf{RQ2}: Can the generated proof be efficiently checked?
+    \item \textbf{RQ3}: What is the overhead of proof generation during symbolic execution?
 \end{itemize}
 
 \subsection{Setup}
