@@ -7,6 +7,7 @@ RQs:
 \end{itemize}
 
 \subsection{Setup}
+
 Each mode is run using the following configuration:
 The search heuristic is set to DFS,
 the timeout is set to one hour,
@@ -22,5 +23,18 @@ We performed our experiments on Ubuntu 24.04,
 equipped with Intel Core i9-9900 and 32GB of RAM.
 
 \subsection{Benchmarks}
+
+Our prototype implementation supports memory operations,
+so our goal is to evaluate it on programs with memory manipulations.
+For this, we selected several benchmarks (\libtasn, \libosip, and \coreutils) that were used in the past in the context of \SE~\cite{klee,symsize-model}.
+In \libtasn and \libosip, we selected a set of APIs,
+and for each API we constructed a test driver that runs it with symbolic inputs (integers, arrays, strings, \etc).
+To symbolically execute the programs in \coreutils,
+one needs to support external calls and model the environment (command-line arguments, file system, \etc).
+As our prototype currently does not support these features,
+we could not evaluate those programs directly.
+However, \coreutils contains a library of APIs, some of which can be tested in isolation.
+We selected a subset of such APIs,
+and constructed test drivers that run these APIs with symbolic inputs.
 
 \subsection{Results}
