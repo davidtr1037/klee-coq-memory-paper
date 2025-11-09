@@ -3,13 +3,14 @@
 
 % TODO: prototype?
 % TODO: we fixed the issues in our version
-% TODO: some SMT transformations are not supported
 
 Our prototype implementation consists of two components:
 A formalization of the concrete and symbolic semantics (\Cref{sec:concrete-semantics,sec:symbolic-semantics}) and an extension of the \SE engine.
 Our formalization is manually written in \coq (8.19.1) and consists of roughly TBD lines of code, excluding third-party dependencies.
 Our proof-generation approach (\Cref{sec:proof-generation}) is implemented on top of \klee~\cite{klee},
 a \emph{state-of-the-art} \SE engine that operates on \llvm bitcode~\cite{llvm}.
+Some of the SMT transformations used in \klee are currently not supported by our prototype,
+but we plan to implement them in future versions.
 During the implementation of our prototype,
 we found several implementation issues in \klee that relate to memory modeling.
 We now give a detailed overview of these issues.
@@ -64,8 +65,9 @@ the SMT expression $4294967296$ (of sort $\smtsort{64}$) is truncated to the SMT
 Therefore, this $\tstore$ instruction actually updates the first byte of the memory object allocated at~\cref{line:issue-llvm-malloc}.
 We note that this behavior occurs in \klee without reporting any errors to the user.
 
+% TODO: fix...
 \begin{algorithm}[t]
-\caption{algorithm for handling \tgep in \klee.}
+\caption{The algorithm for handling $\tgep$ in \klee.}
 \label{alg:gep-klee}
 \begin{algorithmic}[1]
 
