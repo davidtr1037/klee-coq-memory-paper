@@ -4,13 +4,30 @@
 This section will be a bit KLEE-specific,
 but we can claim that our approach can be adapted for other implementations as well.
 
-\subsection{...}
+\subsection{Memory Modeling in \klee}
+%In this section,
+%we give some background about the memory modeling in \klee.
 
-\begin{itemize}
-    \item background about KLEE's implementation of the memory model (address space, memory objects, etc.)
-    \item proving safety of steps: load, store, malloc/alloca, free
-    \item different encodings of SMT arrays (KLEE/Coq)
-\end{itemize}
+% TODO: unique interval?
+In \klee, the memory of a symbolic state is represented as a linear address space containing memory objects.
+A memory object is associated with a concrete base address and a concrete size.
+To encode the contents of a memory object,
+\klee uses two representations: \emph{optimized} and \emph{non-optimized}.
+If all the stores to a given memory object were performed with a concrete offset,
+then \klee uses the optimized representation where the contents are encoded as a mapping between constant offsets and symbolic values.
+When there is a store with a symbolic offset,
+\klee switches to the non-optimized representation,
+by translating the optimized representation into an SMT array, \ie a sequece of SMT store expressions.
+Once this happens, the representation cannot be switched back to the optimized one.
+
+% TODO: needed here?
+%The SMT arrays that are used to encode the contents of a memory object has the sort: ...
+%Therefore, when a memory object is accessed,
+%the SMT expression corresponding to the offset is truncated to an SMT expression of sort $\smtsort{32}$.
+
+\subsection{Proving Safety of Steps}
+% proving safety of steps: load, store, malloc/alloca, free
+% handling different encodings of SMT arrays (KLEE/Coq)
 
 \subsection{Optimizations}
 \begin{itemize}
