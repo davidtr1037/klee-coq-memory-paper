@@ -54,13 +54,13 @@ the algorithm does not account for overflows when computing the resulting pointe
 % TODO: mention that the type of (n + 1) is i64?
 The lack of overflow checks has some additional consequences,
 as can be demonstrated by~\Cref{figure:klee-issue}.
-
 After executing the $\tgep$ instruction at~\cref{line:issue-llvm-gep}, the value of \code{p2} is $a + 4294967296$,
 assuming that the value of \code{p1} is $a$.
 Since \klee ignores the overflow in this case, it continues to the next instruction at~\cref{line:issue-llvm-store}.
 When \klee accesses a memory object (\ie $\tload$ and $\tstore$),
 the SMT expression of the offset is always truncated to an SMT expression of sort $\smtsort{32}$.
-So in this case, the SMT expression $4294967296$ is truncated to the SMT expression $0$.
+So in this case,
+the SMT expression $4294967296$ (of sort $\smtsort{64}$) is truncated to the SMT expression $0$ (of sort $\smtsort{32}$).
 Therefore, this $\tstore$ instruction actually updates the first byte of the memory object allocated at~\cref{line:issue-llvm-malloc}.
 We note that this behavior occurs in \klee without reporting any errors to the user.
 
