@@ -1,6 +1,6 @@
-%add = add i64 4294967295, 1
-%add1 = add i64 %add, 10
-%call = call i8* @malloc(i64 %add1)
-%add2 = add i64 4294967295, 1
-%arrayidx = getelementptr inbounds i8, i8* %call, i64 %add2
-store i8 1, i8* %arrayidx
+%n1 = add i64 4294967295, 1
+%n2 = add i64 %n1, 10
+%p1 = call i8* @malloc(i64 %n2)
+%n3 = add i64 4294967295, 1
+%p2 = getelementptr inbounds i8, i8* %p1, i64 %n3
+store i8 1, i8* %p2
