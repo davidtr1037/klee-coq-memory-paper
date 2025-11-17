@@ -46,9 +46,9 @@ $
   \welldef{\evalexprty{e}\sigma\tau \neq\bot}
 }
 {
-  \progstate{\location}{\localstore}{\stack}
+  \progstate{\location}{\localstore}{\stack}{\memory}
   \step
-  \progstate{\nextinstr{\location}}{\localstore[x\mapsto \evalexprty{e}\sigma\tau]}{\stack}
+  \progstate{\nextinstr{\location}}{\localstore[x\mapsto \evalexprty{e}\sigma\tau]}{\stack}{\memory}
 }
 \\[1em]
 \ruledefsmall{Branch-True}{
@@ -57,9 +57,9 @@ $
   \welldef{\location\triangleright b_i \neq \bot}
 }
 {
-  \progstate{\location}{\localstore}{\stack}
+  \progstate{\location}{\localstore}{\stack}{\memory}
   \step
-  \progstate{\location\triangleright b_1}{\localstore}{\stack}
+  \progstate{\location\triangleright b_1}{\localstore}{\stack}{\memory}
 }
 \\[1em]
 \ruledefsmall{Branch-True}{
@@ -68,9 +68,10 @@ $
   \welldef{\location\triangleright b_i \neq \bot}
 }
 {
+  \progstate{\location}{\localstore}{\stack}{\memory}
   \progstate{\location}{\localstore}{\stack}
   \step
-  \progstate{\location\triangleright b_2}{\localstore}{\stack}
+  \progstate{\location\triangleright b_2}{\localstore}{\stack}{\memory}
 }
 \\[1em]
 \ruledefsmall{Make-Symbolic}{
@@ -78,9 +79,9 @@ $
   \quad n\in\Nat
 }
 {
-  \progstate{\location}{\localstore}{\stack}
+  \progstate{\location}{\localstore}{\stack}{\memory}
   \step
-  \progstate{\nextinstr{\location}}{\localstore[x \mapsto n@\bvsort{32}]}{\stack}
+  \progstate{\nextinstr{\location}}{\localstore[x \mapsto n@\bvsort{32}]}{\stack}{\memory}
 }
 \\[1em]
 \ruledefsmall{Assume}{
@@ -88,9 +89,9 @@ $
   \evalexprty{e}{\localstore}{\bvsort{1}} = \bvval{1}1
 }
 {
-  \progstate{\location}{\localstore}{\stack}
+  \progstate{\location}{\localstore}{\stack}{\memory}
   \step
-  \progstate{\nextinstr{\location}}{\localstore}{\stack}
+  \progstate{\nextinstr{\location}}{\localstore}{\stack}{\memory}
 }
 \end{array}
 \]

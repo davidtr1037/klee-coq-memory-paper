@@ -95,12 +95,11 @@
 \newcommand{\location}{\ell}
 \newcommand{\localstore}{\sigma}
 \newcommand{\stack}{\mathit{\kappa}}
+\newcommand{\memory}{\mathit{\mu}}
 \newcommand{\initstate}{\textit{init}}
 \newcommand{\createlocation}[3]{#1\locsep#2\locsep#3}
 \newcommand{\stackframe}[3]{\langle{#1},{#2},{#3}\rangle}
-% TODO: remove
-\newcommand\localstate[2]{\left\langle{#1},{#2}\right\rangle}
-\newcommand\progstate[4][]{#1\langle{#2},{#3},{#4}#1\rangle}
+\newcommand{\progstate}[4]{\langle{#1},{#2},{#3},{#4}\rangle}
 \newcommand{\step}{\rightarrow}
 \newcommand{\multistep}{\mathrel{{\step}{}^*\!}}
 \newcommand{\errorstate}{\mathit{error}}
