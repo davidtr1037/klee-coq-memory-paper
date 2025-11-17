@@ -10,6 +10,31 @@
 \label{sec:concrete-semantics}
 
 % TODO: ignore alignment details
+% TODO: drop: allocas, globals
+% TODO: we assume that the argument of malloc is a constant
+
+\begin{figure}
+\scalebox{0.9}{
+$
+\begin{array}{l@{~}r@{~{}~}l}
+  \tbinop & ~::={} & \opcode{add} ~|~ \opcode{sub} ~|~ \opcode{mul} ~|~ \opcode{urem} ~|~ \sdots \\
+  \tcmpop & ~::={} & \opcode{eq} ~|~ \opcode{ne} ~|~ \opcode{ugt} ~|~ \opcode{uge} ~|~ \opcode{ult} ~|~ \opcode{ule} ~|~ \sdots \\
+  \toper & ~::={} & binop ~|~ \opcode{icmp}_{cmpop} \\
+  \tcast & ~::={} & \opcode{zext} ~|~ \opcode{sext} ~|~ \opcode{trunc} ~|~ \opcode{bitcast} \\
+  e & ~::={} & n ~|~ x ~|~ \toper^\tau~e_1~e_2 ~|~ \tcast^{\tau\to\tau'}~e \\
+  \tinstr & ~::={} & x ~\texttt{=}~ e \ | \ x ~\texttt{=}~ \tphi^\tau~\{\,\overline{b_i\mapsto e_i}\,\} \ | \ \tbr~b \ | \ \tbr~e~b_1~b_2 \ | \\
+          & & x ~\texttt{=}~ \tcall^{\tau}~\tid~(\overline{\tau_i~e_i}) \ | \ \tret^{\tau}~e \ | \ \tunreachable \ | \\
+          & & x ~\texttt{=}~ \tmalloc~e \ | \ \tfree~e \ | \ x ~\texttt{=}~ \tload^{\tau}~e \ | \ \tstore^{\tau}~e_1~e_2 \ | \ \tgep~e~\overline{(\tau_i, e_i)} \\
+  \tblk & ~::={} & \tid{:}~\overline{\tinstr} \\
+  \tfunc & ~::={} & \tdef~\tau~\tid(\overline{\tau_i~x_i})
+                   ~ \{~\overline{\tblk}~\} \\
+  \tmodule & ~::={} & \overline{\tfunc}
+\end{array}
+$
+}
+\caption{A simplified syntax of \llvm IR.}
+\label{figure:llvm-syntax}
+\end{figure}
 
 \begin{itemize}
     \item a quick overview of basic instructions
