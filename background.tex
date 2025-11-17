@@ -12,6 +12,7 @@
 % TODO: ignore alignment details
 % TODO: drop: allocas, globals
 % TODO: we assume that the argument of malloc is a constant
+% TODO: add type to malloc/free/gep?
 
 \begin{figure}
 \scalebox{0.9}{
@@ -34,6 +35,67 @@ $
 }
 \caption{A simplified syntax of \llvm IR.}
 \label{figure:llvm-syntax}
+\end{figure}
+
+\begin{figure}
+\[
+\begin{array}{cl}
+\ruledefsmall{Assign}{
+  \instrat{\location} = \codequote{v~\texttt{=}~e} \quad
+  e = \codequote{\toper^\tau\sdots} / \codequote{\tcast^{\_ \to \tau}\sdots} \quad
+  \welldef{\evalexprty{e}\sigma\tau \neq\bot}
+}
+{
+  \progstate{\location}{\localstore}{\stack}
+  \step
+  \progstate{\nextinstr{\location}}{\localstore[x\mapsto \evalexprty{e}\sigma\tau]}{\stack}
+}
+\\[1em]
+\ruledefsmall{Branch-True}{
+  \instrat{\location} = \codequote{\tbr~e~b_1~b_2} \quad
+  \evalexprty{e}{\localstore}{\bvsort{1}} = \bvval{1}1 \quad
+  \welldef{\location\triangleright b_i \neq \bot}
+}
+{
+  \progstate{\location}{\localstore}{\stack}
+  \step
+  \progstate{\location\triangleright b_1}{\localstore}{\stack}
+}
+\\[1em]
+\ruledefsmall{Branch-True}{
+  \instrat{\location} = \codequote{\tbr~e~b_1~b_2} \quad
+  \evalexprty{e}{\localstore}{\bvsort{1}} = \bvval{0}1 \quad
+  \welldef{\location\triangleright b_i \neq \bot}
+}
+{
+  \progstate{\location}{\localstore}{\stack}
+  \step
+  \progstate{\location\triangleright b_2}{\localstore}{\stack}
+}
+\\[1em]
+\ruledefsmall{Make-Symbolic}{
+  \instrat{\location} = \codequote{x~\texttt{=}~\tcall~\intrinsicfunc{make\_symbolic}()}
+  \quad n\in\Nat
+}
+{
+  \progstate{\location}{\localstore}{\stack}
+  \step
+  \progstate{\nextinstr{\location}}{\localstore[x \mapsto n@\bvsort{32}]}{\stack}
+}
+\\[1em]
+\ruledefsmall{Assume}{
+  \instrat{\location} = \codequote{x~\texttt{=}~\tcall~\intrinsicfunc{assume}(e)} \quad
+  \evalexprty{e}{\localstore}{\bvsort{1}} = \bvval{1}1
+}
+{
+  \progstate{\location}{\localstore}{\stack}
+  \step
+  \progstate{\nextinstr{\location}}{\localstore}{\stack}
+}
+\end{array}
+\]
+\caption{Operational small-step semantics of \llvm IR.}
+\label{figure:llvm-semantics}
 \end{figure}
 
 \begin{itemize}
