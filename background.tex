@@ -24,7 +24,7 @@ $
   \tcast & ~::={} & \opcode{zext} ~|~ \opcode{sext} ~|~ \opcode{trunc} ~|~ \opcode{bitcast} \\
   e & ~::={} & n ~|~ x ~|~ \toper^\tau~e_1~e_2 ~|~ \tcast^{\tau\to\tau'}~e \\
   \tinstr & ~::={} & x ~\texttt{=}~ e \ | \ x ~\texttt{=}~ \tphi^\tau~\{\,\overline{b_i\mapsto e_i}\,\} \ | \ \tbr~b \ | \ \tbr~e~b_1~b_2 \ | \\
-          & & \tcall^{\tau}~\tid~(\overline{\tau_i~e_i}) \ | \ x ~\texttt{=}~ \tcall^{\tau}~\tid~(\overline{\tau_i~e_i}) \ | \ \tret^{\tau}~e \ | \ \tunreachable \ | \\
+          & & \tcall~\tid~(\overline{\tau_i~e_i}) \ | \ x ~\texttt{=}~ \tcall^{\tau}~\tid~(\overline{\tau_i~e_i}) \ | \ \tret^{\tau}~e \ | \ \tunreachable \ | \\
           & & x ~\texttt{=}~ \tload^{\tau}~e \ | \ \tstore^{\tau}~e_1~e_2 \ | \ \tgep~e~\overline{(\tau_i, e_i)} \\
   \tblk & ~::={} & \tid{:}~\overline{\tinstr} \\
   \tfunc & ~::={} & \tdef~\tau~\tid(\overline{\tau_i~x_i})
@@ -75,7 +75,7 @@ $
 }
 \\[1em]
 \ruledefsmall{Make-Symbolic}{
-  \instrat{\location} = \codequote{x~\texttt{=}~\tcall~\intrinsicfunc{make\_symbolic}()}
+  \instrat{\location} = \codequote{x~\texttt{=}~\tcall^{\bvsort{32}}~\intrinsicfunc{make\_symbolic}()}
   \quad n\in\Nat
 }
 {
@@ -95,7 +95,7 @@ $
 }
 \\[1em]
 \ruledefsmall{Malloc}{
-  \instrat{\location} = \codequote{x~\texttt{=}~\tcall~\tmalloc(e)} \quad
+  \instrat{\location} = \codequote{x~\texttt{=}~\tcall^{\bvsort{64}}~\tmalloc(e)} \quad
   \evalexprty{e}{\localstore}{\bvsort{32}} = n \quad
   \mathit{allocate}(\memory, n) = (\memory', p) \quad
 }
