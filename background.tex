@@ -24,8 +24,8 @@ $
   \tcast & ~::={} & \opcode{zext} ~|~ \opcode{sext} ~|~ \opcode{trunc} ~|~ \opcode{bitcast} \\
   e & ~::={} & n ~|~ x ~|~ \toper^\tau~e_1~e_2 ~|~ \tcast^{\tau\to\tau'}~e \\
   \tinstr & ~::={} & x ~\texttt{=}~ e \ | \ x ~\texttt{=}~ \tphi^\tau~\{\,\overline{b_i\mapsto e_i}\,\} \ | \ \tbr~b \ | \ \tbr~e~b_1~b_2 \ | \\
-          & & x ~\texttt{=}~ \tcall^{\tau}~\tid~(\overline{\tau_i~e_i}) \ | \ \tret^{\tau}~e \ | \ \tunreachable \ | \\
-          & & x ~\texttt{=}~ \tmalloc~e \ | \ \tfree~e \ | \ x ~\texttt{=}~ \tload^{\tau}~e \ | \ \tstore^{\tau}~e_1~e_2 \ | \ \tgep~e~\overline{(\tau_i, e_i)} \\
+          & & \tcall^{\tau}~\tid~(\overline{\tau_i~e_i}) \ | \ x ~\texttt{=}~ \tcall^{\tau}~\tid~(\overline{\tau_i~e_i}) \ | \ \tret^{\tau}~e \ | \ \tunreachable \ | \\
+          & & x ~\texttt{=}~ \tload^{\tau}~e \ | \ \tstore^{\tau}~e_1~e_2 \ | \ \tgep~e~\overline{(\tau_i, e_i)} \\
   \tblk & ~::={} & \tid{:}~\overline{\tinstr} \\
   \tfunc & ~::={} & \tdef~\tau~\tid(\overline{\tau_i~x_i})
                    ~ \{~\overline{\tblk}~\} \\
@@ -85,7 +85,7 @@ $
 }
 \\[1em]
 \ruledefsmall{Assume}{
-  \instrat{\location} = \codequote{x~\texttt{=}~\tcall~\intrinsicfunc{assume}(e)} \quad
+  \instrat{\location} = \codequote{\tcall~\intrinsicfunc{assume}(e)} \quad
   \evalexprty{e}{\localstore}{\bvsort{1}} = \bvval{1}1
 }
 {
@@ -95,7 +95,7 @@ $
 }
 \\[1em]
 \ruledefsmall{Malloc}{
-  \instrat{\location} = \codequote{x~\texttt{=}~\tmalloc(e)} \quad
+  \instrat{\location} = \codequote{x~\texttt{=}~\tcall~\tmalloc(e)} \quad
   \evalexprty{e}{\localstore}{\bvsort{32}} = n \quad
   \mathit{allocate}(\memory, n) = (\memory', p) \quad
 }
@@ -106,7 +106,7 @@ $
 }
 \\[1em]
 \ruledefsmall{Free}{
-  \instrat{\location} = \codequote{\tfree(e)} \quad
+  \instrat{\location} = \codequote{\tcall~\tfree(e)} \quad
   \evalexprty{e}{\localstore}{\bvsort{64}} = p \quad
   \mathit{mo} \in \memory \quad
   \mathit{is\_base\_address}(p, mo) \quad
