@@ -43,12 +43,12 @@ $
 \ruledefsmall{Assign}{
   \instrat{\location} = \codequote{v~\texttt{=}~e} \quad
   e = \codequote{\toper^\tau\sdots} / \codequote{\tcast^{\_ \to \tau}\sdots} \quad
-  \welldef{\evalexprty{e}\sigma\tau \neq\bot}
+  \welldef{\evalexprty{e}\sigma\tau \neq \bot}
 }
 {
   \progstate{\location}{\localstore}{\stack}{\memory}
   \step
-  \progstate{\nextinstr{\location}}{\localstore[x\mapsto \evalexprty{e}\sigma\tau]}{\stack}{\memory}
+  \progstate{\nextinstr{\location}}{\localstore[x \mapsto \evalexprty{e}\sigma\tau]}{\stack}{\memory}
 }
 \\[1em]
 \ruledefsmall{Branch-True}{
@@ -92,6 +92,58 @@ $
   \progstate{\location}{\localstore}{\stack}{\memory}
   \step
   \progstate{\nextinstr{\location}}{\localstore}{\stack}{\memory}
+}
+\\[1em]
+\ruledefsmall{Malloc}{
+  \instrat{\location} = \codequote{x~\texttt{=}~\tmalloc(e)} \quad
+  \evalexprty{e}{\localstore}{\bvsort{32}} = n \quad
+  \mathit{allocate}(\memory, n) = (\memory', p) \quad
+}
+{
+  \progstate{\location}{\localstore}{\stack}{\memory}
+  \step
+  \progstate{\nextinstr{\location}}{\localstore[x \mapsto p]}{\stack}{\memory'}
+}
+\\[1em]
+\ruledefsmall{Free}{
+  \instrat{\location} = \codequote{\tfree(e)} \quad
+  \evalexprty{e}{\localstore}{\bvsort{64}} = p \quad
+  \mathit{mo} \in \memory \quad
+  \mathit{is\_base\_address}(p, mo) \quad
+  \mathit{remove}(\memory, \mathit{mo}) = \memory'
+}
+{
+  \progstate{\location}{\localstore}{\stack}{\memory}
+  \step
+  \progstate{\nextinstr{\location}}{\localstore}{\stack}{\memory'}
+}
+\\[1em]
+\ruledefsmall{Load}{
+  \instrat{\location} = \codequote{x~\texttt{=}~\tload^{\tau}~e} \quad
+  \evalexprty{e}{\localstore}{\bvsort{64}} = p \quad
+  \mathit{mo} \in \memory \quad
+  \mathit{is\_inbounds}(p, |\tau|, mo) \quad
+  \mathit{read}(\mathit{mo}, p, \tau) = v \quad
+}
+{
+  \progstate{\location}{\localstore}{\stack}{\memory}
+  \step
+  \progstate{\nextinstr{\location}}{\localstore[x \mapsto v]}{\stack}{\memory}
+}
+\\[1em]
+\ruledefsmall{Store}{
+  \instrat{\location} = \codequote{\tstore^{\tau}~e_1~e_2} \quad
+  \evalexprty{e_1}{\localstore}{\tau} = v \quad
+  \evalexprty{e_2}{\localstore}{\bvsort{64}} = p \quad
+  \mathit{mo} \in \memory \quad
+  \mathit{is\_inbounds}(p, |\tau|, mo) \quad
+  \mathit{write}(\mathit{mo}, p, v) = \mathit{mo}' \quad
+  \mathit{replace}(\memory, \mathit{mo}') = \memory'
+}
+{
+  \progstate{\location}{\localstore}{\stack}{\memory}
+  \step
+  \progstate{\nextinstr{\location}}{\localstore}{\stack}{\memory'}
 }
 \end{array}
 \]
