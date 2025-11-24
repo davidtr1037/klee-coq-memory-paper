@@ -13,6 +13,22 @@
 % TODO: drop: allocas, globals
 % TODO: we assume that the argument of malloc is a constant
 % TODO: add type to malloc/free/gep?
+% TODO: say that we assume: pointer type = i64 / index type = i32
+
+A \emph{memory object} is defined as a tuple:
+\[ (\addr, \size, \arrayvalue) \in \Vals^{\pointertype} \times \Vals^{\indextype} \times \Arrays \quad \quad \Arrays \triangleq \Z \rightarrow \Vals^{\bvsort{8}} \cup \{\tundef, \tpoison\} \]
+A memory object has a base address $\addr$, a size $\size$, and mapping $\arrayvalue$ which tracks the stored values.
+A stored value can be either a value of type $\Vals^{\bvsort{8}}$ (\ie a byte) or one of the special values $\tundef$ or $\tpoison$.
+The memory is defined using a \emph{heap} and an \emph{allocator}.
+A heap $\heap \in \Heaps$ is a set memory objects.
+An allocator is an algorithm that defines the allocation scheme of memory objects.
+Whenever an allocator adds a new memory object to the heap,
+the address interval of that memory object must not overlap with the address intervals of existing memory objects.
+In addition, an address interval must not wrap around the address space, \ie it must hold that:
+\[ \addr \leq \addr + \size \]
+
+% TODO: modeling a generic allocator is hard...
+In this work, we assume a linear allocator that allocates memory objects in an ascending order while maintaining a constant gap (also known as \emph{red-zone}) between memory objects.
 
 \begin{figure}
 \scalebox{0.9}{
@@ -76,7 +92,7 @@ $
 \\[1em]
 \ruledefsmall{Make-Symbolic}{
   \instrat{\location} = \codequote{x~\texttt{=}~\tcall^{\bvsort{32}}~\intrinsicfunc{make\_symbolic}()}
-  \quad n\in\Nat
+  \quad n \in \Z
 }
 {
   \progstate{\location}{\localstore}{\stack}{\memory}
@@ -151,8 +167,6 @@ $
 \label{figure:llvm-semantics}
 \end{figure}
 
-\begin{itemize}
-    \item a quick overview of basic instructions
-    \item semantics of memory-related instructions
-    \item memory allocator?
-\end{itemize}
+% TODO: a quick overview of basic instructions
+% TODO: semantics of memory-related instructions
+% TODO: memory allocator?
