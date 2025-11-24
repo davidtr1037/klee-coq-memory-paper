@@ -191,7 +191,7 @@ $
     \If {$r \in \{\tundef, \tpoison\}$}
         \State \Return $r$
     \Else
-        \State \Return $p + \mathit{zext}_{\pointertype}(r)$
+        \State \Return $p + \mathit{zero\_ext}_{\pointertype}(r)$
     \EndIf
 \EndFunction
 
