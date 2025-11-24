@@ -54,7 +54,7 @@ $
   e & ~::={} & n ~|~ x ~|~ \toper^\tau~e_1~e_2 ~|~ \tcast^{\tau\to\tau'}~e \\
   \tinstr & ~::={} & x ~\texttt{=}~ e \ | \ x ~\texttt{=}~ \tphi^\tau~\{\,\overline{b_i\mapsto e_i}\,\} \ | \ \tbr~b \ | \ \tbr~e~b_1~b_2 \ | \\
           & & \tcall~\tid~(\overline{\tau_i~e_i}) \ | \ x ~\texttt{=}~ \tcall^{\tau}~\tid~(\overline{\tau_i~e_i}) \ | \ \tret^{\tau}~e \ | \ \tunreachable \ | \\
-          & & x ~\texttt{=}~ \tload^{\tau}~e \ | \ \tstore^{\tau}~e_1~e_2 \ | \ \tgep~e~\overline{(\tau_i, e_i)} \\
+          & & x ~\texttt{=}~ \tload^{\tau}~e \ | \ \tstore^{\tau}~e_1~e_2 \ | \ \tgep~\pointertypeof{\tau}~e~\overline{(\tau_i, e_i)} \\
   \tblk & ~::={} & \tid{:}~\overline{\tinstr} \\
   \tfunc & ~::={} & \tdef~\tau~\tid(\overline{\tau_i~x_i})
                    ~ \{~\overline{\tblk}~\} \\
@@ -174,6 +174,19 @@ $
   \step
   \progstate{\nextinstr{\location}}{\localstore}{\stack}{\memory'}
 }
+\\[1em]
+\ruledefsmall{GetElementPtr}{
+  \instrat{\location} = \codequote{x~\texttt{=}~\tgep~\pointertypeof{\tau}~e~\overline{(\tau_i, e_i)}} \quad
+  |\overline{(\tau_i, e_i)}| > 0 \quad
+  \evalexprty{e}{\localstore}{\pointertypeof{\tau}} = p \quad
+  \evalexprty{e_i}{\localstore}{\tau_i} = j_i \quad
+  \mathit{eval\_gep}(\tau, p, j_0, [...]) = v
+}
+{
+  \progstate{\location}{\localstore}{\stack}{\memory}
+  \step
+  \progstate{\nextinstr{\location}}{\localstore[x \mapsto v]}{\stack}{\memory}
+}
 \end{array}
 \]
 \caption{Operational small-step semantics of \llvm IR.}
@@ -186,8 +199,18 @@ $
 \begin{algorithmic}[1]
 
 \Function{eval-gep}{$t, p, i, is$}
+    \If {$\tpoison \in \{i\} \cup is$}
+        \State \Return $\tpoison$
+    \EndIf
+    \If {$\tundef \in \{i\} \cup is$}
+        \State \Return $\tundef$
+    \EndIf
+    \State \Return \Call{compute-pointer}{$t, p, i is$}
+\EndFunction
+
+\Function{compute-pointer}{$t, p, i, is$}
     \State $o \gets \mathit{trunc}_{\indextype}(i) \cdot |t|$
-    \State $r \gets \Call{eval-gep-internal}{t, o, is}$
+    \State $r \gets \Call{compute-offset}{t, o, is}$
     \If {$r \in \{\tundef, \tpoison\}$}
         \State \Return $r$
     \Else
@@ -195,20 +218,20 @@ $
     \EndIf
 \EndFunction
 
-\Function{eval-gep-internal}{$t, i, is$}
+\Function{compute-offset}{$t, i, is$}
     \If {|is| = 0}
         \State \Return $i$
     \EndIf
     \State $is \gets i' :: is'$
     \If {$t = \arraytype{t'}$}
         \State $o \gets i + \mathit{sign\_ext}_{\indextype}(i') \cdot |t'|$
-        \State \Return \Call{eval-gep-internal}{$t', t_{add}, is'$}
+        \State \Return \Call{compute-offset}{$t', t_{add}, is'$}
     \EndIf
     \If {$t = \structtype{ts}$}
         \State $n \gets \mathit{to\_nat}(i')$
         \State $t_{n} \gets \mathit{field\_type}(ts, n)$
         \State $o \gets i + \mathit{field\_offset}(ts, n)$
-        \State \Return \Call{eval-gep-internal}{$t_{n}, o, is'$}
+        \State \Return \Call{compute-offset}{$t_{n}, o, is'$}
     \EndIf
     \State ...
 \EndFunction
