@@ -201,11 +201,11 @@ $
     \EndIf
     \State $is \gets i' :: is'$
     \If {$t = \arraytype{t'}$}
-        \State $o \gets i + \mathit{sign\_ext}_{\indextype}(i) \cdot |t'|$
+        \State $o \gets i + \mathit{sign\_ext}_{\indextype}(i') \cdot |t'|$
         \State \Return \Call{eval-gep-internal}{$t', t_{add}, is'$}
     \EndIf
     \If {$t = \structtype{ts}$}
-        \State $n \gets \mathit{to\_nat}(i)$
+        \State $n \gets \mathit{to\_nat}(i')$
         \State $t_{n} \gets \mathit{field\_type}(ts, n)$
         \State $o \gets i + \mathit{field\_offset}(ts, n)$
         \State \Return \Call{eval-gep-internal}{$t_{n}, o, is'$}
