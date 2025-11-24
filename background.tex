@@ -186,12 +186,12 @@ $
 \begin{algorithmic}[1]
 
 \Function{eval-gep}{$t, p, i, is$}
-    \State $o \gets \mathit{trunc}_{32}(i) \cdot |t|$
+    \State $o \gets \mathit{trunc}_{\indextype}(i) \cdot |t|$
     \State $r \gets \Call{eval-gep-internal}{t, o, is}$
     \If {$r \in \{\tundef, \tpoison\}$}
         \State \Return $r$
     \Else
-        \State \Return $p + \mathit{zext}_{64}(r)$
+        \State \Return $p + \mathit{zext}_{\pointertype}(r)$
     \EndIf
 \EndFunction
 
@@ -201,7 +201,7 @@ $
     \EndIf
     \State $is \gets i' :: is'$
     \If {$t = \arraytype{t'}$}
-        \State $o \gets i + \mathit{sign\_ext}_{32}(i) \cdot |t'|$
+        \State $o \gets i + \mathit{sign\_ext}_{\indextype}(i) \cdot |t'|$
         \State \Return \Call{eval-gep-internal}{$t', t_{add}, is'$}
     \EndIf
     \If {$t = \structtype{ts}$}
