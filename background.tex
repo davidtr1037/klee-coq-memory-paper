@@ -198,19 +198,19 @@ $
 \label{alg:gep-klee}
 \begin{algorithmic}[1]
 
-\Function{eval-gep}{$t, p, i, is$}
-    \If {$\tpoison \in \{i\} \cup is$}
+\Function{eval-gep}{$\tau, p, j_0, \overline{j}$}
+    \If {$\tpoison \in \{j_0\} \cup \overline{j}$}
         \State \Return $\tpoison$
     \EndIf
-    \If {$\tundef \in \{i\} \cup is$}
+    \If {$\tundef \in \{j_0\} \cup \overline{j}$}
         \State \Return $\tundef$
     \EndIf
-    \State \Return \Call{compute-pointer}{$t, p, i is$}
+    \State \Return \Call{compute-pointer}{$\tau, p, j_0, \overline{j}$}
 \EndFunction
 
-\Function{compute-pointer}{$t, p, i, is$}
-    \State $o \gets \mathit{trunc}_{\indextype}(i) \cdot |t|$
-    \State $r \gets \Call{compute-offset}{t, o, is}$
+\Function{compute-pointer}{$\tau, p, j_0, \overline{j}$}
+    \State $o \gets \mathit{trunc}_{\indextype}(j_0) \cdot |\tau|$
+    \State $r \gets \Call{compute-offset}{\tau, o, \overline{j}}$
     \If {$r \in \{\tundef, \tpoison\}$}
         \State \Return $r$
     \Else
@@ -218,20 +218,20 @@ $
     \EndIf
 \EndFunction
 
-\Function{compute-offset}{$t, i, is$}
-    \If {|is| = 0}
-        \State \Return $i$
+\Function{compute-offset}{$\tau, j_0, \overline{j}$}
+    \If {$|\overline{j}| = 0$}
+        \State \Return $j_0$
     \EndIf
-    \State $is \gets i' :: is'$
-    \If {$t = \arraytype{t'}$}
-        \State $o \gets i + \mathit{sign\_ext}_{\indextype}(i') \cdot |t'|$
-        \State \Return \Call{compute-offset}{$t', t_{add}, is'$}
+    \State $\overline{j} \gets j_1 :: \overline{j'}$
+    \If {$\tau = \arraytype{\tau'}$}
+        \State $o \gets j_0 + \mathit{sign\_ext}_{\indextype}(j_1) \cdot |\tau'|$
+        \State \Return \Call{compute-offset}{$\tau', o, \overline{j'}$}
     \EndIf
-    \If {$t = \structtype{ts}$}
-        \State $n \gets \mathit{to\_nat}(i')$
-        \State $t_{n} \gets \mathit{field\_type}(ts, n)$
-        \State $o \gets i + \mathit{field\_offset}(ts, n)$
-        \State \Return \Call{compute-offset}{$t_{n}, o, is'$}
+    \If {$\tau = \structtype{\overline{\tau}}$}
+        \State $n \gets \mathit{to\_nat}(j_1)$
+        \State $\tau_{n} \gets \mathit{field\_type}(\overline{\tau}, n)$
+        \State $o \gets j_0 + \mathit{field\_offset}(\overline{\tau}, n)$
+        \State \Return \Call{compute-offset}{$\tau_{n}, o, \overline{j'}$}
     \EndIf
     \State ...
 \EndFunction
