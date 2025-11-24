@@ -198,26 +198,6 @@ $
 \label{alg:gep-klee}
 \begin{algorithmic}[1]
 
-\Function{eval-gep}{$\tau, p, j_0, \overline{j}$}
-    \If {$\tpoison \in \{j_0\} \cup \overline{j}$}
-        \State \Return $\tpoison$
-    \EndIf
-    \If {$\tundef \in \{j_0\} \cup \overline{j}$}
-        \State \Return $\tundef$
-    \EndIf
-    \State \Return \Call{compute-pointer}{$\tau, p, j_0, \overline{j}$}
-\EndFunction
-
-\Function{compute-pointer}{$\tau, p, j_0, \overline{j}$}
-    \State $o \gets \mathit{trunc}_{\indextype}(j_0) \cdot |\tau|$
-    \State $r \gets \Call{compute-offset}{\tau, o, \overline{j}}$
-    \If {$r \in \{\tundef, \tpoison\}$}
-        \State \Return $r$
-    \Else
-        \State \Return $p + \mathit{zero\_ext}_{\pointertype}(r)$
-    \EndIf
-\EndFunction
-
 \Function{compute-offset}{$\tau, j_0, \overline{j}$}
     \If {$|\overline{j}| = 0$}
         \State \Return $j_0$
@@ -234,6 +214,26 @@ $
         \State \Return \Call{compute-offset}{$\tau_{n}, o, \overline{j'}$}
     \EndIf
     \State ...
+\EndFunction
+
+\Function{compute-pointer}{$\tau, p, j_0, \overline{j}$}
+    \State $o \gets \mathit{trunc}_{\indextype}(j_0) \cdot |\tau|$
+    \State $r \gets \Call{compute-offset}{\tau, o, \overline{j}}$
+    \If {$r \in \{\tundef, \tpoison\}$}
+        \State \Return $r$
+    \Else
+        \State \Return $p + \mathit{zero\_ext}_{\pointertype}(r)$
+    \EndIf
+\EndFunction
+
+\Function{eval-gep}{$\tau, p, j_0, \overline{j}$}
+    \If {$\tpoison \in \{j_0\} \cup \overline{j}$}
+        \State \Return $\tpoison$
+    \EndIf
+    \If {$\tundef \in \{j_0\} \cup \overline{j}$}
+        \State \Return $\tundef$
+    \EndIf
+    \State \Return \Call{compute-pointer}{$\tau, p, j_0, \overline{j}$}
 \EndFunction
 
 \end{algorithmic}
