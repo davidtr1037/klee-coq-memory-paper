@@ -124,8 +124,8 @@ $
 }
 \\[1em]
 \ruledefsmall{Malloc}{
-  \instrat{\location} = \codequote{x~\texttt{=}~\tcall^{\bvsort{64}}~\intrinsicfunc{malloc}(e)} \quad
-  \evalexprty{e}{\localstore}{\bvsort{32}} = n \quad
+  \instrat{\location} = \codequote{x~\texttt{=}~\tcall^{\pointertype}~\intrinsicfunc{malloc}(e)} \quad
+  \evalexprty{e}{\localstore}{\indextype} = n \quad
   \mathit{allocate}(\memory, n) = (\memory', p) \quad
 }
 {
@@ -136,7 +136,7 @@ $
 \\[1em]
 \ruledefsmall{Free}{
   \instrat{\location} = \codequote{\tcall~\intrinsicfunc{free}(e)} \quad
-  \evalexprty{e}{\localstore}{\bvsort{64}} = p \quad
+  \evalexprty{e}{\localstore}{\pointertype} = p \quad
   \mathit{mo} \in \memory \quad
   \mathit{is\_base\_address}(p, mo) \quad
   \mathit{remove}(\memory, \mathit{mo}) = \memory'
@@ -149,7 +149,7 @@ $
 \\[1em]
 \ruledefsmall{Load}{
   \instrat{\location} = \codequote{x~\texttt{=}~\tload^{\tau}~e} \quad
-  \evalexprty{e}{\localstore}{\bvsort{64}} = p \quad
+  \evalexprty{e}{\localstore}{\pointertype} = p \quad
   \mathit{mo} \in \memory \quad
   \mathit{is\_inbounds}(p, |\tau|, mo) \quad
   \mathit{read}(\mathit{mo}, p, \tau) = v \quad
@@ -163,7 +163,7 @@ $
 \ruledefsmall{Store}{
   \instrat{\location} = \codequote{\tstore^{\tau}~e_1~e_2} \quad
   \evalexprty{e_1}{\localstore}{\tau} = v \quad
-  \evalexprty{e_2}{\localstore}{\bvsort{64}} = p \quad
+  \evalexprty{e_2}{\localstore}{\pointertype} = p \quad
   \mathit{mo} \in \memory \quad
   \mathit{is\_inbounds}(p, |\tau|, mo) \quad
   \mathit{write}(\mathit{mo}, p, v) = \mathit{mo}' \quad
