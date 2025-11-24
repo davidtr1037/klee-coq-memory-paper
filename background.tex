@@ -30,6 +30,19 @@ In addition, an address interval must not wrap around the address space, \ie it 
 % TODO: modeling a generic allocator is hard...
 In this work, we assume a linear allocator that allocates memory objects in an ascending order while maintaining a constant gap (also known as \emph{red-zone}) between memory objects.
 
+\subsubsection{Malloc}
+% size check / UB
+
+\subsubsection{Free}
+% points-to check
+
+\subsubsection{Load}
+
+\subsubsection{Store}
+
+\subsubsection{GetElementPtr}
+% mention flags (nuw, nusw, inbounds)
+
 \begin{figure}
 \scalebox{0.9}{
 $
@@ -166,6 +179,42 @@ $
 \caption{Operational small-step semantics of \llvm IR.}
 \label{figure:llvm-semantics}
 \end{figure}
+
+\begin{algorithm}[t]
+\caption{...}
+\label{alg:gep-klee}
+\begin{algorithmic}[1]
+
+\Function{eval-gep}{$t, p, i, is$}
+    \State $o \gets \mathit{trunc}_{32}(i) \cdot |t|$
+    \State $r \gets \Call{eval-gep-internal}{t, o, is}$
+    \If {$r \in \{\tundef, \tpoison\}$}
+        \State \Return $r$
+    \Else
+        \State \Return $p + \mathit{zext}_{64}(r)$
+    \EndIf
+\EndFunction
+
+\Function{eval-gep-internal}{$t, i, is$}
+    \If {|is| = 0}
+        \State \Return $i$
+    \EndIf
+    \State $is \gets i' :: is'$
+    \If {$t = \arraytype{t'}$}
+        \State $o \gets i + \mathit{sign\_ext}_{32}(i) \cdot |t'|$
+        \State \Return \Call{eval-gep-internal}{$t', t_{add}, is'$}
+    \EndIf
+    \If {$t = \structtype{ts}$}
+        \State $n \gets \mathit{to\_nat}(i)$
+        \State $t_{n} \gets \mathit{field\_type}(ts, n)$
+        \State $o \gets i + \mathit{field\_offset}(ts, n)$
+        \State \Return \Call{eval-gep-internal}{$t_{n}, o, is'$}
+    \EndIf
+    \State ...
+\EndFunction
+
+\end{algorithmic}
+\end{algorithm}
 
 % TODO: a quick overview of basic instructions
 % TODO: semantics of memory-related instructions
