@@ -111,7 +111,7 @@ $
 }
 \\[1em]
 \ruledefsmall{Malloc}{
-  \instrat{\location} = \codequote{x~\texttt{=}~\tcall^{\bvsort{64}}~\tmalloc(e)} \quad
+  \instrat{\location} = \codequote{x~\texttt{=}~\tcall^{\bvsort{64}}~\intrinsicfunc{malloc}(e)} \quad
   \evalexprty{e}{\localstore}{\bvsort{32}} = n \quad
   \mathit{allocate}(\memory, n) = (\memory', p) \quad
 }
@@ -122,7 +122,7 @@ $
 }
 \\[1em]
 \ruledefsmall{Free}{
-  \instrat{\location} = \codequote{\tcall~\tfree(e)} \quad
+  \instrat{\location} = \codequote{\tcall~\intrinsicfunc{free}(e)} \quad
   \evalexprty{e}{\localstore}{\bvsort{64}} = p \quad
   \mathit{mo} \in \memory \quad
   \mathit{is\_base\_address}(p, mo) \quad
