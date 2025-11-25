@@ -17,10 +17,10 @@ In addition, the index type also specifies the type used to represent the size o
 \label{sec:concrete-semantics}
 
 % TODO: ignore alignment details
-% TODO: drop: allocas, globals
 % TODO: we assume that the argument of malloc is a constant
 % TODO: add type to malloc/free/gep?
 % TODO: say that we assume: pointer type = i64 / index type = i32
+% TODO: say the LLVM allows some freedom in the repr of memory objects / address spaces / etc.
 
 A \emph{memory object} is defined as a tuple:
 \[ (\addr, \size, \arrayvalue) \in \Vals^{\pointertype} \times \Vals^{\indextype} \times \Arrays \quad \quad \Arrays \triangleq \Z \rightarrow \Vals^{\bvsort{8}} \cup \{\tundef, \tpoison\} \]
@@ -37,11 +37,18 @@ In addition, an address interval must not wrap around the address space, \ie it 
 % TODO: modeling a generic allocator is hard...
 In this work, we assume a linear allocator that allocates memory objects in an ascending order while maintaining a constant gap (also known as \emph{red-zone}) between memory objects.
 
-\subsubsection{Malloc}
-% size check / UB
+\subsubsection{\textit{Malloc.}}
+When allocating a memory object,
+the size of the allocation must be non-negative and must not exceed the largest signed integer that fits into the index type.
+As mentioned before, the address interval of the allocated memory object must not wrap around the address space.
+If one of these properties is violated, the result is undefined-behavior.
 
 \subsubsection{Free}
-% points-to check
+% TODO: assume that the type of p is iptr?
+When deallocating a pointer value $p$,
+we first check if there exists a memory object $(\addr, \size, \arrayvalue)$ in the heap $h$, such that $p = \addr$.
+If that is the case, then we remove that memory object from the heap $h$.
+Otherwise, the result is undefined-behavior.
 
 \subsubsection{Load}
 
