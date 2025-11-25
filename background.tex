@@ -2,9 +2,16 @@
 
 \subsection{LLVM Memory Model}
 
-\begin{itemize}
-    \item data layout
-\end{itemize}
+In \llvm IR, the \emph{data layout} specifies how data is to be laid out in memory.
+The data layout consists of a list of specifications,
+including endianness, alignment rules, \etc
+In particular, it defines various properties related to pointers, such as \emph{pointer type} and \emph{index type}.
+The pointer type specifies the type used to represent pointer values.
+The index type specifies the type used for address calculations (\eg in \tgep).
+The size of the index type may not exceed the size of the pointer type.
+In addition, the index type also specifies the type used to represent the size of allocated objects.
+
+% TODO: assumptions in this paper (KLEE)
 
 \subsection{Concrete Semantics}
 \label{sec:concrete-semantics}
@@ -98,7 +105,6 @@ $
 }
 {
   \progstate{\location}{\localstore}{\stack}{\memory}
-  \progstate{\location}{\localstore}{\stack}
   \step
   \progstate{\location\triangleright b_2}{\localstore}{\stack}{\memory}
 }
