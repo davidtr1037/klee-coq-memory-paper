@@ -53,7 +53,7 @@ $
   \tcast & ~::={} & \opcode{zext} ~|~ \opcode{sext} ~|~ \opcode{trunc} ~|~ \opcode{bitcast} \\
   e & ~::={} & n ~|~ x ~|~ \toper^\tau~e_1~e_2 ~|~ \tcast^{\tau\to\tau'}~e \\
   \tinstr & ~::={} & x ~\texttt{=}~ e \ | \ x ~\texttt{=}~ \tphi^\tau~\{\,\overline{b_i\mapsto e_i}\,\} \ | \ \tbr~b \ | \ \tbr~e~b_1~b_2 \ | \\
-          & & \tcall~\tid~(\overline{\tau_i~e_i}) \ | \ x ~\texttt{=}~ \tcall^{\tau}~\tid~(\overline{\tau_i~e_i}) \ | \ \tret^{\tau}~e \ | \ \tunreachable \ | \\
+          & & \tcall~\tid~(\overline{\tau_i~e_i}) \ | \ x ~\texttt{=}~ \tcall^{\tau}~\tid~(\overline{\tau_i~e_i}) \ | \ \tret \ | \ \tret^{\tau}~e \ | \ \tunreachable \ | \\
           & & x ~\texttt{=}~ \tload^{\tau}~e \ | \ \tstore^{\tau}~e_1~e_2 \ | \ \tgep~\pointertypeof{\tau}~e~\overline{(\tau_i, e_i)} \\
   \tblk & ~::={} & \tid{:}~\overline{\tinstr} \\
   \tfunc & ~::={} & \tdef~\tau~\tid(\overline{\tau_i~x_i})
@@ -219,11 +219,7 @@ $
 \Function{compute-pointer}{$\tau, p, j_0, \overline{j}$}
     \State $o \gets \mathit{trunc}_{\indextype}(j_0) \cdot |\tau|$
     \State $r \gets \Call{compute-offset}{\tau, o, \overline{j}}$
-    \If {$r \in \{\tundef, \tpoison\}$}
-        \State \Return $r$
-    \Else
-        \State \Return $p + \mathit{zero\_ext}_{\pointertype}(r)$
-    \EndIf
+    \State \Return $p + \mathit{zero\_ext}_{\pointertype}(r)$
 \EndFunction
 
 \Function{eval-gep}{$\tau, p, j_0, \overline{j}$}
