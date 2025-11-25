@@ -46,13 +46,28 @@ If one of these properties is violated, the result is undefined-behavior.
 \subsubsection{Free}
 % TODO: assume that the type of p is iptr?
 When deallocating a pointer value $p$,
-we first check if there exists a memory object $(\addr, \size, \arrayvalue)$ in the heap $h$, such that $p = \addr$.
+we first check if there exists a memory object $(\addr, \size, \arrayvalue)$ in the heap $h$ such that $p = \addr$.
 If that is the case, then we remove that memory object from the heap $h$.
 Otherwise, the result is undefined-behavior.
 
 \subsubsection{Load}
+% TODO: what happens if p is undef/poison?
+When reading $n$ bytes from a pointer value $p$,
+we need to make sure that (1) $p < p + n$ and (2) there exists a memory object $(\addr, \size, \arrayvalue)$ in the heap $h$ such that $\addr \leq p < \addr + \size$.
+If that is not the case, then the result is undfined-behavior.
+Otherwise, we use the \textit{read} procedure to obtain the accessed value.
+This procedure first reads the corresponding sequence of stored values.
+If one of these values is $\tpoison$, then it returns $\tpoison$.
+If one of these values is $\tundef$, then it returns $\tundef$.
+Otherwise, we deserialize this sequence of values (bytes) into an integer of the appropriate type.
 
 \subsubsection{Store}
+% TODO: what happens if p/v is undef/poison?
+When writing a value $v$ to a pointer value $p$,
+we need to make sure that (1) $p < p + n$ and (2) there exists a memory object $(\addr, \size, \arrayvalue)$ in the heap $h$ such that $\addr \leq p < \addr + \size$.
+If that is not the case, then the result is undfined-behavior.
+Otherwise, we use the \textit{write} procedure to store the value $v$.
+This procedure serializes the value $v$ into a sequence of bytes and updates the array $\arrayvalue$ accordingly.
 
 \subsubsection{GetElementPtr}
 % mention flags (nuw, nusw, inbounds)
