@@ -88,8 +88,9 @@
 \ruledefsmall{Free}{
   \instrat{\location} = \codequote{\tcall~\intrinsicfunc{free}(e)} \quad
   \evalexprty{e}{\symlocalstore}{\pointertype} = p \quad
+  m \models \pc \quad
   \mo \in \symmemory \quad
-  \mathit{is\_base\_address}(p, mo) \quad
+  \mathit{is\_base\_address}(p, mo, m) \quad
   \mathit{remove}(\symmemory, \mo) = \symmemory'
 }
 {
@@ -101,29 +102,31 @@
 \ruledefsmall{Load}{
   \instrat{\location} = \codequote{x~\texttt{=}~\tload^{\tau}~e} \quad
   \evalexprty{e}{\symlocalstore}{\pointertype} = p \quad
+  m \models \pc \quad
   \mo \in \symmemory \quad
-  \mathit{is\_inbounds}(p, |\tau|, mo) \quad
-  \widetilde{\mathit{read}}(\mo, p, \tau) = v \quad
+  \mathit{is\_inbounds}(p, |\tau|, mo, m) \quad
+  \mathit{read}(\mo, p, |\tau|) = v \quad
 }
 {
   \symstate{\location}{\symlocalstore}{\symstack}{\symmemory}{\pc}
   \step
-  \symstate{\nextinstr{\location}}{\symlocalstore[x \mapsto v]}{\symstack}{\symmemory}{\pc}
+  \symstate{\nextinstr{\location}}{\symlocalstore[x \mapsto v]}{\symstack}{\symmemory}{\pc \land \rangecond(p, |\tau|, \mo)}
 }
 \\[1em]
 \ruledefsmall{Store}{
   \instrat{\location} = \codequote{\tstore^{\tau}~e_1~e_2} \quad
   \evalexprty{e_1}{\symlocalstore}{\tau} = v \quad
   \evalexprty{e_2}{\symlocalstore}{\pointertype} = p \quad
+  m \models \pc \quad
   \mo \in \symmemory \quad
-  \mathit{is\_inbounds}(p, |\tau|, mo) \quad
-  \widetilde{\mathit{write}}(\mo, p, v) = \mo' \quad
+  \mathit{is\_inbounds}(p, |\tau|, mo, m) \quad
+  \mathit{write}(\mo, p, v) = \mo' \quad
   \mathit{replace}(\symmemory, \mo') = \symmemory'
 }
 {
   \symstate{\location}{\symlocalstore}{\symstack}{\symmemory}{\pc}
   \step
-  \symstate{\nextinstr{\location}}{\symlocalstore}{\symstack}{\symmemory'}{\pc}
+  \symstate{\nextinstr{\location}}{\symlocalstore}{\symstack}{\symmemory'}{\pc \land \rangecond(p, |\tau|, \mo)}
 }
 \\[1em]
 \ruledefsmall{GetElementPtr}{
