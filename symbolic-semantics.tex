@@ -9,3 +9,72 @@
     \item instructions
     \item GEP
 \end{itemize}
+
+\begin{figure}[t]
+\[
+\begin{array}{c}
+\ruledefsmall{Assign}{
+    \instrat{\location} = \codequote{x ~\texttt{=}~ e} \quad
+    e = \codequote{\toper^\tau\sdots} / \codequote{\tcast^{\_ \to \tau}\sdots} \quad
+    \welldef{\evalexprty{e}{\symlocalstore}{\tau} \neq \bot}
+}
+{
+    \symstate{\location}{\symlocalstore}{\symstack}{\symmemory}{\pc}
+    \symstep
+    \symstate{\nextinstr{\location}}{\symlocalstore[x \mapsto \evalexprty{e}{\symlocalstore}{\tau}]}{\symstack}{\symmemory}{\pc}
+}
+\\[1.2em]
+\ruledefsmall{Branch-True}{
+    \instrat{\location} = \codequote{\tbr ~ e ~ b_1 ~ b_2}
+    \quad
+    \welldef{\location\triangleright b_i \neq \bot}
+    \quad
+    \welldef{\evalexprty{e}{\symlocalstore}{\bvsort1} \neq \bot}
+}
+{
+    \symstate{\location}{\symlocalstore}{\symstack}{\symmemory}{\pc}
+    \symstep
+    \symstate{\location\triangleright b_1}{\symlocalstore}{\symstack}{\symmemory}{\pc \land \evalexprty{e}{\symlocalstore}{\bvsort1}}
+}
+\\[1.2em]
+\ruledefsmall{Branch-False}{
+    \instrat{\location} = \codequote{\tbr ~ e ~ b_1 ~ b_2}
+    \quad
+    \welldef{\location\triangleright b_i \neq \bot}
+    \quad
+    \welldef{\evalexprty{e}{\symlocalstore}{\bvsort1} \neq \bot}
+}
+{
+    \symstate{\location}{\symlocalstore}{\symstack}{\symmemory}{\pc}
+    \symstep
+    \symstate{\location\triangleright b_2}{\symlocalstore}{\symstack}{\symmemory}{\pc \land \lnot\evalexprty{e}{\symlocalstore}{\bvsort1}}
+}
+\\[1.2em]
+\ruledefsmall{Make-Symbolic}{
+  \begin{array}{@{}c@{}}
+    \instrat{\location} = \codequote{x ~\texttt{=}~ \tcall ~ \intrinsicfunc{make\_symbolic}()}
+    \\
+    \alpha \not \in \freevars(\symlocalstore) \cup \freevars(\symstack)
+  \end{array}
+}
+{
+    \symstate{\location}{\symlocalstore}{\symstack}{\symmemory}{\pc}
+    \symstep
+    \symstate{\nextinstr{\location}}{\symlocalstore[x \mapsto \alpha]}{\symstack}{\symmemory}{\pc}
+}
+\\[1.2em]
+\ruledefsmall{Assume}{
+    \instrat{\location} = \codequote{x ~\texttt{=}~ \tcall ~ \intrinsicfunc{assume}(e)}
+    \quad
+    \welldef{\evalexprty{e}{\symlocalstore}{\bvsort1} \neq \bot}
+}
+{
+    \symstate{\location}{\symlocalstore}{\symstack}{\symmemory}{\pc}
+    \symstep
+    \symstate{\nextinstr{\location}}{\symlocalstore}{\symstack}{\symmemory}{\pc \land \evalexprty{e}{\symlocalstore}{\bvsort1}}
+}
+\end{array}
+\]
+\caption{Symbolic operational small-step semantics of LLVM IR.}
+\label{fig:symbolic-semantics}
+\end{figure}
