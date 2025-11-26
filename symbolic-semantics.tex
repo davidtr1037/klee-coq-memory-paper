@@ -2,6 +2,13 @@
 % TODO: allocator
 % TODO: explain why deterministic
 % TODO: requires the same allocator in KLEE
+% TODO: hard-code the array sort?
+
+A \emph{symbolic memory object} is defined as a tuple:
+\[ (\addr, \size, \smtarray) \in \Vals^{\pointertype} \times \Vals^{\indextype} \times \arraysort{\smtsort{8}}{\smtsort{32}} \]
+which is similar to the definition of a concrete memory object,
+but now the contents are represented using an SMT array, \ie a store expression.
+The symbolic heap and the symbolic allocator are defined similarly to their concrete counterparts.
 
 \subsection{Symbolic Semantics}
 \label{sec:symbolic-semantics}
@@ -96,7 +103,7 @@
 {
   \symstate{\location}{\symlocalstore}{\symstack}{\symmemory}{\pc}
   \step
-  \symstate{\nextinstr{\location}}{\symlocalstore}{\symstack}{\symmemory'}{\pc}
+  \symstate{\nextinstr{\location}}{\symlocalstore}{\symstack}{\symmemory'}{\pc \land \baseaddrcond(p, |\tau|, \mo)}
 }
 \\[1em]
 \ruledefsmall{Load}{
