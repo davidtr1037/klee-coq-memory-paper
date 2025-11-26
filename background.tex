@@ -99,11 +99,9 @@ and then the resulting offset is converted to the pointer type and added to the 
 % TODO: add modified pseudo-code?
 The $\tgep$ instruction may have flags (\eg \opcode{nuw}, \opcode{nusw}, and \opcode{inbounds}) that impose additional rules.
 For example, if the \opcode{nuw} flag is enabled, then the following must hold:
-\begin{enumerate}
-\item If the type of an index is larger than the index type, the truncation to the index type must preserve the unsigned value.
-\item The multiplication of an index by the type size does not wrap the index type in an unsigned sense.
-\item The successive addition of each offset (without adding the base address) does not wrap the index type in an unsigned sense.
-\end{enumerate}
+(1) if the type of an index is larger than the index type, the truncation to the index type must preserve the unsigned value,
+(2) the multiplication of an index by the type size does not wrap the index type in an unsigned sense, and
+(3) the successive addition of each offset (without adding the base pointer) does not wrap the index type in an unsigned sense.
 If one of these conditions is violated, the result is $\tpoison$.
 
 %First, we compute the value of the base pointer $e$ and then the values of the indices $e_i$.
