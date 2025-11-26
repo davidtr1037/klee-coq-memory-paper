@@ -73,6 +73,71 @@
     \symstep
     \symstate{\nextinstr{\location}}{\symlocalstore}{\symstack}{\symmemory}{\pc \land \evalexprty{e}{\symlocalstore}{\bvsort1}}
 }
+\\[1em]
+\ruledefsmall{Malloc}{
+  \instrat{\location} = \codequote{x~\texttt{=}~\tcall^{\pointertype}~\intrinsicfunc{malloc}(e)} \quad
+  \evalexprty{e}{\symlocalstore}{\indextype} = n \quad
+  \mathit{allocate}(\symmemory, n) = (\symmemory', p) \quad
+}
+{
+  \symstate{\location}{\symlocalstore}{\symstack}{\symmemory}{\pc}
+  \symstep
+  \symstate{\nextinstr{\location}}{\symlocalstore[x \mapsto p]}{\symstack}{\symmemory'}{\pc}
+}
+\\[1em]
+\ruledefsmall{Free}{
+  \instrat{\location} = \codequote{\tcall~\intrinsicfunc{free}(e)} \quad
+  \evalexprty{e}{\symlocalstore}{\pointertype} = p \quad
+  \mo \in \symmemory \quad
+  \mathit{is\_base\_address}(p, mo) \quad
+  \mathit{remove}(\symmemory, \mo) = \symmemory'
+}
+{
+  \symstate{\location}{\symlocalstore}{\symstack}{\symmemory}{\pc}
+  \step
+  \symstate{\nextinstr{\location}}{\symlocalstore}{\symstack}{\symmemory'}{\pc}
+}
+\\[1em]
+\ruledefsmall{Load}{
+  \instrat{\location} = \codequote{x~\texttt{=}~\tload^{\tau}~e} \quad
+  \evalexprty{e}{\symlocalstore}{\pointertype} = p \quad
+  \mo \in \symmemory \quad
+  \mathit{is\_inbounds}(p, |\tau|, mo) \quad
+  \widetilde{\mathit{read}}(\mo, p, \tau) = v \quad
+}
+{
+  \symstate{\location}{\symlocalstore}{\symstack}{\symmemory}{\pc}
+  \step
+  \symstate{\nextinstr{\location}}{\symlocalstore[x \mapsto v]}{\symstack}{\symmemory}{\pc}
+}
+\\[1em]
+\ruledefsmall{Store}{
+  \instrat{\location} = \codequote{\tstore^{\tau}~e_1~e_2} \quad
+  \evalexprty{e_1}{\symlocalstore}{\tau} = v \quad
+  \evalexprty{e_2}{\symlocalstore}{\pointertype} = p \quad
+  \mo \in \symmemory \quad
+  \mathit{is\_inbounds}(p, |\tau|, mo) \quad
+  \widetilde{\mathit{write}}(\mo, p, v) = \mo' \quad
+  \mathit{replace}(\symmemory, \mo') = \symmemory'
+}
+{
+  \symstate{\location}{\symlocalstore}{\symstack}{\symmemory}{\pc}
+  \step
+  \symstate{\nextinstr{\location}}{\symlocalstore}{\symstack}{\symmemory'}{\pc}
+}
+\\[1em]
+\ruledefsmall{GetElementPtr}{
+  \instrat{\location} = \codequote{x~\texttt{=}~\tgep~\pointertypeof{\tau}~e~\overline{(\tau_i, e_i)}} \quad
+  |\overline{(\tau_i, e_i)}| > 0 \quad
+  \evalexprty{e}{\symlocalstore}{\pointertypeof{\tau}} = p \quad
+  \evalexprty{e_i}{\symlocalstore}{\tau_i} = j_i \quad
+  \mathit{eval\_gep}(\tau, p, j_0, [...]) = v
+}
+{
+  \symstate{\location}{\symlocalstore}{\symstack}{\symmemory}{\pc}
+  \step
+  \symstate{\nextinstr{\location}}{\symlocalstore[x \mapsto v]}{\symstack}{\symmemory}{\pc}
+}
 \end{array}
 \]
 \caption{Symbolic operational small-step semantics of LLVM IR.}
