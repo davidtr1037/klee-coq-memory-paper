@@ -53,7 +53,7 @@ Otherwise, the result is undefined-behavior.
 \subsubsection{Load}
 % TODO: what happens if p is undef/poison?
 When reading $n$ bytes from a pointer value $p$,
-we need to make sure that (1) $p < p + n$ and (2) there exists a memory object $(\addr, \size, \arrayvalue)$ in the heap $h$ such that $\addr \leq p < \addr + \size$.
+we need to make sure that there exists a memory object $(\addr, \size, \arrayvalue)$ in the heap $h$ such that (1) $p < p + n$ and (2) $\addr \leq p < \addr + \size$.
 If that is not the case, then the result is undfined-behavior.
 Otherwise, we use the \textit{read} procedure to obtain the accessed value.
 This procedure first reads the corresponding sequence of stored values.
@@ -64,13 +64,57 @@ Otherwise, we deserialize this sequence of values (bytes) into an integer of the
 \subsubsection{Store}
 % TODO: what happens if p/v is undef/poison?
 When writing a value $v$ to a pointer value $p$,
-we need to make sure that (1) $p < p + n$ and (2) there exists a memory object $(\addr, \size, \arrayvalue)$ in the heap $h$ such that $\addr \leq p < \addr + \size$.
+we need to make sure that there exists a memory object $(\addr, \size, \arrayvalue)$ in the heap $h$ such that (1) $p < p + n$ and (2) $\addr \leq p < \addr + \size$.
 If that is not the case, then the result is undfined-behavior.
 Otherwise, we use the \textit{write} procedure to store the value $v$.
 This procedure serializes the value $v$ into a sequence of bytes and updates the array $\arrayvalue$ accordingly.
 
 \subsubsection{GetElementPtr}
-% mention flags (nuw, nusw, inbounds)
+% TODO: mention flags (nuw, nusw, inbounds)
+% TODO: address --> pointer?
+% TODO: index / offset
+% TODO: link to the lines
+
+The $\tgep$ instruction computes the address of a subelement of an aggregate data structure (array, struct, \etc.).
+Note that it only performs address calculations without accessing the memory.
+The first argument is the base pointer to start from,
+and the remaining arguments are indices that indicate which of the elements of the aggregate object are indexed.
+The interpretation of each index dependends on the type being indexed into.
+The first index is always indexed into the base pointer type,
+the second index is indexed into the element type of the base pointer type, \etc
+The first indexed type must be a pointer type, and subsequent types can be either array types or struct types.
+
+A simplified version of the $\tgep$ semantics is given in~\Cref{alg:gep}.
+All the indices are first converted to values of the index type (sign-extended or truncated), and then translated into offsets.
+The first index is used to move accross the elements corresponding to the base pointer type,
+so it is multiplied by the type size of the element type of the base pointer type (\cref{line:first-index}).
+The remaining indices are translated into offsets based on the indexed type.
+If the indexed type is an array type,
+then the index is multiplied by the type size of the indexed type (\cref{line:array-index}).
+If the indexed type is a struct type,
+then the index is translated into a field selector (\cref{line:struct-index}).
+The computed offsets are sequentially summed up,
+and then the resulting offset is converted to the pointer type and added to the base pointer.
+
+% TODO: add modified pseudo-code?
+The $\tgep$ instruction may have flags (\eg \opcode{nuw}, \opcode{nusw}, and \opcode{inbounds}) that impose additional rules.
+For example, if the \opcode{nuw} flag is enabled, then the following must hold:
+\begin{enumerate}
+\item If the type of an index is larger than the index type, the truncation to the index type must preserve the unsigned value.
+\item The multiplication of an index by the type size does not wrap the index type in an unsigned sense.
+\item The successive addition of each offset (without adding the base address) does not wrap the index type in an unsigned sense.
+\end{enumerate}
+If one of these conditions is violated, the result is $\tpoison$.
+
+%First, we compute the value of the base pointer $e$ and then the values of the indices $e_i$.
+%Then, to compute the resulting pointer, we invoke \textit{eval\_gep}.
+%The complete semantics of \tgep is rather complicated,
+%so we first describe a simplified version of its semantics in ...
+%...
+%If $p$ is poison/undef, then
+%If one of the indices is poison, then
+%If one of the indices is undef, then
+%Otherwise, all the arguments are integral values and ...
 
 \begin{figure}
 \scalebox{0.9}{
@@ -223,7 +267,7 @@ $
 
 \begin{algorithm}[t]
 \caption{The basic semantics of \tgep.}
-\label{alg:gep-klee}
+\label{alg:gep}
 \begin{algorithmic}[1]
 
 \Function{compute-offset}{$\tau, o, \overline{j}$}
@@ -232,22 +276,22 @@ $
     \EndIf
     \State $\overline{j} \gets j_1 :: \overline{j'}$
     \If {$\tau = \arraytype{\tau'}$}
-        \State $o \gets o + \mathit{sign\_ext}_{\indextype}(j_1) \cdot |\tau'|$
+        \State $o \gets o + \convert_{\indextype}(j_1) \cdot |\tau'|$ \label{line:array-index}
         \State \Return \Call{compute-offset}{$\tau', o, \overline{j'}$}
     \EndIf
     \If {$\tau = \structtype{\overline{\tau}}$}
-        \State $n \gets \mathit{to\_nat}(j_1)$
+        \State $n \gets \convert_{\indextype}(j_1)$
         \State $\tau_{n} \gets \mathit{field\_type}(\overline{\tau}, n)$
-        \State $o \gets o + \mathit{field\_offset}(\overline{\tau}, n)$
+        \State $o \gets o + \mathit{field\_offset}(\overline{\tau}, n)$ \label{line:struct-index}
         \State \Return \Call{compute-offset}{$\tau_{n}, o, \overline{j'}$}
     \EndIf
     \State ...
 \EndFunction
 
 \Function{compute-pointer}{$\tau, p, j_0, \overline{j}$}
-    \State $o \gets \mathit{trunc}_{\indextype}(j_0) \cdot |\tau|$
+    \State $o \gets \convert_{\indextype}(j_0) \cdot |\tau|$ \label{line:first-index}
     \State $r \gets \Call{compute-offset}{\tau, o, \overline{j}}$
-    \State \Return $p + \mathit{zero\_ext}_{\pointertype}(r)$
+    \State \Return $p + \zeroext_{\pointertype}(r)$
 \EndFunction
 
 \Function{eval-gep}{$\tau, p, j_0, \overline{j}$}
