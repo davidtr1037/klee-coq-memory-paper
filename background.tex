@@ -84,17 +84,17 @@ The first index is always indexed into the base pointer type,
 the second index is indexed into the element type of the base pointer type, \etc
 The first indexed type must be a pointer type, and subsequent types can be either array types or struct types.
 
-A simplified version of the $\tgep$ semantics is given in~\Cref{alg:gep}.
+The semantics of $\tgep$ is given in~\Cref{alg:gep}.
 All the indices are first converted to values of the index type (sign-extended or truncated), and then translated into offsets.
-The first index is used to move accross the elements corresponding to the base pointer type,
+The first index $j_0$ is used to move accross the elements corresponding to the base pointer type,
 so it is multiplied by the type size of the element type of the base pointer type (\cref{line:first-index}).
-The remaining indices are translated into offsets based on the indexed type.
+The remaining indices $\overline{j}$ are translated into offsets based on the indexed type.
 If the indexed type is an array type,
 then the index is multiplied by the type size of the indexed type (\cref{line:array-index}).
 If the indexed type is a struct type,
 then the index is translated into a field selector (\cref{line:struct-index}).
 The computed offsets are sequentially summed up,
-and then the resulting offset is converted to the pointer type and added to the base pointer.
+and then the resulting offset is converted to the pointer type and added to the base pointer $p$.
 
 % TODO: add modified pseudo-code?
 The $\tgep$ instruction may have attributes (\opcode{nuw}, \opcode{nusw}, and \opcode{inbounds}) that impose additional rules.
@@ -264,7 +264,7 @@ $
 \end{figure}
 
 \begin{algorithm}[t]
-\caption{The semantics of \tgep (without any attributes).}
+\caption{The simplified semantics of $\tgep$ (without any attributes).}
 \label{alg:gep}
 \begin{algorithmic}[1]
 
