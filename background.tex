@@ -43,6 +43,7 @@ When allocating a memory object,
 the size of the allocation must be non-negative and must not exceed the largest signed integer that fits into the index type.
 As mentioned before, the address interval of the allocated memory object must not wrap around the address space.
 If one of these properties is violated, the result is undefined-behavior.
+The mapping of the newly allocated memory object is set to a function that maps all the indices to a pre-defined value (byte).
 
 \subsubsection{Free}
 % TODO: assume that the type of p is iptr?
