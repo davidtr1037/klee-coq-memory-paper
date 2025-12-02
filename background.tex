@@ -344,3 +344,11 @@ Then $c$ is an \emph{error} state, denoted by $\errorstate(c)$, if one of the fo
     \end{enumerate}
 \end{enumerate}
 \end{definition}
+
+\begin{definition}
+\label{def:well-formed}
+A memory object $(\addr, \size, \arrayvalue)$ is well-formed if its interval does not wrap around the address space,
+\ie $a + \zeroext_{\bvsort{64}}(s)$ does not overflow.
+A memory $\memory$ is well-formed if all its memory objects are well-formed.
+A concrete state $\progstate{\location}{\localstore}{\stack}{\memory}$ is well-formed if $\memory$ is well-formed.
+\end{definition}
