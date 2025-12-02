@@ -21,6 +21,7 @@ In addition, the index type also specifies the type used to represent the size o
 % TODO: add type to malloc/free/gep?
 % TODO: say that we assume: pointer type = i64 / index type = i32
 % TODO: say the LLVM allows some freedom in the repr of memory objects / address spaces / etc.
+% TODO: initial mapping
 
 A \emph{memory object} is defined as a tuple:
 \[ (\addr, \size, \arrayvalue) \in \Vals^{\pointertype} \times \Vals^{\indextype} \times \Arrays \quad \quad \Arrays \triangleq \Z \rightarrow \Vals^{\bvsort{8}} \cup \{\tundef, \tpoison\} \]
@@ -305,6 +306,28 @@ $
 \end{algorithmic}
 \end{algorithm}
 
-% TODO: a quick overview of basic instructions
-% TODO: semantics of memory-related instructions
-% TODO: memory allocator?
+% TODO: some text before?
+\begin{definition}
+\label{def:error-state}
+Let $c \triangleq \progstate{\location}{\localstore}{\stack}{\memory}$ be a concrete state.
+Then $c$ is an \emph{error} state, denoted by $\errorstate(c)$, if one of the following holds:
+\begin{enumerate}[left=0pt]
+    \item $\instrat{\location} = \codequote{\tunreachable}$
+    \item $\instrat{\location} = \codequote{x \ \texttt{=} \ op \ \bvsort{w} \ e_1 \ e_2}$, and one of the following holds, where $v_k \triangleq \evalexprty{e_k}{\localstore}{\bvsort{w}}$:
+    \begin{enumerate}[left=-3pt]
+        \item $op \in \{\opcode{udiv}, \opcode{sdiv}, \opcode{urem}, \opcode{srem}\}$ and $v_2 = \bvval{0}{w}$
+        \item $op = \opcode{sdiv}$, $v_1 = \bvval{(-2^{w - 1})}{w}$, and $v_2 = \bvval{(-1)}{w}$
+        \item $op \in \{\opcode{shl}, \opcode{lshr}, \opcode{ashr}\}$ and $v_2 = \bvval{n}{w}$, and $n \geq w$
+    \end{enumerate}
+    \item $\instrat{\location} = \codequote{x \ \texttt{=} \ \tload^{\tau} \ e}$, and the following holds:
+    \begin{enumerate}[left=-3pt]
+        \item $\evalexprty{e}{\sigma}{\tau} = p$
+        \item $\invalidaccess(\memory, p, |\tau|)$
+    \end{enumerate}
+    \item $\instrat{\location} = \codequote{\tstore^{\tau} \ e_1 \ e_2}$, and the following holds:
+    \begin{enumerate}[left=-3pt]
+        \item $\evalexprty{e_2}{\sigma}{\tau} = p$
+        \item $\invalidaccess(\memory, p, |\tau|)$
+    \end{enumerate}
+\end{enumerate}
+\end{definition}
