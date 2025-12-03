@@ -208,9 +208,9 @@ $
 \ruledefsmall{Free}{
   \instrat{\location} = \codequote{\tcall~\intrinsicfunc{free}(e)} \quad
   \evalexprty{e}{\localstore}{\pointertype} = p \quad
-  \mathit{mo} \in \memory \quad
-  \mathit{is\_base\_address}(p, mo) \quad
-  \mathit{remove}(\memory, \mathit{mo}) = \memory'
+  \mo \in \memory \quad
+  \isbaseaddr(p, \mo) \quad
+  \mathit{remove}(\memory, \mo) = \memory'
 }
 {
   \progstate{\location}{\localstore}{\stack}{\memory}
@@ -221,9 +221,9 @@ $
 \ruledefsmall{Load}{
   \instrat{\location} = \codequote{x~\texttt{=}~\tload^{\tau}~e} \quad
   \evalexprty{e}{\localstore}{\pointertype} = p \quad
-  \mathit{mo} \in \memory \quad
-  \mathit{is\_inbounds}(p, |\tau|, mo) \quad
-  \mathit{read}(\mathit{mo}, p, \tau) = v \quad
+  \mo \in \memory \quad
+  \isinbounds(p, |\tau|, \mo) \quad
+  \mathit{read}(\mo, p, \tau) = v \quad
 }
 {
   \progstate{\location}{\localstore}{\stack}{\memory}
@@ -235,10 +235,10 @@ $
   \instrat{\location} = \codequote{\tstore^{\tau}~e_1~e_2} \quad
   \evalexprty{e_1}{\localstore}{\tau} = v \quad
   \evalexprty{e_2}{\localstore}{\pointertype} = p \quad
-  \mathit{mo} \in \memory \quad
-  \mathit{is\_inbounds}(p, |\tau|, mo) \quad
-  \mathit{write}(\mathit{mo}, p, v) = \mathit{mo}' \quad
-  \mathit{replace}(\memory, \mathit{mo}') = \memory'
+  \mo \in \memory \quad
+  \isinbounds(p, |\tau|, \mo) \quad
+  \mathit{write}(\mo, p, v) = \mo' \quad
+  \mathit{replace}(\memory, \mo') = \memory'
 }
 {
   \progstate{\location}{\localstore}{\stack}{\memory}
@@ -343,6 +343,13 @@ Then $c$ is an \emph{error} state, denoted by $\errorstate(c)$, if one of the fo
         \item $...$
     \end{enumerate}
 \end{enumerate}
+where:
+\[
+\begin{array}{ll}
+    \invalidpointer(\memory, \pc, p, n) & \triangleq \forall \mo \in \memory. \ \neg \isinbounds(p, n, \mo) \\
+    \invalidbaseaddress(\memory, \pc, p) & \triangleq \forall \mo \in \memory. \ \neg \isbaseaddr(p, \mo)
+\end{array}
+\]
 \end{definition}
 
 \begin{definition}
