@@ -21,6 +21,9 @@ In addition, the index type also specifies the type used to represent the size o
 % TODO: add type to malloc/free/gep?
 % TODO: say that we assume: pointer type = i64 / index type = i32
 % TODO: say the LLVM allows some freedom in the repr of memory objects / address spaces / etc.
+% TODO: UB is interpreted as an error
+% TODO: fix the Malloc rule (set the parameter type to i32?)?
+% TODO: fix the Assume rule (set the parameter type to i1?)?
 
 A \emph{memory object} is defined as a tuple:
 \[ (\addr, \size, \arrayvalue) \in \Vals^{\pointertype} \times \Vals^{\indextype} \times \Arrays \quad \quad \Arrays \triangleq \Z \rightarrow \Vals^{\bvsort{8}} \cup \{\tundef, \tpoison\} \]
@@ -144,12 +147,12 @@ $
 \ruledefsmall{Assign}{
   \instrat{\location} = \codequote{v~\texttt{=}~e} \quad
   e = \codequote{\toper^\tau\sdots} / \codequote{\tcast^{\_ \to \tau}\sdots} \quad
-  \welldef{\evalexprty{e}\sigma\tau \neq \bot}
+  \welldef{\evalexprty{e}\localstore\tau \neq \bot}
 }
 {
   \progstate{\location}{\localstore}{\stack}{\memory}
   \step
-  \progstate{\nextinstr{\location}}{\localstore[x \mapsto \evalexprty{e}\sigma\tau]}{\stack}{\memory}
+  \progstate{\nextinstr{\location}}{\localstore[x \mapsto \evalexprty{e}\localstore\tau]}{\stack}{\memory}
 }
 \\[1em]
 \ruledefsmall{Branch-True}{
@@ -321,21 +324,21 @@ Then $c$ is an \emph{error} state, denoted by $\errorstate(c)$, if one of the fo
     \end{enumerate}
     \item $\instrat{\location} = \textup{$\codequote{x \ \texttt{=} \ \tcall^{\pointertype} \ \intrinsicfunc{malloc}(e)}$}$, and the following holds:
     \begin{enumerate}
-        \item $\evalexprty{e}{\sigma}{\tau} > max\_signed_{\bvsort{32}}$
+        \item $\evalexprty{e}{\localstore}{\tau} > max\_signed_{\bvsort{32}}$
     \end{enumerate}
     \item $\instrat{\location} = \textup{$\codequote{\tcall~\intrinsicfunc{free}(e)}$}$, and the following holds:
     \begin{enumerate}
-        \item $\evalexprty{e}{\sigma}{\tau} = p$
+        \item $\evalexprty{e}{\localstore}{\tau} = p$
         \item $\invalidbaseaddress(\memory, p)$
     \end{enumerate}
     \item $\instrat{\location} = \textup{$\codequote{x \ \texttt{=} \ \tload^{\tau} \ e}$}$, and the following holds:
     \begin{enumerate}
-        \item $\evalexprty{e}{\sigma}{\tau} = p$
+        \item $\evalexprty{e}{\localstore}{\tau} = p$
         \item $\invalidpointer(\memory, p, |\tau|)$
     \end{enumerate}
     \item $\instrat{\location} = \textup{$\codequote{\tstore^{\tau} \ e_1 \ e_2}$}$, and the following holds:
     \begin{enumerate}
-        \item $\evalexprty{e_2}{\sigma}{\tau} = p$
+        \item $\evalexprty{e_2}{\localstore}{\tau} = p$
         \item $\invalidpointer(\memory, p, |\tau|)$
     \end{enumerate}
     \item $\instrat{\location} = \textup{$\codequote{x \ \texttt{=} \ \tgep~\pointertypeof{\tau} \ e \ \overline{(\tau_i, e_i)}}$}$
