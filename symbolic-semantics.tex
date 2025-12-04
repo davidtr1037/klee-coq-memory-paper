@@ -1,4 +1,7 @@
 \subsection{Symbolic Memory Model}
+% TODO: some background about SE
+% TODO: symbolic state
+
 % TODO: allocator
 % TODO: explain why deterministic
 % TODO: requires the same allocator in KLEE
@@ -153,6 +156,35 @@ The symbolic heap and the symbolic allocator are defined similarly to their conc
 \caption{Symbolic operational small-step semantics of LLVM IR.}
 \label{fig:symbolic-semantics}
 \end{figure}
+
+\begin{algorithm}[t]
+\caption{The simplified symbolic semantics of $\tgep$ (without attributes).}
+\label{alg:gep}
+\begin{algorithmic}[1]
+
+\Function{compute-offset}{$\tau, o, \overline{j}$}
+    \If {$|\overline{j}| = 0$}
+        \State \Return $o$
+    \EndIf
+    \State $\overline{j} \gets j_1 :: \overline{j'}$
+    \If {$\tau = \arraytype{\tau'}$}
+        \State $o \gets \bvadd(o, \bvmul(\bvconvert(j_1), \bvconst(|\tau'|)))$ \label{line:array-index}
+        \State \Return \Call{compute-offset}{$\tau', o, \overline{j'}$}
+    \EndIf
+    \If {$\tau = \structtype{\overline{\tau}}$}
+        \State ...
+    \EndIf
+    \State ...
+\EndFunction
+
+\Function{compute-pointer}{$\tau, p, j_0, \overline{j}$}
+    \State $o \gets \bvmul(\bvconvert(j_0), \bvconst(|\tau|))$ \label{line:first-index}
+    \State $r \gets \Call{compute-offset}{\tau, o, \overline{j}}$
+    \State \Return $p + \bvzext(r)$
+\EndFunction
+
+\end{algorithmic}
+\end{algorithm}
 
 \begin{definition}
 Let $s \triangleq \symstate{\location}{\symlocalstore}{\symstack}{\memory}{\pc}$ be a symbolic state.
