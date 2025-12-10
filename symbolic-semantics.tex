@@ -168,7 +168,7 @@ The symbolic heap and the symbolic allocator are defined similarly to their conc
     \EndIf
     \State $\overline{j} \gets j_1 :: \overline{j'}$
     \If {$\tau = \arraytype{\tau'}$}
-        \State $o \gets \bvadd_{32}(o, \bvmul_{32}(\bvsext_{32}(j_1), \bvconst_{32}(|\tau'|)))$ \label{line:array-index}
+        \State $o \gets \bvadd_{32}(o, \bvmul_{32}(\bvsext_{32}(j_1), \bvconst{32}{|\tau'|}))$ \label{line:array-index}
         \State \Return \Call{compute-offset}{$\tau', o, \overline{j'}$}
     \EndIf
     \If {$\tau = \structtype{\overline{\tau}}$}
@@ -178,7 +178,7 @@ The symbolic heap and the symbolic allocator are defined similarly to their conc
 \EndFunction
 
 \Function{compute-pointer}{$\tau, p, j_0, \overline{j}$}
-    \State $o \gets \bvmul_{32}(\bvsext_{32}(j_0), \bvconst_{32}(|\tau|))$ \label{line:first-index}
+    \State $o \gets \bvmul_{32}(\bvsext_{32}(j_0), \bvconst{32}{|\tau|})$ \label{line:first-index}
     \State $r \gets \Call{compute-offset}{\tau, o, \overline{j}}$
     \State \Return $\bvadd_{64}(p, \bvzext_{64}(r))$
 \EndFunction

@@ -66,7 +66,7 @@ The symbolic state computed by the \SE engine:
     {...}
     {\{ \nameid{\_} \mapsto \addr_0 \}}
     {[]}
-    {(\_, [(\addr_0, 10, \arraystore{\arraystore{\arrayconst{\arrayinitvalue}}{0}{\arrayinitvalue}}{1}{\arrayinitvalue})])}
+    {(\_, [(\addr_0, 10, \arraystore{\arraystore{\arrayconst{\arrayinitvalue}}{\bvconst{32}{0}}{\arrayinitvalue}}{\bvconst{32}{1}}{\arrayinitvalue})])}
     {\true}
 \]
 
@@ -85,7 +85,7 @@ The derived symbolic state:
 \[
 \symstate
     {...}
-    {\{ ..., \nameid{arrayidx} \mapsto \bvadd_{64}(\addr_0, \bvzext_{64}(\bvmul_{32}(\bvextract_{32}(0), 1))) \}}
+    {\{ ..., \nameid{arrayidx} \mapsto \bvadd_{64}(\addr_0, \bvzext_{64}(\bvmul_{32}(\bvextract_{32}(\bvconst{64}{0}), \bvconst{32}{1}))) \}}
     {[]}
     {...}
     {n < 2}
@@ -108,9 +108,11 @@ The initial symbolic state:
     {...}
     {\{ ... \}}
     {[]}
-    {(\_, [(\addr_0, 10, \arraystore{\arraystore{\arrayconst{\arrayinitvalue}}{0}{\arrayinitvalue}}{1}{\arrayinitvalue})])}
+    {(\_, [(\addr_0, 10, \smtarray_0)])}
     {n < 2}
 \]
+where:
+\[\smtarray_0 \triangleq \arraystore{\arraystore{\arrayconst{\arrayinitvalue}}{\bvconst{32}{0}}{\arrayinitvalue}}{\bvconst{32}{1}}{\arrayinitvalue} \]
 The derived symbolic state:
 \[
 \symstate
@@ -121,7 +123,7 @@ The derived symbolic state:
     {n < 2 \land \rangecond(\addr_0, 1, \symmo)}
 \]
 where:
-\[ \smtarray_1 \triangleq \arraystore{\arraystore{\arraystore{\arrayconst{\arrayinitvalue}}{0}{\arrayinitvalue}}{1}{\arrayinitvalue}}{(\addr_0 + 1) - \addr_0}{7} \]
+\[ \smtarray_1 \triangleq \arraystore{\smtarray_0}{\bvconst{64}{(\addr_0 + 1)} - \addr_0}{\bvconst{8}{7}} \]
 \[ \symmo \in ... \]
 The symbolic state computed by the \SE engine:
 \[
@@ -133,7 +135,7 @@ The symbolic state computed by the \SE engine:
     {n < 2}
 \]
 where:
-\[ \smtarray_1^{'} \triangleq \arraystore{\arraystore{\arrayconst{\arrayinitvalue}}{0}{7}}{1}{\arrayinitvalue} \]
+\[ \smtarray_1^{'} \triangleq \arraystore{\arraystore{\arrayconst{\arrayinitvalue}}{\bvconst{32}{0}}{\bvconst{8}{7}}}{\bvconst{32}{1}}{\arrayinitvalue} \]
 % TODO: note the change at offset 1
 
 \subsubsection{Example: Load}
@@ -148,7 +150,7 @@ The initial symbolic state:
     {n < 2}
 \]
 where:
-\[ \smtarray \triangleq \arraystore{\arraystore{\arrayconst{\arrayinitvalue}}{0}{7}}{1}{\arrayinitvalue} \]
+\[ \smtarray \triangleq \arraystore{\arraystore{\arrayconst{\arrayinitvalue}}{\bvconst{32}{0}}{\bvconst{8}{7}}}{\bvconst{32}{1}}{\arrayinitvalue} \]
 The derived symbolic state:
 \[
 \symstate
@@ -156,6 +158,7 @@ The derived symbolic state:
     {\{ ..., \nameid{arrayidx2} \mapsto \sdots, \nameid{\%0} \mapsto \arrayselect{\smtarray}{e} \}}
     {[]}
     {(\_, [(\addr_0, 10, \smtarray)])}
+    % TODO: use bvadd?
     {n < 2 \land \rangecond(\addr_0 + n, 1, \symmo)}
 \]
 where:
