@@ -38,6 +38,37 @@ Once this happens, the representation cannot be switched back to the optimized o
 % explain the UNSAT query in gep
 % explain the UNSAT query in symbolic load/store
 
+\subsubsection{Example: Malloc}
+The initial symbolic state:
+\[
+\symstate
+    {...}
+    {\{ \}}
+    {[]}
+    {(\_, [])}
+    {\true}
+\]
+The derived symbolic state:
+\[
+\symstate
+    {...}
+    {\{ \nameid{\_} \mapsto \addr_0 \}}
+    {[]}
+    {(\_, [(\addr_0, 10, \arrayconst{\arrayinitvalue})])}
+    {\true}
+\]
+The symbolic state computed by the \SE engine:
+\[
+\symstate
+    {...}
+    {\{ \nameid{\_} \mapsto \addr_0 \}}
+    {[]}
+    {(\_, [(\addr_0, 10, \smtarray)])}
+    {\true}
+\]
+where:
+\[ \smtarray \triangleq \arraystore{\arraystore{\arraystore{\arraystore{\arrayconst{\arrayinitvalue}}{0}{\arrayinitvalue}}{1}{\arrayinitvalue}}{2}{\arrayinitvalue}}{3}{\arrayinitvalue} \]
+
 \begin{figure}
 \lstinputlisting[basicstyle=\scriptsize\ttfamily,language=llvm,mathescape=true,breaklines=false]{code/example.simple.ll}
 \caption{A simple \llvm IR program.}
