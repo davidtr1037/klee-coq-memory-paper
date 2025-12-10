@@ -6,13 +6,13 @@ target triple = "x86_64-unknown-linux-gnu"
 ; Function Attrs: noinline nounwind uwtable
 define dso_local i32 @main() #0 !dbg !9 {
 entry:
-  %call = call noalias align 16 i8* @malloc(i64 4) #4, !dbg !13
+  %call = call noalias align 16 i8* @malloc(i64 2) #4, !dbg !13
   call void @llvm.dbg.value(metadata i8* %call, metadata !14, metadata !DIExpression()), !dbg !17
   %call1 = call i32 @klee_make_symbolic_int32(), !dbg !18
   call void @llvm.dbg.value(metadata i32 %call1, metadata !19, metadata !DIExpression()), !dbg !17
-  %cmp = icmp ult i32 %call1, 4, !dbg !21
+  %cmp = icmp ult i32 %call1, 2, !dbg !21
   call void @klee_assume_bool(i1 zeroext %cmp), !dbg !22
-  %arrayidx = getelementptr inbounds i8, i8* %call, i64 1, !dbg !23
+  %arrayidx = getelementptr inbounds i8, i8* %call, i64 0, !dbg !23
   store i8 7, i8* %arrayidx, align 1, !dbg !24
   %idxprom = zext i32 %call1 to i64, !dbg !25
   %arrayidx2 = getelementptr inbounds i8, i8* %call, i64 %idxprom, !dbg !25

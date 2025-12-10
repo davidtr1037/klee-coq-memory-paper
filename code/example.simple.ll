@@ -4,7 +4,7 @@ entry:
   %call1 = call i32 @klee_make_symbolic_int32()
   %cmp = icmp ult i32 %call1
   call void @klee_assume_bool(i1 %cmp)
-  %arrayidx = getelementptr nuw i8, i8* %call
+  %arrayidx = getelementptr nuw i8, i8* %call, i64 1
   store i8 7, i8* %arrayidx
   %idxprom = zext i32 %call1 to i64
   %arrayidx2 = getelementptr nuw i8, i8* %call, i64 %idxprom
