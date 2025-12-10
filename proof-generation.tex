@@ -55,18 +55,18 @@ The derived symbolic state:
 \[
 \symstate
     {...}
-    {\{ \nameid{\_} \mapsto \addr_0 \}}
+    {\{ \nameid{\_} \mapsto \bvconst{64}{\addr} \}}
     {[]}
-    {(\_, [(\addr_0, 10, \arrayconst{\arrayinitvalue})])}
+    {(\_, [(\addr, 10, \arrayconst{\arrayinitvalue})])}
     {\true}
 \]
 The symbolic state computed by the \SE engine:
 \[
 \symstate
     {...}
-    {\{ \nameid{\_} \mapsto \addr_0 \}}
+    {\{ \nameid{\_} \mapsto \bvconst{64}{\addr} \}}
     {[]}
-    {(\_, [(\addr_0, 10, \arraystore{\arraystore{\arrayconst{\arrayinitvalue}}{\bvconst{32}{0}}{\arrayinitvalue}}{\bvconst{32}{1}}{\arrayinitvalue})])}
+    {(\_, [(\addr, 10, \arraystore{\arraystore{\arrayconst{\arrayinitvalue}}{\bvconst{32}{0}}{\arrayinitvalue}}{\bvconst{32}{1}}{\arrayinitvalue})])}
     {\true}
 \]
 
@@ -85,7 +85,7 @@ The derived symbolic state:
 \[
 \symstate
     {...}
-    {\{ ..., \nameid{arrayidx} \mapsto \bvadd_{64}(\addr_0, \bvzext_{64}(\bvmul_{32}(\bvextract_{32}(\bvconst{64}{0}), \bvconst{32}{1}))) \}}
+    {\{ ..., \nameid{arrayidx} \mapsto \bvadd_{64}(\bvconst{64}{\addr}, \bvzext_{64}(\bvmul_{32}(\bvextract_{32}(\bvconst{64}{0}), \bvconst{32}{1}))) \}}
     {[]}
     {...}
     {n < 2}
@@ -94,7 +94,7 @@ The symbolic state computed by the \SE engine:
 \[
 \symstate
     {...}
-    {\{ ..., \nameid{arrayidx} \mapsto \addr_0 \}}
+    {\{ ..., \nameid{arrayidx} \mapsto \bvconst{64}{\addr} \}}
     {[]}
     {...}
     {n < 2}
@@ -108,7 +108,7 @@ The initial symbolic state:
     {...}
     {\{ ... \}}
     {[]}
-    {(\_, [(\addr_0, 10, \smtarray_0)])}
+    {(\_, [(\addr, 10, \smtarray_0)])}
     {n < 2}
 \]
 where:
@@ -119,11 +119,11 @@ The derived symbolic state:
     {...}
     {\{ ... \}}
     {[]}
-    {(\_, [(\addr_0, 10, \smtarray_1)])}
-    {n < 2 \land \rangecond(\addr_0, 1, \symmo)}
+    {(\_, [(\addr, 10, \smtarray_1)])}
+    {n < 2 \land \rangecond(\bvconst{64}{\addr}, 1, \symmo)}
 \]
 where:
-\[ \smtarray_1 \triangleq \arraystore{\smtarray_0}{\bvconst{64}{(\addr_0 + 1)} - \addr_0}{\bvconst{8}{7}} \]
+\[ \smtarray_1 \triangleq \arraystore{\smtarray_0}{\bvconst{64}{(\addr + 1)} - \bvconst{64}{\addr}}{\bvconst{8}{7}} \]
 \[ \symmo \in ... \]
 The symbolic state computed by the \SE engine:
 \[
@@ -131,7 +131,7 @@ The symbolic state computed by the \SE engine:
     {...}
     {\{ ... \}}
     {[]}
-    {(\_, [(\addr_0, 10, \smtarray_1^{'})])}
+    {(\_, [(\addr, 10, \smtarray_1^{'})])}
     {n < 2}
 \]
 where:
@@ -146,7 +146,7 @@ The initial symbolic state:
     {...}
     {\{ ..., \nameid{arrayidx2} \mapsto \sdots \}}
     {[]}
-    {(\_, [(\addr_0, 10, \smtarray)])}
+    {(\_, [(\addr, 10, \smtarray)])}
     {n < 2}
 \]
 where:
@@ -157,13 +157,13 @@ The derived symbolic state:
     {...}
     {\{ ..., \nameid{arrayidx2} \mapsto \sdots, \nameid{\%0} \mapsto \arrayselect{\smtarray}{e} \}}
     {[]}
-    {(\_, [(\addr_0, 10, \smtarray)])}
+    {(\_, [(\addr, 10, \smtarray)])}
     % TODO: use bvadd?
-    {n < 2 \land \rangecond(\addr_0 + n, 1, \symmo)}
+    {n < 2 \land \rangecond(\bvconst{64}{\addr} + n, 1, \symmo)}
 \]
 where:
 % TODO: should add 0_{32}?
-\[ e \triangleq \bvextract_{32}(\bvsub(\bvadd_{64}(\addr_0, \bvzext_{64}(\bvextract_{32}(\bvzext_{64}(n)))), \addr_0)) \]
+\[ e \triangleq \bvextract_{32}(\bvsub_{64}(\bvadd_{64}(\bvconst{64}{\addr}, \bvzext_{64}(\bvextract_{32}(\bvzext_{64}(n)))), \bvconst{64}{\addr})) \]
 \[ \symmo \in ... \]
 The symbolic state computed by the \SE engine:
 \[
@@ -171,7 +171,7 @@ The symbolic state computed by the \SE engine:
     {...}
     {\{ ..., \nameid{arrayidx2} \mapsto \sdots, \nameid{\%0} \mapsto \arrayselect{\smtarray}{e} \}}
     {[]}
-    {(\_, [(\addr_0, 10, \smtarray)])}
+    {(\_, [(\addr, 10, \smtarray)])}
     {n < 2}
 \]
 where:
