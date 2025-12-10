@@ -158,8 +158,7 @@ The derived symbolic state:
     {\{ ..., \nameid{arrayidx2} \mapsto \sdots, \nameid{\%0} \mapsto \arrayselect{\smtarray}{e} \}}
     {[]}
     {(\_, [(\addr, 10, \smtarray)])}
-    % TODO: use bvadd?
-    {n < 2 \land \rangecond(\bvconst{64}{\addr} + n, 1, \symmo)}
+    {n < 2 \land \rangecond(\bvadd_{64}(\bvconst{64}{\addr}, \bvzext_{64}(\bvextract_{32}(\bvzext_{64}(n)))), 1, \symmo)}
 \]
 where:
 % TODO: should add 0_{32}?
