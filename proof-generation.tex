@@ -75,7 +75,7 @@ The initial symbolic state:
     {\{ ... \}}
     {[]}
     {(\_, [(\addr_0, 10, \arraystore{\arraystore{\arrayconst{\arrayinitvalue}}{0}{\arrayinitvalue}}{1}{\arrayinitvalue})])}
-    {\true}
+    {n < 2}
 \]
 The derived symbolic state:
 \[
@@ -84,10 +84,11 @@ The derived symbolic state:
     {\{ ... \}}
     {[]}
     {(\_, [(\addr_0, 10, \smtarray_1)])}
-    {\true}
+    {n < 2 \land \rangecond(\addr_0, 1, \symmo)}
 \]
 where:
 \[ \smtarray_1 \triangleq \arraystore{\arraystore{\arraystore{\arrayconst{\arrayinitvalue}}{0}{\arrayinitvalue}}{1}{\arrayinitvalue}}{(\addr_0 + 1) - \addr_0}{7} \]
+\[ \symmo \in ... \]
 The symbolic state computed by the \SE engine:
 \[
 \symstate
@@ -95,7 +96,7 @@ The symbolic state computed by the \SE engine:
     {\{ ... \}}
     {[]}
     {(\_, [(\addr_0, 10, \smtarray_1^{'})])}
-    {\true}
+    {n < 2}
 \]
 where:
 \[ \smtarray_1^{'} \triangleq \arraystore{\arraystore{\arrayconst{\arrayinitvalue}}{0}{7}}{1}{\arrayinitvalue}\]
