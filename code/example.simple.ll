@@ -1,8 +1,8 @@
 define i32 @main() {
 entry:
-  %call = call i8* @malloc(i64 4)
+  %call = call i8* @malloc(i64 2)
   %call1 = call i32 @klee_make_symbolic_int32()
-  %cmp = icmp ult i32 %call1
+  %cmp = icmp ult i32 %call1, 2
   call void @klee_assume_bool(i1 %cmp)
   %arrayidx = getelementptr nuw i8, i8* %call, i64 1
   store i8 7, i8* %arrayidx
