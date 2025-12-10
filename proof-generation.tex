@@ -30,13 +30,19 @@ Once this happens, the representation cannot be switched back to the optimized o
 % handling different encodings of SMT arrays (KLEE/Coq)
 
 % example for malloc
-% example for gep
-% example for load
-% example for store
+% example for gep (concrete / symbolic)
+% example for load (concrete / symbolic)
+% example for store (concrete / symbolic)
 % example for free
 % use an example with load/store of i8?
 % explain the UNSAT query in gep
 % explain the UNSAT query in symbolic load/store
+
+\begin{figure}
+\lstinputlisting[basicstyle=\scriptsize\ttfamily,language=llvm,mathescape=true,breaklines=false]{code/example.simple.ll}
+\caption{A simple \llvm IR program.}
+\label{figure:example-llvm}
+\end{figure}
 
 \subsection{Optimizations}
 \begin{itemize}
