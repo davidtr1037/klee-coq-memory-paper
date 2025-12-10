@@ -63,11 +63,43 @@ The symbolic state computed by the \SE engine:
     {...}
     {\{ \nameid{\_} \mapsto \addr_0 \}}
     {[]}
-    {(\_, [(\addr_0, 10, \smtarray_0)])}
+    {(\_, [(\addr_0, 10, \arraystore{\arraystore{\arrayconst{\arrayinitvalue}}{0}{\arrayinitvalue}}{1}{\arrayinitvalue})])}
+    {\true}
+\]
+
+\subsubsection{Example: Store}
+The initial symbolic state:
+\[
+\symstate
+    {...}
+    {\{ ... \}}
+    {[]}
+    {(\_, [(\addr_0, 10, \arraystore{\arraystore{\arrayconst{\arrayinitvalue}}{0}{\arrayinitvalue}}{1}{\arrayinitvalue})])}
+    {\true}
+\]
+The derived symbolic state:
+\[
+\symstate
+    {...}
+    {\{ ... \}}
+    {[]}
+    {(\_, [(\addr_0, 10, \smtarray_1)])}
     {\true}
 \]
 where:
-\[ \smtarray_0 \triangleq \arraystore{\arraystore{\arraystore{\arraystore{\arrayconst{\arrayinitvalue}}{0}{\arrayinitvalue}}{1}{\arrayinitvalue}}{2}{\arrayinitvalue}}{3}{\arrayinitvalue} \]
+\[ \smtarray_1 \triangleq \arraystore{\arraystore{\arraystore{\arrayconst{\arrayinitvalue}}{0}{\arrayinitvalue}}{1}{\arrayinitvalue}}{(\addr_0 + 1) - \addr_0}{7} \]
+The symbolic state computed by the \SE engine:
+\[
+\symstate
+    {...}
+    {\{ ... \}}
+    {[]}
+    {(\_, [(\addr_0, 10, \smtarray_1^{'})])}
+    {\true}
+\]
+where:
+\[ \smtarray_1^{'} \triangleq \arraystore{\arraystore{\arrayconst{\arrayinitvalue}}{0}{7}}{1}{\arrayinitvalue}\]
+% TODO: note the change at offset 1
 
 \begin{figure}
 \lstinputlisting[basicstyle=\scriptsize\ttfamily,language=llvm,mathescape=true,breaklines=false]{code/example.simple.ll}
