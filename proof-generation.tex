@@ -99,8 +99,45 @@ The symbolic state computed by the \SE engine:
     {n < 2}
 \]
 where:
-\[ \smtarray_1^{'} \triangleq \arraystore{\arraystore{\arrayconst{\arrayinitvalue}}{0}{7}}{1}{\arrayinitvalue}\]
+\[ \smtarray_1^{'} \triangleq \arraystore{\arraystore{\arrayconst{\arrayinitvalue}}{0}{7}}{1}{\arrayinitvalue} \]
 % TODO: note the change at offset 1
+
+\subsubsection{Example: Load}
+The initial symbolic state:
+\[
+\symstate
+    {...}
+    {\{ ..., \nameid{arrayidx2} \mapsto \sdots \}}
+    {[]}
+    {(\_, [(\addr_0, 10, \smtarray)])}
+    {n < 2}
+\]
+where:
+\[ \smtarray \triangleq \arraystore{\arraystore{\arrayconst{\arrayinitvalue}}{0}{7}}{1}{\arrayinitvalue} \]
+The derived symbolic state:
+\[
+\symstate
+    {...}
+    {\{ ..., \nameid{arrayidx2} \mapsto \sdots, \nameid{\%0} \mapsto \arrayselect{\smtarray}{e} \}}
+    {[]}
+    {(\_, [(\addr_0, 10, \smtarray)])}
+    {n < 2 \land \rangecond(\addr_0 + n, 1, \symmo)}
+\]
+where:
+% TODO: should add 0_{32}?
+\[ e \triangleq \bvextract_{32}(\bvsub(\bvadd_{64}(\addr_0, \bvzext_{64}(\bvextract_{32}(\bvzext_{64}(n)))), \addr_0)) \]
+\[ \symmo \in ... \]
+The symbolic state computed by the \SE engine:
+\[
+\symstate
+    {...}
+    {\{ ..., \nameid{arrayidx2} \mapsto \sdots, \nameid{\%0} \mapsto \arrayselect{\smtarray}{e} \}}
+    {[]}
+    {(\_, [(\addr_0, 10, \smtarray)])}
+    {n < 2}
+\]
+where:
+\[ e \triangleq \bvextract_{32}(\bvzext_{64}(\bvextract_{32}(\bvzext_{64}(n)))) \]
 
 \begin{figure}
 \lstinputlisting[basicstyle=\scriptsize\ttfamily,language=llvm,mathescape=true,breaklines=false]{code/example.simple.ll}
