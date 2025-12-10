@@ -63,11 +63,11 @@ The symbolic state computed by the \SE engine:
     {...}
     {\{ \nameid{\_} \mapsto \addr_0 \}}
     {[]}
-    {(\_, [(\addr_0, 10, \smtarray)])}
+    {(\_, [(\addr_0, 10, \smtarray_0)])}
     {\true}
 \]
 where:
-\[ \smtarray \triangleq \arraystore{\arraystore{\arraystore{\arraystore{\arrayconst{\arrayinitvalue}}{0}{\arrayinitvalue}}{1}{\arrayinitvalue}}{2}{\arrayinitvalue}}{3}{\arrayinitvalue} \]
+\[ \smtarray_0 \triangleq \arraystore{\arraystore{\arraystore{\arraystore{\arrayconst{\arrayinitvalue}}{0}{\arrayinitvalue}}{1}{\arrayinitvalue}}{2}{\arrayinitvalue}}{3}{\arrayinitvalue} \]
 
 \begin{figure}
 \lstinputlisting[basicstyle=\scriptsize\ttfamily,language=llvm,mathescape=true,breaklines=false]{code/example.simple.ll}

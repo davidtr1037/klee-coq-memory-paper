@@ -112,9 +112,9 @@
 \newcommand{\issafens}{\mathit{safe_{ns}}}
 \newcommand{\pointertype}{\bvsort{ptr}}
 \newcommand{\indextype}{\bvsort{idx}}
-\newcommand{\addr}{a}
+\newcommand{\addr}{b}
 \newcommand{\size}{s}
-\newcommand{\arrayvalue}{\mathit{arr}}
+\newcommand{\arrayvalue}{a}
 \newcommand{\mo}{\mathit{mo}}
 \newcommand{\heap}{\mathit{h}}
 \newcommand{\zeroext}{\mathit{zeroext}}
@@ -142,7 +142,7 @@
 \newcommand{\bvconvert}{\textsf{bvconvert}}
 \newcommand{\arraysort}[2]{Array\langle#1,~#2\rangle}
 \newcommand{\arrayconst}[1]{K(#1)}
-\newcommand{\arrayselect}{\mathit{select}}
+\newcommand{\arrayselect}[2]{\mathit{select}(#1, #2)}
 \newcommand{\arraystore}[3]{\mathit{store}(#1, #2, #3)}
 \newcommand{\arrayinitvalue}{v}
 
@@ -166,7 +166,7 @@
 \newcommand{\infeasible}{\mathit{infeasible}}
 \newcommand{\symstackframe}[3]{\langle{#1},{#2},{#3}\rangle}
 \newcommand{\freevars}{\mathit{FV}}
-\newcommand{\smtarray}{\widetilde{arr}}
+\newcommand{\smtarray}{\tilde{a}}
 \newcommand{\symmo}{\widetilde{\mathit{mo}}}
 \newcommand{\symmemory}{\tilde{\mu}}
 \newcommand{\baseaddrcond}{\mathit{bc}}
