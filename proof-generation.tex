@@ -138,6 +138,40 @@ where:
 \[ \smtarray_1^{'} \triangleq \arraystore{\arraystore{\arrayconst{\arrayinitvalue}}{\bvconst{32}{0}}{\bvconst{8}{7}}}{\bvconst{32}{1}}{\arrayinitvalue} \]
 % TODO: note the change at offset 1
 
+\subsubsection{Example: GetElementPtr (2)}
+% TODO: explain how to prove that this is not an error state
+The initial symbolic state:
+\[
+\symstate
+    {...}
+    {\{ ... \}}
+    {[]}
+    {...}
+    {n < 2}
+\]
+The derived symbolic state:
+\[
+\symstate
+    {...}
+    {\{ ..., \nameid{arrayidx2} \mapsto e \}}
+    {[]}
+    {...}
+    {n < 2}
+\]
+where:
+\[ e \triangleq \bvadd_{64}(\bvconst{64}{\addr}, \bvzext_{64}(\bvmul_{32}(\bvextract_{32}(\bvzext_{64}(n)), \bvconst{32}{1}))) \]
+The symbolic state computed by the \SE engine:
+\[
+\symstate
+    {...}
+    {\{ ..., \nameid{arrayidx2} \mapsto e \}}
+    {[]}
+    {...}
+    {n < 2}
+\]
+where:
+\[ e \triangleq \bvadd_{64}(\bvconst{64}{\addr}, \bvzext_{64}(\bvextract_{32}(\bvzext_{64}(n)))) \]
+
 \subsubsection{Example: Load}
 % TODO: explain how to prove that this is not an error state
 The initial symbolic state:
