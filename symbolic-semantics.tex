@@ -74,7 +74,7 @@ The symbolic heap and the symbolic allocator are defined similarly to their conc
 }
 \\[1.2em]
 \ruledefsmall{Assume}{
-    \instrat{\location} = \codequote{x ~\texttt{=}~ \tcall ~ \intrinsicfunc{assume}(e)}
+    \instrat{\location} = \codequote{\tcall ~ \intrinsicfunc{assume}(e)}
     \quad
     \welldef{\evalexprty{e}{\symlocalstore}{\bvsort1} \neq \bot}
 }
@@ -156,6 +156,50 @@ The symbolic heap and the symbolic allocator are defined similarly to their conc
 \caption{Symbolic operational small-step semantics of LLVM IR.}
 \label{fig:symbolic-semantics}
 \end{figure}
+
+\subsubsection{\textit{Malloc.}}
+% TODO: use the same pre-defined value
+The symbolic semantics of \textit{malloc} mirror the concrete semantics,
+differing only in the handling of content initialization.
+The SMT array of the newly allocated memory object is set to a constant array $\arrayconst{v}$,
+which maps all the indices to a pre-defined SMT expression $v$.
+
+\subsubsection{\textit{Free.}}
+% TODO: assume that the type of p is iptr?
+% TODO: use $\symmemory$ instead of $h$?
+When deallocating a pointer $p$,
+recall that $p$ is an SMT expression which is not necessarily a constant SMT expression.
+Therefore, we check if there exists an SMT model $m$ and a memory object $(\addr, \size, \arrayvalue)$ in the heap $h$ such that
+$m$ satisfies that path constraints $\pc$ and $m[p]$ points to $\addr$.
+If that is the case,
+then we remove that memory object from the heap $h$,
+and extend $\pc$ with the condition $\baseaddrcond(p, \mo)$, which constraints $p$ to $\addr$.
+Otherwise, the result is undefined-behavior.
+Note that this rule might have multiple derivations, since $p$ may be concretized to different base addresses.
+
+\subsubsection{\textit{Load.}}
+% TODO: what happens if p is undef/poison?
+When reading $n$ bytes from a pointer $p$,
+we check if there exists an SMT model $m$ and a memory object $\mo$ in the heap $h$ such that
+$m$ satisfies that path constraints $\pc$ and $m[p + n]$ points to the address interval of $\mo$.
+If that is not the case, then the result is undfined-behavior.
+Otherwise, we use the \textit{read} procedure to obtain the accessed value.
+This procedure reads the corresponding sequence of stored SMT expressions (of sort $\bvsort{8}$),
+and then translated them to a \textit{concat} expression.
+% TODO: example?
+
+\subsubsection{\textit{Store.}}
+% TODO: what happens if p/v is undef/poison?
+When writing an expression $e$ to a pointer $p$,
+we check if there exists an SMT model $m$ and a memory object $\mo$ in the heap $h$ such that
+$m$ satisfies that path constraints $\pc$ and $m[p + n]$ points to the address interval of $\mo$.
+If that is not the case, then the result is undfined-behavior.
+Otherwise, we use the \textit{write} procedure to store the expression $e$.
+This procedure serializes the expression $e$ into a sequence of SMT expressions (of sort $\bvsort{8}$)
+and extends the SMT array $\smtarray$ with additional store expressions accordingly.
+
+\subsubsection{\textit{GetElementPtr.}}
+...
 
 \begin{algorithm}[t]
 \caption{The symbolic semantics of $\tgep$ (without attributes).}
