@@ -179,13 +179,14 @@ Note that this rule might have multiple derivations, since $p$ may be concretize
 
 \subsubsection{\textit{Load.}}
 % TODO: what happens if p is undef/poison?
+% TODO: mentions the assumptions about n?
 When reading $n$ bytes from a pointer $p$,
 we check if there exists an SMT model $m$ and a memory object $\mo$ in the heap $h$ such that
 $m$ satisfies that path constraints $\pc$ and $m[p + n]$ points to the address interval of $\mo$.
 If that is not the case, then the result is undfined-behavior.
 Otherwise, we use the \textit{read} procedure to obtain the accessed value.
-This procedure reads the corresponding sequence of stored SMT expressions (of sort $\bvsort{8}$),
-and then translated them to a \textit{concat} expression.
+This procedure reads the corresponding sequence of $n$ stored SMT expressions (of sort $\smtsort{8}$),
+and then translates them to a \textit{concat} expression of the appropriate sort.
 % TODO: example?
 
 \subsubsection{\textit{Store.}}
@@ -195,15 +196,20 @@ we check if there exists an SMT model $m$ and a memory object $\mo$ in the heap 
 $m$ satisfies that path constraints $\pc$ and $m[p + n]$ points to the address interval of $\mo$.
 If that is not the case, then the result is undfined-behavior.
 Otherwise, we use the \textit{write} procedure to store the expression $e$.
-This procedure serializes the expression $e$ into a sequence of SMT expressions (of sort $\bvsort{8}$)
+This procedure serializes the expression $e$ into a sequence of SMT expressions (of sort $\smtsort{8}$)
 and extends the SMT array $\smtarray$ with additional store expressions accordingly.
+% TODO: example?
 
 \subsubsection{\textit{GetElementPtr.}}
-...
+The symbolic semantics of $\tgep$, which is given in~\Cref{alg:symbolic-gep},
+is similar to the concrete semantics, but uses SMT expressions for the offset and address calculations.
+While the concrete version may return $\tundef$ or $\tpoison$,
+the symbolic version always returns an SMT expression,
+since the symbolic domain does not model $\tundef$ and $\tpoison$.
 
 \begin{algorithm}[t]
 \caption{The symbolic semantics of $\tgep$ (without attributes).}
-\label{alg:gep}
+\label{alg:symbolic-gep}
 \begin{algorithmic}[1]
 
 \Function{compute-offset}{$\tau, o, \overline{j}$}
