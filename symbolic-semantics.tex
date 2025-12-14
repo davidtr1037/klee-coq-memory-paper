@@ -175,7 +175,7 @@ If that is the case,
 then we remove that memory object from the heap $h$,
 and extend $\pc$ with the condition $\baseaddrcond(p, \mo)$, which constraints $p$ to $\addr$.
 Otherwise, the result is undefined-behavior.
-Note that this rule might have multiple derivations, since $p$ may be concretized to different base addresses.
+Note that this rule might have multiple derivations, since $p$ may be concretized to different base addresses depending on the SMT model.
 
 \subsubsection{\textit{Load.}}
 % TODO: what happens if p is undef/poison?
@@ -201,7 +201,7 @@ and extends the SMT array $\smtarray$ with additional store expressions accordin
 % TODO: example?
 
 \subsubsection{\textit{GetElementPtr.}}
-The symbolic semantics of $\tgep$, which is given in~\Cref{alg:symbolic-gep},
+The symbolic semantics of $\tgep$, given in~\Cref{alg:symbolic-gep},
 is similar to the concrete semantics, but uses SMT expressions for the offset and address calculations.
 While the concrete version may return $\tundef$ or $\tpoison$,
 the symbolic version always returns an SMT expression,

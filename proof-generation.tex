@@ -17,7 +17,7 @@ If all the stores to a given memory object were performed with a concrete offset
 then \klee uses the optimized representation where the contents are encoded as a mapping between constant offsets and symbolic values.
 When there is a store with a symbolic offset,
 \klee switches to the non-optimized representation,
-by translating the optimized representation into an SMT array, \ie a sequece of SMT store expressions.
+by translating the optimized representation into an SMT array, \ie a sequence of store expressions.
 Once this happens, the representation cannot be switched back to the optimized one.
 
 % TODO: needed here?
@@ -39,6 +39,14 @@ Once this happens, the representation cannot be switched back to the optimized o
 % use an example with load/store of i8?
 % explain the UNSAT query in gep
 % explain the UNSAT query in symbolic load/store
+
+\subsubsection{Symbolic State Translation.}
+The translation of a memory object from its internal representation to its representation in \coq works as follows.
+In the case of an optimized representation,
+the internal mapping $\{0 \mapsto e_0, 1 \mapsto e_1, \ldots\}$ is translated to a sequence of store expressions:
+\[ \arraystore{\arraystore{\arrayconst{\arrayinitvalue}}{\bvconst{32}{0}}{e_0}}{\bvconst{32}{1}}{e_1} \ldots \]
+In the case of a non-optimized representation,
+we directly translate the sequence of store expressions used internally to a sequence of store expressions in \coq.
 
 \subsubsection{Example: Malloc}
 % TODO: explain how to prove that this is not an error state
@@ -222,3 +230,8 @@ where:
     \item specialized lemmas (interface lemmas)
     \item ...
 \end{itemize}
+
+% similarly to ..., we reuse terms to accelerate the ...
+% here, we extend this approach to handle ..
+% more spec., ...
+% what about interface lemmas?
