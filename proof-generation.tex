@@ -26,6 +26,7 @@ Once this happens, the representation cannot be switched back to the optimized o
 %the SMT expression corresponding to the offset is truncated to an SMT expression of sort $\smtsort{32}$.
 
 \subsection{Proving Safety of Steps}
+% TODO: explain the concept of applying generic lemmas
 % TODO use \bvconst instead of regular constants?
 
 % proving safety of steps: load, store, malloc/alloca, free
@@ -81,7 +82,7 @@ so the symbolic state computed by the \SE engine is:
 The two symbolic states are identical up to the encoding of the SMT array of the allocated memory object.
 However, these two SMT arrays are equivalent,
 since all the additional store expressions contain the same value $v$ as in $\arrayconst{v}$.
-Therefore, the two symbolic state are equivalent as well.
+Therefore, the two symbolic states are equivalent as well.
 % TODO: why safe?
 
 \subsubsection{Example: GetElementPtr}
@@ -120,30 +121,37 @@ The initial symbolic state:
 \[
 \symstate
     {...}
-    {\{ ... \}}
+    {\{ ..., \nameid{arrayidx} \mapsto \bvconst{64}{\addr} \}}
     {[]}
     {(\_, [(\addr, 10, \smtarray_0)])}
     {n < 2}
 \]
 where:
 \[\smtarray_0 \triangleq \arraystore{\arraystore{\arrayconst{\arrayinitvalue}}{\bvconst{32}{0}}{\arrayinitvalue}}{\bvconst{32}{1}}{\arrayinitvalue} \]
-The derived symbolic state:
+% TODO: there might be multiple derivations
+% TODO: the derived state is parametric
+% TODO: the type is i8, so we add a single store expression
+% TODO: fix the index expression
+The symbolic state derived according to the symbolic semantics is:
 \[
 \symstate
     {...}
-    {\{ ... \}}
+    {\{ ..., \nameid{arrayidx} \mapsto \bvconst{64}{\addr} \}}
     {[]}
     {(\_, [(\addr, 10, \smtarray_1)])}
     {n < 2 \land \rangecond(\bvconst{64}{\addr}, 1, \symmo)}
 \]
 where:
-\[ \smtarray_1 \triangleq \arraystore{\smtarray_0}{\bvconst{64}{(\addr + 1)} - \bvconst{64}{\addr}}{\bvconst{8}{7}} \]
+\[ \smtarray_1 \triangleq \arraystore{\smtarray_0}{(\bvconst{64}{\addr} - \bvconst{64}{\addr})}{\bvconst{8}{7}} \]
 \[ \symmo \in ... \]
+% The representation of the updated memory object is optimized, ...
+% offset computation
+% mapping
 The symbolic state computed by the \SE engine:
 \[
 \symstate
     {...}
-    {\{ ... \}}
+    {\{ ..., \nameid{arrayidx} \mapsto \bvconst{64}{\addr} \}}
     {[]}
     {(\_, [(\addr, 10, \smtarray_1^{'})])}
     {n < 2}
