@@ -68,7 +68,8 @@ The derived symbolic state:
     {(\_, [(\addr, 10, \arrayconst{\arrayinitvalue})])}
     {\true}
 \]
-The symbolic state computed by the \SE engine:
+At this point, the representation of the allocated memory object is optimized, as no stores have been performed yet,
+so the symbolic state computed by the \SE engine is:
 \[
 \symstate
     {...}
@@ -77,6 +78,11 @@ The symbolic state computed by the \SE engine:
     {(\_, [(\addr, 10, \arraystore{\arraystore{\arrayconst{\arrayinitvalue}}{\bvconst{32}{0}}{\arrayinitvalue}}{\bvconst{32}{1}}{\arrayinitvalue})])}
     {\true}
 \]
+The two symbolic states are identical up to the encoding of the SMT array of the allocated memory object.
+However, these two SMT arrays are equivalent,
+since all the additional store expressions contain the same value $v$ as in $\arrayconst{v}$.
+Therefore, the two symbolic state are equivalent as well.
+% TODO: why safe?
 
 \subsubsection{Example: GetElementPtr}
 % TODO: explain how to prove that this is not an error state
