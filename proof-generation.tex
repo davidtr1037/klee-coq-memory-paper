@@ -25,6 +25,12 @@ Once this happens, the representation cannot be switched back to the optimized o
 %Therefore, when a memory object is accessed,
 %the SMT expression corresponding to the offset is truncated to an SMT expression of sort $\smtsort{32}$.
 
+\begin{figure}
+\lstinputlisting[basicstyle=\scriptsize\ttfamily,language=llvm,mathescape=true,breaklines=false]{code/example.simple.ll}
+\caption{A simple \llvm IR program.}
+\label{figure:example-llvm}
+\end{figure}
+
 \subsection{Proving Safety of Steps}
 % TODO: Proving Safety of Steps using Interface Lemmas?
 % TODO: explain the concept of interface lemmas
@@ -108,16 +114,16 @@ then $\safeet(\tree(s, [t]))$.
 % TODO: explain how to prove that this is not an error state
 The initial symbolic state:
 \[
-\symstate
+s \triangleq \symstate
     {...}
     {\{ ... \}}
     {[]}
     {...}
     {n < 2}
 \]
-The derived symbolic state:
+According to the symbolic semantics, the derived symbolic state is:
 \[
-\symstate
+s' \triangleq \symstate
     {...}
     {\{ ..., \nameid{arrayidx} \mapsto \bvadd_{64}(\bvconst{64}{\addr}, \bvzext_{64}(\bvmul_{32}(\bvextract_{32}(\bvconst{64}{0}), \bvconst{32}{1}))) \}}
     {[]}
@@ -126,13 +132,26 @@ The derived symbolic state:
 \]
 The symbolic state computed by the \SE engine:
 \[
-\symstate
+s'_{opt} \triangleq \symstate
     {...}
     {\{ ..., \nameid{arrayidx} \mapsto \bvconst{64}{\addr} \}}
     {[]}
     {...}
     {n < 2}
 \]
+\begin{lemma}
+Let $s \triangleq \symstate{\location}{\symlocalstore}{\symstack}{\symmemory}{\pc}$,
+where \textup{$\instrat{\location} = \codequote{x~\texttt{=}~\tgep~\pointertypeof{\tau}~e~(\tau_1, e_1)}$}.
+If there exist $\symlocalstore'_{opt}$ and $t$ such that:
+\begin{itemize}
+    \item $\evalexprty{e_1}{\symlocalstore}{\tau_1} = k_1$
+    \item $\unsat(\overflowcond(\tau, k_1))$
+    \item \textup{$\symlocalstore'_{opt} \equiv \symlocalstore[x \mapsto \evalexprty{\tgep~\pointertypeof{\tau}~e~(\tau_1, e_1)}{\symlocalstore}{\tau^{*}}]$}
+    \item $t.\attrstate = \symstate{\nextinstr{\location}}{\symlocalstore'_{opt}}{\symstack}{\symmemory}{\pc}$
+    \item $\safeet(t)$
+\end{itemize}
+then $\safeet(\tree(s, [t]))$.
+\end{lemma}
 
 \subsubsection{Example: Store}
 % TODO: explain how to prove that this is not an error state
@@ -283,12 +302,6 @@ If there exist $\symmo$ and $t$ such that:
 \end{itemize}
 then $\safeet(\tree(s, [t]))$.
 \end{lemma}
-
-\begin{figure}
-\lstinputlisting[basicstyle=\scriptsize\ttfamily,language=llvm,mathescape=true,breaklines=false]{code/example.simple.ll}
-\caption{A simple \llvm IR program.}
-\label{figure:example-llvm}
-\end{figure}
 
 \subsection{Optimizations}
 \begin{itemize}
