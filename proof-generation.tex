@@ -92,12 +92,13 @@ Therefore, the two symbolic states are equivalent as well.
 % TODO: why safe?
 \begin{lemma}
 Let $s \triangleq \symstate{\location}{\symlocalstore}{\symstack}{\symmemory}{\pc}$,
-where \textup{$\instrat{\location} = \codequote{x~\texttt{=}~\tcall^{\pointertype}~\intrinsicfunc{malloc}(e)}$}.
+where \textup{$\instrat{\location} = \codequote{x~\texttt{=}~\tcall^{\bvsort{64}}~\intrinsicfunc{malloc}(e)}$},
+and let $b \triangleq \nfa{\memory}$.
 If there exist $n$, $\mo$, and $t$ such that:
 \begin{itemize}
-    \item $\exists n. \ \evalexprty{e}{\symlocalstore}{\bvsort{64}} \equiv \bvval{n}{64} \land n < max\_signed_{\bvsort{32}}$
-    \item $\mo \equiv (\nfa{\memory}, \bvval{n}{32}, \arrayconst{\arrayinitvalue})$
-    \item $t.\attrstate = \symstate{\nextinstr{\location}}{\symlocalstore[x \mapsto \addr]}{\symstack}{\memory \mathbin{++} [\mo]}{\pc}$
+    \item $\evalexprty{e}{\symlocalstore}{\bvsort{64}} \equiv \bvval{n}{64} \land n < max\_signed_{\bvsort{32}}$
+    \item $\mo \equiv (\bvval{b}{32}, \bvval{n}{32}, \arrayconst{\arrayinitvalue})$
+    \item $t.\attrstate = \symstate{\nextinstr{\location}}{\symlocalstore[x \mapsto \bvconst{32}{b}]}{\symstack}{\memory \mathbin{++} [\mo]}{\pc}$
     \item $\safeet(t)$
 \end{itemize}
 then $\safeet(\tree(s, [t]))$.
