@@ -205,7 +205,7 @@ $
 \ruledefsmall{Malloc}{
   \instrat{\location} = \codequote{x~\texttt{=}~\tcall^{\pointertype}~\intrinsicfunc{malloc}(e)} \quad
   \evalexprty{e}{\localstore}{\indextype} = n \quad
-  \mathit{allocate}(\memory, n) = (\memory', p) \quad
+  \allocate(\memory, n) = (\memory', p) \quad
 }
 {
   \progstate{\location}{\localstore}{\stack}{\memory}

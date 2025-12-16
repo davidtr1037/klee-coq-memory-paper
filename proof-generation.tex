@@ -26,8 +26,10 @@ Once this happens, the representation cannot be switched back to the optimized o
 %the SMT expression corresponding to the offset is truncated to an SMT expression of sort $\smtsort{32}$.
 
 \subsection{Proving Safety of Steps}
-% TODO: explain the concept of applying generic lemmas
-% TODO use \bvconst instead of regular constants?
+% TODO: Proving Safety of Steps using Interface Lemmas?
+% TODO: explain the concept of interface lemmas
+% TODO: use \bvconst instead of regular constants?
+% TODO: in this section: iptr = i64 / iidx = i32
 
 % proving safety of steps: load, store, malloc/alloca, free
 % handling different encodings of SMT arrays (KLEE/Coq)
@@ -42,6 +44,7 @@ Once this happens, the representation cannot be switched back to the optimized o
 % explain the UNSAT query in symbolic load/store
 
 \subsubsection{Symbolic State Translation.}
+% TODO: explain how to translate the heap/memory
 The translation of a memory object from its internal representation to its representation in \coq works as follows.
 In the case of an optimized representation,
 the internal mapping $\{0 \mapsto e_0, 1 \mapsto e_1, \ldots\}$ is translated to a sequence of store expressions:
@@ -53,22 +56,25 @@ we directly translate the sequence of store expressions used internally to a seq
 % TODO: explain how to prove that this is not an error state
 The initial symbolic state:
 \[
-\symstate
+s \triangleq \symstate
     {...}
     {\{ \}}
     {[]}
     {(\_, [])}
     {\true}
 \]
-The symbolic state derived according to the symbolic semantics is:
+According to the symbolic semantics, any derived symbolic state should have the following form:
 \[
-\symstate
+s' \triangleq \symstate
     {...}
     {\{ \nameid{\_} \mapsto \bvconst{64}{\addr} \}}
     {[]}
-    {(\_, [(\addr, 10, \arrayconst{\arrayinitvalue})])}
+    %{(\_, [(\addr, 10, \arrayconst{\arrayinitvalue})])}
+    {\memory'}
     {\true}
 \]
+where there exists an SMT model $m$ such that $m[\evalexprty{e}{\symlocalstore}{\tau}] = n$ and $\allocate(..., n) = (\memory', \bvconst{64}{\addr})$.
+
 At this point, the representation of the allocated memory object is optimized, as no stores have been performed yet,
 so the symbolic state computed by the \SE engine is:
 \[
@@ -84,6 +90,18 @@ However, these two SMT arrays are equivalent,
 since all the additional store expressions contain the same value $v$ as in $\arrayconst{v}$.
 Therefore, the two symbolic states are equivalent as well.
 % TODO: why safe?
+\begin{lemma}
+Let $s \triangleq \symstate{\location}{\symlocalstore}{\symstack}{\symmemory}{\pc}$,
+where \textup{$\instrat{\location} = \codequote{x~\texttt{=}~\tcall^{\pointertype}~\intrinsicfunc{malloc}(e)}$}.
+If there exist $n$, $\mo$, and $t$ such that:
+\begin{itemize}
+    \item $\exists n. \ \evalexprty{e}{\symlocalstore}{\bvsort{64}} \equiv \bvval{n}{64} \land n < max\_signed_{\bvsort{32}}$
+    \item $\mo \equiv (\nfa{\memory}, \bvval{n}{32}, \arrayconst{\arrayinitvalue})$
+    \item $t.\attrstate = \symstate{\nextinstr{\location}}{\symlocalstore[x \mapsto \addr]}{\symstack}{\memory \mathbin{++} [\mo]}{\pc}$
+    \item $\safeet(t)$
+\end{itemize}
+then $\safeet(\tree(s, [t]))$.
+\end{lemma}
 
 \subsubsection{Example: GetElementPtr}
 % TODO: explain how to prove that this is not an error state
@@ -132,7 +150,8 @@ where:
 % TODO: the derived state is parametric
 % TODO: the type is i8, so we add a single store expression
 % TODO: fix the index expression
-The symbolic state derived according to the symbolic semantics is:
+On one side, according to the symbolic semantics,
+there might be several derived symbolic states and each such symbolic state should have the following form:
 \[
 \symstate
     {...}
@@ -147,7 +166,7 @@ where:
 % The representation of the updated memory object is optimized, ...
 % offset computation
 % mapping
-The symbolic state computed by the \SE engine:
+On the other side, the symbolic state computed by the \SE engine is:
 \[
 \symstate
     {...}
@@ -159,6 +178,7 @@ The symbolic state computed by the \SE engine:
 where:
 \[ \smtarray_1^{'} \triangleq \arraystore{\arraystore{\arrayconst{\arrayinitvalue}}{\bvconst{32}{0}}{\bvconst{8}{7}}}{\bvconst{32}{1}}{\arrayinitvalue} \]
 % TODO: note the change at offset 1
+Now, we have to show that the two symbolic states are equivalent.
 
 \subsubsection{Example: GetElementPtr (2)}
 % TODO: explain how to prove that this is not an error state

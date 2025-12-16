@@ -87,7 +87,7 @@ The symbolic heap and the symbolic allocator are defined similarly to their conc
 \ruledefsmall{Malloc}{
   \instrat{\location} = \codequote{x~\texttt{=}~\tcall^{\pointertype}~\intrinsicfunc{malloc}(e)} \quad
   \evalexprty{e}{\symlocalstore}{\indextype} = n \quad
-  \mathit{allocate}(\symmemory, n) = (\symmemory', p) \quad
+  \allocate(\symmemory, n) = (\symmemory', p) \quad
 }
 {
   \symstate{\location}{\symlocalstore}{\symstack}{\symmemory}{\pc}
