@@ -141,12 +141,12 @@ s'_{opt} \triangleq \symstate
 \]
 \begin{lemma}
 Let $s \triangleq \symstate{\location}{\symlocalstore}{\symstack}{\symmemory}{\pc}$,
-where \textup{$\instrat{\location} = \codequote{x~\texttt{=}~\tgep~\pointertypeof{\tau}~e~(\tau_1, e_1)}$}.
+where \textup{$\instrat{\location} = \codequote{x~\texttt{=}~\tgep~\pointertypeof{\tau}~e~\overline{(\tau_i, e_i)}}$}.
 If there exist $\symlocalstore'_{opt}$ and $t$ such that:
 \begin{itemize}
-    \item $\evalexprty{e_1}{\symlocalstore}{\tau_1} = k_1$
-    \item $\unsat(\overflowcond(\tau, k_1))$
-    \item \textup{$\symlocalstore'_{opt} \equiv \symlocalstore[x \mapsto \evalexprty{\tgep~\pointertypeof{\tau}~e~(\tau_1, e_1)}{\symlocalstore}{\tau^{*}}]$}
+    \item $\evalexprty{e_i}{\symlocalstore}{\tau_i} = k_i$
+    \item $\unsat(\overflowcond(\tau, \overline{k_i}))$
+    \item \textup{$\symlocalstore'_{opt} \equiv \symlocalstore[x \mapsto \evalexprty{\tgep~\pointertypeof{\tau}~e~\overline{(\tau_i, e_i)}}{\symlocalstore}{\tau^{*}}]$}
     \item $t.\attrstate = \symstate{\nextinstr{\location}}{\symlocalstore'_{opt}}{\symstack}{\symmemory}{\pc}$
     \item $\safeet(t)$
 \end{itemize}
