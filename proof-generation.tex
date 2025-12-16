@@ -138,11 +138,11 @@ The symbolic state computed by the \SE engine:
 % TODO: explain how to prove that this is not an error state
 The initial symbolic state:
 \[
-\symstate
+s \triangleq \symstate
     {...}
     {\{ ..., \nameid{arrayidx} \mapsto \bvconst{64}{\addr} \}}
     {[]}
-    {(\_, [(\addr, 10, \smtarray_0)])}
+    {[(\addr, 10, \smtarray_0)]}
     {n < 2}
 \]
 where:
@@ -152,34 +152,50 @@ where:
 % TODO: the type is i8, so we add a single store expression
 % TODO: fix the index expression
 On one side, according to the symbolic semantics,
-there might be several derived symbolic states and each such symbolic state should have the following form:
+any derived symbolic state should have the following form:
 \[
-\symstate
+s' \triangleq \symstate
     {...}
     {\{ ..., \nameid{arrayidx} \mapsto \bvconst{64}{\addr} \}}
     {[]}
-    {(\_, [(\addr, 10, \smtarray_1)])}
+    %{[(\addr, 10, \smtarray_1)])}
+    {[\symmo]}
     {n < 2 \land \rangecond(\bvconst{64}{\addr}, 1, \symmo)}
 \]
-where:
-\[ \smtarray_1 \triangleq \arraystore{\smtarray_0}{(\bvconst{64}{\addr} - \bvconst{64}{\addr})}{\bvconst{8}{7}} \]
-\[ \symmo \in ... \]
+where there is an SMT model $m$ and a memory object $\mo$ such that $m \models \pc$ and $\mo \in \symmemory$.
+%\[ \smtarray_1 \triangleq \arraystore{\smtarray_0}{(\bvconst{64}{\addr} - \bvconst{64}{\addr})}{\bvconst{8}{7}} \]
 % The representation of the updated memory object is optimized, ...
 % offset computation
 % mapping
 On the other side, the symbolic state computed by the \SE engine is:
 \[
-\symstate
+s'_{opt} \triangleq \symstate
     {...}
     {\{ ..., \nameid{arrayidx} \mapsto \bvconst{64}{\addr} \}}
     {[]}
-    {(\_, [(\addr, 10, \smtarray_1^{'})])}
+    {[(\addr, 10, \smtarray_1^{'})]}
     {n < 2}
 \]
 where:
 \[ \smtarray_1^{'} \triangleq \arraystore{\arraystore{\arrayconst{\arrayinitvalue}}{\bvconst{32}{0}}{\bvconst{8}{7}}}{\bvconst{32}{1}}{\arrayinitvalue} \]
 % TODO: note the change at offset 1
 Now, we have to show that the two symbolic states are equivalent.
+\begin{lemma}
+Let $s \triangleq \symstate{\location}{\symlocalstore}{\symstack}{\symmemory}{\pc}$,
+where \textup{$\instrat{\location} = \codequote{\tstore^{\tau}~e_1~e_2}$}.
+If there exist $\mo$ and $t$ such that:
+\begin{itemize}
+    \item $\symmemory$ is well-formed
+    \item $\mo \in \symmemory$
+    \item $\evalexprty{e_1}{\symlocalstore}{\tau} = v$
+    \item $\evalexprty{e_2}{\symlocalstore}{\bvsort{64}^{*}} = \bvconst{64}{p}$
+    \item $\isinbounds(\bvval{p}{64}, |\tau|, \mo)$
+    \item $\mo'_{opt} \equiv \writemo(\mo, \bvconst{64}{p}, v)$
+    \item $t.\attrstate = \symstate{\nextinstr{\location}}{\symlocalstore}{\symstack}{\replace(\symmemory, \mo'_{opt})}{\pc}$
+    \item $\safeet(t)$
+\end{itemize}
+then $\safeet(\tree(s, [t]))$.
+\end{lemma}
 
 \subsubsection{Example: GetElementPtr (2)}
 % TODO: explain how to prove that this is not an error state
