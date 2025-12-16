@@ -100,7 +100,7 @@ The symbolic heap and the symbolic allocator are defined similarly to their conc
   \evalexprty{e}{\symlocalstore}{\pointertype} = p \quad
   m \models \pc \quad
   \mo \in \symmemory \quad
-  \mathit{is\_base\_address}(p, mo, m) \quad
+  \isbaseaddr(p, mo, m) \quad
   \mathit{remove}(\symmemory, \mo) = \symmemory'
 }
 {
@@ -114,8 +114,8 @@ The symbolic heap and the symbolic allocator are defined similarly to their conc
   \evalexprty{e}{\symlocalstore}{\pointertype} = p \quad
   m \models \pc \quad
   \mo \in \symmemory \quad
-  \mathit{is\_inbounds}(p, |\tau|, mo, m) \quad
-  \mathit{read}(\mo, p, |\tau|) = v \quad
+  \isinbounds(p, |\tau|, mo, m) \quad
+  \readmo(\mo, p, |\tau|) = v \quad
 }
 {
   \symstate{\location}{\symlocalstore}{\symstack}{\symmemory}{\pc}
@@ -129,9 +129,9 @@ The symbolic heap and the symbolic allocator are defined similarly to their conc
   \evalexprty{e_2}{\symlocalstore}{\pointertype} = p \quad
   m \models \pc \quad
   \mo \in \symmemory \quad
-  \mathit{is\_inbounds}(p, |\tau|, mo, m) \quad
-  \mathit{write}(\mo, p, v) = \mo' \quad
-  \mathit{replace}(\symmemory, \mo') = \symmemory'
+  \isinbounds(p, |\tau|, mo, m) \quad
+  \writemo(\mo, p, v) = \mo' \quad
+  \replace(\symmemory, \mo') = \symmemory'
 }
 {
   \symstate{\location}{\symlocalstore}{\symstack}{\symmemory}{\pc}
