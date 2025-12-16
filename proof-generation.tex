@@ -94,11 +94,11 @@ Therefore, the two symbolic states are equivalent as well.
 Let $s \triangleq \symstate{\location}{\symlocalstore}{\symstack}{\symmemory}{\pc}$,
 where \textup{$\instrat{\location} = \codequote{x~\texttt{=}~\tcall^{\bvsort{64}}~\intrinsicfunc{malloc}(e)}$},
 and let $b \triangleq \nfa{\memory}$.
-If there exist $n$, $\mo$, and $t$ such that:
+If there exist $n$, $\symmo$, and $t$ such that:
 \begin{itemize}
     \item $\evalexprty{e}{\symlocalstore}{\bvsort{64}} \equiv \bvval{n}{64} \land n < max\_signed_{\bvsort{32}}$
-    \item $\mo \equiv (\bvval{b}{32}, \bvval{n}{32}, \arrayconst{\arrayinitvalue})$
-    \item $t.\attrstate = \symstate{\nextinstr{\location}}{\symlocalstore[x \mapsto \bvconst{32}{b}]}{\symstack}{\memory \mathbin{++} [\mo]}{\pc}$
+    \item $\symmo \equiv (\bvval{b}{32}, \bvval{n}{32}, \arrayconst{\arrayinitvalue})$
+    \item $t.\attrstate = \symstate{\nextinstr{\location}}{\symlocalstore[x \mapsto \bvconst{32}{b}]}{\symstack}{\memory \mathbin{++} [\symmo]}{\pc}$
     \item $\safeet(t)$
 \end{itemize}
 then $\safeet(\tree(s, [t]))$.
@@ -162,7 +162,7 @@ s' \triangleq \symstate
     {[\symmo]}
     {n < 2 \land \rangecond(\bvconst{64}{\addr}, 1, \symmo)}
 \]
-where there is an SMT model $m$ and a memory object $\mo$ such that $m \models \pc$ and $\mo \in \symmemory$.
+where there is an SMT model $m$ and a memory object $\symmo$ such that $m \models \pc$ and $\symmo \in \symmemory$.
 %\[ \smtarray_1 \triangleq \arraystore{\smtarray_0}{(\bvconst{64}{\addr} - \bvconst{64}{\addr})}{\bvconst{8}{7}} \]
 % The representation of the updated memory object is optimized, ...
 % offset computation
@@ -183,15 +183,15 @@ Now, we have to show that the two symbolic states are equivalent.
 \begin{lemma}
 Let $s \triangleq \symstate{\location}{\symlocalstore}{\symstack}{\symmemory}{\pc}$,
 where \textup{$\instrat{\location} = \codequote{\tstore^{\tau}~e_1~e_2}$}.
-If there exist $\mo$ and $t$ such that:
+If there exist $\symmo$ and $t$ such that:
 \begin{itemize}
     \item $\symmemory$ is well-formed
-    \item $\mo \in \symmemory$
+    \item $\symmo \in \symmemory$
     \item $\evalexprty{e_1}{\symlocalstore}{\tau} = v$
     \item $\evalexprty{e_2}{\symlocalstore}{\bvsort{64}^{*}} = \bvconst{64}{p}$
-    \item $\isinbounds(\bvval{p}{64}, |\tau|, \mo)$
-    \item $\mo'_{opt} \equiv \writemo(\mo, \bvconst{64}{p}, v)$
-    \item $t.\attrstate = \symstate{\nextinstr{\location}}{\symlocalstore}{\symstack}{\replace(\symmemory, \mo'_{opt})}{\pc}$
+    \item $\isinbounds(\bvval{p}{64}, |\tau|, \symmo)$
+    \item $\symmo'_{opt} \equiv \writemo(\symmo, \bvconst{64}{p}, v)$
+    \item $t.\attrstate = \symstate{\nextinstr{\location}}{\symlocalstore}{\symstack}{\replace(\symmemory, \symmo'_{opt})}{\pc}$
     \item $\safeet(t)$
 \end{itemize}
 then $\safeet(\tree(s, [t]))$.
@@ -268,6 +268,21 @@ The symbolic state computed by the \SE engine:
 \]
 where:
 \[ e \triangleq \bvextract_{32}(\bvzext_{64}(\bvextract_{32}(\bvzext_{64}(n)))) \]
+\begin{lemma}
+Let $s \triangleq \symstate{\location}{\symlocalstore}{\symstack}{\symmemory}{\pc}$,
+where \textup{$\instrat{\location} = \codequote{x~\texttt{=}~\tload^{\tau}~e}$}.
+If there exist $\symmo$ and $t$ such that:
+\begin{itemize}
+    \item $\symmemory$ is well-formed
+    \item $\symmo \in \symmemory$
+    \item $\evalexprty{e}{\symlocalstore}{\bvsort{64}^{*}} = \bvconst{64}{p}$
+    \item $\isinbounds(\bvval{p}{64}, |\tau|, \symmo)$
+    \item $\symlocalstore'_{opt} \equiv \symlocalstore[x \mapsto \readmo(\symmo, \bvconst{64}{p}, |\tau|)]$
+    \item $t.\attrstate = \symstate{\nextinstr{\location}}{\symlocalstore'_{opt}}{\symstack}{\symmemory}{\pc}$
+    \item $\safeet(t)$
+\end{itemize}
+then $\safeet(\tree(s, [t]))$.
+\end{lemma}
 
 \begin{figure}
 \lstinputlisting[basicstyle=\scriptsize\ttfamily,language=llvm,mathescape=true,breaklines=false]{code/example.simple.ll}
