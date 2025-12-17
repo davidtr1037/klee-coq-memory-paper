@@ -62,6 +62,7 @@ we directly translate the sequence of store expressions used internally to a seq
 % TODO: explain the concept of interface lemmas (why needed? ...)
 % TODO: use \bvconst instead of regular constants?
 % TODO: in this section: iptr = i64 / iidx = i32
+% TODO: an example of ET def?
 
 % proving safety of steps: load, store, malloc/alloca, free
 % handling different encodings of SMT arrays (KLEE/Coq)
@@ -73,9 +74,29 @@ we directly translate the sequence of store expressions used internally to a seq
 % explain the UNSAT query in gep
 % explain the UNSAT query in symbolic load/store
 
-Once the execution tree is defined, we have to prove that it satisfies the \safeet relation.
-We generate this proof in a bottom-up manner, showing that each subtree satisfies the required property.
+First, we generate the definition of the execution tree in a bottom-up manner.
+Then, we have to prove that the execution tree satisfies the $\safeet$ relation.
+We generate this proof in a bottom-up manner as well, showing that each subtree satisfies the required properties.
 The proof of each subtree corresponds to a single instruction that was executed during the analysis.
+Generating an explicit proof from scratch for each subtree is expensive in terms of proof generation,
+and it also make the proof checking inefficient,
+as such a proof requires expensive \coq tactics such as: \textit{inversion}, \textit{subst}, \etc
+Instead, we adapt the approach proposed in X,
+and create for each instruction type a generic lemma that can be used to infer execution tree safety.
+We call these lemmas \emph{interface} lemmas,
+as they help to create an effective interaction between the pre-defined and auto-generated sections of the proof.
+By using such interface lemmas,
+we accelerate both proof generation and proof checking,
+since we create smaller proofs which mainly rely on simple tactics such as \textit{apply} and \textit{reflexivity}.
+
+%we adapt the approach used in X: ...
+%we define lemmas that are generic enough to handle a wide range of instruction instances
+%we call these lemmas interface lemmas
+%as they help to effectively connect/integrate the pre-defined and auto-generated sections of the proof.
+%we show how to apply this approach for memory operations
+%using the example above
+%helps also to accelerate the proof checking
+%as it avoid expensive tactics such as... and instead mainly relies on apply / reflexivity which are relatively fast.
 
 \subsubsection{Example: Malloc}
 % TODO: explain how to prove that this is not an error state
