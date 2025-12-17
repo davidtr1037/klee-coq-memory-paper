@@ -45,23 +45,8 @@ Once this happens, the representation cannot be switched back to the optimized o
 \label{figure:example-llvm}
 \end{figure}
 
-\subsection{Proving Execution Tree Safety using Interface Lemmas}
-% TODO: explain how we prove the the ET is safe
-% TODO: explain the concept of interface lemmas (why needed? ...)
-% TODO: use \bvconst instead of regular constants?
-% TODO: in this section: iptr = i64 / iidx = i32
-
-% proving safety of steps: load, store, malloc/alloca, free
-% handling different encodings of SMT arrays (KLEE/Coq)
-
-% example for malloc
-% example for gep (concrete / symbolic)
-% example for load (concrete / symbolic)
-% example for store (concrete / symbolic)
-% example for free
-% use an example with load/store of i8?
-% explain the UNSAT query in gep
-% explain the UNSAT query in symbolic load/store
+\subsubsection{Module Translation.}
+...
 
 \subsubsection{Symbolic State Translation.}
 % TODO: explain how to translate the heap/memory
@@ -71,6 +56,26 @@ the internal mapping $\{0 \mapsto e_0, 1 \mapsto e_1, \ldots\}$ is translated to
 \[ \arraystore{\arraystore{\arrayconst{\arrayinitvalue}}{\bvconst{32}{0}}{e_0}}{\bvconst{32}{1}}{e_1} \ldots \]
 In the case of a non-optimized representation,
 we directly translate the sequence of store expressions used internally to a sequence of store expressions in \coq.
+
+\subsection{Proving Execution Tree Safety using Interface Lemmas}
+% TODO: explain how we prove the the ET is safe
+% TODO: explain the concept of interface lemmas (why needed? ...)
+% TODO: use \bvconst instead of regular constants?
+% TODO: in this section: iptr = i64 / iidx = i32
+
+% proving safety of steps: load, store, malloc/alloca, free
+% handling different encodings of SMT arrays (KLEE/Coq)
+
+% example for gep (concrete / symbolic)
+% example for load (concrete / symbolic)
+% example for store (concrete / symbolic)
+% use an example with load/store of i8?
+% explain the UNSAT query in gep
+% explain the UNSAT query in symbolic load/store
+
+Once the execution tree is defined, we have to prove that it satisfies the \safeet relation.
+We generate this proof in a bottom-up manner, showing that each subtree satisfies the required property.
+The proof of each subtree corresponds to a single instruction that was executed during the analysis.
 
 \subsubsection{Example: Malloc}
 % TODO: explain how to prove that this is not an error state
