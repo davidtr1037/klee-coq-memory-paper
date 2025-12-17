@@ -111,11 +111,10 @@ s' \triangleq \symstate
     {\{ \nameid{\_} \mapsto \bvconst{64}{\addr} \}}
     {[]}
     %{(\_, [(\addr, 10, \arrayconst{\arrayinitvalue})])}
-    {\memory'}
+    {\symmemory'}
     {\true}
 \]
-where there exists an SMT model $m$ such that $m[\evalexprty{e}{\symlocalstore}{\tau}] = n$ and $\allocate([], n) = (\memory', \bvconst{64}{\addr})$.
-
+where there exists an SMT model $m$ such that $m[\evalexprty{e}{\symlocalstore}{\tau}] = n$ and $\allocate([], n) = (\symmemory', \bvconst{64}{\addr})$.
 At this point, the representation of the allocated memory object is optimized, as no stores have been performed yet,
 so the symbolic state computed by the \SE engine is:
 \[
@@ -123,25 +122,30 @@ so the symbolic state computed by the \SE engine is:
     {...}
     {\{ \nameid{\_} \mapsto \bvconst{64}{\addr} \}}
     {[]}
-    {[(\addr, 10, \arraystore{\arraystore{\arrayconst{\arrayinitvalue}}{\bvconst{32}{0}}{\arrayinitvalue}}{\bvconst{32}{1}}{\arrayinitvalue})]}
+    {[(\bvval{\addr}{64}, \bvval{10}{32}, \arraystore{\arraystore{\arrayconst{\arrayinitvalue}}{\bvconst{32}{0}}{\arrayinitvalue}}{\bvconst{32}{1}}{\arrayinitvalue})]}
     {\true}
 \]
-The two symbolic states are identical up to the encoding of the SMT array of the allocated memory object.
-However, these two SMT arrays are equivalent,
-since all the additional store expressions contain the same value $v$ as in $\arrayconst{v}$.
-Therefore, the two symbolic states are equivalent as well.
+To show that the subtree of $s$ is safe,
+we can apply~\Cref{lemma:interface-malloc} by providing \[ n \triangleq 2, \ \symmo \triangleq ..., \ \]
+Then, it only remains to prove the preconditions.
+We know that $\evalexprty{2}{\symlocalstore}{\bvsort{64}} = \bvval{2}{64}$, so (a) follows immediately.
+To prove (b), note that the additional store expressions contain the same value $v$ as in $\arrayconst{v}$,
+so these two SMT arrays are equivalent.
+At this point, we assume that the subtree of $s'_{opt}$ has been already proven safe, so (d) holds as well.
+
 % TODO: why safe?
 \begin{lemma}
+\label{lemma:interface-malloc}
 Let $s \triangleq \symstate{\location}{\symlocalstore}{\symstack}{\symmemory}{\pc}$,
 where \textup{$\instrat{\location} = \codequote{x~\texttt{=}~\tcall^{\bvsort{64}}~\intrinsicfunc{malloc}(e)}$},
-and let $b \triangleq \nfa{\memory}$.
+and let $b \triangleq \nfa{\symmemory}$.
 If there exist $n$, $\symmo$, and $t$ such that:
-\begin{itemize}
+\begin{enumerate}
     \item $\evalexprty{e}{\symlocalstore}{\bvsort{64}} \equiv \bvval{n}{64} \land n < max\_signed_{\bvsort{32}}$
     \item $\symmo \equiv (\bvval{b}{64}, \bvval{n}{32}, \arrayconst{\arrayinitvalue})$
-    \item $t.\attrstate = \symstate{\nextinstr{\location}}{\symlocalstore[x \mapsto \bvconst{64}{b}]}{\symstack}{\memory \mathbin{++} [\symmo]}{\pc}$
+    \item $t.\attrstate = \symstate{\nextinstr{\location}}{\symlocalstore[x \mapsto \bvconst{64}{b}]}{\symstack}{\symmemory \mathbin{++} [\symmo]}{\pc}$
     \item $\safeet(t)$
-\end{itemize}
+\end{enumerate}
 then $\safeet(\tree(s, [t]))$.
 \end{lemma}
 
