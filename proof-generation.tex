@@ -89,14 +89,9 @@ By using such interface lemmas,
 we accelerate both proof generation and proof checking,
 since we create smaller proofs which mainly rely on simple tactics such as \textit{apply} and \textit{reflexivity}.
 
-%we adapt the approach used in X: ...
-%we define lemmas that are generic enough to handle a wide range of instruction instances
-%we call these lemmas interface lemmas
-%as they help to effectively connect/integrate the pre-defined and auto-generated sections of the proof.
-%we show how to apply this approach for memory operations
-%using the example above
-%helps also to accelerate the proof checking
-%as it avoid expensive tactics such as... and instead mainly relies on apply / reflexivity which are relatively fast.
+Now, we will show how to define such interface lemmas,
+and how to apply them in the context of the example from~\Cref{figure:example-llvm}.
+In this section, we will focus on memory-related instructions.
 
 \subsubsection{Example: Malloc}
 % TODO: explain how to prove that this is not an error state
