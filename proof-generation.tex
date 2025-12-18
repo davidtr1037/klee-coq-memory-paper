@@ -95,6 +95,7 @@ In this section, we will focus on memory-related instructions.
 
 \subsubsection{Example: Malloc}
 % TODO: explain how to prove that this is not an error state
+% TODO: discuss the case where the size is symbolic
 The initial symbolic state:
 \[
 s \triangleq \symstate
@@ -104,36 +105,43 @@ s \triangleq \symstate
     {[]}
     {\true}
 \]
-According to the symbolic semantics, any derived symbolic state should have the following form:
+In general, the \rulenameref{Malloc} rule may result in multiple derivations,
+but in this case, the size argument of \textit{malloc} is evaluated to a constant SMT expression,
+so the only derived symbolic state is:
 \[
 s' \triangleq \symstate
     {...}
     {\{ \nameid{\_} \mapsto \bvconst{64}{\addr} \}}
     {[]}
-    %{(\_, [(\addr, 10, \arrayconst{\arrayinitvalue})])}
-    {\symmemory'}
+    {[(\bvval{\addr}{64}, \bvval{2}{32}, \arrayconst{\arrayinitvalue})]}
     {\true}
 \]
-where there exists an SMT model $m$ such that $m[\evalexprty{e}{\symlocalstore}{\tau}] = n$ and $\allocate([], n) = (\symmemory', \bvconst{64}{\addr})$.
-At this point, the representation of the allocated memory object is optimized, as no stores have been performed yet,
+where $b \triangleq \nfa{\symmemory}$.
+At this point, the \SE engine uses an optimized representation for the allocated memory object, as no stores have been performed yet,
 so the symbolic state computed by the \SE engine is:
 \[
-\symstate
+s'_{opt} \triangleq \symstate
     {...}
     {\{ \nameid{\_} \mapsto \bvconst{64}{\addr} \}}
     {[]}
-    {[(\bvval{\addr}{64}, \bvval{10}{32}, \arraystore{\arraystore{\arrayconst{\arrayinitvalue}}{\bvconst{32}{0}}{\arrayinitvalue}}{\bvconst{32}{1}}{\arrayinitvalue})]}
+    {[(\bvval{\addr}{64}, \bvval{2}{32}, \arraystore{\arraystore{\arrayconst{\arrayinitvalue}}{\bvconst{32}{0}}{\arrayinitvalue}}{\bvconst{32}{1}}{\arrayinitvalue})]}
     {\true}
 \]
-To show that the subtree of $s$ is safe,
-we can apply~\Cref{lemma:interface-malloc} by providing \[ n \triangleq 2, \ \symmo \triangleq ..., \ \]
-Then, it only remains to prove the preconditions.
-We know that $\evalexprty{2}{\symlocalstore}{\bvsort{64}} = \bvval{2}{64}$, so (a) follows immediately.
-To prove (b), note that the additional store expressions contain the same value $v$ as in $\arrayconst{v}$,
-so these two SMT arrays are equivalent.
-At this point, we assume that the subtree of $s'_{opt}$ has been already proven safe, so (d) holds as well.
+Now, to show that the subtree of $s$ is safe, we need to show that $s' \equiv s'_{opt}$.
+The SMT arrays in the two symbolic states are encoded differently,
+but they are actually equivalent, since the additional store expressions contain the same value $v$ as in $\arrayconst{v}$.
 
-% TODO: why safe?
+To handle such cases in general, we define an interface lemma for \textit{malloc}, which is given as~\Cref{lemma:interface-malloc}.
+In this case, we can apply~\Cref{lemma:interface-malloc} with $n$ as 2, $\symmo$ as ..., and $t$ as the subtree of $s'_{opt}$.
+% TODO: show why the preconditions hold?
+
+Note that this lemma assumes that the size argument of \textit{malloc} is evaluated to a concrete SMT expression.
+If that is not the case,
+then the \SE engine concretizes the symbolic expression,
+and then the analysis may be incomplete and a safety proof may not be derived.
+There exist extensions of \klee that support symbolic-size allocations (\eg \cite{symsize-model}),
+however, it is not the focus of this work.
+
 \begin{lemma}
 \label{lemma:interface-malloc}
 Let $s \triangleq \symstate{\location}{\symlocalstore}{\symstack}{\symmemory}{\pc}$,
@@ -200,7 +208,7 @@ s \triangleq \symstate
     {...}
     {\{ ..., \nameid{arrayidx} \mapsto \bvconst{64}{\addr} \}}
     {[]}
-    {[(\addr, 10, \smtarray_0)]}
+    {[(\addr, 2, \smtarray_0)]}
     {n < 2}
 \]
 where:
@@ -216,7 +224,7 @@ s' \triangleq \symstate
     {...}
     {\{ ..., \nameid{arrayidx} \mapsto \bvconst{64}{\addr} \}}
     {[]}
-    %{[(\addr, 10, \smtarray_1)])}
+    %{[(\addr, 2, \smtarray_1)])}
     {[\symmo]}
     {n < 2 \land \rangecond(\bvconst{64}{\addr}, 1, \symmo)}
 \]
@@ -231,7 +239,7 @@ s'_{opt} \triangleq \symstate
     {...}
     {\{ ..., \nameid{arrayidx} \mapsto \bvconst{64}{\addr} \}}
     {[]}
-    {[(\addr, 10, \smtarray_1^{'})]}
+    {[(\addr, 2, \smtarray_1^{'})]}
     {n < 2}
 \]
 where:
@@ -297,7 +305,7 @@ The initial symbolic state:
     {...}
     {\{ ..., \nameid{arrayidx2} \mapsto \sdots \}}
     {[]}
-    {(\_, [(\addr, 10, \smtarray)])}
+    {(\_, [(\addr, 2, \smtarray)])}
     {n < 2}
 \]
 where:
@@ -308,7 +316,7 @@ The derived symbolic state:
     {...}
     {\{ ..., \nameid{arrayidx2} \mapsto \sdots, \nameid{\%0} \mapsto \arrayselect{\smtarray}{e} \}}
     {[]}
-    {(\_, [(\addr, 10, \smtarray)])}
+    {(\_, [(\addr, 2, \smtarray)])}
     {n < 2 \land \rangecond(\bvadd_{64}(\bvconst{64}{\addr}, \bvzext_{64}(\bvextract_{32}(\bvzext_{64}(n)))), 1, \symmo)}
 \]
 where:
@@ -321,7 +329,7 @@ The symbolic state computed by the \SE engine:
     {...}
     {\{ ..., \nameid{arrayidx2} \mapsto \sdots, \nameid{\%0} \mapsto \arrayselect{\smtarray}{e} \}}
     {[]}
-    {(\_, [(\addr, 10, \smtarray)])}
+    {(\_, [(\addr, 2, \smtarray)])}
     {n < 2}
 \]
 where:
