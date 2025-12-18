@@ -132,7 +132,7 @@ Now, to show that the subtree of $s$ is safe, we need to show that $s' \equiv s'
 The SMT arrays in the two symbolic states are encoded differently,
 but they are actually equivalent, since the additional store expressions contain the same value $v$ as in $\arrayconst{v}$.
 
-To handle such cases in general, we define an interface lemma for \textit{malloc}, which is given as~\Cref{lemma:interface-malloc}.
+To handle such cases in general, we define an interface lemma for \textit{malloc}, which is stated as~\Cref{lemma:interface-malloc}.
 In this case, we can apply~\Cref{lemma:interface-malloc} with $n$ as 2, $\symmo$ as ..., and $t$ as the subtree of $s'_{opt}$.
 % TODO: show why the preconditions hold?
 
@@ -246,25 +246,24 @@ s'_{opt} \triangleq \symstate
     {n < 2}
 \]
 where:
-\[ \smtarray_1' \triangleq \arraystore{\arraystore{\arrayconst{\arrayinitvalue}}{\bvconst{32}{0}}{\bvconst{8}{7}}}{\bvconst{32}{1}}{\arrayinitvalue} \]
+\[ \smtarray' \triangleq \arraystore{\arraystore{\arrayconst{\arrayinitvalue}}{\bvconst{32}{0}}{\bvconst{8}{7}}}{\bvconst{32}{1}}{\arrayinitvalue} \]
 % TODO: note the change at offset 1
 
+% TODO: show the store_i8 lemma?
 Now, we have to show that the subtree of $s$ is safe.
 Note that $s$ is not an error state,
 since $m[\evalexprty{...}{\symlocalstore}{\pointertypeof{\bvsort{64}}}] = \bvconst{64}{\addr}$ for every SMT model $m$.
-To prove that $s' \equiv s'_{opt}$, it is enough to prove that $\arraystore{\smtarray}{(\bvextract_{32}(\bvconst{64}{\addr} - \bvconst{64}{\addr}))}{\bvconst{8}{7}} \equiv \smtarray'$.
-To prove the latter,
+To prove that $s' \equiv s'_{opt}$, it remains to prove the equivalence of their memory and path constraints.
+As for the memory,
 note that $(\bvextract_{32}(\bvconst{64}{\addr} - \bvconst{64}{\addr})) \equiv \bvconst{32}{0}$,
-so the last store override the inner one,
-In general, we use the following lemma to prove such equivalences:
-\begin{lemma}
-\end{lemma}
+so $\arraystore{\smtarray}{(\bvextract_{32}(\bvconst{64}{\addr} - \bvconst{64}{\addr}))}{\bvconst{8}{7}} \equiv \smtarray'$.
+As for the path constraints,
+note that $\rangecond(\bvconst{64}{\addr}, 1, \symmo) \equiv \true$, so the equivalence follows easily.
 
 % this intuition is packed/formulated in the following interface lemma
 % we generalize the proof sketch / intuition above to an interface lemma...
-The interface lemma for \textit{store} is given as~\Cref{lemma:interface-store}.
-To show that the subtree of $s$ is safe,
-we can apply~\Cref{lemma:interface-store} with $\symmo$ as X.
+The proof above is generalized into an interface lemma for \textit{store}, which is stated as~\Cref{lemma:interface-store}.
+%The interface lemma for \textit{store} is given as~\Cref{lemma:interface-store}.
 \begin{lemma}
 \label{lemma:interface-store}
 Let $s \triangleq \symstate{\location}{\symlocalstore}{\symstack}{\symmemory}{\pc}$,
@@ -282,6 +281,8 @@ If there exist $\symmo$ and $t$ such that:
 \end{itemize}
 then $\safeet(\tree(s, [t]))$.
 \end{lemma}
+To show that the subtree of $s$ is safe,
+we can apply~\Cref{lemma:interface-store} with $\symmo$ as $(\bvval{\addr}{64}, \bvval{2}{32}, \smtarray)$.
 
 \subsubsection{Example: GetElementPtr (2)}
 % TODO: explain how to prove that this is not an error state
