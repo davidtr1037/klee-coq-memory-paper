@@ -127,6 +127,7 @@ s'_{opt} \triangleq \symstate
     {[(\bvval{\addr}{64}, \bvval{2}{32}, \arraystore{\arraystore{\arrayconst{\arrayinitvalue}}{\bvconst{32}{0}}{\arrayinitvalue}}{\bvconst{32}{1}}{\arrayinitvalue})]}
     {\true}
 \]
+% TODO: show that $s$ is not an error state
 Now, to show that the subtree of $s$ is safe, we need to show that $s' \equiv s'_{opt}$.
 The SMT arrays in the two symbolic states are encoded differently,
 but they are actually equivalent, since the additional store expressions contain the same value $v$ as in $\arrayconst{v}$.
@@ -202,51 +203,70 @@ then $\safeet(\tree(s, [t]))$.
 
 \subsubsection{Example: Store}
 % TODO: explain how to prove that this is not an error state
+% TODO: show the lemma for array equivalence
+% TODO: the type is i8, so we add a single store expression
+% TODO: fix the index expression
 The initial symbolic state:
 \[
 s \triangleq \symstate
     {...}
     {\{ ..., \nameid{arrayidx} \mapsto \bvconst{64}{\addr} \}}
     {[]}
-    {[(\addr, 2, \smtarray_0)]}
+    {[(\bvval{\addr}{64}, \bvval{2}{32}, \smtarray)]}
     {n < 2}
 \]
 where:
-\[\smtarray_0 \triangleq \arraystore{\arraystore{\arrayconst{\arrayinitvalue}}{\bvconst{32}{0}}{\arrayinitvalue}}{\bvconst{32}{1}}{\arrayinitvalue} \]
-% TODO: there might be multiple derivations
-% TODO: the derived state is parametric
-% TODO: the type is i8, so we add a single store expression
-% TODO: fix the index expression
+\[\smtarray \triangleq \arraystore{\arraystore{\arrayconst{\arrayinitvalue}}{\bvconst{32}{0}}{\arrayinitvalue}}{\bvconst{32}{1}}{\arrayinitvalue} \]
+
+% TODO: note that $m[\evalexprty{\nameid{arrayidx}}{\symlocalstore}{\pointertypeof{\bvsort{64}}}] = \bvconst{64}{\addr}$?
 On one side, according to the symbolic semantics,
-any derived symbolic state should have the following form:
+if $s'$ is derived from $s$ then there exist an SMT model $m$ and a memory object $\symmo$ such that
+$m \models \pc$, $\symmo \in \symmemory$, and $\isinbounds(\bvconst{64}{\addr}, 1, \symmo)$, and then:
 \[
 s' \triangleq \symstate
     {...}
     {\{ ..., \nameid{arrayidx} \mapsto \bvconst{64}{\addr} \}}
     {[]}
-    %{[(\addr, 2, \smtarray_1)])}
-    {[\symmo]}
-    {n < 2 \land \rangecond(\bvconst{64}{\addr}, 1, \symmo)}
+    {[\writemo(\symmo, \bvconst{64}{\addr}, \bvconst{8}{7})]}
+    {n < 2 \land \rangecond(\bvconst{64}{\addr}, 1, \symmo))}
 \]
-where there is an SMT model $m$ and a memory object $\symmo$ such that $m \models \pc$ and $\symmo \in \symmemory$.
-%\[ \smtarray_1 \triangleq \arraystore{\smtarray_0}{(\bvconst{64}{\addr} - \bvconst{64}{\addr})}{\bvconst{8}{7}} \]
-% The representation of the updated memory object is optimized, ...
-% offset computation
-% mapping
+We assume that $\symmemory$ is well-formed, which implies that address intervals of memory objects do not overlap,
+so if $\symmo \in \symmemory$, then $\symmo$ must be equal to $(\bvval{\addr}{64}, \bvval{2}{32}, \smtarray)$,
+since $\bvconst{64}{\addr}$ is a constant SMT expression.
+Therefore, although the \rulenameref{Store} rule may have multiple derivations in general,
+$s'$ is the only possible derivation here.
+
 On the other side, the symbolic state computed by the \SE engine is:
 \[
 s'_{opt} \triangleq \symstate
     {...}
     {\{ ..., \nameid{arrayidx} \mapsto \bvconst{64}{\addr} \}}
     {[]}
-    {[(\addr, 2, \smtarray_1^{'})]}
+    {[(\bvval{\addr}{64}, \bvval{2}{32}, \smtarray')]}
     {n < 2}
 \]
 where:
-\[ \smtarray_1^{'} \triangleq \arraystore{\arraystore{\arrayconst{\arrayinitvalue}}{\bvconst{32}{0}}{\bvconst{8}{7}}}{\bvconst{32}{1}}{\arrayinitvalue} \]
+\[ \smtarray_1' \triangleq \arraystore{\arraystore{\arrayconst{\arrayinitvalue}}{\bvconst{32}{0}}{\bvconst{8}{7}}}{\bvconst{32}{1}}{\arrayinitvalue} \]
 % TODO: note the change at offset 1
-Now, we have to show that the two symbolic states are equivalent.
+
+Now, we have to show that the subtree of $s$ is safe.
+Note that $s$ is not an error state,
+since $m[\evalexprty{...}{\symlocalstore}{\pointertypeof{\bvsort{64}}}] = \bvconst{64}{\addr}$ for every SMT model $m$.
+To prove that $s' \equiv s'_{opt}$, it is enough to prove that $\arraystore{\smtarray}{(\bvextract_{32}(\bvconst{64}{\addr} - \bvconst{64}{\addr}))}{\bvconst{8}{7}} \equiv \smtarray'$.
+To prove the latter,
+note that $(\bvextract_{32}(\bvconst{64}{\addr} - \bvconst{64}{\addr})) \equiv \bvconst{32}{0}$,
+so the last store override the inner one,
+In general, we use the following lemma to prove such equivalences:
 \begin{lemma}
+\end{lemma}
+
+% this intuition is packed/formulated in the following interface lemma
+% we generalize the proof sketch / intuition above to an interface lemma...
+The interface lemma for \textit{store} is given as~\Cref{lemma:interface-store}.
+To show that the subtree of $s$ is safe,
+we can apply~\Cref{lemma:interface-store} with $\symmo$ as X.
+\begin{lemma}
+\label{lemma:interface-store}
 Let $s \triangleq \symstate{\location}{\symlocalstore}{\symstack}{\symmemory}{\pc}$,
 where \textup{$\instrat{\location} = \codequote{\tstore^{\tau}~e_1~e_2}$}.
 If there exist $\symmo$ and $t$ such that:
@@ -349,13 +369,6 @@ If there exist $\symmo$ and $t$ such that:
 \end{itemize}
 then $\safeet(\tree(s, [t]))$.
 \end{lemma}
-
-\subsection{Optimizations}
-\begin{itemize}
-    \item reusing terms (memory, ...)
-    \item specialized lemmas (interface lemmas)
-    \item ...
-\end{itemize}
 
 % similarly to ..., we reuse terms to accelerate the ...
 % here, we extend this approach to handle ..
