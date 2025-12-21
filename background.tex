@@ -5,13 +5,36 @@
 
 Add some general background about LLVM here...
 
+LLVM IR is an industry-standard intermediate representation for low-level languages, esp.
+C, C++, and Rust.
+In addition to its uses for compilation, it is
+also used by analysis tools such as model checkers and symbolic execution engines.
+We describe below the aspects of \llvm that are relevant for our development.
+
 \subsection{LLVM Memory Model}
 
-In \llvm IR, the \emph{data layout} specifies how data is to be laid out in memory.
-The data layout consists of a list of specifications,
-including endianness, alignment rules, \etc
+\llvm supports scalar types, array types, structures, and pointers.
+For the purposes of this paper, suffices that we focus on integral types, array types, and pointers.
+%
+\[
+\tau ::= \bvsort{$w$} \;|\;
+         \texttt{[}n \times \tau\texttt{]} \;|\;
+         \tau\texttt{*}
+\]
+
+Scalar types can be of any positive bitwidth $w$,
+and arrays are parametrized by a dimension $n$,
+with multi-dimentional arrays taking the form of nested arrays.
+Pointers are typed---that is, the type of the pointed data is explicit.
+The width of the pointer itself is fixed.
+
+We use the notation $n@\bvsort{$w$}$ to denote a scalar value of type $\bvsort{$w$}$ whose integral (either signed or unsigned) value is $n$.
+
+\llvm defines a \emph{data layout}, which specifies how data is to be laid out in memory.
+%The data layout consists of a list of specifications,
+%including endianness, alignment rules, \etc
 In particular, it defines various properties related to pointers, such as \emph{pointer type} and \emph{index type}.
-The pointer type specifies the type used to represent pointer values.
+The pointer type specifies the integral type used to represent pointer values.
 The index type specifies the type used for address calculations (\eg in \tgep).
 The size of the index type may not exceed the size of the pointer type.
 In addition, the index type also specifies the type used to represent the size of allocated objects.
@@ -29,6 +52,31 @@ In addition, the index type also specifies the type used to represent the size o
 % TODO: UB is interpreted as an error
 % TODO: fix the Malloc rule (set the parameter type to i32?)?
 % TODO: fix the Assume rule (set the parameter type to i1?)?
+
+The \llvm standard documentation provides some leeway in how memory is viewed and addressed.
+The most common depiction of program memory (a.k.a.\@ the ``flat model'') is a single, large block of memory bytes, with addresses being simple byte indexes.
+In this work, we take a slightly different approach---the \emph{memory-object model}---%
+which is more compatible with the workings of
+symbolic execution w.r.t.\@ memory allocation
+and manipulation.
+
+\begin{definition}
+A \emph{concrete heap}, according to the memory-object model, is a mapping from (half-open, integer) intervals to arrays of bytes of a corresponding size.
+%
+\[
+\begin{array}{l}
+H = \Intervals^{\indextype} \rightharpoonup (\Vals^{\bvsort{8}}\cup\{\tundef, \tpoison\})[\,]
+\\
+\Intervals^{\tau} \eqdef \{[b,e) \mid b,e\in \!\Vals^{\tau}\!, \,b\leq e\}
+\end{array}
+\]
+
+With the following properties for $h\in\Heaps$:
+\begin{itemize}
+\item $\mathrm{dom}~h$ are pairwise-disjoint intervals.
+\item $|h(\iota)| = |\iota|$ for all $\iota\in\mathrm{dom}~h$.
+\end{itemize}
+\end{definition}
 
 A \emph{memory object} is defined as a tuple:
 \[ (\addr, \size, \arrayvalue) \in \Vals^{\pointertype} \times \Vals^{\indextype} \times \Arrays \quad \quad \Arrays \triangleq \Z \rightarrow \Vals^{\bvsort{8}} \cup \{\tundef, \tpoison\} \]
