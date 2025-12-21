@@ -2,3 +2,17 @@
 
 % all the related work from the previous paper
 % our paper
+
+Trabish et al.~\cite{klee-rocq} propose an approach for generating machine-checked safety proofs using symbolic execution.
+Their approach supports only a subset of \llvm with integers,
+while our approach supports memory operations,
+making it applicable in more realistic settings.
+
+Correnson et al.~\cite{fse23wise} formalize a Coq framework with concrete and symbolic semantics of a small prototype language.
+Based on this framework, they extract an executable OCaml implementation of a symbolic execution engine.
+Their implementation does not support memory operations, advanced search heuristics, SMT optimizations, and other performance optimizations.
+In addition, their formalization is coupled with a specific search heuristic (BFS),
+while our approach is agnostic to the underlying search heuristic.
+% TODO: do we need this one?
+The approach proposed by~\cite{icfp22:keuchel} is similar to the work mentioned above,
+but based on axiomatic semantics instead.
