@@ -339,9 +339,10 @@ Then $c$ is an \emph{error} state, denoted by $\errorstate(c)$, if one of the fo
         \item $\evalexprty{e_2}{\localstore}{\tau} = p$
         \item $\invalidpointer(\memory, p, |\tau|)$
     \end{enumerate}
-    \item $\instrat{\location} = \textup{$\codequote{x \ \texttt{=} \ \tgep~\pointertypeof{\tau} \ e \ \overline{(\tau_i, e_i)}}$}$
+    \item $\instrat{\location} = \textup{$\codequote{x \ \texttt{=} \ \tgep~\pointertypeof{\tau} \ e \ \overline{(\tau_i, e_i)}}$}$, and the following holds:
     \begin{enumerate}
-        \item $...$
+        \item $|\overline{(\tau_i, e_i)}| > 0$, $\evalexprty{e}{\localstore}{\pointertypeof{\tau}} = p$, and $\evalexprty{e_i}{\localstore}{\tau_i} = j_i$
+        \item $\evalgep(\tau, p, j_0, [...]) = \tpoison$
     \end{enumerate}
 \end{enumerate}
 where:
