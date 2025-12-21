@@ -265,7 +265,7 @@ $
   \instrat{\location} = \codequote{\tcall~\intrinsicfunc{free}(e)} \quad
   \evalexprty{e}{\localstore}{\pointertype} = p \quad
   \mo \in \memory \quad
-  \isbaseaddr(p, \mo) \quad
+  \isbaseaddr{p}{\mo} \quad
   \mathit{remove}(\memory, \mo) = \memory'
 }
 {
@@ -278,7 +278,7 @@ $
   \instrat{\location} = \codequote{x~\texttt{=}~\tload^{\tau}~e} \quad
   \evalexprty{e}{\localstore}{\pointertype} = p \quad
   \mo \in \memory \quad
-  \isinbounds(p, |\tau|, \mo) \quad
+  \isinbounds{p}{|\tau|}{\mo} \quad
   \mathit{read}(\mo, p, \tau) = v \quad
 }
 {
@@ -292,7 +292,7 @@ $
   \evalexprty{e_1}{\localstore}{\tau} = v \quad
   \evalexprty{e_2}{\localstore}{\pointertype} = p \quad
   \mo \in \memory \quad
-  \isinbounds(p, |\tau|, \mo) \quad
+  \isinbounds{p}{|\tau|}{\mo} \quad
   \mathit{write}(\mo, p, v) = \mo' \quad
   \mathit{replace}(\memory, \mo') = \memory'
 }
@@ -398,8 +398,8 @@ Then $c$ is an \emph{error} state, denoted by $\errorstate(c)$, if one of the fo
 where:
 \[
 \begin{array}{ll}
-    \invalidpointer(\memory, p, n) & \triangleq \forall \mo \in \memory. \ \neg \isinbounds(p, n, \mo) \\
-    \invalidbaseaddress(\memory, p) & \triangleq \forall \mo \in \memory. \ \neg \isbaseaddr(p, \mo)
+    \invalidpointer(\memory, p, n) & \triangleq \forall \mo \in \memory. \ \neg \isinbounds{p}{n}{\mo} \\
+    \invalidbaseaddress(\memory, p) & \triangleq \forall \mo \in \memory. \ \neg \isbaseaddr{p}{\mo}
 \end{array}
 \]
 \end{definition}
