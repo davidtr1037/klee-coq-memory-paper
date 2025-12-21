@@ -316,13 +316,13 @@ Then $c$ is an \emph{error} state, denoted by $\errorstate(c)$, if one of the fo
     \item $\instrat{\location} = \textup{$\codequote{\tunreachable}$}$
     \item $\instrat{\location} = \textup{$\codequote{x \ \texttt{=} \ op \ \bvsort{w} \ e_1 \ e_2}$}$, and one of the following holds, where $v_k \triangleq \evalexprty{e_k}{\localstore}{\bvsort{w}}$:
     \begin{enumerate}[left=-3pt]
-        \item $op \in \{\opcode{udiv}, \opcode{sdiv}, \opcode{urem}, \opcode{srem}\}$ and $v_2 = \bvval{0}{w}$
-        \item $op = \opcode{sdiv}$, $v_1 = \bvval{(-2^{w - 1})}{w}$, and $v_2 = \bvval{(-1)}{w}$
-        \item $op \in \{\opcode{shl}, \opcode{lshr}, \opcode{ashr}\}$ and $v_2 = \bvval{n}{w}$, and $n \geq w$
+        \item \textup{$op \in \{\opcode{udiv}, \opcode{sdiv}, \opcode{urem}, \opcode{srem}\}$ and $v_2 = \bvval{0}{w}$}
+        \item \textup{$op = \opcode{sdiv}$, $v_1 = \bvval{(-2^{w - 1})}{w}$, and $v_2 = \bvval{(-1)}{w}$}
+        \item \textup{$op \in \{\opcode{shl}, \opcode{lshr}, \opcode{ashr}\}$ and $v_2 = \bvval{n}{w}$, and $n \geq w$}
     \end{enumerate}
     \item $\instrat{\location} = \textup{$\codequote{x \ \texttt{=} \ \tcall^{\pointertype} \ \intrinsicfunc{malloc}(e)}$}$, and the following holds:
     \begin{enumerate}
-        \item $\evalexprty{e}{\localstore}{\tau} > max\_signed_{\bvsort{32}}$
+        \item \textup{$\evalexprty{e}{\localstore}{\tau} > max\_signed_{\bvsort{32}}$}
     \end{enumerate}
     \item $\instrat{\location} = \textup{$\codequote{\tcall~\intrinsicfunc{free}(e)}$}$, and the following holds:
     \begin{enumerate}
