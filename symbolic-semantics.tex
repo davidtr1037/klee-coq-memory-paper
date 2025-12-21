@@ -267,9 +267,12 @@ Then $s$ is an \emph{error} state, denoted by $\errorsymstate(c)$, if one of the
         \item $\evalexprty{e_2}{\symlocalstore}{\tau} = p$
         \item $\syminvalidpointer(\memory, \pc, p, |\tau|)$
     \end{enumerate}
-    \item $\instrat{\location} = \textup{$\codequote{x \ \texttt{=} \ \tgep~\pointertypeof{\tau} \ e \ \overline{(\tau_i, e_i)}}$}$
+    \item $\instrat{\location} = \textup{$\codequote{x \ \texttt{=} \ \tgep~\pointertypeof{\tau} \ e \ \overline{(\tau_i, e_i)}}$}$, and the following holds:
     \begin{enumerate}
-        \item $...$
+        % TODO: needed?
+        % \item $|\overline{(\tau_i, e_i)}| > 0$
+        \item there exists an SMT model $m$ such that $m[\evalexprty{e}{\localstore}{\pointertypeof{\tau}}] = p$ and $m[\evalexprty{e_i}{\localstore}{\tau_i}] = j_i$
+        \item $\evalgep(\tau, p, j_0, [...]) = \tpoison$
     \end{enumerate}
 \end{enumerate}
 where:
