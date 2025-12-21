@@ -50,10 +50,10 @@ Once this happens, the representation cannot be switched back to the optimized o
 \label{figure:example-llvm}
 \end{figure}
 
-\subsubsection{Module Translation.}
+\subsection{Module Translation}
 ...
 
-\subsubsection{Symbolic State Translation.}
+\subsection{Symbolic State Translation}
 % TODO: explain how to translate the heap/memory
 The translation of a memory object from its internal representation to its representation in \coq works as follows.
 In the case of an optimized representation,
@@ -86,7 +86,7 @@ The proof of each subtree corresponds to a single instruction that was executed 
 Generating an explicit proof from scratch for each subtree is expensive in terms of proof generation,
 and it also make the proof checking inefficient,
 as such a proof requires expensive \coq tactics such as: \textit{inversion}, \textit{subst}, \etc
-Instead, we adapt the approach proposed in X,
+Instead, we adapt the approach proposed in~\cite{klee-rocq},
 and create for each instruction type a generic lemma that can be used to infer execution tree safety.
 We call these lemmas \emph{interface} lemmas,
 as they help to create an effective interaction between the pre-defined and auto-generated sections of the proof.
@@ -367,9 +367,9 @@ If there exist $\symmo$ and $t$ such that:
 \begin{itemize}
     \item $\symmemory$ is well-formed
     \item $\symmo \in \symmemory$
-    \item $\evalexprty{e}{\symlocalstore}{\bvsort{64}^{*}} = \bvconst{64}{p}$
-    \item $\isinbounds(\bvval{p}{64}, |\tau|, \symmo)$
-    \item $\symlocalstore'_{opt} \equiv \symlocalstore[x \mapsto \readmo(\symmo, \bvconst{64}{p}, |\tau|)]$
+    \item $\evalexprty{e}{\symlocalstore}{\bvsort{64}^{*}} = p$
+    \item $\unsat(\pc \land \rangecond(p, |\tau|, \symmo))$
+    \item $\symlocalstore'_{opt} \equiv \symlocalstore[x \mapsto \readmo(\symmo, p, |\tau|)]$
     \item $t.\attrstate = \symstate{\nextinstr{\location}}{\symlocalstore'_{opt}}{\symstack}{\symmemory}{\pc}$
     \item $\safeet(t)$
 \end{itemize}
