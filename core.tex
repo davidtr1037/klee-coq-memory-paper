@@ -9,7 +9,15 @@ A concrete state $c \triangleq \progstate{\location}{\localstore}{\stack}{\memor
 if $\localstore$, $\stack$, and $\memory$ do not contain $\tpoison$ values.
 Let $c$ and $c'$ be two concrete states.
 We say that there is a \emph{non-speculative} step between $c$ and $c'$, denoted by $c \nsstep c'$,
-if $c \step c'$, and both $c$ and $c'$ are poison-free.
+if $c \step c'$ and both $c$ and $c'$ are poison-free.
+\end{definition}
+
+\begin{definition}
+\label{def:issafe-ns-step}
+Let $c_0 \triangleq \initstate(\module)$,
+then $\module$ is \emph{safe} w.r.t. the non-speculative concrete semantics, denoted by $\issafens(\module)$, if:
+\[ \forall c. \ c_{0} \multinsstep c \implies \neg \errorstate(c) \]
+(The relation $\multinsstep$ is the reflexive-transitive closure of the relation $\nsstep$.)
 \end{definition}
 
 \begin{lemma}
