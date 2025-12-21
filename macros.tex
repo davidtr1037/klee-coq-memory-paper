@@ -107,7 +107,7 @@
 \newcommand{\multistep}{\mathrel{{\step}{}^*\!}}
 \newcommand{\errorstate}{\mathit{error}}
 \newcommand{\issafe}{\mathit{safe}}
-\newcommand{\nsstep}{\stackrel{\raisebox{-3pt}{\scriptsize{\textit{ns}}}}{\rightarrow}}
+\newcommand{\nsstep}{\stackrel{\hspace{-2pt}\raisebox{1pt}{\tiny{\textit{ns}}}}{\rightarrow}}
 \newcommand{\multinsstep}{\mathrel{{\nsstep}{}^*\!}}
 \newcommand{\issafens}{\mathit{safe_{ns}}}
 \newcommand{\pointertype}{\bvsort{ptr}}
@@ -156,9 +156,7 @@
 \newcommand{\arrayinitvalue}{v}
 
 % symbolic semantics
-% TODO: fix / make smaller
 \makeatletter
-\newcommand{\oset}[3][0ex]{\mathrel{\mathop{#3}\limits^{\vbox to#1{\kern-2\ex@\hbox{$#2$}\vss}}}}
 \makeatother
 \newcommand{\SymStores}{\tilde\Sigma}
 \newcommand{\symlocalstore}{\tilde\sigma}
@@ -170,7 +168,7 @@
 \newcommand{\overapprox}{\approx}
 \newcommand{\overapproxvia}[1]{\approx_{#1}}
 \newcommand{\initsymstate}{\widetilde{\textit{init}}}
-\newcommand{\symstep}{\oset{\sim}{\rightarrow}}
+\newcommand{\symstep}{\overset{\sim}{\rightarrow}}
 \newcommand{\symmultistep}{\mathrel{{\symstep}{}^*\!}}
 \newcommand{\infeasible}{\mathit{infeasible}}
 \newcommand{\symstackframe}[3]{\langle{#1},{#2},{#3}\rangle}
