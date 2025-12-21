@@ -40,8 +40,13 @@ Once this happens, the representation cannot be switched back to the optimized o
 %the SMT expression corresponding to the offset is truncated to an SMT expression of sort $\smtsort{32}$.
 
 \begin{figure}
+\begin{minipage}[t]{0.60\columnwidth}
 \lstinputlisting[basicstyle=\scriptsize\ttfamily,language=llvm,mathescape=true,breaklines=false]{code/example.simple.ll}
-\caption{A simple \llvm IR program.}
+\end{minipage}
+\begin{minipage}[t]{0.38\columnwidth}
+\lstinputlisting[basicstyle=\scriptsize\ttfamily,language=c,mathescape=true,breaklines=false]{code/example.simple.c}
+\end{minipage}
+\caption{A simple \llvm IR program (left) and its source code (right).}
 \label{figure:example-llvm}
 \end{figure}
 
