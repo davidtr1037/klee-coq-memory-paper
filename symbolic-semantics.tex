@@ -243,13 +243,14 @@ Then $s$ is an \emph{error} state, denoted by $\errorsymstate(c)$, if one of the
     \item $\instrat{\location} = \textup{$\codequote{\tunreachable}$}$
     \item $\instrat{\location} = \textup{$\codequote{x \ \texttt{=} \ op \ \bvsort{w} \ e_1 \ e_2}$}$ and one of the following holds ($t_j \triangleq \evalexprty{e_j}{\symlocalstore}{\bvsort{w}}$):
     \begin{enumerate}[left=-3pt]
-        \item $op \in \{\opcode{udiv}, \opcode{sdiv}, \opcode{urem}, \opcode{srem}\}$ and $\pc \land (t_2 = 0)$ is satisfiable
-        \item $op = \opcode{sdiv}$ and $\pc \land (t_1 = -2^{w - 1}) \land (t_2 = -1)$ is satisfiable
-        \item $op \in \{\opcode{shl}, \opcode{lshr}, \opcode{ashr}\}$ and $\pc \land (t_2 \geq w)$ is satisfiable
+        \item \textup{$op \in \{\opcode{udiv}, \opcode{sdiv}, \opcode{urem}, \opcode{srem}\}$} and $\pc \land (t_2 = 0)$ is satisfiable
+        \item \textup{$op = \opcode{sdiv}$} and $\pc \land (t_1 = -2^{w - 1}) \land (t_2 = -1)$ is satisfiable
+        \item \textup{$op \in \{\opcode{shl}, \opcode{lshr}, \opcode{ashr}\}$} and $\pc \land (t_2 \geq w)$ is satisfiable
     \end{enumerate}
     \item $\instrat{\location} = \textup{$\codequote{x \ \texttt{=} \ \tcall^{\pointertype} \ \intrinsicfunc{malloc}(e)}$}$, and the following holds:
     \begin{enumerate}
-        \item ...
+        % TODO: use bvconst?
+        \item \textup{$\pc \land (t > max\_signed_{\bvsort{32}})$} is satisfiable ($t \triangleq \evalexprty{e}{\symlocalstore}{\tau}$)
     \end{enumerate}
     \item $\instrat{\location} = \textup{$\codequote{\tcall~\intrinsicfunc{free}(e)}$}$, and the following holds:
     \begin{enumerate}
