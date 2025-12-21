@@ -3,3 +3,19 @@
 \input{symbolic-semantics.tex}
 
 \subsection{Program Safety via Execution Trees}
+
+\begin{definition}
+The symbolic stores $\symlocalstore_1$ and $\symlocalstore_2$ are \emph{equivalent}, denoted by $\symlocalstore_1\equiv
+\symlocalstore_2$, if they are defined over the same variables,
+and for each such variable $x$, $\mapaccess{\symlocalstore_1}{x} \equiv \mapaccess{\symlocalstore_2}{x}$.
+The symbolic frames $\symstackframe{\location_1}{\symlocalstore_1}{x_1}$ and $\symstackframe{\location_2}{\symlocalstore_2}{x_2}$ are \emph{equivalent} if
+$\location_1 = \location_2$, $\symlocalstore_1 \equiv \symlocalstore_2$, and $x_1 = x_2$.
+The symbolic stacks $\symstack_1$ and $\symstack_2$ are \emph{equivalent}, denoted by $\symstack_1 \equiv \symstack_2$,
+if their elements are pointwise equivalent.
+The symbolic memory objects $(\addr_1, \size_1, \smtarray_1)$ and $(\addr_2, \size_2, \smtarray_2)$ are \emph{equivalent} if
+$\addr_1 = \addr_2$, $\size_1 = \size_2$, and $\smtarray_1 \equiv \smtarray_2$.
+The symbolic memories $\symmemory_1$ and $\symmemory_2$ are \emph{equivalent}, denoted by $\symmemory_1 \equiv \symmemory_2$,
+if their elements are pointwise equivalent.
+The symbolic states $s_1 \triangleq \symstate{\location_1}{\symlocalstore_1}{\symstack_1}{\symmemory_1}{\pc_1}$ and $s_2 \triangleq \symstate{\location_2}{\symlocalstore_2}{\symstack_2}{\symmemory_2}{\pc_2}$ are \emph{equivalent},
+denoted by $s_1 \equiv s_2$, if $\location_1 = \location_2$, $\symlocalstore_1 \equiv \symlocalstore_2$, $\symstack_1 \equiv \symstack_2$, $\symmemory_1 \equiv \symmemory_2$, and $\pc_1 \equiv \pc_2$.
+\end{definition}
