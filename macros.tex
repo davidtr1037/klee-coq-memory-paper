@@ -123,8 +123,10 @@
 \newcommand{\zeroext}{\mathit{zeroext}}
 \newcommand{\signext}{\mathit{signext}}
 \newcommand{\convert}{\mathit{convert}}
-\newcommand{\isinbounds}[3]{\mathit{is\_inbounds}(#1, #2 #3)}
-\newcommand{\isbaseaddr}[2]{\mathit{is\_base\_addr}(#1, #2)}
+%\newcommand{\isinbounds}[3]{\mathit{is\_inbounds}(#1, #2 #3)}
+\newcommand{\isinbounds}[3]{#1 \overset{#2}{\rightsquigarrow} #3}
+%\newcommand{\isbaseaddr}[2]{\mathit{is\_base\_addr}(#1, #2)}
+\newcommand{\isbaseaddr}[2]{#1 \rightsquigarrow #2}
 \newcommand{\invalidpointer}{\mathit{invalid\_pointer}}
 \newcommand{\invalidbaseaddress}{\mathit{invalid\_base\_address}}
 \newcommand{\nfa}[1]{\mathit{top}(#1)}
@@ -180,7 +182,7 @@
 \newcommand{\smtarray}{\tilde{a}}
 \newcommand{\symmo}{\widetilde{\mathit{mo}}}
 \newcommand{\symmemory}{\tilde{\mu}}
-\newcommand{\symisinbounds}[4]{\mathit{is\_inbounds}(#1, #2 #3, #4)}
+\newcommand{\symisinbounds}[4]{\mathit{is\_inbounds}(#1, #2, #3, #4)}
 \newcommand{\symisbaseaddr}[3]{\mathit{is\_base\_addr}(#1, #2, #3)}
 \newcommand{\baseaddrcond}{\mathit{bc}}
 \newcommand{\rangecond}{\mathit{rc}}

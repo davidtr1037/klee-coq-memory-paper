@@ -226,7 +226,7 @@ where:
 % TODO: note that $m[\evalexprty{\nameid{arrayidx}}{\symlocalstore}{\pointertypeof{\bvsort{64}}}] = \bvconst{64}{\addr}$?
 On one side, according to the symbolic semantics,
 if $s'$ is derived from $s$ then there exist an SMT model $m$ and a memory object $\symmo$ such that
-$m \models \pc$, $\symmo \in \symmemory$, and $\isinbounds(\bvconst{64}{\addr}, 1, \symmo)$, and then:
+$m \models \pc$, $\symmo \in \symmemory$, and $\isinbounds{\bvconst{64}{\addr}}{1}{\symmo}$, and then:
 \[
 s' \triangleq \symstate
     {...}
@@ -279,7 +279,7 @@ If there exist $\symmo$ and $t$ such that:
     \item $\symmo \in \symmemory$
     \item $\evalexprty{e_1}{\symlocalstore}{\tau} = v$
     \item $\evalexprty{e_2}{\symlocalstore}{\bvsort{64}^{*}} = \bvconst{64}{p}$
-    \item $\isinbounds(\bvval{p}{64}, |\tau|, \symmo)$
+    \item $\isinbounds{\bvval{p}{64}}{|\tau|}{\symmo}$
     \item $\symmo'_{opt} \equiv \writemo(\symmo, \bvconst{64}{p}, v)$
     \item $t.\attrstate = \symstate{\nextinstr{\location}}{\symlocalstore}{\symstack}{\replace(\symmemory, \symmo'_{opt})}{\pc}$
     \item $\safeet(t)$
