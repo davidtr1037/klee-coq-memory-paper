@@ -8,11 +8,8 @@
 A concrete state $c \triangleq \progstate{\location}{\localstore}{\stack}{\memory}$ is \emph{poison-free}
 if $\localstore$, $\stack$, and $\memory$ do not contain $\tpoison$ values.
 Let $c$ and $c'$ be two concrete states.
-We say that there is a \emph{non-speculative} step between $c$ and $c'$, denoted by $c \nsstep c'$, if:
-\begin{enumerate}
-    \item $c \step c'$, \ie $c'$ is derived from $c$ according to the concrete semantics
-    \item $c$ and $c'$ are poison-free
-\end{enumerate}
+We say that there is a \emph{non-speculative} step between $c$ and $c'$, denoted by $c \nsstep c'$,
+if $c \step c'$, and both $c$ and $c'$ are poison-free.
 \end{definition}
 
 \begin{lemma}
