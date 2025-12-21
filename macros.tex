@@ -182,8 +182,10 @@
 \newcommand{\smtarray}{\tilde{a}}
 \newcommand{\symmo}{\widetilde{\mathit{mo}}}
 \newcommand{\symmemory}{\tilde{\mu}}
-\newcommand{\symisinbounds}[4]{\mathit{is\_inbounds}(#1, #2, #3, #4)}
-\newcommand{\symisbaseaddr}[3]{\mathit{is\_base\_addr}(#1, #2, #3)}
+%\newcommand{\symisinbounds}[4]{\mathit{is\_inbounds}(#1, #2, #3, #4)}
+\newcommand{\symisinbounds}[4]{#4[#1] \overset{#2}\rightsquigarrow #3}
+%\newcommand{\symisbaseaddr}[3]{\mathit{is\_base\_addr}(#1, #2, #3)}
+\newcommand{\symisbaseaddr}[3]{#3[#1] \rightsquigarrow #2}
 \newcommand{\baseaddrcond}{\mathit{bc}}
 \newcommand{\rangecond}{\mathit{rc}}
 \newcommand{\syminvalidpointer}{\mathit{invalid\_pointer}}
