@@ -2,6 +2,33 @@
 
 \input{symbolic-semantics.tex}
 
+\subsection{Reachability Completeness}
+
+\begin{definition}
+A concrete state $c \triangleq \progstate{\location}{\localstore}{\stack}{\memory}$ is \emph{poison-free}
+if $\localstore$, $\stack$, and $\memory$ do not contain $\tpoison$ values.
+Let $c$ and $c'$ be two concrete states.
+We say that there is a \emph{non-speculative} step between $c$ and $c'$, denoted by $c \nsstep c'$, if:
+\begin{enumerate}
+    \item $c \step c'$, \ie $c'$ is derived from $c$ according to the concrete semantics
+    \item $c$ and $c'$ are poison-free
+\end{enumerate}
+\end{definition}
+
+\begin{lemma}
+\label{lemma:multi-ns-step-relative-completeness}
+Let $c$ and $c'$ be concrete states.
+If $\module$ is supported, $c$ is poison-free, no error states can be derived from $c$ using the $\multinsstep$ relation, and $c \multistep c'$,
+then $c \multinsstep c'$.
+\end{lemma}
+
+\begin{theorem}
+\label{theorem:completeness}
+Let $c_{0} \triangleq \initstate(\module)$, and let $s_{0} \triangleq \initsymstate(\module)$.
+If $\module$ is supported and $c_{0} \multinsstep c$,
+then there exists a symbolic state $s$ such that $s_{0} \symmultistep s$ and $s \overapprox c$.
+\end{theorem}
+
 \subsection{Program Safety via Execution Trees}
 
 \begin{definition}
@@ -19,3 +46,15 @@ if their elements are pointwise equivalent.
 The symbolic states $s_1 \triangleq \symstate{\location_1}{\symlocalstore_1}{\symstack_1}{\symmemory_1}{\pc_1}$ and $s_2 \triangleq \symstate{\location_2}{\symlocalstore_2}{\symstack_2}{\symmemory_2}{\pc_2}$ are \emph{equivalent},
 denoted by $s_1 \equiv s_2$, if $\location_1 = \location_2$, $\symlocalstore_1 \equiv \symlocalstore_2$, $\symstack_1 \equiv \symstack_2$, $\symmemory_1 \equiv \symmemory_2$, and $\pc_1 \equiv \pc_2$.
 \end{definition}
+
+\begin{lemma}
+\label{lemma:safety-via-et-ns-step}
+Let $s_0 \triangleq \initsymstate(\module)$, and $l$ be a list of execution trees.
+If $\module$ is supported and $\safeet(\tree(s_0, l))$, then $\issafens(\module)$.
+\end{lemma}
+
+\begin{theorem}
+\label{theorem:safety-via-et}
+Let $s_0 \triangleq \initsymstate(\module)$, and $l$ be a list of execution trees.
+If $\module$ is supported and $\safeet(\tree(s_0, l))$, then $\issafe(\module)$.
+\end{theorem}
