@@ -287,28 +287,21 @@ $
         \State \Return \Call{compute-offset}{$\tau', o, \overline{j'}$}
     \EndIf
     \If {$\tau = \structtype{\overline{\tau}}$}
-        \State $n \gets \convert_{\indextype}(j_1)$
-        \State $\tau_{n} \gets \mathit{field\_type}(\overline{\tau}, n)$
-        \State $o \gets o + \mathit{field\_offset}(\overline{\tau}, n)$ \label{line:struct-index}
-        \State \Return \Call{compute-offset}{$\tau_{n}, o, \overline{j'}$}
+        \State ...
     \EndIf
     \State ...
 \EndFunction
 
 \Function{compute-pointer}{$\tau, p, j_0, \overline{j}$}
+    \If {$j_0 = \tpoison \ \textbf{or} \ \tpoison \in \overline{j}$}
+        \State \Return $\tpoison$
+    \EndIf
+    \If {$j_0 = \tundef \ \textbf{or} \ \tundef \in \overline{j}$}
+        \State \Return $\tundef$
+    \EndIf
     \State $o \gets \convert_{\indextype}(j_0) \cdot |\tau|$ \label{line:first-index}
     \State $r \gets \Call{compute-offset}{\tau, o, \overline{j}}$
     \State \Return $p + \zeroext_{\pointertype}(r)$
-\EndFunction
-
-\Function{eval-gep}{$\tau, p, j_0, \overline{j}$}
-    \If {$\tpoison \in \{j_0\} \cup \overline{j}$}
-        \State \Return $\tpoison$
-    \EndIf
-    \If {$\tundef \in \{j_0\} \cup \overline{j}$}
-        \State \Return $\tundef$
-    \EndIf
-    \State \Return \Call{compute-pointer}{$\tau, p, j_0, \overline{j}$}
 \EndFunction
 
 \end{algorithmic}
