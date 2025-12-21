@@ -354,6 +354,17 @@ where:
 \end{definition}
 
 \begin{definition}
+\label{def:safety}
+Let $f$ be the entry function in the module $\module$.
+The \emph{initial state} is defined as:
+\[ \initstate(\module) \triangleq \progstate{f\hspace{-2pt}.\funcentry}{\{\}}{[]}{[]} \]
+Now, let $c_0 \triangleq \initstate(\module)$.
+Then $\module$ is \emph{safe}, denoted by $\issafe(\module)$, if:
+\[ \forall c. \ c_{0} \multistep c \implies \neg \errorstate(c) \]
+(The relation $\multistep$ is the reflexive-transitive closure of the relation $\step$.)
+\end{definition}
+
+\begin{definition}
 \label{def:well-formed}
 A memory object $(\addr, \size, \arrayvalue)$ is well-formed if its interval does not wrap around the address space,
 \ie $a + \zeroext_{\bvsort{64}}(s)$ does not overflow.
