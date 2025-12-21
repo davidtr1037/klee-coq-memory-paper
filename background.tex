@@ -259,7 +259,7 @@ $
   |\overline{(\tau_i, e_i)}| > 0 \quad
   \evalexprty{e}{\localstore}{\pointertypeof{\tau}} = p \quad
   \evalexprty{e_i}{\localstore}{\tau_i} = j_i \quad
-  \mathit{eval\_gep}(\tau, p, j_0, [...]) = v
+  \evalgep(\tau, p, j_0, [...]) = v
 }
 {
   \progstate{\location}{\localstore}{\stack}{\memory}
@@ -292,7 +292,7 @@ $
     \State ...
 \EndFunction
 
-\Function{compute-pointer}{$\tau, p, j_0, \overline{j}$}
+\Function{eval\_gep}{$\tau, p, j_0, \overline{j}$}
     \If {$j_0 = \tpoison \ \textbf{or} \ \tpoison \in \overline{j}$}
         \State \Return $\tpoison$
     \EndIf

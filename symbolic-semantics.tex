@@ -144,7 +144,7 @@ The symbolic heap and the symbolic allocator are defined similarly to their conc
   |\overline{(\tau_i, e_i)}| > 0 \quad
   \evalexprty{e}{\symlocalstore}{\pointertypeof{\tau}} = p \quad
   \evalexprty{e_i}{\symlocalstore}{\tau_i} = j_i \quad
-  \mathit{eval\_gep}(\tau, p, j_0, [...]) = v
+  \evalgep(\tau, p, j_0, [...]) = v
 }
 {
   \symstate{\location}{\symlocalstore}{\symstack}{\symmemory}{\pc}
@@ -227,7 +227,7 @@ since the symbolic domain does not model $\tundef$ and $\tpoison$.
     \State ...
 \EndFunction
 
-\Function{compute-pointer}{$\tau, p, j_0, \overline{j}$}
+\Function{eval-gep}{$\tau, p, j_0, \overline{j}$}
     \State $o \gets \bvmul_{32}(\bvsext_{32}(j_0), \bvconst{32}{|\tau|})$ \label{line:first-index}
     \State $r \gets \Call{compute-offset}{\tau, o, \overline{j}}$
     \State \Return $\bvadd_{64}(p, \bvzext_{64}(r))$
