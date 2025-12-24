@@ -80,7 +80,7 @@ With the following properties for $h\in\Heaps$:
 \end{definition}
 
 A \emph{memory object} is defined as a tuple:
-\[ (\addr, \size, \arrayvalue) \in \MemoryObjects \quad \quad \MemoryObjects \triangleq \Vals^{\pointertype} \times \Vals^{\indextype} \times \Arrays \quad \quad \Arrays \triangleq \Z \rightarrow \Vals^{\bvsort{8}} \cup \{\tundef, \tpoison\} \]
+\[ (\addr, \size, \arrayvalue) \in \MemoryObjects \quad \quad \MemoryObjects \triangleq \Vals^{\pointertype} \times \Vals^{\indextype} \times (\Z \rightarrow \Vals^{\bvsort{8}} \cup \{\tundef, \tpoison\}) \]
 A memory object has a base address $\addr$, a size $\size$, and mapping $\arrayvalue$ which tracks the stored values.
 A stored value can be either a value of type $\Vals^{\bvsort{8}}$ (\ie a byte) or one of the special values $\tundef$ or $\tpoison$.
 The memory is defined using a \emph{heap} and an \emph{allocator}.
