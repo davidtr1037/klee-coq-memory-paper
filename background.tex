@@ -101,7 +101,7 @@ A \emph{concrete state} is a tuple $\progstate{\location}{\localstore}{\stack}{\
 where $\location \in \Locs$ is a location,
 $\localstore \in \Stores$ is a \emph{local store} that maps variables to values in $\Vals$,
 $\stack \in (\Locs \times \Stores \times \Ids)^{*}$ is a call stack represented as a sequence of frames,
-and $\memory \in \MemoryObjects^{*}$ is a sequence of memory objects.
+and $\memory \in (\MemoryObjects)^{*}$ is a sequence of memory objects.
 \end{definition}
 
 \subsubsection{\textit{Malloc.}}

@@ -8,7 +8,7 @@
 % TODO: hard-code the array sort?
 
 A \emph{symbolic memory object} is defined as a tuple:
-\[ (\addr, \size, \smtarray) \in \Vals^{\pointertype} \times \Vals^{\indextype} \times \arraysort{\smtsort{8}}{\smtsort{32}} \]
+\[ (\addr, \size, \smtarray) \in \SymMemoryObjects \quad \quad \SymMemoryObjects \triangleq \Vals^{\pointertype} \times \Vals^{\indextype} \times \arraysort{\smtsort{8}}{\smtsort{32}} \]
 which is similar to the definition of a concrete memory object,
 but now the contents are represented using an SMT array, \ie a store expression.
 The symbolic heap and the symbolic allocator are defined similarly to their concrete counterparts.
@@ -16,7 +16,12 @@ The symbolic heap and the symbolic allocator are defined similarly to their conc
 \begin{definition}
 \label{def:symbolic-state}
 A \emph{symbolic state} is a tuple $\symstate{\location}{\symlocalstore}{\symstack}{\symmemory}{\pc}$.
-...
+The location $\location \in \Locs$ is defined as before.
+The concrete store $\localstore \in \Stores$ is replaced with a symbolic store $\symlocalstore \in \SymStores$,
+where $\SymStores \triangleq \Ids \to \Exprs$ and $\Exprs$ is a set of \emph{SMT expressions}, \ie first-order terms.
+The symbolic stack $\symstack \in (\Locs \times \SymStores \times \Ids)^*$ is modified accordingly to hold symbolic stores instead of concrete ones.
+The symbolic memory $\symmemory \in (\SymMemoryObjects)^{*}$ is a sequence of symbolic memory objects.
+The \emph{path constraint} $\pc \in \Exprs$ is a formula of sort $\Bool$ which accumulates assumptions along the execution path.
 \end{definition}
 
 \subsection{Symbolic Semantics}
