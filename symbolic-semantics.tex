@@ -174,7 +174,7 @@ which maps all the indices to a pre-defined SMT expression $v$.
 % TODO: use $\symmemory$ instead of $h$?
 When deallocating a pointer $p$,
 recall that $p$ is an SMT expression which is not necessarily a constant SMT expression.
-Therefore, we check if there exists an SMT model $m$ and a memory object $(\addr, \size, \arrayvalue) \in \symmemory$ such that
+Therefore, we check if there exists an SMT model $m$ and a memory object $\symmo \triangleq (\addr, \size, \arrayvalue)$ in $\symmemory$ such that
 $m$ satisfies the path constraints $\pc$ and $m[p]$ points to $\addr$.
 If that is the case,
 then we remove that memory object from $\symmemory$,
@@ -186,23 +186,26 @@ Note that this rule might have multiple derivations, since $p$ may be concretize
 % TODO: what happens if p is undef/poison?
 % TODO: mentions the assumptions about n?
 When reading $n$ bytes from a pointer $p$,
-we check if there exists an SMT model $m$ and a memory object $\symmo \in \symmemory$ such that
+we check if there exists an SMT model $m$ and a memory object $\symmo$ in $\symmemory$ such that
 $m$ satisfies the path constraints $\pc$ and $m[p + n]$ points to the address interval of $\symmo$.
-If that is not the case, then the result is undfined-behavior.
+If that is not the case, then the result is undefined-behavior.
 Otherwise, we use the \textit{read} procedure to obtain the accessed value.
 This procedure reads the corresponding sequence of $n$ stored SMT expressions (of sort $\smtsort{8}$),
 and then translates them to a \textit{concat} expression of the appropriate sort.
+At last, we update the path constraints $\varphi$ with the condition $\rangecond(p, |\tau|, \symmo)$,
+which makes sure that accessing $|\tau|$ bytes starting from $p$ remains within the address interval of $\symmo$.
 % TODO: example?
 
 \subsubsection{\textit{Store.}}
 % TODO: what happens if p/v is undef/poison?
 When writing an expression $e$ to a pointer $p$,
-we check if there exists an SMT model $m$ and a memory object $\symmo \in \symmemory$ such that
+we check if there exists an SMT model $m$ and a memory object $\symmo$ in $\symmemory$ such that
 $m$ satisfies th path constraints $\pc$ and $m[p + n]$ points to the address interval of $\symmo$.
-If that is not the case, then the result is undfined-behavior.
+If that is not the case, then the result is undefined-behavior.
 Otherwise, we use the \textit{write} procedure to store the expression $e$.
 This procedure serializes the expression $e$ into a sequence of SMT expressions (of sort $\smtsort{8}$)
 and extends the SMT array $\smtarray$ with additional store expressions accordingly.
+Here as well, we update the path constraints $\varphi$ with the condition $\rangecond(p, |\tau|, \symmo)$.
 % TODO: example?
 
 \subsubsection{\textit{GetElementPtr.}}
