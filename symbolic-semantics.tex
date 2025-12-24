@@ -291,3 +291,11 @@ where:
 \end{array}
 \]
 \end{definition}
+
+\begin{definition}
+\label{def:sym-well-formed}
+A symbolic memory object $(\addr, \size, \smtarray)$ is well-formed if its interval does not wrap around the address space,
+\ie $a + \zeroext_{\bvsort{64}}(s)$ does not overflow.
+A memory $\symmemory$ is well-formed if all the memory objects are well-formed and there are no memory objects with overlapping address intervals.
+A symbolic state $\symstate{\location}{\symlocalstore}{\symstack}{\symmemory}{\pc}$ is well-formed if $\symmemory$ is well-formed.
+\end{definition}

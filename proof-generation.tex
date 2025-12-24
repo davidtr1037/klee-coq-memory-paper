@@ -172,49 +172,6 @@ If there exist $n$, $\symmo$, and $t$ such that:
 then $\safeet(\tree(s, [t]))$.
 \end{lemma}
 
-\subsubsection{Example: GetElementPtr}
-% TODO: explain how to prove that this is not an error state
-The initial symbolic state:
-\[
-s \triangleq \symstate
-    {...}
-    {\{ ... \}}
-    {[]}
-    {...}
-    {n < 2}
-\]
-According to the symbolic semantics, the derived symbolic state is:
-\[
-s' \triangleq \symstate
-    {...}
-    {\{ ..., \nameid{arrayidx} \mapsto \bvadd_{64}(\bvconst{64}{\addr}, \bvzext_{64}(\bvmul_{32}(\bvextract_{32}(\bvconst{64}{0}), \bvconst{32}{1}))) \}}
-    {[]}
-    {...}
-    {n < 2}
-\]
-The symbolic state computed by the \SE engine:
-\[
-s'_{opt} \triangleq \symstate
-    {...}
-    {\{ ..., \nameid{arrayidx} \mapsto \bvconst{64}{\addr} \}}
-    {[]}
-    {...}
-    {n < 2}
-\]
-\begin{lemma}
-Let $s \triangleq \symstate{\location}{\symlocalstore}{\symstack}{\symmemory}{\pc}$,
-where \textup{$\instrat{\location} = \codequote{x~\texttt{=}~\tgep~\pointertypeof{\tau}~e~\overline{(\tau_i, e_i)}}$}.
-If there exist $\symlocalstore'_{opt}$ and $t$ such that:
-\begin{itemize}
-    \item $\evalexprty{e_i}{\symlocalstore}{\tau_i} = k_i$
-    \item $\unsat(\overflowcond(\tau, \overline{k_i}))$
-    \item \textup{$\symlocalstore'_{opt} \equiv \symlocalstore[x \mapsto \evalexprty{\tgep~\pointertypeof{\tau}~e~\overline{(\tau_i, e_i)}}{\symlocalstore}{\tau^{*}}]$}
-    \item $t.\attrstate = \symstate{\nextinstr{\location}}{\symlocalstore'_{opt}}{\symstack}{\symmemory}{\pc}$
-    \item $\safeet(t)$
-\end{itemize}
-then $\safeet(\tree(s, [t]))$.
-\end{lemma}
-
 \subsubsection{Example: Store}
 % TODO: explain how to prove that this is not an error state
 % TODO: show the lemma for array equivalence
@@ -283,7 +240,7 @@ The proof above is generalized into an interface lemma for \textit{store}, which
 Let $s \triangleq \symstate{\location}{\symlocalstore}{\symstack}{\symmemory}{\pc}$,
 where \textup{$\instrat{\location} = \codequote{\tstore^{\tau}~e_1~e_2}$}.
 If there exist $\symmo$ and $t$ such that:
-\begin{itemize}
+\begin{enumerate}
     \item $\symmemory$ is well-formed
     \item $\symmo \in \symmemory$
     \item $\evalexprty{e_1}{\symlocalstore}{\tau} = v$
@@ -292,7 +249,7 @@ If there exist $\symmo$ and $t$ such that:
     \item $\symmo'_{opt} \equiv \writemo(\symmo, \bvconst{64}{p}, v)$
     \item $t.\attrstate = \symstate{\nextinstr{\location}}{\symlocalstore}{\symstack}{\replace(\symmemory, \symmo'_{opt})}{\pc}$
     \item $\safeet(t)$
-\end{itemize}
+\end{enumerate}
 then $\safeet(\tree(s, [t]))$.
 \end{lemma}
 To show that the subtree of $s$ is safe,
@@ -331,6 +288,19 @@ The symbolic state computed by the \SE engine:
 \]
 where:
 \[ e \triangleq \bvadd_{64}(\bvconst{64}{\addr}, \bvzext_{64}(\bvextract_{32}(\bvzext_{64}(n)))) \]
+\begin{lemma}
+Let $s \triangleq \symstate{\location}{\symlocalstore}{\symstack}{\symmemory}{\pc}$,
+where \textup{$\instrat{\location} = \codequote{x~\texttt{=}~\tgep~\pointertypeof{\tau}~e~\overline{(\tau_i, e_i)}}$}.
+If there exist $\symlocalstore'_{opt}$ and $t$ such that:
+\begin{enumerate}
+    \item $\evalexprty{e_i}{\symlocalstore}{\tau_i} = k_i$
+    \item $\unsat(\overflowcond(\tau, \overline{k_i}))$
+    \item \textup{$\symlocalstore'_{opt} \equiv \symlocalstore[x \mapsto \evalexprty{\tgep~\pointertypeof{\tau}~e~\overline{(\tau_i, e_i)}}{\symlocalstore}{\tau^{*}}]$}
+    \item $t.\attrstate = \symstate{\nextinstr{\location}}{\symlocalstore'_{opt}}{\symstack}{\symmemory}{\pc}$
+    \item $\safeet(t)$
+\end{enumerate}
+then $\safeet(\tree(s, [t]))$.
+\end{lemma}
 
 \subsubsection{Example: Load}
 % TODO: explain how to prove that this is not an error state
@@ -373,7 +343,7 @@ where:
 Let $s \triangleq \symstate{\location}{\symlocalstore}{\symstack}{\symmemory}{\pc}$,
 where \textup{$\instrat{\location} = \codequote{x~\texttt{=}~\tload^{\tau}~e}$}.
 If there exist $\symmo$ and $t$ such that:
-\begin{itemize}
+\begin{enumerate}
     \item $\symmemory$ is well-formed
     \item $\symmo \in \symmemory$
     \item $\evalexprty{e}{\symlocalstore}{\bvsort{64}^{*}} = p$
@@ -381,7 +351,7 @@ If there exist $\symmo$ and $t$ such that:
     \item $\symlocalstore'_{opt} \equiv \symlocalstore[x \mapsto \readmo(\symmo, p, |\tau|)]$
     \item $t.\attrstate = \symstate{\nextinstr{\location}}{\symlocalstore'_{opt}}{\symstack}{\symmemory}{\pc}$
     \item $\safeet(t)$
-\end{itemize}
+\end{enumerate}
 then $\safeet(\tree(s, [t]))$.
 \end{lemma}
 
