@@ -13,6 +13,12 @@ which is similar to the definition of a concrete memory object,
 but now the contents are represented using an SMT array, \ie a store expression.
 The symbolic heap and the symbolic allocator are defined similarly to their concrete counterparts.
 
+\begin{definition}
+\label{def:symbolic-state}
+A \emph{symbolic state} is a tuple $\symstate{\location}{\symlocalstore}{\symstack}{\symmemory}{\pc}$.
+...
+\end{definition}
+
 \subsection{Symbolic Semantics}
 \label{sec:symbolic-semantics}
 \begin{itemize}
