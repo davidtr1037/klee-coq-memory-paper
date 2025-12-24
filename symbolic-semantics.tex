@@ -1,4 +1,5 @@
-\subsection{Symbolic Memory Model}
+\subsection{Symbolic Semantics}
+\label{sec:symbolic-semantics}
 % TODO: some background about SE
 % TODO: symbolic state
 
@@ -10,7 +11,7 @@
 A \emph{symbolic memory object} is defined as a tuple:
 \[ (\addr, \size, \smtarray) \in \SymMemoryObjects \quad \quad \SymMemoryObjects \triangleq \Vals^{\pointertype} \times \Vals^{\indextype} \times \arraysort{\smtsort{8}}{\smtsort{32}} \]
 which is similar to the definition of a concrete memory object,
-but now the contents are represented using an SMT array, \ie a store expression.
+but now the contents are encoded using an SMT array, \ie a store expression.
 The symbolic heap and the symbolic allocator are defined similarly to their concrete counterparts.
 
 \begin{definition}
@@ -23,13 +24,6 @@ The symbolic stack $\symstack \in (\Locs \times \SymStores \times \Ids)^*$ is mo
 The symbolic memory $\symmemory \in (\SymMemoryObjects)^{*}$ is a sequence of symbolic memory objects.
 The \emph{path constraint} $\pc \in \Exprs$ is a formula of sort $\Bool$ which accumulates assumptions along the execution path.
 \end{definition}
-
-\subsection{Symbolic Semantics}
-\label{sec:symbolic-semantics}
-\begin{itemize}
-    \item instructions
-    \item GEP
-\end{itemize}
 
 \begin{figure}[t]
 \[
@@ -110,28 +104,28 @@ The \emph{path constraint} $\pc \in \Exprs$ is a formula of sort $\Bool$ which a
   \instrat{\location} = \codequote{\tcall~\intrinsicfunc{free}(e)} \quad
   \evalexprty{e}{\symlocalstore}{\pointertype} = p \quad
   m \models \pc \quad
-  \mo \in \symmemory \quad
+  \symmo \in \symmemory \quad
   \symisbaseaddr{p}{mo}{m} \quad
-  \mathit{remove}(\symmemory, \mo) = \symmemory'
+  \mathit{remove}(\symmemory, \symmo) = \symmemory'
 }
 {
   \symstate{\location}{\symlocalstore}{\symstack}{\symmemory}{\pc}
   \symstep
-  \symstate{\nextinstr{\location}}{\symlocalstore}{\symstack}{\symmemory'}{\pc \land \baseaddrcond(p, \mo)}
+  \symstate{\nextinstr{\location}}{\symlocalstore}{\symstack}{\symmemory'}{\pc \land \baseaddrcond(p, \symmo)}
 }
 \\[1em]
 \ruledefsmall{Load}{
   \instrat{\location} = \codequote{x~\texttt{=}~\tload^{\tau}~e} \quad
   \evalexprty{e}{\symlocalstore}{\pointertype} = p \quad
   m \models \pc \quad
-  \mo \in \symmemory \quad
+  \symmo \in \symmemory \quad
   \symisinbounds{p}{|\tau|}{mo}{m} \quad
-  \readmo(\mo, p, |\tau|) = v \quad
+  \readmo(\symmo, p, |\tau|) = v \quad
 }
 {
   \symstate{\location}{\symlocalstore}{\symstack}{\symmemory}{\pc}
   \symstep
-  \symstate{\nextinstr{\location}}{\symlocalstore[x \mapsto v]}{\symstack}{\symmemory}{\pc \land \rangecond(p, |\tau|, \mo)}
+  \symstate{\nextinstr{\location}}{\symlocalstore[x \mapsto v]}{\symstack}{\symmemory}{\pc \land \rangecond(p, |\tau|, \symmo)}
 }
 \\[1em]
 \ruledefsmall{Store}{
@@ -139,15 +133,15 @@ The \emph{path constraint} $\pc \in \Exprs$ is a formula of sort $\Bool$ which a
   \evalexprty{e_1}{\symlocalstore}{\tau} = v \quad
   \evalexprty{e_2}{\symlocalstore}{\pointertype} = p \quad
   m \models \pc \quad
-  \mo \in \symmemory \quad
+  \symmo \in \symmemory \quad
   \symisinbounds{p}{|\tau|}{mo}{m} \quad
-  \writemo(\mo, p, v) = \mo' \quad
-  \replace(\symmemory, \mo') = \symmemory'
+  \writemo(\symmo, p, v) = \symmo' \quad
+  \replace(\symmemory, \symmo') = \symmemory'
 }
 {
   \symstate{\location}{\symlocalstore}{\symstack}{\symmemory}{\pc}
   \symstep
-  \symstate{\nextinstr{\location}}{\symlocalstore}{\symstack}{\symmemory'}{\pc \land \rangecond(p, |\tau|, \mo)}
+  \symstate{\nextinstr{\location}}{\symlocalstore}{\symstack}{\symmemory'}{\pc \land \rangecond(p, |\tau|, \symmo)}
 }
 \\[1em]
 \ruledefsmall{GetElementPtr}{
@@ -180,11 +174,11 @@ which maps all the indices to a pre-defined SMT expression $v$.
 % TODO: use $\symmemory$ instead of $h$?
 When deallocating a pointer $p$,
 recall that $p$ is an SMT expression which is not necessarily a constant SMT expression.
-Therefore, we check if there exists an SMT model $m$ and a memory object $(\addr, \size, \arrayvalue)$ in the heap $h$ such that
-$m$ satisfies that path constraints $\pc$ and $m[p]$ points to $\addr$.
+Therefore, we check if there exists an SMT model $m$ and a memory object $(\addr, \size, \arrayvalue) \in \symmemory$ such that
+$m$ satisfies the path constraints $\pc$ and $m[p]$ points to $\addr$.
 If that is the case,
-then we remove that memory object from the heap $h$,
-and extend $\pc$ with the condition $\baseaddrcond(p, \mo)$, which constraints $p$ to $\addr$.
+then we remove that memory object from $\symmemory$,
+and extend $\pc$ with the condition $\baseaddrcond(p, \symmo)$, which constraints $p$ to $\addr$.
 Otherwise, the result is undefined-behavior.
 Note that this rule might have multiple derivations, since $p$ may be concretized to different base addresses depending on the SMT model.
 
@@ -192,8 +186,8 @@ Note that this rule might have multiple derivations, since $p$ may be concretize
 % TODO: what happens if p is undef/poison?
 % TODO: mentions the assumptions about n?
 When reading $n$ bytes from a pointer $p$,
-we check if there exists an SMT model $m$ and a memory object $\mo$ in the heap $h$ such that
-$m$ satisfies that path constraints $\pc$ and $m[p + n]$ points to the address interval of $\mo$.
+we check if there exists an SMT model $m$ and a memory object $\symmo \in \symmemory$ such that
+$m$ satisfies the path constraints $\pc$ and $m[p + n]$ points to the address interval of $\symmo$.
 If that is not the case, then the result is undfined-behavior.
 Otherwise, we use the \textit{read} procedure to obtain the accessed value.
 This procedure reads the corresponding sequence of $n$ stored SMT expressions (of sort $\smtsort{8}$),
@@ -203,8 +197,8 @@ and then translates them to a \textit{concat} expression of the appropriate sort
 \subsubsection{\textit{Store.}}
 % TODO: what happens if p/v is undef/poison?
 When writing an expression $e$ to a pointer $p$,
-we check if there exists an SMT model $m$ and a memory object $\mo$ in the heap $h$ such that
-$m$ satisfies that path constraints $\pc$ and $m[p + n]$ points to the address interval of $\mo$.
+we check if there exists an SMT model $m$ and a memory object $\symmo \in \symmemory$ such that
+$m$ satisfies th path constraints $\pc$ and $m[p + n]$ points to the address interval of $\symmo$.
 If that is not the case, then the result is undfined-behavior.
 Otherwise, we use the \textit{write} procedure to store the expression $e$.
 This procedure serializes the expression $e$ into a sequence of SMT expressions (of sort $\smtsort{8}$)
@@ -248,7 +242,7 @@ since the symbolic domain does not model $\tundef$ and $\tpoison$.
 \end{algorithm}
 
 \begin{definition}
-Let $s \triangleq \symstate{\location}{\symlocalstore}{\symstack}{\memory}{\pc}$ be a symbolic state.
+Let $s \triangleq \symstate{\location}{\symlocalstore}{\symstack}{\symmemory}{\pc}$ be a symbolic state.
 Then $s$ is an \emph{error} state, denoted by $\errorsymstate(c)$, if one of the following holds:
 \begin{enumerate}[left=0pt]
     \item $\instrat{\location} = \textup{$\codequote{\tunreachable}$}$
@@ -266,17 +260,17 @@ Then $s$ is an \emph{error} state, denoted by $\errorsymstate(c)$, if one of the
     \item $\instrat{\location} = \textup{$\codequote{\tcall~\intrinsicfunc{free}(e)}$}$, and the following holds:
     \begin{enumerate}
         \item $\evalexprty{e}{\symlocalstore}{\tau} = p$
-        \item $\syminvalidbaseaddress(\memory, \pc, p)$
+        \item $\syminvalidbaseaddress(\symmemory, \pc, p)$
     \end{enumerate}
     \item $\instrat{\location} = \textup{$\codequote{x \ \texttt{=} \ \tload^{\tau} \ e}$}$, and the following holds:
     \begin{enumerate}
         \item $\evalexprty{e}{\symlocalstore}{\tau} = p$
-        \item $\syminvalidpointer(\memory, \pc, p, |\tau|)$
+        \item $\syminvalidpointer(\symmemory, \pc, p, |\tau|)$
     \end{enumerate}
     \item $\instrat{\location} = \textup{$\codequote{\tstore^{\tau} \ e_1 \ e_2}$}$, and the following holds:
     \begin{enumerate}
         \item $\evalexprty{e_2}{\symlocalstore}{\tau} = p$
-        \item $\syminvalidpointer(\memory, \pc, p, |\tau|)$
+        \item $\syminvalidpointer(\symmemory, \pc, p, |\tau|)$
     \end{enumerate}
     \item $\instrat{\location} = \textup{$\codequote{x \ \texttt{=} \ \tgep~\pointertypeof{\tau} \ e \ \overline{(\tau_i, e_i)}}$}$, and the following holds:
     \begin{enumerate}
@@ -289,8 +283,8 @@ Then $s$ is an \emph{error} state, denoted by $\errorsymstate(c)$, if one of the
 where:
 \[
 \begin{array}{ll}
-    \syminvalidpointer(\memory, \pc, p, n) & \triangleq \exists m. \ \forall \mo \in \memory. \ m \not \models \pc \land \rangecond(p, n, \mo) \\
-    \syminvalidbaseaddress(\memory, \pc, p) & \triangleq \exists m. \ \forall \mo \in \memory. \ m \not \models \pc \land \baseaddrcond(p, \mo)
+    \syminvalidpointer(\symmemory, \pc, p, n) & \triangleq \exists m. \ \forall \symmo \in \symmemory. \ m \not \models \pc \land \rangecond(p, n, \symmo) \\
+    \syminvalidbaseaddress(\symmemory, \pc, p) & \triangleq \exists m. \ \forall \symmo \in \symmemory. \ m \not \models \pc \land \baseaddrcond(p, \symmo)
 \end{array}
 \]
 \end{definition}
