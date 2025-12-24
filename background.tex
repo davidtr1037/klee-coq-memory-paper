@@ -80,7 +80,7 @@ With the following properties for $h\in\Heaps$:
 \end{definition}
 
 A \emph{memory object} is defined as a tuple:
-\[ (\addr, \size, \arrayvalue) \in \Vals^{\pointertype} \times \Vals^{\indextype} \times \Arrays \quad \quad \Arrays \triangleq \Z \rightarrow \Vals^{\bvsort{8}} \cup \{\tundef, \tpoison\} \]
+\[ (\addr, \size, \arrayvalue) \in \MemoryObjects \quad \quad \MemoryObjects \triangleq \Vals^{\pointertype} \times \Vals^{\indextype} \times \Arrays \quad \quad \Arrays \triangleq \Z \rightarrow \Vals^{\bvsort{8}} \cup \{\tundef, \tpoison\} \]
 A memory object has a base address $\addr$, a size $\size$, and mapping $\arrayvalue$ which tracks the stored values.
 A stored value can be either a value of type $\Vals^{\bvsort{8}}$ (\ie a byte) or one of the special values $\tundef$ or $\tpoison$.
 The memory is defined using a \emph{heap} and an \emph{allocator}.
@@ -93,6 +93,16 @@ In addition, an address interval must not wrap around the address space, \ie it 
 
 % TODO: modeling a generic allocator is hard...
 In this work, we assume a linear allocator that allocates memory objects in an ascending order while maintaining a constant gap (also known as \emph{red-zone}) between memory objects.
+
+\begin{definition}\label{def:state}
+%A location $\location\in\Locs$ is specified by a function identifier, block identifier, instruction index,
+%and an optional previous-block identifier.
+A \emph{concrete state} is a tuple $\progstate{\location}{\localstore}{\stack}{\memory}$,
+where $\location \in \Locs$ is a location,
+$\localstore \in \Stores$ is a \emph{local store} that maps variables to values in $\Vals$,
+$\stack \in (\Locs \times \Stores \times \Ids)^{*}$ is a call stack represented as a sequence of frames,
+and $\memory \in \MemoryObjects^{*}$ is a sequence of memory objects.
+\end{definition}
 
 \subsubsection{\textit{Malloc.}}
 When allocating a memory object,
