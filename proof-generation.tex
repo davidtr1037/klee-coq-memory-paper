@@ -225,9 +225,18 @@ Now, we have to show that the subtree of $s$ is safe.
 Note that $s$ is not an error state,
 since $m[\evalexprty{...}{\symlocalstore}{\pointertypeof{\bvsort{64}}}] = \bvconst{64}{\addr}$ for every SMT model $m$.
 To prove that $s' \equiv s'_{opt}$, it remains to prove the equivalence of their memory and path constraints.
-As for the memory,
-note that $(\bvextract_{32}(\bvconst{64}{\addr} - \bvconst{64}{\addr})) \equiv \bvconst{32}{0}$,
-so $\arraystore{\smtarray}{(\bvextract_{32}(\bvconst{64}{\addr} - \bvconst{64}{\addr}))}{\bvconst{8}{7}} \equiv \smtarray'$.
+As for the memory, we need to prove that:
+\[ \arraystore{\smtarray}{(\bvextract_{32}(\bvconst{64}{\addr} - \bvconst{64}{\addr}))}{\bvconst{8}{7}} \equiv \smtarray' \]
+To do this, we define a lemma that can be applied in general when storing a single byte (\ie \bvsort{8}):
+\begin{lemma}
+\label{lemma:smtarray-equiv}
+Let $\bvconst{32}{i}$, ..., $\bvconst{32}{(i + n)}$ be subsequent constant SMT expressions,
+and assume that $k \equiv \bvconst{32}{i}$ and $v' \equiv v'_{opt}$, then:
+\[ \arraystore{\arraystore{\arraystore{a}{\bvconst{32}{i}}{v}[...]}{\bvconst{32}{(i + n)}}{...}}{k}{v'} \equiv \arraystore{\arraystore{a}{\bvconst{32}{i}}{v'_{opt}}[...]}{\bvconst{32}{(i + n)}}{...} \]
+\end{lemma}
+This lemma can be applied in our case,
+since $(\bvextract_{32}(\bvconst{64}{\addr} - \bvconst{64}{\addr})) \equiv \bvconst{32}{0}$.
+We define similar lemmas to handle stores of other types (\bvsort{16}, \bvsort{32}, and \bvsort{64}).
 As for the path constraints,
 note that $\rangecond(\bvconst{64}{\addr}, 1, \symmo) \equiv \true$, so the equivalence follows easily.
 
@@ -239,7 +248,7 @@ The proof above is generalized into an interface lemma for \textit{store}, which
 \label{lemma:interface-store}
 Let $s \triangleq \symstate{\location}{\symlocalstore}{\symstack}{\symmemory}{\pc}$,
 where \textup{$\instrat{\location} = \codequote{\tstore^{\tau}~e_1~e_2}$}.
-If there exist $\symmo$ and $t$ such that:
+If there exist $\symmo$, $\symmo'_{opt}$, and $t$ such that:
 \begin{enumerate}
     \item $\symmemory$ is well-formed
     \item $\symmo \in \symmemory$
@@ -254,12 +263,6 @@ then $\safeet(\tree(s, [t]))$.
 \end{lemma}
 To show that the subtree of $s$ is safe,
 we can apply~\Cref{lemma:interface-store} with $\symmo$ as $(\bvval{\addr}{64}, \bvval{2}{32}, \smtarray)$.
-
-\begin{lemma}
-\label{lemma:smtarray-equiv}
-% TODO: k_{opt} is a bvconst
-\[ \arraystore{\arraystore{a}{k_{opt}}{v}[...]}{k}{v'} \equiv \arraystore{a}{k_{opt}}{v'_{opt}}[...] \]
-\end{lemma}
 
 \subsubsection{Example: GetElementPtr}
 % TODO: explain how to prove that this is not an error state
