@@ -201,6 +201,8 @@ s' \triangleq \symstate
     {[\writemo(\symmo, \bvconst{64}{\addr}, \bvconst{8}{7})]}
     {n < 2 \land \rangecond(\bvconst{64}{\addr}, 1, \symmo))}
 \]
+%where:
+%\[ (\addr', \size', \smtarray') \triangleq \writemo(\symmo, \bvconst{64}{\addr}, \bvconst{8}{7}) \]
 We assume that $\symmemory$ is well-formed, which implies that address intervals of memory objects do not overlap,
 so if $\symmo \in \symmemory$, then $\symmo$ must be equal to $(\bvval{\addr}{64}, \bvval{2}{32}, \smtarray)$,
 since $\bvconst{64}{\addr}$ is a constant SMT expression.
@@ -277,7 +279,7 @@ The initial symbolic state:
 \]
 According to the symbolic semantics, the derived symbolic state is:
 \[
-\symstate
+s' \triangleq \symstate
     {...}
     {\{ ..., \nameid{idx} \mapsto \bvzext_{64}(n), \nameid{gep2} \mapsto e \}}
     {[]}
@@ -288,7 +290,7 @@ where:
 \[ e \triangleq \bvadd_{64}(\bvconst{64}{\addr}, \bvzext_{64}(\bvmul_{32}(\bvextract_{32}(\bvzext_{64}(n)), \bvconst{32}{1}))) \]
 The symbolic state computed by the \SE engine:
 \[
-\symstate
+s'_{opt} \triangleq \symstate
     {...}
     {\{ ..., \nameid{idx} \mapsto \bvzext_{64}(n), \nameid{gep2} \mapsto e_{opt} \}}
     {[]}
@@ -298,11 +300,24 @@ The symbolic state computed by the \SE engine:
 where:
 \[ e_{opt} \triangleq \bvadd_{64}(\bvconst{64}{\addr}, \bvzext_{64}(\bvextract_{32}(\bvzext_{64}(n)))) \]
 Now, we need to prove that the subtree of $s$ is safe.
-% TODO: explain based on the definition
-To prove that $s$ is safe,
-note that the following constraint is unsatisfiable:
+% TODO: explain based on the definition for GEP
+For this we first introduce $\overflowcond(\tau, ...)$,
+which constructs a condition that encodes the fact that there are no overlfows when evaluating the $\tgep$ instruction.
+More specifically, we prove the following:
+\begin{lemma}
+If there exists an SMT model $m$ such that:
+\begin{enumerate}
+    \item $m[\evalexprty{e}{\localstore}{\pointertypeof{\tau}}] = p$ and $m[k_i] = j_i$ (where $k_i \triangleq \evalexprty{e_i}{\localstore}{\tau_i}$).
+    \item $\evalgep(\tau, p, j_0, [...]) = \tpoison$
+\end{enumerate}
+    then $m \models \overflowcond(\tau, \overline{k_i})$.
+\end{lemma}
+Based on this,
+to prove that $s$ is not an error state,
+we need to show that $\overflowcond(\bvsort{64}, (\bvzext_{64}(n)))$ is unsatisfiable.
+In our case, it unfolds to the following condition:
 \[ \pc \land ((\bvzext_{64}(n) > \bvconst{64}{4294967295}) \lor (\bvmul_{64}(\bvzext_{64}(\bvextract_{32}(\bvzext_{64}(n))), \bvconst{64}{1}) > \bvconst{64}{4294967295})) \]
-so an overflow cannot occur.
+which is indeed unsatisfiable.
 To prove that $s' \equiv s'_{opt}$,
 note that their stores are equivalent, since $e \equiv e_{opt}$.
 
