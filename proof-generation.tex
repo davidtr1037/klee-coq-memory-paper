@@ -242,7 +242,7 @@ note that $\rangecond(\bvconst{64}{\addr}, 1, \symmo) \equiv \true$, so the equi
 
 % this intuition is packed/formulated in the following interface lemma
 % we generalize the proof sketch / intuition above to an interface lemma...
-The proof above is generalized into an interface lemma for \textit{store}, which is stated as~\Cref{lemma:interface-store}.
+The proof above is generalized into an interface lemma for $\tstore$, which is stated as~\Cref{lemma:interface-store}.
 %The interface lemma for \textit{store} is given as~\Cref{lemma:interface-store}.
 \begin{lemma}
 \label{lemma:interface-store}
@@ -297,10 +297,17 @@ The symbolic state computed by the \SE engine:
 \]
 where:
 \[ e_{opt} \triangleq \bvadd_{64}(\bvconst{64}{\addr}, \bvzext_{64}(\bvextract_{32}(\bvzext_{64}(n)))) \]
-To prove that the subtree of $s$ is safe,
-we need to prove that $s$ is safe and $s' \equiv s'_{opt}$.
-...
+Now, we need to prove that the subtree of $s$ is safe.
+% TODO: explain based on the definition
+To prove that $s$ is safe,
+note that the following constraint is unsatisfiable:
+\[ \pc \land ((\bvzext_{64}(n) > \bvconst{64}{4294967295}) \lor (\bvmul_{64}(\bvzext_{64}(\bvextract_{32}(\bvzext_{64}(n))), \bvconst{64}{1}) > \bvconst{64}{4294967295})) \]
+so an overflow cannot occur.
+To prove that $s' \equiv s'_{opt}$,
+note that their stores are equivalent, since $e \equiv e_{opt}$.
 
+The proof above is generalized into an interface lemma for $\tgep$, which is stated as~\Cref{lemma:interface-store}.
+% TODO: define overflowcond?
 \begin{lemma}
 Let $s \triangleq \symstate{\location}{\symlocalstore}{\symstack}{\symmemory}{\pc}$,
 where \textup{$\instrat{\location} = \codequote{x~\texttt{=}~\tgep~\pointertypeof{\tau}~e~\overline{(\tau_i, e_i)}}$}.
