@@ -279,7 +279,7 @@ Then $s$ is an \emph{error} state, denoted by $\errorsymstate(c)$, if one of the
     \begin{enumerate}
         % TODO: needed?
         % \item $|\overline{(\tau_i, e_i)}| > 0$
-        \item there exists a model $m$ such that $m \models \overflowcond(\tau, \overline{k_i})$ ($k_i \triangleq \evalexprty{e_i}{\localstore}{\tau_i}$)
+        \item there exists a model $m$ such that $m \models \varphi \land \overflowcond(\tau, \overline{k_i})$ ($k_i \triangleq \evalexprty{e_i}{\localstore}{\tau_i}$)
     \end{enumerate}
 \end{enumerate}
 where $\overflowcond(\tau, \overline{k_i})$ constructs a condition that encodes the fact that there are no overlfows when evaluating the $\tgep$ instruction,
