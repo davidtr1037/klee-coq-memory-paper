@@ -125,7 +125,7 @@ so the only derived symbolic state is:
 \[
 s' \triangleq \symstate
     {...}
-    {\{ \nameid{\_} \mapsto \bvconst{64}{\addr} \}}
+    {\{ \nameid{p} \mapsto \bvconst{64}{\addr} \}}
     {[]}
     {[(\bvval{\addr}{64}, \bvval{2}{32}, \arrayconst{\arrayinitvalue})]}
     {\true}
@@ -136,7 +136,7 @@ so the symbolic state computed by the \SE engine is:
 \[
 s'_{opt} \triangleq \symstate
     {...}
-    {\{ \nameid{\_} \mapsto \bvconst{64}{\addr} \}}
+    {\{ \nameid{p} \mapsto \bvconst{64}{\addr} \}}
     {[]}
     {[(\bvval{\addr}{64}, \bvval{2}{32}, \arraystore{\arraystore{\arrayconst{\arrayinitvalue}}{\bvconst{32}{0}}{\arrayinitvalue}}{\bvconst{32}{1}}{\arrayinitvalue})]}
     {\true}
@@ -147,7 +147,7 @@ The SMT arrays in the two symbolic states are encoded differently,
 but they are actually equivalent, since the additional store expressions contain the same value $v$ as in $\arrayconst{v}$.
 
 To handle such cases in general, we define an interface lemma for \textit{malloc}, which is stated as~\Cref{lemma:interface-malloc}.
-In this case, we can apply~\Cref{lemma:interface-malloc} with $n$ as 2, $\symmo$ as ..., and $t$ as the subtree of $s'_{opt}$.
+In this case, we can apply~\Cref{lemma:interface-malloc} with $n$ as 2, $\symmo$ as the memory object from $s'_{opt}$, and $t$ as the subtree of $s'_{opt}$.
 % TODO: show why the preconditions hold?
 
 Note that this lemma assumes that the size argument of \textit{malloc} is evaluated to a concrete SMT expression.
@@ -181,7 +181,7 @@ The initial symbolic state:
 \[
 s \triangleq \symstate
     {...}
-    {\{ ..., \nameid{arrayidx} \mapsto \bvconst{64}{\addr} \}}
+    {\{ ..., \nameid{gep1} \mapsto \bvconst{64}{\addr} \}}
     {[]}
     {[(\bvval{\addr}{64}, \bvval{2}{32}, \smtarray)]}
     {n < 2}
@@ -196,7 +196,7 @@ $m \models \pc$, $\symmo \in \symmemory$, and $\isinbounds{\bvconst{64}{\addr}}{
 \[
 s' \triangleq \symstate
     {...}
-    {\{ ..., \nameid{arrayidx} \mapsto \bvconst{64}{\addr} \}}
+    {\{ ..., \nameid{gep1} \mapsto \bvconst{64}{\addr} \}}
     {[]}
     {[\writemo(\symmo, \bvconst{64}{\addr}, \bvconst{8}{7})]}
     {n < 2 \land \rangecond(\bvconst{64}{\addr}, 1, \symmo))}
@@ -211,7 +211,7 @@ On the other side, the symbolic state computed by the \SE engine is:
 \[
 s'_{opt} \triangleq \symstate
     {...}
-    {\{ ..., \nameid{arrayidx} \mapsto \bvconst{64}{\addr} \}}
+    {\{ ..., \nameid{gep1} \mapsto \bvconst{64}{\addr} \}}
     {[]}
     {[(\bvval{\addr}{64}, \bvval{2}{32}, \smtarray')]}
     {n < 2}
@@ -255,7 +255,13 @@ then $\safeet(\tree(s, [t]))$.
 To show that the subtree of $s$ is safe,
 we can apply~\Cref{lemma:interface-store} with $\symmo$ as $(\bvval{\addr}{64}, \bvval{2}{32}, \smtarray)$.
 
-\subsubsection{Example: GetElementPtr (2)}
+\begin{lemma}
+\label{lemma:smtarray-equiv}
+% TODO: k_{opt} is a bvconst
+\[ \arraystore{\arraystore{a}{k_{opt}}{v}[...]}{k}{v'} \equiv \arraystore{a}{k_{opt}}{v'_{opt}}[...] \]
+\end{lemma}
+
+\subsubsection{Example: GetElementPtr}
 % TODO: explain how to prove that this is not an error state
 The initial symbolic state:
 \[
