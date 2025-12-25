@@ -301,19 +301,7 @@ where:
 \[ e_{opt} \triangleq \bvadd_{64}(\bvconst{64}{\addr}, \bvzext_{64}(\bvextract_{32}(\bvzext_{64}(n)))) \]
 Now, we need to prove that the subtree of $s$ is safe.
 % TODO: explain based on the definition for GEP
-For this we first introduce $\overflowcond(\tau, ...)$,
-which constructs a condition that encodes the fact that there are no overlfows when evaluating the $\tgep$ instruction.
-More specifically, we prove the following:
-\begin{lemma}
-If there exists an SMT model $m$ such that:
-\begin{enumerate}
-    \item $m[\evalexprty{e}{\localstore}{\pointertypeof{\tau}}] = p$ and $m[k_i] = j_i$ (where $k_i \triangleq \evalexprty{e_i}{\localstore}{\tau_i}$).
-    \item $\evalgep(\tau, p, j_0, [...]) = \tpoison$
-\end{enumerate}
-    then $m \models \overflowcond(\tau, \overline{k_i})$.
-\end{lemma}
-Based on this,
-to prove that $s$ is not an error state,
+To prove that $s$ is not an error state,
 we need to show that $\overflowcond(\bvsort{64}, (\bvzext_{64}(n)))$ is unsatisfiable.
 In our case, it unfolds to the following condition:
 \[ \pc \land ((\bvzext_{64}(n) > \bvconst{64}{4294967295}) \lor (\bvmul_{64}(\bvzext_{64}(\bvextract_{32}(\bvzext_{64}(n))), \bvconst{64}{1}) > \bvconst{64}{4294967295})) \]

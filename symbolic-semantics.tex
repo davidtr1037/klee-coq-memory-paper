@@ -279,11 +279,11 @@ Then $s$ is an \emph{error} state, denoted by $\errorsymstate(c)$, if one of the
     \begin{enumerate}
         % TODO: needed?
         % \item $|\overline{(\tau_i, e_i)}| > 0$
-        \item there exists an SMT model $m$ such that $m[\evalexprty{e}{\localstore}{\pointertypeof{\tau}}] = p$ and $m[\evalexprty{e_i}{\localstore}{\tau_i}] = j_i$
-        \item $\evalgep(\tau, p, j_0, [...]) = \tpoison$
+        \item there exists a model $m$ such that $m \models \overflowcond(\tau, \overline{k_i})$ ($k_i \triangleq \evalexprty{e_i}{\localstore}{\tau_i}$)
     \end{enumerate}
 \end{enumerate}
-where:
+where $\overflowcond(\tau, \overline{k_i})$ constructs a condition that encodes the fact that there are no overlfows when evaluating the $\tgep$ instruction,
+and:
 \[
 \begin{array}{ll}
     \syminvalidpointer(\symmemory, \pc, p, n) & \triangleq \exists m. \ \forall \symmo \in \symmemory. \ m \not \models \pc \land \rangecond(p, n, \symmo) \\
