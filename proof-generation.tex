@@ -270,16 +270,16 @@ The initial symbolic state:
 \[
 \symstate
     {...}
-    {\{ ... \}}
+    {\{ ..., \nameid{idx} \mapsto \bvzext_{64}(n) \}}
     {[]}
     {...}
     {n < 2}
 \]
-The derived symbolic state:
+According to the symbolic semantics, the derived symbolic state is:
 \[
 \symstate
     {...}
-    {\{ ..., \nameid{arrayidx2} \mapsto e \}}
+    {\{ ..., \nameid{idx} \mapsto \bvzext_{64}(n), \nameid{gep2} \mapsto e \}}
     {[]}
     {...}
     {n < 2}
@@ -290,20 +290,24 @@ The symbolic state computed by the \SE engine:
 \[
 \symstate
     {...}
-    {\{ ..., \nameid{arrayidx2} \mapsto e \}}
+    {\{ ..., \nameid{idx} \mapsto \bvzext_{64}(n), \nameid{gep2} \mapsto e_{opt} \}}
     {[]}
     {...}
     {n < 2}
 \]
 where:
-\[ e \triangleq \bvadd_{64}(\bvconst{64}{\addr}, \bvzext_{64}(\bvextract_{32}(\bvzext_{64}(n)))) \]
+\[ e_{opt} \triangleq \bvadd_{64}(\bvconst{64}{\addr}, \bvzext_{64}(\bvextract_{32}(\bvzext_{64}(n)))) \]
+To prove that the subtree of $s$ is safe,
+we need to prove that $s$ is safe and $s' \equiv s'_{opt}$.
+...
+
 \begin{lemma}
 Let $s \triangleq \symstate{\location}{\symlocalstore}{\symstack}{\symmemory}{\pc}$,
 where \textup{$\instrat{\location} = \codequote{x~\texttt{=}~\tgep~\pointertypeof{\tau}~e~\overline{(\tau_i, e_i)}}$}.
 If there exist $\symlocalstore'_{opt}$ and $t$ such that:
 \begin{enumerate}
     \item $\evalexprty{e_i}{\symlocalstore}{\tau_i} = k_i$
-    \item $\unsat(\overflowcond(\tau, \overline{k_i}))$
+    \item $\unsat(\pc \land \overflowcond(\tau, \overline{k_i}))$
     \item \textup{$\symlocalstore'_{opt} \equiv \symlocalstore[x \mapsto \evalexprty{\tgep~\pointertypeof{\tau}~e~\overline{(\tau_i, e_i)}}{\symlocalstore}{\tau^{*}}]$}
     \item $t.\attrstate = \symstate{\nextinstr{\location}}{\symlocalstore'_{opt}}{\symstack}{\symmemory}{\pc}$
     \item $\safeet(t)$
