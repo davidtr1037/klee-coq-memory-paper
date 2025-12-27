@@ -31,6 +31,30 @@ The purpose of this layering is to defuse the
 inherent high complexity that is forever involved
 when reasoning about the set of reachable states.
 
+This framework has been previously instantiated as a proof of
+concept using a subset of LLVM IR that is 
+restricted to scalar, integer values, and without
+dynamic memory allocation, arrays, or pointers.
+Indeed, adapting the supporting infrastructure to
+cover memory access semantic proved to be an arduous one.
+The development described in this section consists
+of two main parts:
+\begin{enumerate}
+\item Defining the symbolic semantics of memory-%
+access instructions and of expressions involving
+pointer data types; and, importantly, establishing
+the \emph{reachability completeness} property,
+showing that the new semantics is true to the
+aformentioned concrete semantics.
+\item A proof-generation procedure embedded in a
+symbolic execution engine (KLEE), which emits Coq
+definitions mirrorring the symbolic execution tree,
+along with \emph{proofs that the execution tree is
+safe}---that is, satisfies the two claims above\si{reference more clearly which ones}---%
+using the reachability completeness property and
+a few supporting theorems.
+\end{enumerate}
+
 \input{symbolic-semantics.tex}
 
 \subsection{Reachability Completeness}
