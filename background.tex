@@ -40,6 +40,9 @@ The index type specifies the type used for address calculations (\eg in \tgep).
 The size of the index type may not exceed the size of the pointer type.
 In addition, the index type also specifies the type used to represent the size of allocated objects.
 
+\si{add spec of allocating object from llvmref}
+\si{add spec of pointer values from llvmref}
+
 % TODO: assumptions in this paper (KLEE)
 
 \subsection{Concrete Semantics}
@@ -71,6 +74,8 @@ H = \Intervals^{\indextype} \rightharpoonup (\Vals^{\bvsort{8}}\cup\{\tundef, \t
 \Intervals^{\tau} \eqdef \{[b,e) \mid b,e\in \!\Vals^{\tau}\!, \,b\leq e\}
 \end{array}
 \]
+
+The notation $E[\,]$ denotes a finite, fixed-size arrays of elements of $E$.
 
 With the following properties for $h\in\Heaps$:
 \begin{itemize}
