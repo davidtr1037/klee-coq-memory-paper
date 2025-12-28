@@ -1,6 +1,8 @@
 \section{From Symbolic Execution to Sound Safety Proofs}
 \label{sec:core}
 
+\dt{What is sound in this context?}
+
 The framework introduced in~\cite{cpp2025} defines
 some fundamental concepts that can be combined
 modularly and systematically into safety proofs.
@@ -8,6 +10,7 @@ By safety proof, we mean a (machine-checkable) proof
 that the input LLVM IR module never encounters an
 error state, when evaluated according to the operational semantics defined in \Cref{sec:background}.
 
+\dt{add the formal def?}
 In order to compose the proof, these two claims need to be established:
 \begin{enumerate}
 \item The symbolic states encountered during the symbolic execution \emph{represent only safe (concrete) states}.
@@ -15,25 +18,27 @@ In order to compose the proof, these two claims need to be established:
 represented by at least one such symbolic state.
 \end{enumerate}
 
-By ``represents'', we intuitively mean that a concrete state $\sigma$ is equal to an instantiation of a symbolic state $\tilde\sigma$
+\dt{define represents formally?}
+By ``represents'', we intuitively mean that a concrete state $\sigma$ \dt{$\sigma$ is for stores} is equal to an instantiation of a symbolic state $\tilde\sigma$
 by assigning some concrete values to the symbolic
 variables of $\tilde\sigma$ and evaluating the resulting expressions.
 (The assigned values must respect $\tilde\sigma$'s \emph{path constraint}.)
 
+\dt{the first part also relies on symbolic semantics}
 The first claim is relatively easy to ascertain,
 using the checks and queries that the symbolic
 execution itself performs.
 For the second claim, \cite{cpp2025} offers a
 two-tiered approach by introducing a \emph{symbolic
 semantics} as an intermediary between the symbolic
-states and the concrete semantics.
+states and the concrete semantics \dt{states?}.
 The purpose of this layering is to defuse the
 inherent high complexity that is forever involved
-when reasoning about the set of reachable states.
+when reasoning about the set of reachable states \dt{concrete or symbolic?}.
 
 This framework has been previously instantiated as a proof of
 concept using a subset of LLVM IR that is 
-restricted to scalar, integer values, and without
+restricted to integeral values, and without
 dynamic memory allocation, arrays, or pointers.
 Indeed, adapting the supporting infrastructure to
 cover memory access semantic proved to be an arduous one.

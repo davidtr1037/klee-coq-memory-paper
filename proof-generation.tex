@@ -255,7 +255,7 @@ If there exist $\symmo$, $\symmo'_{opt}$, and $t$ such that:
     \item $\symmemory$ is well-formed
     \item $\symmo \in \symmemory$
     \item $\evalexprty{e_1}{\symlocalstore}{\tau} = v$
-    \item $\evalexprty{e_2}{\symlocalstore}{\bvsort{64}^{*}} = \bvconst{64}{p}$
+    \item $\evalexprty{e_2}{\symlocalstore}{\bvsort{64}} = \bvconst{64}{p}$
     \item $\isinbounds{\bvval{p}{64}}{|\tau|}{\symmo}$
     \item $\symmo'_{opt} \equiv \writemo(\symmo, \bvconst{64}{p}, v)$
     \item $t.\attrstate = \symstate{\nextinstr{\location}}{\symlocalstore}{\symstack}{\replace(\symmemory, \symmo'_{opt})}{\pc}$
@@ -389,7 +389,7 @@ If there exist $\symmo$, $\symlocalstore'_{opt}$, and $t$ such that:
 \begin{enumerate}
     \item $\symmemory$ is well-formed
     \item $\symmo \in \symmemory$
-    \item $\evalexprty{e}{\symlocalstore}{\bvsort{64}^{*}} = p$
+    \item $\evalexprty{e}{\symlocalstore}{\bvsort{64}} = p$
     \item $\unsat(\pc \land \neg \rangecond(p, |\tau|, \symmo))$
     \item $\symlocalstore[x \mapsto \readmo(\symmo, p, |\tau|)] \equiv \symlocalstore'_{opt}$
     \item $t.\attrstate = \symstate{\nextinstr{\location}}{\symlocalstore'_{opt}}{\symstack}{\symmemory}{\pc}$
