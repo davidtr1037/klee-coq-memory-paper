@@ -208,7 +208,7 @@ it must hold that $\symmo' = \symmo$, since $\bvconst{64}{\addr}$ is a constant 
 Therefore, although the \rulenameref{Store} rule may have multiple derivations in general,
 there is a single derivation in this case.
 In particular, it also implies that:
-\[ \writemo(\symmo', \bvconst{64}{\addr}, \bvconst{8}{7}) = \arraystore{\smtarray}{(\bvextract_{32}(\bvsub(\bvconst{64}{\addr}, \bvconst{64}{\addr})))}{\bvconst{8}{7}} \]
+\[ \writemo(\symmo', \bvconst{64}{\addr}, \bvconst{8}{7}) = (\bvval{\addr}{64}, \bvval{2}{32}, \arraystore{\smtarray}{(\bvextract_{32}(\bvsub(\bvconst{64}{\addr}, \bvconst{64}{\addr})))}{\bvconst{8}{7}}) \]
 
 On the other side, the symbolic state computed by the \SE engine is:
 \[
@@ -226,7 +226,7 @@ Now, we have to prove that the subtree of $s$ is safe.
 Note that $s$ is not an error state,
 since $\evalexprty{\nameid{gep1}}{\symlocalstore}{\bvsort{64}} = \bvconst{64}{\addr}$ for every SMT model $m$.
 To prove that $s' \equiv s'_{opt}$, it suffices to prove the equivalence of their memory and path constraints.
-As for the memory, we need to prove that:
+As for the memory, it suffices to prove that:
 \[ \arraystore{\smtarray}{(\bvextract_{32}(\bvconst{64}{\addr} - \bvconst{64}{\addr}))}{\bvconst{8}{7}} \equiv \smtarray'_{opt} \]
 To do this, we define a lemma that can be applied in general when storing a single byte (\ie \bvsort{8}):
 % TODO: introduce all variables
@@ -237,7 +237,7 @@ and assume that $k \equiv \bvconst{32}{i}$ and $v' \equiv v'_{opt}$, then:
 \[ \arraystore{\arraystore{\arraystore{a}{\bvconst{32}{i}}{v}[...]}{\bvconst{32}{(i + n)}}{...}}{k}{v'} \equiv \arraystore{\arraystore{a}{\bvconst{32}{i}}{v'_{opt}}[...]}{\bvconst{32}{(i + n)}}{...} \]
 \end{lemma}
 This lemma can be applied in our case,
-since $(\bvextract_{32}(\bvconst{64}{\addr} - \bvconst{64}{\addr})) \equiv \bvconst{32}{0}$.
+since $\bvextract_{32}(\bvsub(\bvconst{64}{\addr}, \bvconst{64}{\addr})) \equiv \bvconst{32}{0}$.
 We define similar lemmas to handle stores of other types (\bvsort{16}, \bvsort{32}, and \bvsort{64}).
 As for the path constraints,
 note that $\rangecond(\bvconst{64}{\addr}, 1, \symmo) \equiv \true$, so the equivalence follows easily.
