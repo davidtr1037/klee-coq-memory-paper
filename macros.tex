@@ -46,8 +46,8 @@
 
 % LLVM
 \definecolor{stringcolor}{RGB}{140, 140, 140}
-\definecolor{markcolor}{RGB}{183, 28, 28}
 \definecolor{codecolor}{RGB}{133,82,21}
+\definecolor{bvcolor}{RGB}{173, 51, 51}
 \newcommand{\nameid}[1]{\mathit{\textcolor{stringcolor}{#1}}}
 
 \newcommand{\pointertypeof}[1]{\mathit{#1^{*}}}
@@ -94,7 +94,7 @@
 \newcommand\evalexprty[3]{\sem{#1}^{#3}{#2}}
 \newcommand\valoftype[2]{{#1}_{#2}}
 \newcommand\bvsort[1]{\textsf{i}{\textsf{#1}}}
-\newcommand\bvval[2]{\valoftype{#1}{\bvsort{#2}}}
+\newcommand\bvval[2]{\textcolor{bvcolor}{\valoftype{#1}{\bvsort{#2}}}}
 
 \newcommand\welldef[1]{{\color{blue!50!white}#1}}
 
@@ -137,6 +137,7 @@
 \newcommand{\evalgep}{\mathit{eval\_gep}}
 
 % SMT
+\definecolor{smtcolor}{RGB}{33, 70, 158}
 \newcommand{\true}{\mathit{true}}
 \newcommand{\false}{\mathit{false}}
 \newcommand{\sat}{\mathit{sat}}
@@ -145,7 +146,7 @@
 \newcommand{\subexpr}{\sqsubseteq}
 \newcommand{\evalmodel}[2]{#1[#2]}
 \newcommand{\smtsort}[1]{\textsf{bv}_{#1}}
-\newcommand{\bvconst}[2]{#2_{#1}}
+\newcommand{\bvconst}[2]{\textcolor{smtcolor}{#2_{#1}}}
 \newcommand{\bvadd}{\textsf{bvadd}}
 \newcommand{\bvsub}{\textsf{bvsub}}
 \newcommand{\bvmul}{\textsf{bvmul}}
