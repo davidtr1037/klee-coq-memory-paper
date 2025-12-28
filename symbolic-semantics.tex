@@ -148,8 +148,8 @@ The \emph{path constraint} $\pc \in \Exprs$ is a formula of sort $\Bool$ which a
   \instrat{\location} = \codequote{x~\texttt{=}~\tgep~\pointertypeof{\tau}~e~\overline{(\tau_i, e_i)}} \quad
   |\overline{(\tau_i, e_i)}| > 0 \quad
   \evalexprty{e}{\symlocalstore}{\pointertypeof{\tau}} = p \quad
-  \evalexprty{e_i}{\symlocalstore}{\tau_i} = j_i \quad
-  \evalgep(\tau, p, j_0, [...]) = v
+  \evalexprty{e_i}{\symlocalstore}{\tau_i} = t_i \quad
+  \evalgep(\tau, p, \overline{t_i}) = v
 }
 {
   \symstate{\location}{\symlocalstore}{\symstack}{\symmemory}{\pc}

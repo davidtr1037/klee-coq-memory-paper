@@ -323,7 +323,7 @@ $
   |\overline{(\tau_i, e_i)}| > 0 \quad
   \evalexprty{e}{\localstore}{\pointertypeof{\tau}} = p \quad
   \evalexprty{e_i}{\localstore}{\tau_i} = j_i \quad
-  \evalgep(\tau, p, j_0, [...]) = v
+  \evalgep(\tau, p, \overline{j_i}) = v
 }
 {
   \progstate{\location}{\localstore}{\stack}{\memory}
@@ -356,13 +356,14 @@ $
     \State ...
 \EndFunction
 
-\Function{eval\_gep}{$\tau, p, j_0, \overline{j}$}
-    \If {$j_0 = \tpoison \ \textbf{or} \ \tpoison \in \overline{j}$}
+\Function{eval\_gep}{$\tau, p, \overline{j}$}
+    \If {$\tpoison \in \overline{j}$}
         \State \Return $\tpoison$
     \EndIf
-    \If {$j_0 = \tundef \ \textbf{or} \ \tundef \in \overline{j}$}
+    \If {$\tundef \in \overline{j}$}
         \State \Return $\tundef$
     \EndIf
+    \State $j_0 :: \overline{j} \gets \overline{j}$
     \State $o \gets \convert_{\indextype}(j_0) \cdot |\tau|$ \label{line:first-index}
     \State $r \gets \Call{compute-offset}{\tau, o, \overline{j}}$
     \State \Return $p + \zeroext_{\pointertype}(r)$
