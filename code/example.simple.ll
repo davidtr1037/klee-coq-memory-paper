@@ -8,8 +8,8 @@ entry:
   store i8 7, i8* %gep1
   %idx = zext i32 %n to i64
   %gep2 = getelementptr nuw i8, i8* %p, i64 %idx
-  %0 = load i8, i8* %gep2
-  %conv = sext i8 %0 to i32
+  %v = load i8, i8* %gep2
+  %conv = sext i8 %v to i32
   %cmp2 = icmp eq i32 %conv, 7
   br i1 %cmp2, label %if.then, label %if.else
 if.then:

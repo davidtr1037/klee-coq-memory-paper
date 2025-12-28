@@ -192,7 +192,7 @@ where:
 % TODO: note that $m[\evalexprty{\nameid{arrayidx}}{\symlocalstore}{\pointertypeof{\bvsort{64}}}] = \bvconst{64}{\addr}$?
 On one side, according to the symbolic semantics,
 if $s'$ is derived from $s$ then there exist an SMT model $m$ and a memory object $\symmo$ such that
-$m \models \pc$, $\symmo \in \symmemory$, and $\isinbounds{\bvconst{64}{\addr}}{1}{\symmo}$, and then:
+$m \models \pc$, $\symmo \in \symmemory$, and $\symisinbounds{\bvconst{64}{\addr}}{1}{\symmo}{m}$, and then:
 \[
 s' \triangleq \symstate
     {...}
@@ -315,7 +315,6 @@ To prove that $s' \equiv s'_{opt}$,
 it suffices to prove that their stores are equivalent, which holds since $e \equiv e_{opt}$.
 
 The proof above is generalized into an interface lemma for $\tgep$, which is stated as~\Cref{lemma:interface-store}.
-% TODO: define overflowcond?
 \begin{lemma}
 Let $s \triangleq \symstate{\location}{\symlocalstore}{\symstack}{\symmemory}{\pc}$,
 where \textup{$\instrat{\location} = \codequote{x~\texttt{=}~\tgep~\pointertypeof{\tau}~e~\overline{(\tau_i, e_i)}}$}.
@@ -329,40 +328,41 @@ If there exist $\symlocalstore'_{opt}$ and $t$ such that:
 \end{enumerate}
 then $\safeet(\tree(s, [t]))$.
 \end{lemma}
+% TODO: show how to apply?
 
 \subsubsection{Example: Load}
 % TODO: explain how to prove that this is not an error state
 The initial symbolic state:
 \[
-\symstate
+s \triangleq \symstate
     {...}
-    {\{ ..., \nameid{arrayidx2} \mapsto \sdots \}}
+    {\{ ..., \nameid{gep2} \mapsto e \}}
     {[]}
     {(\_, [(\addr, 2, \smtarray)])}
     {n < 2}
 \]
 where:
+\[ e \triangleq \bvadd_{64}(\bvconst{64}{\addr}, \bvzext_{64}(\bvextract_{32}(\bvzext_{64}(n)))) \]
 \[ \smtarray \triangleq \arraystore{\arraystore{\arrayconst{\arrayinitvalue}}{\bvconst{32}{0}}{\bvconst{8}{7}}}{\bvconst{32}{1}}{\arrayinitvalue} \]
-The derived symbolic state:
-\[
-\symstate
-    {...}
-    {\{ ..., \nameid{arrayidx2} \mapsto \sdots, \nameid{\%0} \mapsto \arrayselect{\smtarray}{e} \}}
-    {[]}
-    {(\_, [(\addr, 2, \smtarray)])}
-    {n < 2 \land \rangecond(\bvadd_{64}(\bvconst{64}{\addr}, \bvzext_{64}(\bvextract_{32}(\bvzext_{64}(n)))), 1, \symmo)}
-\]
-where:
+On one side, according to the symbolic semantics,
+if $s'$ is derived from $s$ then there exist an SMT model $m$ and a memory object $\symmo$ such that
+$m \models \pc$, $\symmo \in \symmemory$, and $\symisinbounds{\bvconst{64}{\addr}}{1}{\symmo}{m}$, and then:
 % TODO: should add 0_{32}?
-\[ e \triangleq \bvextract_{32}(\bvsub_{64}(\bvadd_{64}(\bvconst{64}{\addr}, \bvzext_{64}(\bvextract_{32}(\bvzext_{64}(n)))), \bvconst{64}{\addr})) \]
-\[ \symmo \in ... \]
-The symbolic state computed by the \SE engine:
 \[
-\symstate
+s' \triangleq \symstate
     {...}
-    {\{ ..., \nameid{arrayidx2} \mapsto \sdots, \nameid{\%0} \mapsto \arrayselect{\smtarray}{e} \}}
+    {\{ ..., \nameid{gep2} \mapsto e, \nameid{v} \mapsto \arrayselect{\smtarray}{\bvextract_{32}(\bvsub_{64}(e, \bvconst{64}{\addr}))} \}}
     {[]}
-    {(\_, [(\addr, 2, \smtarray)])}
+    {[(\addr, 2, \smtarray)]}
+    {n < 2 \land \rangecond(e, 1, \symmo)}
+\]
+One the other side, the symbolic state computed by the \SE engine is:
+\[
+s'_{opt} \triangleq \symstate
+    {...}
+    {\{ ..., \nameid{gep2} \mapsto e, \nameid{v} \mapsto \arrayselect{\smtarray}{\bvextract_{32}(\bvsub_{64}(e, \bvconst{64}{\addr}))} \}}
+    {[]}
+    {[(\addr, 2, \smtarray)]}
     {n < 2}
 \]
 where:
