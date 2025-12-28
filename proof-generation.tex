@@ -338,42 +338,46 @@ s \triangleq \symstate
     {...}
     {\{ ..., \nameid{gep2} \mapsto e \}}
     {[]}
-    {(\_, [(\addr, 2, \smtarray)])}
+    {[\symmo]}
     {n < 2}
 \]
 where:
 \[ e \triangleq \bvadd_{64}(\bvconst{64}{\addr}, \bvzext_{64}(\bvextract_{32}(\bvzext_{64}(n)))) \]
 \[ \smtarray \triangleq \arraystore{\arraystore{\arrayconst{\arrayinitvalue}}{\bvconst{32}{0}}{\bvconst{8}{7}}}{\bvconst{32}{1}}{\arrayinitvalue} \]
+\[ \symmo \triangleq (\bvval{\addr}{64}, \bvval{2}{32}, \smtarray) \]
 On one side, according to the symbolic semantics,
-if $s'$ is derived from $s$ then there exist an SMT model $m$ and a memory object $\symmo$ such that
-$m \models \pc$, $\symmo \in \symmemory$, and $\symisinbounds{\bvconst{64}{\addr}}{1}{\symmo}{m}$, and then:
+if $s'$ is derived from $s$ then there exist an SMT model $m$ and a memory object $\symmo' \triangleq (\addr', \size', \smtarray')$ such that
+$m \models \pc$, $\symmo' \in \symmemory$, and $\symisinbounds{e}{1}{\symmo'}{m}$, and then:
 % TODO: should add 0_{32}?
 \[
 s' \triangleq \symstate
     {...}
-    {\{ ..., \nameid{gep2} \mapsto e, \nameid{v} \mapsto \arrayselect{\smtarray}{\bvextract_{32}(\bvsub_{64}(e, \bvconst{64}{\addr}))} \}}
+    {\{ ..., \nameid{gep2} \mapsto e, \nameid{v} \mapsto \arrayselect{\smtarray'}{\bvextract_{32}(\bvsub_{64}(e, \bvconst{64}{\addr}))} \}}
     {[]}
-    {[(\addr, 2, \smtarray)]}
+    {[\symmo]}
     {n < 2 \land \rangecond(e, 1, \symmo)}
 \]
+Before dereferencing $e$, the \SE engine checks if $e$ may point to other memory objects,
+by checking the satisfiability of $n < 2 \land \neg \rangecond(e, 1, \symmo)$.
+Here, this constraint is unsatisfiable,
+which means that $e$ points only to $\symmo$.
+In particular, it must hold that $\symmo' = \symmo$ (and $\smtarray' = \smtarray$).
+
 One the other side, the symbolic state computed by the \SE engine is:
 \[
 s'_{opt} \triangleq \symstate
     {...}
     {\{ ..., \nameid{gep2} \mapsto e, \nameid{v} \mapsto \arrayselect{\smtarray}{\bvextract_{32}(\bvsub_{64}(e, \bvconst{64}{\addr}))} \}}
     {[]}
-    {[(\addr, 2, \smtarray)]}
+    {[\symmo]}
     {n < 2}
 \]
 Now, we have to show that the subtree of $s$ is safe.
-Before dereferencing $e$, the \SE engine checks if $e$ may point to other memory objects,
-by checking the satisfiability of $n < 2 \land \neg \rangecond(e, 1, \symmo)$.
-Here, this constraint is unsatisfiable,
-which means that $e$ points only to $(\addr, 2, \smtarray)$.
-In particular, according to~\Cref{def:sym-error-state}, $s$ is not an error state.
-To prove that $s' \equiv s'_{opt}$, it suffices to prove the equivalence of their path constraints.
 We already know that $n < 2 \land \neg \rangecond(e, 1, \symmo)$ is unsatisfiable,
-and this implies that $n < 2 \land \rangecond(e, 1, \symmo) \equiv n < 2$.
+so by~\Cref{def:sym-error-state}, $s$ is not an error state.
+To prove that $s' \equiv s'_{opt}$, it suffices to prove the equivalence of their path constraints.
+Since $n < 2 \land \neg \rangecond(e, 1, \symmo)$ is unsatisfiable,
+this implies that $n < 2 \land \rangecond(e, 1, \symmo) \equiv n < 2$.
 
 The proof above is generalized into an interface lemma for $\tload$, which is stated as~\Cref{lemma:interface-load}.
 \begin{lemma}
