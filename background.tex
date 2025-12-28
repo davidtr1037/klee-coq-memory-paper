@@ -375,7 +375,7 @@ $
 \begin{definition}
 \label{def:error-state}
 Let $c \triangleq \progstate{\location}{\localstore}{\stack}{\memory}$ be a concrete state.
-Then $c$ is an \emph{error} state, denoted by $\errorstate(c)$, if one of the following holds:
+Then $c$ is an error state, denoted by $\errorstate(c)$, if one of the following holds:
 \begin{enumerate}
     \item $\instrat{\location} = \textup{$\codequote{\tunreachable}$}$
     \item $\instrat{\location} = \textup{$\codequote{x \ \texttt{=} \ op \ \bvsort{w} \ e_1 \ e_2}$}$, and one of the following holds, where $v_k \triangleq \evalexprty{e_k}{\localstore}{\bvsort{w}}$:

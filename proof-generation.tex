@@ -365,9 +365,19 @@ s'_{opt} \triangleq \symstate
     {[(\addr, 2, \smtarray)]}
     {n < 2}
 \]
-where:
-\[ e \triangleq \bvextract_{32}(\bvzext_{64}(\bvextract_{32}(\bvzext_{64}(n)))) \]
+Now, we have to show that the subtree of $s$ is safe.
+Before dereferencing $e$, the \SE engine checks if $e$ may point to other memory objects,
+by checking the satisfiability of $n < 2 \land \neg \rangecond(e, 1, \symmo)$.
+Here, this constraint is unsatisfiable,
+which means that $e$ points only to $(\addr, 2, \smtarray)$.
+In particular, according to~\Cref{def:sym-error-state}, $s$ is not an error state.
+To prove that $s' \equiv s'_{opt}$, it suffices to prove the equivalence of their path constraints.
+We already know that $n < 2 \land \neg \rangecond(e, 1, \symmo)$ is unsatisfiable,
+and this implies that $n < 2 \land \rangecond(e, 1, \symmo) \equiv n < 2$.
+
+The proof above is generalized into an interface lemma for $\tload$, which is stated as~\Cref{lemma:interface-load}.
 \begin{lemma}
+\label{lemma:interface-load}
 Let $s \triangleq \symstate{\location}{\symlocalstore}{\symstack}{\symmemory}{\pc}$,
 where \textup{$\instrat{\location} = \codequote{x~\texttt{=}~\tload^{\tau}~e}$}.
 If there exist $\symmo$ and $t$ such that:

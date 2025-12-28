@@ -245,8 +245,9 @@ since the symbolic domain does not model $\tundef$ and $\tpoison$.
 \end{algorithm}
 
 \begin{definition}
+\label{def:sym-error-state}
 Let $s \triangleq \symstate{\location}{\symlocalstore}{\symstack}{\symmemory}{\pc}$ be a symbolic state.
-Then $s$ is an \emph{error} state, denoted by $\errorsymstate(c)$, if one of the following holds:
+Then $s$ is an error state, denoted by $\errorsymstate(c)$, if one of the following holds:
 \begin{enumerate}[left=0pt]
     \item $\instrat{\location} = \textup{$\codequote{\tunreachable}$}$
     \item $\instrat{\location} = \textup{$\codequote{x \ \texttt{=} \ op \ \bvsort{w} \ e_1 \ e_2}$}$ and one of the following holds ($t_j \triangleq \evalexprty{e_j}{\symlocalstore}{\bvsort{w}}$):
