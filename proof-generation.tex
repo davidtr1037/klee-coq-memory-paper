@@ -200,7 +200,7 @@ s' \triangleq \symstate
     {\{ ..., \nameid{gep1} \mapsto \bvconst{64}{\addr} \}}
     {[]}
     {[\writemo(\symmo, \bvconst{64}{\addr}, \bvconst{8}{7})]}
-    {n < 2 \land \rangecond(\bvconst{64}{\addr}, 1, \symmo))}
+    {n < \bvconst{32}{2} \land \rangecond(\bvconst{64}{\addr}, 1, \symmo))}
 \]
 %where:
 %\[ (\addr', \size', \smtarray') \triangleq \writemo(\symmo, \bvconst{64}{\addr}, \bvconst{8}{7}) \]
@@ -217,7 +217,7 @@ s'_{opt} \triangleq \symstate
     {\{ ..., \nameid{gep1} \mapsto \bvconst{64}{\addr} \}}
     {[]}
     {[(\bvval{\addr}{64}, \bvval{2}{32}, \smtarray')]}
-    {n < 2}
+    {n < \bvconst{32}{2}}
 \]
 where:
 \[ \smtarray' \triangleq \arraystore{\arraystore{\arrayconst{\arrayinitvalue}}{\bvconst{32}{0}}{\bvconst{8}{7}}}{\bvconst{32}{1}}{\arrayinitvalue} \]
@@ -276,7 +276,7 @@ The initial symbolic state:
     {\{ ..., \nameid{idx} \mapsto \bvzext_{64}(n) \}}
     {[]}
     {...}
-    {n < 2}
+    {n < \bvconst{32}{2}}
 \]
 According to the symbolic semantics, the derived symbolic state is:
 \[
@@ -285,7 +285,7 @@ s' \triangleq \symstate
     {\{ ..., \nameid{idx} \mapsto \bvzext_{64}(n), \nameid{gep2} \mapsto e \}}
     {[]}
     {...}
-    {n < 2}
+    {n < \bvconst{32}{2}}
 \]
 where:
 \[ e \triangleq \bvadd_{64}(\bvconst{64}{\addr}, \bvzext_{64}(\bvmul_{32}(\bvextract_{32}(\bvzext_{64}(n)), \bvconst{32}{1}))) \]
@@ -296,18 +296,18 @@ s'_{opt} \triangleq \symstate
     {\{ ..., \nameid{idx} \mapsto \bvzext_{64}(n), \nameid{gep2} \mapsto e_{opt} \}}
     {[]}
     {...}
-    {n < 2}
+    {n < \bvconst{32}{2}}
 \]
 where:
 \[ e_{opt} \triangleq \bvadd_{64}(\bvconst{64}{\addr}, \bvzext_{64}(\bvextract_{32}(\bvzext_{64}(n)))) \]
 Now, we need to prove that the subtree of $s$ is safe.
 % TODO: explain based on the definition for GEP
 To prove that $s$ is not an error state,
-it suffices to prove that $n < 2 \land \overflowcond(\bvsort{64}, [\bvzext_{64}(n)])$ is unsatisfiable.
+it suffices to prove that $n < \bvconst{32}{2} \land \overflowcond(\bvsort{64}, [\bvzext_{64}(n)])$ is unsatisfiable.
 In our case, it unfolds to the following constraint:
 \[
 \begin{array}{ll}
-    n < 2 \ \land \ \big(&(\bvzext_{64}(n) > \bvconst{64}{4294967295}) \ \lor \\
+    n < \bvconst{32}{2} \ \land \ \big(&(\bvzext_{64}(n) > \bvconst{64}{4294967295}) \ \lor \\
                          &(\bvmul_{64}(\bvzext_{64}(\bvextract_{32}(\bvzext_{64}(n))), \bvconst{64}{1}) > \bvconst{64}{4294967295})\big)
 \end{array}
 \]
@@ -340,7 +340,7 @@ s \triangleq \symstate
     {\{ ..., \nameid{gep2} \mapsto e \}}
     {[]}
     {[\symmo]}
-    {n < 2}
+    {n < \bvconst{32}{2}}
 \]
 where:
 \[ e \triangleq \bvadd_{64}(\bvconst{64}{\addr}, \bvzext_{64}(\bvextract_{32}(\bvzext_{64}(n)))) \]
@@ -356,10 +356,10 @@ s' \triangleq \symstate
     {\{ ..., \nameid{gep2} \mapsto e, \nameid{v} \mapsto \arrayselect{\smtarray'}{\bvextract_{32}(\bvsub_{64}(e, \bvconst{64}{\addr}))} \}}
     {[]}
     {[\symmo]}
-    {n < 2 \land \rangecond(e, 1, \symmo')}
+    {n < \bvconst{32}{2} \land \rangecond(e, 1, \symmo')}
 \]
 Before dereferencing $e$, the \SE engine checks if $e$ may point to other memory objects,
-by checking the satisfiability of $n < 2 \land \neg \rangecond(e, 1, \symmo)$.
+by checking the satisfiability of $n < \bvconst{32}{2} \land \neg \rangecond(e, 1, \symmo)$.
 Here, this constraint is unsatisfiable,
 which means that $e$ points only to $\symmo$.
 In particular, it must hold that $\symmo' = \symmo$ (and $\smtarray' = \smtarray$).
@@ -371,14 +371,14 @@ s'_{opt} \triangleq \symstate
     {\{ ..., \nameid{gep2} \mapsto e, \nameid{v} \mapsto \arrayselect{\smtarray}{\bvextract_{32}(\bvsub_{64}(e, \bvconst{64}{\addr}))} \}}
     {[]}
     {[\symmo]}
-    {n < 2}
+    {n < \bvconst{32}{2}}
 \]
 Now, we have to show that the subtree of $s$ is safe.
-We already know that $n < 2 \land \neg \rangecond(e, 1, \symmo)$ is unsatisfiable,
+We already know that $n < \bvconst{32}{2} \land \neg \rangecond(e, 1, \symmo)$ is unsatisfiable,
 so by~\Cref{def:sym-error-state}, $s$ is not an error state.
 To prove that $s' \equiv s'_{opt}$, it suffices to prove the equivalence of their path constraints.
-Since $n < 2 \land \neg \rangecond(e, 1, \symmo)$ is unsatisfiable,
-this implies that $n < 2 \land \rangecond(e, 1, \symmo) \equiv n < 2$.
+Since $n < \bvconst{32}{2} \land \neg \rangecond(e, 1, \symmo)$ is unsatisfiable,
+this implies that $n < \bvconst{32}{2} \land \rangecond(e, 1, \symmo) \equiv n < \bvconst{32}{2}$.
 
 The proof above is generalized into an interface lemma for $\tload$, which is stated as~\Cref{lemma:interface-load}.
 \begin{lemma}
