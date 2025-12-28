@@ -107,9 +107,7 @@ Now, we will show how to define such interface lemmas,
 and how to apply them in the context of the example from~\Cref{figure:example-llvm}.
 In this section, we will focus on memory-related instructions.
 
-\subsubsection{Example: Malloc}
-% TODO: explain how to prove that this is not an error state
-% TODO: discuss the case where the size is symbolic
+\subsubsection{\textit{Example: Malloc.}}
 The initial symbolic state:
 \[
 s \triangleq \symstate
@@ -141,9 +139,12 @@ s'_{opt} \triangleq \symstate
     {[(\bvval{\addr}{64}, \bvval{2}{32}, \arraystore{\arraystore{\arrayconst{\arrayinitvalue}}{\bvconst{32}{0}}{\arrayinitvalue}}{\bvconst{32}{1}}{\arrayinitvalue})]}
     {\true}
 \]
-% TODO: show that $s$ is not an error state
-Now, to show that the subtree of $s$ is safe, we need to show that $s' \equiv s'_{opt}$.
-The SMT arrays in the two symbolic states are encoded differently,
+Now, we have to prove that the subtree of $s$ is safe.
+Note that $\evalexprty{2}{\symlocalstore}{\bvsort{64}} = \bvconst{64}{2}$,
+so $s$ is not an error state.
+To prove that $s' \equiv s'_{opt}$,
+it suffices to prove that their memory is equivalent.
+The SMT arrays in those two symbolic states are encoded differently,
 but they are actually equivalent, since the additional store expressions contain the same value $v$ as in $\arrayconst{v}$.
 
 To handle such cases in general, we define an interface lemma for \textit{malloc}, which is stated as~\Cref{lemma:interface-malloc}.
@@ -154,7 +155,7 @@ Note that this lemma assumes that the size argument of \textit{malloc} is evalua
 If that is not the case,
 then the \SE engine concretizes the symbolic expression,
 and then the analysis may be incomplete and a safety proof may not be derived.
-There exist extensions of \klee that support symbolic-size allocations (\eg \cite{symsize-model}),
+There exist \SE engines that support symbolic-size allocations (\eg \cite{symsize-model}),
 however, it is not the focus of this work.
 
 \begin{lemma}
@@ -164,7 +165,7 @@ where \textup{$\instrat{\location} = \codequote{x~\texttt{=}~\tcall^{\bvsort{64}
 and let $b \triangleq \nfa{\symmemory}$.
 If there exist $n$, $\symmo$, and $t$ such that:
 \begin{enumerate}
-    \item $\evalexprty{e}{\symlocalstore}{\bvsort{64}} \equiv \bvval{n}{64} \land n < max\_signed_{\bvsort{32}}$
+    \item $\evalexprty{e}{\symlocalstore}{\bvsort{64}} \equiv \bvval{n}{64} \land \bvval{n}{64} < max\_signed_{\bvsort{32}}$
     \item $\symmo \equiv (\bvval{b}{64}, \bvval{n}{32}, \arrayconst{\arrayinitvalue})$
     \item $t.\attrstate = \symstate{\nextinstr{\location}}{\symlocalstore[x \mapsto \bvconst{64}{b}]}{\symstack}{\symmemory \mathbin{++} [\symmo]}{\pc}$
     \item $\safeet(t)$
@@ -172,7 +173,7 @@ If there exist $n$, $\symmo$, and $t$ such that:
 then $\safeet(\tree(s, [t]))$.
 \end{lemma}
 
-\subsubsection{Example: Store}
+\subsubsection{\textit{Example: Store.}}
 % TODO: explain how to prove that this is not an error state
 % TODO: show the lemma for array equivalence
 % TODO: the type is i8, so we add a single store expression
@@ -184,7 +185,7 @@ s \triangleq \symstate
     {\{ ..., \nameid{gep1} \mapsto \bvconst{64}{\addr} \}}
     {[]}
     {[(\bvval{\addr}{64}, \bvval{2}{32}, \smtarray)]}
-    {n < 2}
+    {n < \bvconst{32}{2}}
 \]
 where:
 \[\smtarray \triangleq \arraystore{\arraystore{\arrayconst{\arrayinitvalue}}{\bvconst{32}{0}}{\arrayinitvalue}}{\bvconst{32}{1}}{\arrayinitvalue} \]
@@ -331,7 +332,7 @@ then $\safeet(\tree(s, [t]))$.
 % TODO: show how to apply?
 
 \subsubsection{Example: Load}
-% TODO: explain how to prove that this is not an error state
+% TODO: remind that the repr is non-opt now
 The initial symbolic state:
 \[
 s \triangleq \symstate
@@ -355,7 +356,7 @@ s' \triangleq \symstate
     {\{ ..., \nameid{gep2} \mapsto e, \nameid{v} \mapsto \arrayselect{\smtarray'}{\bvextract_{32}(\bvsub_{64}(e, \bvconst{64}{\addr}))} \}}
     {[]}
     {[\symmo]}
-    {n < 2 \land \rangecond(e, 1, \symmo)}
+    {n < 2 \land \rangecond(e, 1, \symmo')}
 \]
 Before dereferencing $e$, the \SE engine checks if $e$ may point to other memory objects,
 by checking the satisfiability of $n < 2 \land \neg \rangecond(e, 1, \symmo)$.
@@ -389,7 +390,7 @@ If there exist $\symmo$ and $t$ such that:
     \item $\symmemory$ is well-formed
     \item $\symmo \in \symmemory$
     \item $\evalexprty{e}{\symlocalstore}{\bvsort{64}^{*}} = p$
-    \item $\unsat(\pc \land \rangecond(p, |\tau|, \symmo))$
+    \item $\unsat(\pc \land \neg \rangecond(p, |\tau|, \symmo))$
     \item $\symlocalstore'_{opt} \equiv \symlocalstore[x \mapsto \readmo(\symmo, p, |\tau|)]$
     \item $t.\attrstate = \symstate{\nextinstr{\location}}{\symlocalstore'_{opt}}{\symstack}{\symmemory}{\pc}$
     \item $\safeet(t)$
