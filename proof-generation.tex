@@ -270,7 +270,7 @@ then $\safeet(\tree(s, [t]))$.
 % TODO: explain how to prove that this is not an error state
 The initial symbolic state:
 \[
-\symstate
+s \triangleq \symstate
     {...}
     {\{ ..., \nameid{idx} \mapsto \bvzext_{64}(n) \}}
     {[]}
@@ -345,6 +345,7 @@ where:
 \[ e \triangleq \bvadd_{64}(\bvconst{64}{\addr}, \bvzext_{64}(\bvextract_{32}(\bvzext_{64}(n)))) \]
 \[ \smtarray \triangleq \arraystore{\arraystore{\arrayconst{\arrayinitvalue}}{\bvconst{32}{0}}{\bvconst{8}{7}}}{\bvconst{32}{1}}{\arrayinitvalue} \]
 \[ \symmo \triangleq (\bvval{\addr}{64}, \bvval{2}{32}, \smtarray) \]
+
 On one side, according to the symbolic semantics,
 if $s'$ is derived from $s$ then there exist an SMT model $m$ and a memory object $\symmo' \triangleq (\addr', \size', \smtarray')$ such that
 $m \models \pc$, $\symmo' \in \symmemory$, and $\symisinbounds{e}{1}{\symmo'}{m}$, and then:
@@ -372,7 +373,7 @@ s'_{opt} \triangleq \symstate
     {[\symmo]}
     {n < \bvconst{32}{2}}
 \]
-Now, we have to show that the subtree of $s$ is safe.
+Now, we have to prove that the subtree of $s$ is safe.
 We already know that $n < \bvconst{32}{2} \land \neg \rangecond(e, 1, \symmo)$ is unsatisfiable,
 so by~\Cref{def:sym-error-state}, $s$ is not an error state.
 To prove that $s' \equiv s'_{opt}$, it suffices to prove the equivalence of their path constraints.
@@ -384,13 +385,13 @@ The proof above is generalized into an interface lemma for $\tload$, which is st
 \label{lemma:interface-load}
 Let $s \triangleq \symstate{\location}{\symlocalstore}{\symstack}{\symmemory}{\pc}$,
 where \textup{$\instrat{\location} = \codequote{x~\texttt{=}~\tload^{\tau}~e}$}.
-If there exist $\symmo$ and $t$ such that:
+If there exist $\symmo$, $\symlocalstore'_{opt}$, and $t$ such that:
 \begin{enumerate}
     \item $\symmemory$ is well-formed
     \item $\symmo \in \symmemory$
     \item $\evalexprty{e}{\symlocalstore}{\bvsort{64}^{*}} = p$
     \item $\unsat(\pc \land \neg \rangecond(p, |\tau|, \symmo))$
-    \item $\symlocalstore'_{opt} \equiv \symlocalstore[x \mapsto \readmo(\symmo, p, |\tau|)]$
+    \item $\symlocalstore[x \mapsto \readmo(\symmo, p, |\tau|)] \equiv \symlocalstore'_{opt}$
     \item $t.\attrstate = \symstate{\nextinstr{\location}}{\symlocalstore'_{opt}}{\symstack}{\symmemory}{\pc}$
     \item $\safeet(t)$
 \end{enumerate}
