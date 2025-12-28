@@ -288,7 +288,7 @@ s' \triangleq \symstate
 \]
 where:
 \[ e \triangleq \bvadd_{64}(\bvconst{64}{\addr}, \bvzext_{64}(\bvmul_{32}(\bvextract_{32}(\bvzext_{64}(n)), \bvconst{32}{1}))) \]
-The symbolic state computed by the \SE engine:
+The symbolic state computed by the \SE engine is:
 \[
 s'_{opt} \triangleq \symstate
     {...}
@@ -302,8 +302,8 @@ where:
 Now, we need to prove that the subtree of $s$ is safe.
 % TODO: explain based on the definition for GEP
 To prove that $s$ is not an error state,
-it is enough to prove that $n < 2 \land \overflowcond(\bvsort{64}, [\bvzext_{64}(n)])$ is unsatisfiable.
-In our case, it unfolds to the following condition:
+it suffices to prove that $n < 2 \land \overflowcond(\bvsort{64}, [\bvzext_{64}(n)])$ is unsatisfiable.
+In our case, it unfolds to the following constraint:
 \[
 \begin{array}{ll}
     n < 2 \ \land \ \big(&(\bvzext_{64}(n) > \bvconst{64}{4294967295}) \ \lor \\
@@ -312,7 +312,7 @@ In our case, it unfolds to the following condition:
 \]
 which is indeed unsatisfiable.
 To prove that $s' \equiv s'_{opt}$,
-note that their stores are equivalent, since $e \equiv e_{opt}$.
+it suffices to prove that their stores are equivalent, which holds since $e \equiv e_{opt}$.
 
 The proof above is generalized into an interface lemma for $\tgep$, which is stated as~\Cref{lemma:interface-store}.
 % TODO: define overflowcond?
@@ -323,7 +323,7 @@ If there exist $\symlocalstore'_{opt}$ and $t$ such that:
 \begin{enumerate}
     \item $\evalexprty{e_i}{\symlocalstore}{\tau_i} = k_i$
     \item $\unsat(\pc \land \overflowcond(\tau, \overline{k_i}))$
-    \item \textup{$\symlocalstore'_{opt} \equiv \symlocalstore[x \mapsto \evalexprty{\tgep~\pointertypeof{\tau}~e~\overline{(\tau_i, e_i)}}{\symlocalstore}{\tau^{*}}]$}
+    \item \textup{$\symlocalstore[x \mapsto \evalexprty{\tgep~\pointertypeof{\tau}~e~\overline{(\tau_i, e_i)}}{\symlocalstore}{\tau^{*}}] \equiv \symlocalstore'_{opt}$}
     \item $t.\attrstate = \symstate{\nextinstr{\location}}{\symlocalstore'_{opt}}{\symstack}{\symmemory}{\pc}$
     \item $\safeet(t)$
 \end{enumerate}
