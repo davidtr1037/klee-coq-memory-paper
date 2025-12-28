@@ -256,31 +256,15 @@ Then $s$ is an error state, denoted by $\errorsymstate(c)$, if one of the follow
         \item \textup{$op = \opcode{sdiv}$} and $\pc \land (t_1 = -2^{w - 1}) \land (t_2 = -1)$ is satisfiable
         \item \textup{$op \in \{\opcode{shl}, \opcode{lshr}, \opcode{ashr}\}$} and $\pc \land (t_2 \geq w)$ is satisfiable
     \end{enumerate}
-    \item $\instrat{\location} = \textup{$\codequote{x \ \texttt{=} \ \tcall^{\pointertype} \ \intrinsicfunc{malloc}(e)}$}$, and the following holds:
+    % TODO: use bvconst?
+    \item $\instrat{\location} = \textup{$\codequote{x \ \texttt{=} \ \tcall^{\pointertype} \ \intrinsicfunc{malloc}(e)}$}$, \textup{$\sat(\pc \land (t > max\_signed_{\bvsort{32}}))$} ($t \triangleq \evalexprty{e}{\symlocalstore}{\tau}$).
+    \item $\instrat{\location} = \textup{$\codequote{\tcall~\intrinsicfunc{free}(e)}$}$, \textup{$\evalexprty{e}{\symlocalstore}{\pointertype} = p$}, and $\syminvalidbaseaddress(\symmemory, \pc, p)$.
+    \item $\instrat{\location} = \textup{$\codequote{x \ \texttt{=} \ \tload^{\tau} \ e}$}$, \textup{$\evalexprty{e}{\symlocalstore}{\pointertype} = p$}, and $\syminvalidpointer(\symmemory, \pc, p, |\tau|)$.
+    \item $\instrat{\location} = \textup{$\codequote{\tstore^{\tau} \ e_1 \ e_2}$}$, \textup{$\evalexprty{e_2}{\symlocalstore}{\pointertype} = p$}, and $\syminvalidpointer(\symmemory, \pc, p, |\tau|)$.
+    % TODO: \item $|\overline{(\tau_i, e_i)}| > 0$
+    \item $\instrat{\location} = \textup{$\codequote{x \ \texttt{=} \ \tgep~\pointertypeof{\tau} \ e \ \overline{(\tau_i, e_i)}}$}$, and:
     \begin{enumerate}
-        % TODO: use bvconst?
-        \item \textup{$\pc \land (t > max\_signed_{\bvsort{32}})$} is satisfiable ($t \triangleq \evalexprty{e}{\symlocalstore}{\tau}$)
-    \end{enumerate}
-    \item $\instrat{\location} = \textup{$\codequote{\tcall~\intrinsicfunc{free}(e)}$}$, and the following holds:
-    \begin{enumerate}
-        \item $\evalexprty{e}{\symlocalstore}{\tau} = p$
-        \item $\syminvalidbaseaddress(\symmemory, \pc, p)$
-    \end{enumerate}
-    \item $\instrat{\location} = \textup{$\codequote{x \ \texttt{=} \ \tload^{\tau} \ e}$}$, and the following holds:
-    \begin{enumerate}
-        \item $\evalexprty{e}{\symlocalstore}{\tau} = p$
-        \item $\syminvalidpointer(\symmemory, \pc, p, |\tau|)$
-    \end{enumerate}
-    \item $\instrat{\location} = \textup{$\codequote{\tstore^{\tau} \ e_1 \ e_2}$}$, and the following holds:
-    \begin{enumerate}
-        \item $\evalexprty{e_2}{\symlocalstore}{\tau} = p$
-        \item $\syminvalidpointer(\symmemory, \pc, p, |\tau|)$
-    \end{enumerate}
-    \item $\instrat{\location} = \textup{$\codequote{x \ \texttt{=} \ \tgep~\pointertypeof{\tau} \ e \ \overline{(\tau_i, e_i)}}$}$, and the following holds:
-    \begin{enumerate}
-        % TODO: needed?
-        % \item $|\overline{(\tau_i, e_i)}| > 0$
-        \item there exists a model $m$ such that $m \models \varphi \land \overflowcond(\tau, \overline{k_i})$ ($k_i \triangleq \evalexprty{e_i}{\localstore}{\tau_i}$)
+        \item $\sat(\varphi \land \overflowcond(\tau, \overline{k_i}))$ ($k_i \triangleq \evalexprty{e_i}{\localstore}{\tau_i}$)
     \end{enumerate}
 \end{enumerate}
 where $\overflowcond(\tau, \overline{k_i})$ constructs a condition that encodes the fact that there are no overlfows when evaluating the $\tgep$ instruction,
