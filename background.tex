@@ -49,13 +49,9 @@ In addition, the index type also specifies the type used to represent the size o
 \label{sec:concrete-semantics}
 
 % TODO: ignore alignment details
-% TODO: we assume that the argument of malloc is a constant
-% TODO: add type to malloc/free/gep?
 % TODO: say that we assume: pointer type = i64 / index type = i32
 % TODO: say the LLVM allows some freedom in the repr of memory objects / address spaces / etc.
 % TODO: UB is interpreted as an error
-% TODO: fix the Malloc rule (set the parameter type to i32?)?
-% TODO: fix the Assume rule (set the parameter type to i1?)?
 
 The \llvm standard documentation provides some leeway in how memory is viewed and addressed.
 The most common depiction of program memory (a.k.a.\@ the ``flat model'') is a single, large block of memory bytes, with addresses being simple byte indexes.
@@ -257,7 +253,7 @@ $
 }
 \\[1em]
 \ruledefsmall{Assume}{
-  \instrat{\location} = \codequote{\tcall~\intrinsicfunc{assume}(e)} \quad
+  \instrat{\location} = \codequote{\tcall~\intrinsicfunc{assume}(\bvsort{1} ~ e)} \quad
   \evalexprty{e}{\localstore}{\bvsort{1}} = \bvval{1}1
 }
 {
@@ -267,7 +263,7 @@ $
 }
 \\[1em]
 \ruledefsmall{Malloc}{
-  \instrat{\location} = \codequote{x~\texttt{=}~\tcall^{\pointertype}~\intrinsicfunc{malloc}(e)} \quad
+  \instrat{\location} = \codequote{x~\texttt{=}~\tcall^{\pointertype}~\intrinsicfunc{malloc}(\bvsort{64} ~ e)} \quad
   \evalexprty{e}{\localstore}{\indextype} = n \quad
   \allocate(\memory, n) = (\memory', p) \quad
 }
@@ -278,7 +274,7 @@ $
 }
 \\[1em]
 \ruledefsmall{Free}{
-  \instrat{\location} = \codequote{\tcall~\intrinsicfunc{free}(e)} \quad
+  \instrat{\location} = \codequote{\tcall~\intrinsicfunc{free}(\pointertypeof{\bvsort{8}} ~ e)} \quad
   \evalexprty{e}{\localstore}{\pointertype} = p \quad
   \mo \in \memory \quad
   \isbaseaddr{p}{\mo} \quad
