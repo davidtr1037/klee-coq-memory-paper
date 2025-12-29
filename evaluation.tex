@@ -10,8 +10,8 @@ Therefore, these transformations are disabled in \proofopt.
 The following research questions guide our evaluation:
 \begin{itemize}
     \item \textbf{RQ1}: Can our approach generate valid proofs?
-    \item \textbf{RQ2}: Can the generated proof be efficiently checked?
-    \item \textbf{RQ3}: What is the overhead of proof generation during symbolic execution?
+    \item \textbf{RQ2}: What is the overhead of proof generation during symbolic execution?
+    \item \textbf{RQ3}: What is the time required to validate the generated proofs?
 \end{itemize}
 
 \subsection{Setup}
@@ -52,3 +52,29 @@ which are currently unsupported by both \klee and our approach.
 To overcome this, we modified the relevant parts in these programs to perform fixed-size memory allocations instead.
 
 \subsection{Results}
+
+The results are shown in~\Cref{table:results}.
+% TODO ...
+
+\begin{table*}[t]
+\caption{Comparison between the \base mode and the proof-generating modes.}
+\label{table:results}
+\centering
+\scriptsize{
+\begin{tabular}{|l|r|r|r|r|r|r|}
+\cline{1-7}
+\multicolumn{1}{|c|}{} &
+\multicolumn{2}{c|}{\textbf{Time}} &
+\multicolumn{1}{c|}{\textbf{Proof Time}} &
+\multicolumn{1}{c|}{\textbf{Proof Size}} &
+\multicolumn{1}{c|}{\textbf{\#Paths}} &
+\multicolumn{1}{c|}{\textbf{\#Inst}} \\
+\cline{2-7}
+\multicolumn{1}{|c|}{} &
+\multicolumn{1}{c|}{\makecell{\textbf{Base}}} &
+\multicolumn{1}{c|}{\makecell{\textbf{PG}}} & & & & \\
+\hline
+A & 0.1 & 0.1 & 1.4 & 1.9 & 4 & 82 \\ \hline
+\end{tabular}
+}
+\end{table*}
