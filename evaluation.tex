@@ -32,9 +32,11 @@ equipped with Intel Core i9-9900 and 32GB of RAM.
 
 \subsection{Benchmarks}
 
+% TODO: add citations to benchmarks
+% TODO: which SE paper uses SVComp?
 Our prototype implementation supports memory operations,
 so our goal is to evaluate it on programs with memory manipulations.
-For this, we selected several benchmarks (\libtasn, \libosip, and \coreutils) that were used in the past in the context of \SE~\cite{klee,symsize-model}.
+For this, we selected several benchmarks (\libtasn, \libosip, \coreutils, and \svcomp) that were used in the past in the context of \SE~\cite{klee,symsize-model,klee-rocq}.
 In \libtasn and \libosip, we selected a set of APIs,
 and for each API we constructed a test driver that runs it with symbolic inputs (integers, arrays, strings, \etc).
 To symbolically execute the programs in \coreutils,
@@ -44,5 +46,9 @@ we could not evaluate those programs directly.
 However, \coreutils contains a library of APIs, some of which can be tested in isolation.
 We selected a subset of such APIs,
 and constructed test drivers that run these APIs with symbolic inputs.
+In \svcomp, we selected a subset of programs from the \textit{array-memsafety} section.
+Most of these programs perform memory allocations with symbolic sizes,
+which are currently unsupported by both \klee and our approach.
+To overcome this, we modified the relevant parts in these programs to perform fixed-size memory allocations instead.
 
 \subsection{Results}
