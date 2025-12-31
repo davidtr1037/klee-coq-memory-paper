@@ -19,6 +19,13 @@ Convey the difficulties/challenges in extending to memory support.
 Mention some discrepancies in the impl of KLEE (pending PR)
 
 % Innovation
+We leverage results from previous work, building on it, integrating
+with a new model for representing ...
+Mechanized symbolic memory model and its symbolic operational semantics.
+Address challenges arising from poison in gep via marking as error states (for ns), instrumenting KLEE with additional checks.
+Pointer resolution -- interface lemmas (for efficiency); mention nondet symbolic semantics of "resolve". The theory is a bit more abstract relative to the optimized implementation, and the inteface lemmas help adjust.
+
+% related: Loom -- automatic proofs, but not for a real language (Velvet).
 
 \begin{paragraph}{Our contributions.}
 
