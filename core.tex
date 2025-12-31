@@ -21,11 +21,11 @@ where an interpreter manipulates these states
 in a way that is cognate to what a classical interpreter would do.
 The \emph{symbolic semantics} formalizes the
 expected behavior of such an interpreter.
-Presented with an execution trace of a specific implementation, we can then determine when the
+Presented with an execution trace of a specific implementation, we can then determine whether the
 engine followed the rules as dictated by the semantics.
 This provides the basis for safety proofs that
 only pertain to the symbolic states, effectively
-\emph{liftying} the proof from the concrete plane
+\emph{lifting} the proof from the concrete plane
 to the symbolic.
 
 This framework has been previously instantiated as a proof of
@@ -43,6 +43,17 @@ symbolic states sufficiently captures (over-%
 approximates) the set of concrete reachable states.
 
 \input{symbolic-semantics.tex}
+
+\subsection{Module Assumptions}
+
+\si{fill in}
+We do make some simplifying assumption ... (also backed up by LLVM ref).
+
+\begin{itemize}
+  \item operand types in load/store/gep
+  \item gep index of struct type is constant in range
+  \item malloc ??
+\end{itemize}
 
 \subsection{Reachability Completeness}
 
@@ -75,6 +86,9 @@ Let $c_{0} \triangleq \initstate(\module)$, and let $s_{0} \triangleq \initsymst
 If $\module$ is supported and $c_{0} \multinsstep c$,
 then there exists a symbolic state $s$ such that $s_{0} \symmultistep s$ and $s \overapprox c$.
 \end{theorem}
+
+\si{write about the additional cases introduced by the extension
+to memory operations.}
 
 \subsection{Program Safety via Execution Trees}
 
