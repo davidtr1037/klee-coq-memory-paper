@@ -2,17 +2,22 @@
 \label{sec:background}
 
 % TODO: explain bit-vectors
-% TODO: explain SMT
 
-Add some general background about LLVM here...
+In this section,
+we provide background on \llvm IR~\cite{llvm},
+an intermediate representation used in \llvm,
+and on satisfiability modulo theories (SMT).
 
-LLVM IR is an industry-standard intermediate representation for low-level languages, esp.
-C, C++, and Rust.
-In addition to its uses for compilation, it is
-also used by analysis tools such as model checkers and symbolic execution engines.
-We describe below the aspects of \llvm that are relevant for our development.
+\subsection{LLVM}
 
-\subsection{LLVM Memory Model}
+\llvm IR is a low-level intermediate representation for languages such as C, C++, and Rust.
+Beyond its role in compilation,
+\llvm IR is widely used in program analysis (symbolic execution, model checking, static analysis, \etc).
+In the following,
+we describe the aspects of \llvm IR that are relevant for our development.
+% TODO: The semantics presented here are largely based on~\cite{klee-rocq}, and we further extend them to memory operations.
+
+\subsubsection{\textit{LLVM Memory Model.}}
 
 \llvm supports scalar types, array types, structures, and pointers.
 For the purposes of this paper, suffices that we focus on integral types, array types, and pointers.
@@ -45,7 +50,7 @@ In addition, the index type also specifies the type used to represent the size o
 
 % TODO: assumptions in this paper (KLEE)
 
-\subsection{Concrete Semantics}
+\subsubsection{\textit{Concrete Semantics.}}
 \label{sec:concrete-semantics}
 
 % TODO: ignore alignment details
