@@ -38,13 +38,13 @@ In particular, it defines various properties related to pointers, such as \emph{
 The pointer type specifies the integral type used to represent pointer values.
 The index type specifies the type used for address calculations (\eg in \tgep).
 The size of the index type may not exceed the size of the pointer type.
-An allocated object is a region of the address space that is reserved by a memory allocation such as
-\textsf{alloca}, heap allocation call (\eg \textit{malloc}), and global variable definition.\footnote{
+An allocated object is a region of the address space reserved by a memory-allocation operation,
+such as \textsf{alloca}, a heap allocation call (\eg \textit{malloc}), or a global variable definition.\footnote{
 The semantics presented in the paper support only heap allocations.
 However, our implementation supports the other memory allocations as well.
 }
 An allocated object may not cross the unsigned boundary of the address space,
-and its size may not exceed the largest signed integer that fits into the index type.
+and its size may not exceed the largest signed integer representable by the index type.
 % In addition, the index type also specifies the type used to represent the size of allocated objects.
 
 \si{add spec of allocating object from llvmref}
