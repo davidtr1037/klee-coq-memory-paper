@@ -30,14 +30,22 @@ We use the notation $\bvval{n}{w}$ to denote an integer value of type $\bvsort{$
 
 \subsubsection{\textit{LLVM Memory Model.}}
 
-\llvm defines a \emph{data layout}, which specifies how data is to be laid out in memory.
+% TODO: mention address space
+According to the \llvm reference, a \emph{data layout} specifies how data is to be laid out in memory.
 %The data layout consists of a list of specifications,
 %including endianness, alignment rules, \etc
 In particular, it defines various properties related to pointers, such as \emph{pointer type} and \emph{index type}.
 The pointer type specifies the integral type used to represent pointer values.
 The index type specifies the type used for address calculations (\eg in \tgep).
 The size of the index type may not exceed the size of the pointer type.
-In addition, the index type also specifies the type used to represent the size of allocated objects.
+An allocated object is a region of the address space that is reserved by a memory allocation such as
+\textsf{alloca}, heap allocation call (\eg \textit{malloc}), and global variable definition.\footnote{
+The semantics presented in the paper support only heap allocations.
+However, our implementation supports the other memory allocations as well.
+}
+An allocated object may not cross the unsigned boundary of the address space,
+and its size may not exceed the largest signed integer that fits into the index type.
+% In addition, the index type also specifies the type used to represent the size of allocated objects.
 
 \si{add spec of allocating object from llvmref}
 \si{add spec of pointer values from llvmref}
