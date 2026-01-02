@@ -17,24 +17,18 @@ In the following,
 we describe the aspects of \llvm IR that are relevant for our development.
 % TODO: The semantics presented here are largely based on~\cite{klee-rocq}, and we further extend them to memory operations.
 
+\subsubsection{\textit{Syntax.}}
+
+In this paper,
+we focus on a subset of \llvm IR with memory operations, whose syntax is given in~\Cref{figure:llvm-syntax}.
+Integers are represented as bit-vectors of type $\bvsort{w}$, where \textsf{w} denotes the bit width.
+% TODO: the width of the pointer itself is fixed
+% TODO: mention the pointer index type?
+Array types are parametrized by an element type $\tau$ and a dimension $n$,
+while struct types are parametrized by a sequence of field types.
+We use the notation $\bvval{n}{w}$ to denote an integer value of type $\bvsort{$w$}$ whose (signed or unsigned) numerical value is $n$.
+
 \subsubsection{\textit{LLVM Memory Model.}}
-
-\llvm supports scalar types, array types, structures, and pointers.
-For the purposes of this paper, suffices that we focus on integral types, array types, and pointers.
-%
-\[
-\tau ::= \bvsort{$w$} \;|\;
-         \texttt{[}n \times \tau\texttt{]} \;|\;
-         \tau\texttt{*}
-\]
-
-Scalar types can be of any positive bitwidth $w$,
-and arrays are parametrized by a dimension $n$,
-with multi-dimentional arrays taking the form of nested arrays.
-Pointers are typed---that is, the type of the pointed data is explicit.
-The width of the pointer itself is fixed.
-
-We use the notation $n@\bvsort{$w$}$ to denote a scalar value of type $\bvsort{$w$}$ whose integral (either signed or unsigned) value is $n$.
 
 \llvm defines a \emph{data layout}, which specifies how data is to be laid out in memory.
 %The data layout consists of a list of specifications,
@@ -192,18 +186,19 @@ If one of these conditions is violated, the result is $\tpoison$.
 \scalebox{0.9}{
 $
 \begin{array}{l@{~}r@{~{}~}l}
-  \tbinop & ~::={} & \opcode{add} ~|~ \opcode{sub} ~|~ \opcode{mul} ~|~ \opcode{urem} ~|~ \sdots \\
-  \tcmpop & ~::={} & \opcode{eq} ~|~ \opcode{ne} ~|~ \opcode{ugt} ~|~ \opcode{uge} ~|~ \opcode{ult} ~|~ \opcode{ule} ~|~ \sdots \\
-  \toper & ~::={} & binop ~|~ \opcode{icmp}_{cmpop} \\
-  \tcast & ~::={} & \opcode{zext} ~|~ \opcode{sext} ~|~ \opcode{trunc} ~|~ \opcode{bitcast} \\
-  e & ~::={} & n ~|~ x ~|~ \toper^\tau~e_1~e_2 ~|~ \tcast^{\tau\to\tau'}~e \\
-  \tinstr & ~::={} & x ~\texttt{=}~ e \ | \ x ~\texttt{=}~ \tphi^\tau~\{\,\overline{b_i\mapsto e_i}\,\} \ | \ \tbr~b \ | \ \tbr~e~b_1~b_2 \ | \\
-          & & \tcall~\tid~(\overline{\tau_i~e_i}) \ | \ x ~\texttt{=}~ \tcall^{\tau}~\tid~(\overline{\tau_i~e_i}) \ | \ \tret \ | \ \tret^{\tau}~e \ | \ \tunreachable \ | \\
-          & & x ~\texttt{=}~ \tload^{\tau}~e \ | \ \tstore^{\tau}~e_1~e_2 \ | \ \tgep~\pointertypeof{\tau}~e~\overline{(\tau_i, e_i)} \\
-  \tblk & ~::={} & \tid{:}~\overline{\tinstr} \\
-  \tfunc & ~::={} & \tdef~\tau~\tid(\overline{\tau_i~x_i})
-                   ~ \{~\overline{\tblk}~\} \\
-  \tmodule & ~::={} & \overline{\tfunc}
+\tau & ~::={} & \bvsort{$w$} \ | \ \pointertypeof{\tau} \ | \ \arraytype{\tau}{n} \ | \ \structtype{\tau}{n} \\
+\tbinop & ~::={} & \opcode{add} ~|~ \opcode{sub} ~|~ \opcode{mul} ~|~ \opcode{urem} ~|~ \sdots \\
+\tcmpop & ~::={} & \opcode{eq} ~|~ \opcode{ne} ~|~ \opcode{ugt} ~|~ \opcode{uge} ~|~ \opcode{ult} ~|~ \opcode{ule} ~|~ \sdots \\
+\toper & ~::={} & binop ~|~ \opcode{icmp}_{cmpop} \\
+\tcast & ~::={} & \opcode{zext} ~|~ \opcode{sext} ~|~ \opcode{trunc} ~|~ \opcode{bitcast} \\
+e & ~::={} & n ~|~ x ~|~ \toper^\tau~e_1~e_2 ~|~ \tcast^{\tau\to\tau'}~e \\
+\tinstr & ~::={} & x ~\texttt{=}~ e \ | \ x ~\texttt{=}~ \tphi^\tau~\{\,\overline{b_i\mapsto e_i}\,\} \ | \ \tbr~b \ | \ \tbr~e~b_1~b_2 \ | \\
+        & & \tcall~\tid~(\overline{\tau_i~e_i}) \ | \ x ~\texttt{=}~ \tcall^{\tau}~\tid~(\overline{\tau_i~e_i}) \ | \ \tret \ | \ \tret^{\tau}~e \ | \ \tunreachable \ | \\
+        & & x ~\texttt{=}~ \tload^{\tau}~e \ | \ \tstore^{\tau}~e_1~e_2 \ | \ \tgep~\pointertypeof{\tau}~e~\overline{(\tau_i, e_i)} \\
+\tblk & ~::={} & \tid{:}~\overline{\tinstr} \\
+\tfunc & ~::={} & \tdef~\tau~\tid(\overline{\tau_i~x_i})
+                 ~ \{~\overline{\tblk}~\} \\
+\tmodule & ~::={} & \overline{\tfunc}
 \end{array}
 $
 }
@@ -347,11 +342,11 @@ $
         \State \Return $o$
     \EndIf
     \State $\overline{j} \gets j_1 :: \overline{j'}$
-    \If {$\tau = \arraytype{\tau'}$}
+    \If {$\tau = \arraytype{\tau'}{n}$}
         \State $o \gets o + \convert_{\indextype}(j_1) \cdot |\tau'|$ \label{line:array-index}
         \State \Return \Call{compute-offset}{$\tau', o, \overline{j'}$}
     \EndIf
-    \If {$\tau = \structtype{\overline{\tau}}$}
+    \If {$\tau = \structtype{\tau}{n}$}
         \State ...
     \EndIf
     \State ...

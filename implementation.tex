@@ -80,11 +80,11 @@ We note that this behavior occurs in \klee without reporting any errors to the u
         \State \Return $o$
     \EndIf
     \State $\overline{j} \gets j_1 :: \overline{j'}$
-    \If {$\tau = \arraytype{\tau'}$}
+    \If {$\tau = \arraytype{\tau'}{n}$}
         \State $o \gets \bvadd_{64}(o, \bvmul_{64}(\bvsext_{64}(j_1), \bvconst{64}{|\tau'|}))$ \label{line:array-index}
         \State \Return \Call{compute-offset}{$\tau', o, \overline{j'}$}
     \EndIf
-    \If {$\tau = \structtype{\overline{\tau}}$}
+    \If {$\tau = \structtype{\tau}{n}$}
         \State ...
     \EndIf
     \State ...

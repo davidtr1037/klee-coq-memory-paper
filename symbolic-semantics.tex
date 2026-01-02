@@ -225,11 +225,11 @@ since the symbolic domain does not model $\tundef$ and $\tpoison$.
         \State \Return $o$
     \EndIf
     \State $\overline{j} \gets j_1 :: \overline{j'}$
-    \If {$\tau = \arraytype{\tau'}$}
+    \If {$\tau = \arraytype{\tau'}{n}$}
         \State $o \gets \bvadd_{32}(o, \bvmul_{32}(\bvsext_{32}(j_1), \bvconst{32}{|\tau'|}))$ \label{line:array-index}
         \State \Return \Call{compute-offset}{$\tau', o, \overline{j'}$}
     \EndIf
-    \If {$\tau = \structtype{\overline{\tau}}$}
+    \If {$\tau = \structtype{\tau}{n}$}
         \State ...
     \EndIf
     \State ...
