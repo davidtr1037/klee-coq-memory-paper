@@ -149,7 +149,7 @@ the pointer type and index type are denoted by $\pointertype$ and $\indextype$, 
 \\[1em]
 \ruledefsmall{Free}{
   \instrat{\location} = \codequote{\tcall~\intrinsicfunc{free}(\pointertypeof{\bvsort{8}} ~ e)} \quad
-  \evalexprty{e}{\localstore}{\pointertype} = p \quad
+  \evalexprty{e}{\localstore}{\pointertypeof{\bvsort{8}}} = p \quad
   \mo \in \memory \quad
   \isbaseaddr{p}{\mo} \quad
   \mathit{remove}(\memory, \mo) = \memory'
@@ -162,7 +162,7 @@ the pointer type and index type are denoted by $\pointertype$ and $\indextype$, 
 \\[1em]
 \ruledefsmall{Load}{
   \instrat{\location} = \codequote{x~\texttt{=}~\tload^{\tau}~e} \quad
-  \evalexprty{e}{\localstore}{\pointertype} = p \quad
+  \evalexprty{e}{\localstore}{\pointertypeof{\tau}} = p \quad
   \mo \in \memory \quad
   \isinbounds{p}{|\tau|}{\mo} \quad
   \mathit{read}(\mo, p, \tau) = v \quad
@@ -176,7 +176,7 @@ the pointer type and index type are denoted by $\pointertype$ and $\indextype$, 
 \ruledefsmall{Store}{
   \instrat{\location} = \codequote{\tstore^{\tau}~e_1~e_2} \quad
   \evalexprty{e_1}{\localstore}{\tau} = v \quad
-  \evalexprty{e_2}{\localstore}{\pointertype} = p \quad
+  \evalexprty{e_2}{\localstore}{\pointertypeof{\tau}} = p \quad
   \mo \in \memory \quad
   \isinbounds{p}{|\tau|}{\mo} \quad
   \mathit{write}(\mo, p, v) = \mo' \quad
