@@ -30,6 +30,12 @@
 \newcommand\ruledef[3]{\infer[\rulenamedef{#1}]{#3}{#2}}
 \newcommand\ruledefsmall[3]{\infer[\rulenamedef{#1}]{\scalebox{0.9}{$#3$}}{\scalebox{0.8}{$#2$}}}
 
+% colors
+\definecolor{stringcolor}{RGB}{0,0,0}
+\definecolor{codecolor}{RGB}{33, 70, 158}
+\definecolor{bvcolor}{RGB}{173, 51, 51}
+\definecolor{smtcolor}{RGB}{189, 163, 0}
+
 % Notations for domains
 \newcommand\Z{\mathds{Z}}
 \newcommand\Bool{\mathit{Bool}}
@@ -45,11 +51,7 @@
 \newcommand\Intervals{\mathit{I}}
 
 % LLVM
-\definecolor{stringcolor}{RGB}{0,0,0}
-\definecolor{codecolor}{RGB}{122,122,122}
-\definecolor{bvcolor}{RGB}{173, 51, 51}
 \newcommand{\nameid}[1]{\mathit{\textcolor{stringcolor}{#1}}}
-
 \newcommand{\pointertypeof}[1]{\mathit{#1^{*}}}
 \newcommand{\arraytype}[2]{\mathit{[#1 \times #2]}}
 \newcommand{\structtype}[2]{\mathit{struct}\{#1_1, #1_2, \sdots, #1_n\}}
@@ -137,7 +139,6 @@
 \newcommand{\evalgep}{\mathit{eval\_gep}}
 
 % SMT
-\definecolor{smtcolor}{RGB}{33, 70, 158}
 \newcommand{\true}{\mathit{true}}
 \newcommand{\false}{\mathit{false}}
 \newcommand{\sat}{\mathit{sat}}
