@@ -391,15 +391,10 @@ For example, if the \opcode{nuw} attribute is enabled, then the following must h
 (3) the successive addition of each offset does not wrap the index type in an unsigned sense.
 If one of these conditions is violated, the result is $\tpoison$.
 
-%First, we compute the value of the base pointer $e$ and then the values of the indices $e_i$.
-%Then, to compute the resulting pointer, we invoke \textit{eval\_gep}.
-%The complete semantics of \tgep is rather complicated,
-%so we first describe a simplified version of its semantics in ...
-%...
-%If $p$ is poison/undef, then
-%If one of the indices is poison, then
-%If one of the indices is undef, then
-%Otherwise, all the arguments are integral values and ...
+In the following,
+we define when an concrete state is considered to be an error state.
+Afterwards,
+we define when a program, \ie an \llvm module, is considered as safe.
 
 % TODO: some text before?
 \begin{definition}
