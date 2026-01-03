@@ -90,7 +90,7 @@ The \emph{path constraint} $\pc \in \Exprs$ is a formula of sort $\Bool$ which a
 }
 \\[1em]
 \ruledefsmall{Malloc}{
-  \instrat{\location} = \codequote{x~\texttt{=}~\tcall^{\pointertype}~\intrinsicfunc{malloc}(\bvsort{64} ~ e)} \quad
+  \instrat{\location} = \codequote{x~\texttt{=}~\tcall^{\pointertypeof{\bvsort{8}}}~\intrinsicfunc{malloc}(\bvsort{64} ~ e)} \quad
   \evalexprty{e}{\symlocalstore}{\bvsort{64}} = n \quad
   \allocate(\symmemory, n) = (\symmemory', p) \quad
 }
@@ -257,7 +257,8 @@ Then $s$ is an error state, denoted by $\errorsymstate(c)$, if one of the follow
         \item \textup{$op \in \{\opcode{shl}, \opcode{lshr}, \opcode{ashr}\}$} and $\pc \land (t_2 \geq w)$ is satisfiable
     \end{enumerate}
     % TODO: use bvconst?
-    \item $\instrat{\location} = \textup{$\codequote{x \ \texttt{=} \ \tcall^{\pointertype} \ \intrinsicfunc{malloc}(e)}$}$, \textup{$\sat(\pc \land (t > max\_signed_{\bvsort{32}}))$} ($t \triangleq \evalexprty{e}{\symlocalstore}{\tau}$).
+    \item $\instrat{\location} = \textup{$\codequote{x \ \texttt{=} \ \tcall^{\pointertypeof{\bvsort{8}}} \ \intrinsicfunc{malloc}(\bvsort{64} \ e)}$}$ and
+          \textup{$\sat(\pc \land (t > max\_signed_{\bvsort{32}}))$} ($t \triangleq \evalexprty{e}{\symlocalstore}{\tau}$).
     \item $\instrat{\location} = \textup{$\codequote{\tcall~\intrinsicfunc{free}(e)}$}$, \textup{$\evalexprty{e}{\symlocalstore}{\pointertype} = p$}, and $\syminvalidbaseaddress(\symmemory, \pc, p)$.
     \item $\instrat{\location} = \textup{$\codequote{x \ \texttt{=} \ \tload^{\tau} \ e}$}$, \textup{$\evalexprty{e}{\symlocalstore}{\pointertype} = p$}, and $\syminvalidpointer(\symmemory, \pc, p, |\tau|)$.
     \item $\instrat{\location} = \textup{$\codequote{\tstore^{\tau} \ e_1 \ e_2}$}$, \textup{$\evalexprty{e_2}{\symlocalstore}{\pointertype} = p$}, and $\syminvalidpointer(\symmemory, \pc, p, |\tau|)$.
