@@ -65,13 +65,12 @@ The size of the index type may not exceed the size of the pointer type.
 An allocated object is a region of the address space reserved by a memory-allocation operation,
 such as \textsf{alloca}, a heap allocation call (\eg \textit{malloc}), or a global variable definition.\footnote{
 The semantics presented in the paper support only heap allocations.
-However, our implementation supports the other memory allocations as well.
+However, our implementation supports the other memory-allocation operations as well.
 }
 An allocated object may not cross the unsigned boundary of the address space,
 and its size may not exceed the largest signed integer representable by the index type.
 % In addition, the index type also specifies the type used to represent the size of allocated objects.
 
-\si{add spec of allocating object from llvmref}
 \si{add spec of pointer values from llvmref}
 
 % TODO: assumptions in this paper (KLEE)
