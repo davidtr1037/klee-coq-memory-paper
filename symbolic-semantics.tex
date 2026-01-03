@@ -91,7 +91,7 @@ The \emph{path constraint} $\pc \in \Exprs$ is a formula of sort $\Bool$ which a
 \\[1em]
 \ruledefsmall{Malloc}{
   \instrat{\location} = \codequote{x~\texttt{=}~\tcall^{\pointertype}~\intrinsicfunc{malloc}(\bvsort{64} ~ e)} \quad
-  \evalexprty{e}{\symlocalstore}{\indextype} = n \quad
+  \evalexprty{e}{\symlocalstore}{\bvsort{64}} = n \quad
   \allocate(\symmemory, n) = (\symmemory', p) \quad
 }
 {

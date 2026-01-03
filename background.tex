@@ -138,8 +138,8 @@ the pointer type and index type are denoted by $\pointertype$ and $\indextype$, 
 \\[1em]
 \ruledefsmall{Malloc}{
   \instrat{\location} = \codequote{x~\texttt{=}~\tcall^{\pointertype}~\intrinsicfunc{malloc}(\bvsort{64} ~ e)} \quad
-  \evalexprty{e}{\localstore}{\indextype} = n \quad
-  \allocate(\memory, n) = (\memory', p) \quad
+  \evalexprty{e}{\localstore}{\bvsort{64}} = \bvval{n}{64} \quad
+  \allocate(\memory, \valoftype{n}{\indextype}) = (\memory', p) \quad
 }
 {
   \progstate{\location}{\localstore}{\stack}{\memory}
