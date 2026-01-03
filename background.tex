@@ -127,7 +127,8 @@ In addition, an address interval must not wrap around the address space.
 % \[ \addr \leq \addr + \size \]
 \end{definition}
 
-We assume a linear allocator that allocates memory objects in an ascending order while separating them with a fixed gap,
+In this paper,
+we assume a linear allocator that allocates memory objects in an ascending order while separating them with a fixed gap,
 commonly referred to as a \emph{red-zone}.
 Modeling a generic allocator that allows arbitrary locations for memory objects is challenging.
 First, modeling such allocators requires developing a more complex theory (\Cref{sec:core}).
@@ -144,6 +145,14 @@ $\localstore \in \Stores$ is a \emph{local store} that maps variables to values 
 $\stack \in (\Locs \times \Stores \times \Ids)^{*}$ is a call stack represented as a sequence of frames,
 and $\memory \in (\MemoryObjects)^{*}$ is a sequence of memory objects.
 \end{definition}
+
+\Cref{figure:llvm-semantics} defines the operational small-step semantics of \llvm IR based on the syntax in~\Cref{figure:llvm-syntax}.
+The evaluation semantics of an expression $e$ in a context of a local store $\localstore \in \Stores$ when a value of type $\tau$ is expected,
+denoted as $\evalexprty{e}{\localstore}{\tau}$,
+is defined according to~\cite{klee-rocq} (Section 2.1.2).
+The rules \rulenameref{Assign}, \rulenameref{Branch-True}, \rulenameref{Branch-False}, \rulenameref{Make-Symbolic}, and \rulenameref{Assume}
+were discussed in detail in~\cite{klee-rocq},
+so here we extend the discussion to memory-related instructions.
 
 \subsubsection{\textit{Malloc.}}
 When allocating a memory object,
