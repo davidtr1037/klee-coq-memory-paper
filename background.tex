@@ -323,45 +323,6 @@ This procedure serializes the value $v$ into a sequence of bytes and updates the
 % TODO: index / offset
 % TODO: link to the lines
 
-The $\tgep$ instruction computes the address of a subelement of an aggregate data structure (array, struct, \etc.).
-Note that it only performs address calculations without accessing the memory.
-The first argument is the base pointer to start from,
-and the remaining arguments are indices that indicate which of the elements of the aggregate object are indexed.
-The interpretation of each index dependends on the type being indexed into.
-The first index is always indexed into the base pointer type,
-the second index is indexed into the element type of the base pointer type, \etc
-The first indexed type must be a pointer type, and subsequent types can be either array types or struct types.
-
-The semantics of $\tgep$ is given in~\Cref{alg:gep}.
-All the indices are first converted to values of the index type (sign-extended or truncated), and then translated into offsets.
-The first index $j_0$ is used to move accross the elements corresponding to the base pointer type,
-so it is multiplied by the type size of the element type of the base pointer type (\cref{line:first-index}).
-The remaining indices $\overline{j}$ are translated into offsets based on the indexed type.
-If the indexed type is an array type,
-then the index is multiplied by the type size of the indexed type (\cref{line:array-index}).
-If the indexed type is a struct type,
-then the index is translated into a field selector (\cref{line:struct-index}).
-The computed offsets are sequentially summed up,
-and then the resulting offset is converted to the pointer type and added to the base pointer $p$.
-
-% TODO: add modified pseudo-code?
-The $\tgep$ instruction may have attributes (\opcode{nuw}, \opcode{nusw}, and \opcode{inbounds}) that impose additional rules.
-For example, if the \opcode{nuw} attribute is enabled, then the following must hold:
-(1) if the type of an index is larger than the index type, the truncation to the index type must preserve the unsigned value,
-(2) the multiplication of an index by the type size does not wrap the index type in an unsigned sense, and
-(3) the successive addition of each offset does not wrap the index type in an unsigned sense.
-If one of these conditions is violated, the result is $\tpoison$.
-
-%First, we compute the value of the base pointer $e$ and then the values of the indices $e_i$.
-%Then, to compute the resulting pointer, we invoke \textit{eval\_gep}.
-%The complete semantics of \tgep is rather complicated,
-%so we first describe a simplified version of its semantics in ...
-%...
-%If $p$ is poison/undef, then
-%If one of the indices is poison, then
-%If one of the indices is undef, then
-%Otherwise, all the arguments are integral values and ...
-
 \begin{algorithm}[t]
 \caption{The semantics of $\tgep$ (without attributes).}
 \label{alg:gep}
@@ -397,6 +358,48 @@ If one of these conditions is violated, the result is $\tpoison$.
 
 \end{algorithmic}
 \end{algorithm}
+
+
+The $\tgep$ instruction computes the address of a subelement of an aggregate data structure (array, struct, \etc.).
+Note that it only performs address calculations without accessing the memory.
+The first argument is the base pointer to start from,
+and the remaining arguments are indices that indicate which of the elements of the aggregate object are indexed.
+The interpretation of each index dependends on the type being indexed into.
+The indexed type of the first index is the base pointer type,
+the indexed type of the second index is the element type of the base pointer type, \etc
+%The first index is always indexed into the base pointer type,
+%the second index is indexed into the element type of the base pointer type, \etc
+The first indexed type must be a pointer type, and subsequent types can be either array types or struct types.
+
+The semantics of $\tgep$ is given in~\Cref{alg:gep}.
+All the indices are first converted to values of the index type (sign-extended or truncated), and then translated into offsets.
+The first index $j_0$ is used to move accross the elements corresponding to the base pointer type,
+so it is multiplied by the type size of the element type of the base pointer type (\cref{line:first-index}).
+The remaining indices $\overline{j}$ are translated into offsets based on the indexed type.
+If the indexed type is an array type,
+then the index is multiplied by the type size of the indexed type (\cref{line:array-index}).
+If the indexed type is a struct type\footnote{The pseudo-code for this case is not shown due to space limitations.},
+then the index is translated into a field selector.
+The computed offsets are sequentially summed up,
+and then the resulting offset is converted to the pointer type and added to the base pointer $p$.
+
+% TODO: add modified pseudo-code?
+The $\tgep$ instruction may have attributes (\opcode{nuw}, \opcode{nusw}, and \opcode{inbounds}) that impose additional rules.
+For example, if the \opcode{nuw} attribute is enabled, then the following must hold:
+(1) if the type of an index is larger than the index type, the truncation to the index type must preserve the unsigned value,
+(2) the multiplication of an index by the type size does not wrap the index type in an unsigned sense, and
+(3) the successive addition of each offset does not wrap the index type in an unsigned sense.
+If one of these conditions is violated, the result is $\tpoison$.
+
+%First, we compute the value of the base pointer $e$ and then the values of the indices $e_i$.
+%Then, to compute the resulting pointer, we invoke \textit{eval\_gep}.
+%The complete semantics of \tgep is rather complicated,
+%so we first describe a simplified version of its semantics in ...
+%...
+%If $p$ is poison/undef, then
+%If one of the indices is poison, then
+%If one of the indices is undef, then
+%Otherwise, all the arguments are integral values and ...
 
 % TODO: some text before?
 \begin{definition}
