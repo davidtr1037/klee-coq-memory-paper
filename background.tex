@@ -334,7 +334,7 @@ This procedure serializes the value $v$ into a sequence of bytes and updates the
     \EndIf
     \State $\overline{j} \gets j_1 :: \overline{j'}$
     \If {$\tau = \arraytype{\tau'}{n}$}
-        \State $o \gets o + \convert_{\indextype}(j_1) \cdot |\tau'|$ \label{line:array-index}
+        \State $o \gets o + \convert_{\indextype}(j_1) \cdot \valoftype{|\tau'|}{\indextype}$ \label{line:array-index}
         \State \Return \Call{compute-offset}{$\tau', o, \overline{j'}$}
     \EndIf
     \If {$\tau = \structtype{\tau}{n}$}
@@ -351,7 +351,7 @@ This procedure serializes the value $v$ into a sequence of bytes and updates the
         \State \Return $\tundef$
     \EndIf
     \State $j_0 :: \overline{j} \gets \overline{j}$
-    \State $o \gets \convert_{\indextype}(j_0) \cdot |\tau|$ \label{line:first-index}
+    \State $o \gets \convert_{\indextype}(j_0) \cdot \valoftype{|\tau|}{\indextype}$ \label{line:first-index}
     \State $r \gets \Call{compute-offset}{\tau, o, \overline{j}}$
     \State \Return $p + \zeroext_{\pointertype}(r)$
 \EndFunction
