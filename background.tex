@@ -451,30 +451,25 @@ Then $\module$ is \emph{safe}, denoted by $\issafe(\module)$, if:
 \subsection{SMT}
 We focus on first-order logic modulo the theory of bit-vectors and arrays (QFABV),
 which is widely used in symbolic execution tools.
-% TODO: In the bit-vector theory
 The bit-vector theory defines the $\mathsf{BV}[w]$ sort, which is interpreted as the set $\{0{,}1\}^w$,
 and it introduces \emph{interpreted} function symbols for operations over values of bit-vector sorts (\eg $\textit{bvadd}$).
-Array theory defines the array sort $\arraysort{I}{V}$, which is parametrized by an index sort $I$ and a value sort $V$.\footnote{
+The array theory defines the array sort $\arraysort{I}{V}$ parametrized by an index sort $I$ and a value sort $V$,
+which is interpreted as a total map of the appropriate type.\footnote{
 In our context, we assume that both $I$ and $V$ are bit-vector sorts.
 }
 In addition,
 it defines the interpreted function symbols \textit{select}, \textit{store}, and \textit{K}.
-%$\mathit{select} : \arraysort{I}{V} \times I \rightarrow V$
-%$\mathit{store} : \arraysort{I}{V} \times I \times V \rightarrow \arraysort{I}{V}$
-%$K : V \rightarrow \arraysort{I}{V}$
-
+Semantically,
+$\mathit{select}(a, i)$ returns the value stored at index $i$ in $a$,
+$\mathit{store}(a, i, v)$ return the array obtained from $a$ by updating the value at index $i$ to $v$,
+and $K(v)$ returns a constant array that maps all the indices to $v$.
 A \emph{structure} $m$ must map interpreted function symbols to their accepted functions over $\{0{,}1\}^w$.
 As is typically done in the context of symbolic execution,
 we identify the $\Bool$ sort with $\mathsf{BV}[1]$,
 such that $\true$ and $\false$ correspond to $1$ and $0$, respectively.
-%In the sequel, we take a slightly nonstandard approach,
-%although it is commonplace in implementations of symbolic execution,
-%and identify $\Bool$ with $\mathsf{BV}[1]$,
-%where $\true$ and $\false$ correspond to $1$ and $0$, respectively.
-%This is done for uniformity of presentation only.
 
-\begin{paragraph}{Notations}
+\begin{paragraph}{\textbf{Notations.}}
 We denote by $m[t]$ the interpretation of the term $t$ in a structure $m$.
-%In particular, $m[\varphi] \in \{\true, \false\}$ in the case of formulas.
 We denote by $t_1\equiv t_2$ the assertion that $m[t_1] = m[t_2]$ for any structure $m$.
+We use $\arrayselect{a}{i}$ and $\arraystore{a}{i}{v}$ as shorthands for $\mathit{select}(a, i)$ and $\mathit{store}(a, i, v)$.
 \end{paragraph}
