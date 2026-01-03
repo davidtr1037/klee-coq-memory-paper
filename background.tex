@@ -137,7 +137,7 @@ the pointer type and index type are denoted by $\pointertype$ and $\indextype$, 
 }
 \\[1em]
 \ruledefsmall{Malloc}{
-  \instrat{\location} = \codequote{x~\texttt{=}~\tcall^{\pointertype}~\intrinsicfunc{malloc}(\bvsort{64} ~ e)} \quad
+  \instrat{\location} = \codequote{x~\texttt{=}~\tcall^{\pointertypeof{\bvsort{8}}}~\intrinsicfunc{malloc}(\bvsort{64} ~ e)} \quad
   \evalexprty{e}{\localstore}{\bvsort{64}} = \bvval{n}{64} \quad
   \allocate(\memory, \valoftype{n}{\indextype}) = (\memory', p) \quad
 }
@@ -409,14 +409,14 @@ Then $c$ is an error state, denoted by $\errorstate(c)$, if one of the following
         \item \textup{$op = \opcode{sdiv}$, $v_1 = \bvval{(-2^{w - 1})}{w}$, and $v_2 = \bvval{(-1)}{w}$}
         \item \textup{$op \in \{\opcode{shl}, \opcode{lshr}, \opcode{ashr}\}$ and $v_2 = \bvval{n}{w}$, and $n \geq w$}
     \end{enumerate}
-    \item $\instrat{\location} = \textup{$\codequote{x \ \texttt{=} \ \tcall^{\pointertype} \ \intrinsicfunc{malloc}(e)}$}$, and \textup{$\evalexprty{e}{\localstore}{\bvsort{64}} > max\_signed_{\indextype}$}.
-    \item $\instrat{\location} = \textup{$\codequote{\tcall~\intrinsicfunc{free}(e)}$}$, \textup{$\evalexprty{e}{\localstore}{\pointertype} = p$}, and $\invalidbaseaddress(\memory, p)$.
-    \item $\instrat{\location} = \textup{$\codequote{x \ \texttt{=} \ \tload^{\tau} \ e}$}$, \textup{$\evalexprty{e}{\localstore}{\pointertype} = p$}, and $\invalidpointer(\memory, p, |\tau|)$.
-    \item $\instrat{\location} = \textup{$\codequote{\tstore^{\tau} \ e_1 \ e_2}$}$, \textup{$\evalexprty{e_2}{\localstore}{\pointertype} = p$}, and $\invalidpointer(\memory, p, |\tau|)$.
+\item $\instrat{\location} = \textup{$\codequote{x \ \texttt{=} \ \tcall^{\pointertypeof{\bvsort{8}}} \ \intrinsicfunc{malloc}(\bvsort{64} \ e)}$}$, and \textup{$\evalexprty{e}{\localstore}{\bvsort{64}} > max\_signed_{\indextype}$}.
+    \item $\instrat{\location} = \textup{$\codequote{\tcall~\intrinsicfunc{free}(\pointertypeof{\bvsort{8}} \ e)}$}$, \textup{$\evalexprty{e}{\localstore}{\pointertypeof{\bvsort{8}}} = p$}, and $\invalidbaseaddress(\memory, p)$.
+    \item $\instrat{\location} = \textup{$\codequote{x \ \texttt{=} \ \tload^{\tau} \ e}$}$, \textup{$\evalexprty{e}{\localstore}{\pointertypeof{\tau}} = p$}, and $\invalidpointer(\memory, p, |\tau|)$.
+    \item $\instrat{\location} = \textup{$\codequote{\tstore^{\tau} \ e_1 \ e_2}$}$, \textup{$\evalexprty{e_2}{\localstore}{\pointertypeof{\tau}} = p$}, and $\invalidpointer(\memory, p, |\tau|)$.
     % TODO: $|\overline{(\tau_i, e_i)}| > 0$
     \item $\instrat{\location} = \textup{$\codequote{x \ \texttt{=} \ \tgep~\pointertypeof{\tau} \ e \ \overline{(\tau_i, e_i)}}$}$, and:
     \begin{enumerate}
-        \item \textup{$\evalexprty{e}{\localstore}{\pointertype} = p$}, $\evalexprty{e_i}{\localstore}{\tau_i} = j_i$, and $\evalgep(\tau, p, \overline{j_i}) = \tpoison$.
+        \item \textup{$\evalexprty{e}{\localstore}{\pointertypeof{\tau}} = p$}, $\evalexprty{e_i}{\localstore}{\tau_i} = j_i$, and $\evalgep(\tau, p, \overline{j_i}) = \tpoison$.
     \end{enumerate}
 \end{enumerate}
 where:
