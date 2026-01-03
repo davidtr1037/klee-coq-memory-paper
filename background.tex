@@ -78,162 +78,6 @@ and its size may not exceed the largest signed integer representable by the inde
 \subsubsection{\textit{Concrete Semantics.}}
 \label{sec:concrete-semantics}
 
-% TODO: ignore alignment details
-% TODO: say that we assume: pointer type = i64 / index type = i32
-% TODO: say the LLVM allows some freedom in the repr of memory objects / address spaces / etc.
-% TODO: UB is interpreted as an error
-
-%The most common depiction of program memory (a.k.a.\@ the ``flat model'') is a single,
-%large block of memory bytes, with addresses being simple byte indexes.
-The \llvm reference leaves some aspects of the memory model unspecified,
-such as the representation of allocated objects and address spaces.
-This flexibility allows different semantic interpretations,
-and in this work,
-we adopt the \emph{memory-object model}~\cite{klee,mossberg2019manticore} which is widely used in \SE tools.
-
-%\begin{definition}
-%A \emph{concrete heap}, according to the memory-object model,
-%is a mapping from (half-open, integer) intervals to arrays of bytes of a corresponding size.
-%\[
-%\begin{array}{l}
-%H = \Intervals^{\indextype} \rightharpoonup (\Vals^{\bvsort{8}}\cup\{\tundef, \tpoison\})[\,]
-%\\
-%\Intervals^{\tau} \eqdef \{[b,e) \mid b,e\in \!\Vals^{\tau}\!, \,b\leq e\}
-%\end{array}
-%\]
-%
-%The notation $E[\,]$ denotes a finite, fixed-size arrays of elements of $E$.
-%
-%With the following properties for $h\in\Heaps$:
-%\begin{itemize}
-%\item $\mathrm{dom}~h$ are pairwise-disjoint intervals.
-%\item $|h(\iota)| = |\iota|$ for all $\iota\in\mathrm{dom}~h$.
-%\end{itemize}
-%\end{definition}
-
-\begin{definition}
-A \emph{memory object} is defined as a tuple:
-\[ (\addr, \size, \arrayvalue) \in \MemoryObjects \quad \quad \MemoryObjects \triangleq \Vals^{\pointertype} \times \Vals^{\indextype} \times (\Z \rightarrow \Vals^{\bvsort{8}} \cup \{\tundef, \tpoison\}) \]
-where $\addr$ is its base address, $\size$ is its size, and $\arrayvalue$ is a mapping that tracks the stored values.
-A stored value can be either a value of type $\Vals^{\bvsort{8}}$ (\ie a byte) or one of the special values $\tundef$ or $\tpoison$.
-The address space is defined by the unsigned range representable by the pointer index type.
-The memory is defined using a heap and an allocator.
-A heap $\heap \in \Heaps$ is a set memory objects.
-An allocator is an algorithm that defines the allocation scheme of memory objects.
-Whenever an allocator adds a new memory object to the heap,
-the address interval of that memory object must not overlap with the address intervals of existing memory objects.
-In addition, an address interval must not wrap around the address space.
-% TODO: add this?
-% \[ \addr \leq \addr + \size \]
-\end{definition}
-
-In this paper,
-we assume a linear allocator that allocates memory objects in an ascending order while separating them with a fixed gap,
-commonly referred to as a \emph{red-zone}.
-Modeling a generic allocator that allows arbitrary locations for memory objects is challenging.
-First, modeling such allocators requires developing a more complex theory (\Cref{sec:core}).
-Second, existing \SE tools do not support such allocators,
-so generating safety proofs using these tools would require significant modifications to their implementations (\Cref{sec:proof-generation}).
-Therefore, we leave the modeling of such allocators to future work.
-
-\begin{definition}\label{def:state}
-%A location $\location\in\Locs$ is specified by a function identifier, block identifier, instruction index,
-%and an optional previous-block identifier.
-A \emph{concrete state} is a tuple $\progstate{\location}{\localstore}{\stack}{\memory}$,
-where $\location \in \Locs$ is a location,
-$\localstore \in \Stores$ is a \emph{local store} that maps variables to values in $\Vals$,
-$\stack \in (\Locs \times \Stores \times \Ids)^{*}$ is a call stack represented as a sequence of frames,
-and $\memory \in (\MemoryObjects)^{*}$ is a sequence of memory objects.
-\end{definition}
-
-\Cref{figure:llvm-semantics} defines the operational small-step semantics of \llvm IR based on the syntax in~\Cref{figure:llvm-syntax}.
-The evaluation semantics of an expression $e$ in a context of a local store $\localstore \in \Stores$ when a value of type $\tau$ is expected,
-denoted as $\evalexprty{e}{\localstore}{\tau}$,
-is defined according to~\cite{klee-rocq} (Section 2.1.2).
-The rules \rulenameref{Assign}, \rulenameref{Branch-True}, \rulenameref{Branch-False}, \rulenameref{Make-Symbolic}, and \rulenameref{Assume}
-were discussed in detail in~\cite{klee-rocq},
-so here we extend the discussion to memory-related instructions.
-
-\subsubsection{\textit{Malloc.}}
-When allocating a memory object,
-the size of the allocation must be non-negative and must not exceed the largest signed integer representable by the index type.
-As mentioned before, the address interval of the allocated memory object may not cross the unsigned boundary of the address space.
-If one of these properties is violated, the result is undefined-behavior.
-The mapping of the newly allocated memory object is set to a function that maps all the indices to a pre-defined value (byte).
-
-\subsubsection{Free}
-% TODO: assume that the type of p is iptr?
-When deallocating a pointer value $p$,
-we first check if there exists a memory object $(\addr, \size, \arrayvalue)$ in the memory $\memory$ such that $p = \addr$.
-If that is the case, we remove that memory object from $\memory$.
-Otherwise, the result is undefined-behavior.
-
-\subsubsection{Load}
-% TODO: what happens if p is undef/poison?
-When reading $n$ bytes from a pointer value $p$,
-we need to make sure that there exists a memory object $(\addr, \size, \arrayvalue)$ in the memory $\memory$ such that
-(1) $p < p + n$ and (2) $\addr \leq p < \addr + \size$.
-If that is not the case, then the result is undefined-behavior.
-Otherwise, we use the \textit{read} procedure to obtain the accessed value.
-This procedure first reads the corresponding sequence of stored values.
-If one of these values is $\tpoison$, then it returns $\tpoison$.
-If one of these values is $\tundef$, then it returns $\tundef$.
-Otherwise, we deserialize this sequence of values (bytes) into an integer of the appropriate type.
-
-\subsubsection{Store}
-% TODO: what happens if p/v is undef/poison?
-When writing a value $v$ to a pointer value $p$,
-we need to make sure that there exists a memory object $(\addr, \size, \arrayvalue)$ in the memory $\memory$ such that
-(1) $p < p + n$ and (2) $\addr \leq p < \addr + \size$.
-If that is not the case, then the result is undefined-behavior.
-Otherwise, we use the \textit{write} procedure to store the value $v$.
-This procedure serializes the value $v$ into a sequence of bytes and updates the array $\arrayvalue$ accordingly.
-
-\subsubsection{GetElementPtr}
-% TODO: mention flags (nuw, nusw, inbounds)
-% TODO: address --> pointer?
-% TODO: index / offset
-% TODO: link to the lines
-
-The $\tgep$ instruction computes the address of a subelement of an aggregate data structure (array, struct, \etc.).
-Note that it only performs address calculations without accessing the memory.
-The first argument is the base pointer to start from,
-and the remaining arguments are indices that indicate which of the elements of the aggregate object are indexed.
-The interpretation of each index dependends on the type being indexed into.
-The first index is always indexed into the base pointer type,
-the second index is indexed into the element type of the base pointer type, \etc
-The first indexed type must be a pointer type, and subsequent types can be either array types or struct types.
-
-The semantics of $\tgep$ is given in~\Cref{alg:gep}.
-All the indices are first converted to values of the index type (sign-extended or truncated), and then translated into offsets.
-The first index $j_0$ is used to move accross the elements corresponding to the base pointer type,
-so it is multiplied by the type size of the element type of the base pointer type (\cref{line:first-index}).
-The remaining indices $\overline{j}$ are translated into offsets based on the indexed type.
-If the indexed type is an array type,
-then the index is multiplied by the type size of the indexed type (\cref{line:array-index}).
-If the indexed type is a struct type,
-then the index is translated into a field selector (\cref{line:struct-index}).
-The computed offsets are sequentially summed up,
-and then the resulting offset is converted to the pointer type and added to the base pointer $p$.
-
-% TODO: add modified pseudo-code?
-The $\tgep$ instruction may have attributes (\opcode{nuw}, \opcode{nusw}, and \opcode{inbounds}) that impose additional rules.
-For example, if the \opcode{nuw} attribute is enabled, then the following must hold:
-(1) if the type of an index is larger than the index type, the truncation to the index type must preserve the unsigned value,
-(2) the multiplication of an index by the type size does not wrap the index type in an unsigned sense, and
-(3) the successive addition of each offset does not wrap the index type in an unsigned sense.
-If one of these conditions is violated, the result is $\tpoison$.
-
-%First, we compute the value of the base pointer $e$ and then the values of the indices $e_i$.
-%Then, to compute the resulting pointer, we invoke \textit{eval\_gep}.
-%The complete semantics of \tgep is rather complicated,
-%so we first describe a simplified version of its semantics in ...
-%...
-%If $p$ is poison/undef, then
-%If one of the indices is poison, then
-%If one of the indices is undef, then
-%Otherwise, all the arguments are integral values and ...
-
 \begin{figure}
 \[
 \begin{array}{cl}
@@ -359,6 +203,162 @@ If one of these conditions is violated, the result is $\tpoison$.
 \caption{Operational small-step semantics of \llvm IR.}
 \label{figure:llvm-semantics}
 \end{figure}
+
+% TODO: ignore alignment details
+% TODO: say that we assume: pointer type = i64 / index type = i32
+% TODO: say the LLVM allows some freedom in the repr of memory objects / address spaces / etc.
+% TODO: UB is interpreted as an error
+
+%The most common depiction of program memory (a.k.a.\@ the ``flat model'') is a single,
+%large block of memory bytes, with addresses being simple byte indexes.
+The \llvm reference leaves some aspects of the memory model unspecified,
+such as the representation of allocated objects and address spaces.
+This flexibility allows different semantic interpretations,
+and in this work,
+we adopt the \emph{memory-object model}~\cite{klee,mossberg2019manticore} which is widely used in \SE tools.
+
+%\begin{definition}
+%A \emph{concrete heap}, according to the memory-object model,
+%is a mapping from (half-open, integer) intervals to arrays of bytes of a corresponding size.
+%\[
+%\begin{array}{l}
+%H = \Intervals^{\indextype} \rightharpoonup (\Vals^{\bvsort{8}}\cup\{\tundef, \tpoison\})[\,]
+%\\
+%\Intervals^{\tau} \eqdef \{[b,e) \mid b,e\in \!\Vals^{\tau}\!, \,b\leq e\}
+%\end{array}
+%\]
+%
+%The notation $E[\,]$ denotes a finite, fixed-size arrays of elements of $E$.
+%
+%With the following properties for $h\in\Heaps$:
+%\begin{itemize}
+%\item $\mathrm{dom}~h$ are pairwise-disjoint intervals.
+%\item $|h(\iota)| = |\iota|$ for all $\iota\in\mathrm{dom}~h$.
+%\end{itemize}
+%\end{definition}
+
+\begin{definition}
+A \emph{memory object} is defined as a tuple:
+\[ (\addr, \size, \arrayvalue) \in \MemoryObjects \quad \quad \MemoryObjects \triangleq \Vals^{\pointertype} \times \Vals^{\indextype} \times (\Z \rightarrow \Vals^{\bvsort{8}} \cup \{\tundef, \tpoison\}) \]
+where $\addr$ is its base address, $\size$ is its size, and $\arrayvalue$ is a mapping that tracks the stored values.
+A stored value can be either a value of type $\Vals^{\bvsort{8}}$ (\ie a byte) or one of the special values $\tundef$ or $\tpoison$.
+The address space is defined by the unsigned range representable by the pointer index type.
+The memory is defined using a heap and an allocator.
+A heap $\heap \in \Heaps$ is a set memory objects.
+An allocator is an algorithm that defines the allocation scheme of memory objects.
+Whenever an allocator adds a new memory object to the heap,
+the address interval of that memory object must not overlap with the address intervals of existing memory objects.
+In addition, an address interval must not wrap around the address space.
+% TODO: add this?
+% \[ \addr \leq \addr + \size \]
+\end{definition}
+
+In this paper,
+we assume a linear allocator that allocates memory objects in an ascending order while separating them with a fixed gap,
+commonly referred to as a \emph{red-zone}.
+Modeling a generic allocator that allows arbitrary locations for memory objects is challenging.
+First, modeling such allocators requires developing a more complex theory (\Cref{sec:core}).
+Second, existing \SE tools do not support such allocators,
+so generating safety proofs using these tools would require significant modifications to their implementations (\Cref{sec:proof-generation}).
+Therefore, we leave the modeling of such allocators to future work.
+
+\begin{definition}\label{def:state}
+%A location $\location\in\Locs$ is specified by a function identifier, block identifier, instruction index,
+%and an optional previous-block identifier.
+A \emph{concrete state} is a tuple $\progstate{\location}{\localstore}{\stack}{\memory}$,
+where $\location \in \Locs$ is a location,
+$\localstore \in \Stores$ is a \emph{local store} that maps variables to values in $\Vals$,
+$\stack \in (\Locs \times \Stores \times \Ids)^{*}$ is a call stack represented as a sequence of frames,
+and $\memory \in (\MemoryObjects)^{*}$ is a sequence of memory objects.
+\end{definition}
+
+\Cref{figure:llvm-semantics} defines the operational small-step semantics of \llvm IR based on the syntax in~\Cref{figure:llvm-syntax}.
+The evaluation semantics of an expression $e$ in a context of a local store $\localstore \in \Stores$ when a value of type $\tau$ is expected,
+denoted as $\evalexprty{e}{\localstore}{\tau}$,
+is defined according to~\cite{klee-rocq} (Section 2.1.2).
+The rules \rulenameref{Assign}, \rulenameref{Branch-True}, \rulenameref{Branch-False}, \rulenameref{Make-Symbolic}, and \rulenameref{Assume}
+were discussed in detail in~\cite{klee-rocq},
+so here we extend the discussion to memory-related instructions.
+
+\subsubsection{\textit{Malloc.}}
+When allocating a memory object,
+the size of the allocation must be non-negative and must not exceed the largest signed integer representable by the index type.
+As mentioned before, the address interval of the allocated memory object may not cross the unsigned boundary of the address space.
+If one of these properties is violated, the result is undefined-behavior.
+The mapping of the newly allocated memory object is set to a function that maps all the indices to a pre-defined value (byte).
+
+\subsubsection{\textit{Free.}}
+% TODO: assume that the type of p is iptr?
+When deallocating a pointer value $p$,
+we first check if there exists a memory object $(\addr, \size, \arrayvalue)$ in the memory $\memory$ such that $p = \addr$.
+If that is the case, we remove that memory object from $\memory$.
+Otherwise, the result is undefined-behavior.
+
+\subsubsection{\textit{Load.}}
+% TODO: what happens if p is undef/poison?
+When reading $n$ bytes from a pointer value $p$,
+we need to make sure that there exists a memory object $(\addr, \size, \arrayvalue)$ in the memory $\memory$ such that
+(1) $p < p + n$ and (2) $\addr \leq p < \addr + \size$.
+If that is not the case, then the result is undefined-behavior.
+Otherwise, we use the \textit{read} procedure to obtain the accessed value.
+This procedure first reads the corresponding sequence of stored values.
+If one of these values is $\tpoison$, then it returns $\tpoison$.
+If one of these values is $\tundef$, then it returns $\tundef$.
+Otherwise, we deserialize this sequence of values (bytes) into an integer of the appropriate type.
+
+\subsubsection{\textit{Store.}}
+% TODO: what happens if p/v is undef/poison?
+When writing a value $v$ to a pointer value $p$,
+we need to make sure that there exists a memory object $(\addr, \size, \arrayvalue)$ in the memory $\memory$ such that
+(1) $p < p + n$ and (2) $\addr \leq p < \addr + \size$.
+If that is not the case, then the result is undefined-behavior.
+Otherwise, we use the \textit{write} procedure to store the value $v$.
+This procedure serializes the value $v$ into a sequence of bytes and updates the array $\arrayvalue$ accordingly.
+
+\subsubsection{\textit{GetElementPtr.}}
+% TODO: mention flags (nuw, nusw, inbounds)
+% TODO: address --> pointer?
+% TODO: index / offset
+% TODO: link to the lines
+
+The $\tgep$ instruction computes the address of a subelement of an aggregate data structure (array, struct, \etc.).
+Note that it only performs address calculations without accessing the memory.
+The first argument is the base pointer to start from,
+and the remaining arguments are indices that indicate which of the elements of the aggregate object are indexed.
+The interpretation of each index dependends on the type being indexed into.
+The first index is always indexed into the base pointer type,
+the second index is indexed into the element type of the base pointer type, \etc
+The first indexed type must be a pointer type, and subsequent types can be either array types or struct types.
+
+The semantics of $\tgep$ is given in~\Cref{alg:gep}.
+All the indices are first converted to values of the index type (sign-extended or truncated), and then translated into offsets.
+The first index $j_0$ is used to move accross the elements corresponding to the base pointer type,
+so it is multiplied by the type size of the element type of the base pointer type (\cref{line:first-index}).
+The remaining indices $\overline{j}$ are translated into offsets based on the indexed type.
+If the indexed type is an array type,
+then the index is multiplied by the type size of the indexed type (\cref{line:array-index}).
+If the indexed type is a struct type,
+then the index is translated into a field selector (\cref{line:struct-index}).
+The computed offsets are sequentially summed up,
+and then the resulting offset is converted to the pointer type and added to the base pointer $p$.
+
+% TODO: add modified pseudo-code?
+The $\tgep$ instruction may have attributes (\opcode{nuw}, \opcode{nusw}, and \opcode{inbounds}) that impose additional rules.
+For example, if the \opcode{nuw} attribute is enabled, then the following must hold:
+(1) if the type of an index is larger than the index type, the truncation to the index type must preserve the unsigned value,
+(2) the multiplication of an index by the type size does not wrap the index type in an unsigned sense, and
+(3) the successive addition of each offset does not wrap the index type in an unsigned sense.
+If one of these conditions is violated, the result is $\tpoison$.
+
+%First, we compute the value of the base pointer $e$ and then the values of the indices $e_i$.
+%Then, to compute the resulting pointer, we invoke \textit{eval\_gep}.
+%The complete semantics of \tgep is rather complicated,
+%so we first describe a simplified version of its semantics in ...
+%...
+%If $p$ is poison/undef, then
+%If one of the indices is poison, then
+%If one of the indices is undef, then
+%Otherwise, all the arguments are integral values and ...
 
 \begin{algorithm}[t]
 \caption{The semantics of $\tgep$ (without attributes).}
