@@ -32,13 +32,10 @@ According to the \llvm semantics,
 if the allocation size exceeds the largest \emph{signed integer} representable by the index type,
 then the result is undefined behavior.
 However, \klee currently does not check this condition.
-Moreover, \klee silently truncates the allocation size to the \code{uint32\_t} type, without reporting any error to the user,
-which can result in unexpected behavior.
-% TODO: demonstrate under the assumption of index type = i64
-%To illustrate this behavior, consider the code snippet from~\Cref{figure:klee-issue}.
-%When executing~\cref{line:issue-malloc},
-%the allocation size (\code{UINT32\_MAX + 1 + 10}) is internally casted to the \code{uint32\_t} type,
-%so the actual allocation size is 10.
+Moreover, \klee silently truncates the allocation size to the \code{uint32\_t} type, without reporting any error to the user, which may lead to unexpected behavior.
+For example, if we allocate an object of size $2^{32} + 10$,
+then the allocation size is internally casted to $10$,
+and if later we access that object at offset $10$, then we will get an out-of-bounds error, which is a false positive.
 
 \paragraph{\textbf{\textit{Incorrect Interpretation of $\tgep$.}}}
 We found that the interpretation of $\tgep$ in \klee is not fully compliant with the \llvm reference,
