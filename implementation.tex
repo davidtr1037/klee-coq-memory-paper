@@ -19,21 +19,15 @@ Some of the SMT transformations used in \klee are currently not supported by our
 but we plan to support them in future versions.
 We found several implementation issues in \klee that relate to memory modeling, which we discuss next.
 
-\subsection{Implementation Issues in \klee}
-% TODO: mention that different parts assume different index types
-To represent the contents of a memory object, \klee uses an SMT array of sort:
-\[ \smtsort{32} \rightarrow \smtsort{8} \]
-Based on this, we conclude that the index type is assumed to be \bvsort{32}.
-
-\subsubsection{\textit{Inconsistent modeling of the index type.}}
+\paragraph{\textbf{\textit{Inconsistent modeling of the index type.}}}
 On one side,
-\klee uses an SMT array of sort $\arraysort{\smtsort{32}}{\smtsort{8}}$ to represent the contents of memory objects,
+\klee uses SMT arrays of sort $\arraysort{\smtsort{32}}{\smtsort{8}}$ to represent the contents of memory objects,
 which suggests that the modeled index type is $\bvsort{32}$.
 On the other side,
 \klee computes the offsets in the interpretation of $\tgep$ using SMT expressions of sort $\smtsort{64}$,
 which suggests that the modeled index type is $\bvsort{64}$.
 
-\subsubsection{\textit{Memory Allocation.}}
+\paragraph{\textbf{\textit{Memory Allocation.}}}
 According to the \llvm semantics,
 if the allocation size exceeds the largest \emph{signed integer} that fits into the index type,
 then the result is undefined behavior.
@@ -55,7 +49,7 @@ so the actual allocation size is 10.
 \label{figure:klee-issue}
 \end{figure}
 
-\subsubsection{GEP}
+\paragraph{\textbf{\textit{GEP}}}
 The algorithm used in \klee to handle the $\tgep$ instruction is given in~\Cref{alg:gep-klee}.
 As can be seen,
 the offset computed at each iteration is converted to an expression of sort $\smtsort{64}$,
