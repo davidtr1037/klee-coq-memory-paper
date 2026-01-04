@@ -35,14 +35,14 @@ equipped with Intel Core i9-9900 and 32GB of RAM.
 
 % TODO: add citations to benchmarks
 % TODO: which SE paper uses SVComp?
-Our prototype implementation supports memory operations,
+Our implementation supports memory operations,
 so our goal is to evaluate it on programs with memory manipulations.
 For this, we selected several benchmarks (\libtasn, \libosip, \coreutils, and \svcomp) that were used in the past in the context of \SE~\cite{klee,symsize-model,klee-rocq}.
 In \libtasn and \libosip, we selected a set of APIs,
 and for each API we constructed a test driver that runs it with symbolic inputs (integers, arrays, strings, \etc).
 To symbolically execute the programs in \coreutils,
 one needs to support external calls and model the environment (command-line arguments, file system, \etc).
-As our prototype currently does not support these features,
+As our implementation currently does not support these features,
 we could not evaluate those programs directly.
 However, \coreutils contains a library of APIs, some of which can be tested in isolation.
 We selected a subset of such APIs,
