@@ -1,23 +1,23 @@
 \section{Implementation}
 \label{sec:implementation}
 
-% TODO: prototype?
 % TODO: we fixed the issues in our version
 % TODO: we added a new allocator to be aligned with...
 % TODO: use an example where the size if casted to 0?
 % TODO: say that we model only nuw
 % TODO: check again the issue related to the offsets (w.r.t. official KLEE)
+% TODO: reported / confirmed / a patched was proposed / fixed
+% TODO: report 3 issues
 
-Our prototype implementation consists of two components:
-A formalization of the concrete and symbolic semantics (\Cref{sec:concrete-semantics,sec:symbolic-semantics}) and an extension of the \SE engine.
-Our formalization is manually written in \coq (9.0.1) and consists of roughly 40K lines of code, excluding third-party dependencies.
+Our implementation consists of two main components:
+A formalization in \coq (9.0.1) and an extension of the \SE engine.
+Our formalization includes the definition of the semantics and the theory discussed before (\Cref{sec:background,sec:core}),
+and it consists of roughly 40K lines of code, excluding third-party dependencies.
 Our proof-generation approach (\Cref{sec:proof-generation}) is implemented on top of \klee~\cite{klee},
-a \emph{state-of-the-art} \SE engine that operates on \llvm bitcode~\cite{llvm}.
-Some of the SMT transformations used in \klee are currently not supported by our prototype,
-but we plan to implement them in future versions.
-During the implementation of our prototype,
-we found several implementation issues in \klee that relate to memory modeling.
-We now give a detailed overview of these issues.
+a \emph{state-of-the-art} \SE engine operating on \llvm IR~\cite{llvm}.
+Some of the SMT transformations used in \klee are currently not supported by our implementation,
+but we plan to support them in future versions.
+We found several implementation issues in \klee that relate to memory modeling, which we discuss next.
 
 \subsection{Implementation Issues in \klee}
 % TODO: mention that different parts assume different index types
@@ -25,7 +25,15 @@ To represent the contents of a memory object, \klee uses an SMT array of sort:
 \[ \smtsort{32} \rightarrow \smtsort{8} \]
 Based on this, we conclude that the index type is assumed to be \bvsort{32}.
 
-\subsubsection{Allocation}
+\subsubsection{\textit{Inconsistent modeling of the index type.}}
+On one side,
+\klee uses an SMT array of sort $\arraysort{\smtsort{32}}{\smtsort{8}}$ to represent the contents of memory objects,
+which suggests that the modeled index type is $\bvsort{32}$.
+On the other side,
+\klee computes the offsets in the interpretation of $\tgep$ using SMT expressions of sort $\smtsort{64}$,
+which suggests that the modeled index type is $\bvsort{64}$.
+
+\subsubsection{\textit{Memory Allocation.}}
 According to the \llvm semantics,
 if the allocation size exceeds the largest \emph{signed integer} that fits into the index type,
 then the result is undefined behavior.
