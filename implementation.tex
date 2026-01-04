@@ -32,34 +32,33 @@ According to the \llvm semantics,
 if the allocation size exceeds the largest \emph{signed integer} representable by the index type,
 then the result is undefined behavior.
 However, \klee currently does not check this condition.
-Moreover, \klee silently truncates the allocation size to the \code{uint32\_t} type, without reporting any error to the user.
+Moreover, \klee silently truncates the allocation size to the \code{uint32\_t} type, without reporting any error to the user,
+which can result in unexpected behavior.
 % TODO: demonstrate under the assumption of index type = i64
 %To illustrate this behavior, consider the code snippet from~\Cref{figure:klee-issue}.
 %When executing~\cref{line:issue-malloc},
 %the allocation size (\code{UINT32\_MAX + 1 + 10}) is internally casted to the \code{uint32\_t} type,
 %so the actual allocation size is 10.
 
-\paragraph{\textbf{\textit{GEP}}}
-The algorithm used in \klee to handle the $\tgep$ instruction is given in~\Cref{alg:gep-klee}.
-As can be seen,
-the offset computed at each iteration is converted to an expression of sort $\smtsort{64}$,
-while the index type is assumed to be \bvsort{32}.
-%Even if we assume that the index type is \bvsort{64},
-In addition,
-the algorithm does not account for overflows when computing the resulting pointer.
+\paragraph{\textbf{\textit{Incorrect Interpretation of $\tgep$.}}}
+We found that the interpretation of $\tgep$ in \klee is not fully compliant with the \llvm reference,
+as it does not account for overflows when computing the offset.
+We modified the interpretation of $\tgep$ as follows:
+First, we modified the offset computation to be in accordance with the index type $\bvsort{32}$,
+to make it consistent with the index sort $\smtsort{32}$ of the SMT arrays.
+Second, if the \code{nuw} attribute is enabled, we report an error when an overflow occurs.
 
-% TODO: mention that the type of (n + 1) is i64?
-The lack of overflow checks has some additional consequences,
-as can be demonstrated by~\Cref{figure:klee-issue}.
-After executing the $\tgep$ instruction at~\cref{line:issue-llvm-gep}, the value of \code{p2} is $a + 4294967296$,
-assuming that the value of \code{p1} is $a$.
-Since \klee ignores the overflow in this case, it continues to the next instruction at~\cref{line:issue-llvm-store}.
-When \klee accesses a memory object (\ie $\tload$ and $\tstore$),
-the SMT expression of the offset is always truncated to an SMT expression of sort $\smtsort{32}$.
-So in this case,
-the SMT expression $4294967296$ (of sort $\smtsort{64}$) is truncated to the SMT expression $0$ (of sort $\smtsort{32}$).
-Therefore, this $\tstore$ instruction actually updates the first byte of the memory object allocated at~\cref{line:issue-llvm-malloc}.
-We note that this behavior occurs in \klee without reporting any errors to the user.
+%The lack of overflow checks has some additional consequences,
+%as can be demonstrated by~\Cref{figure:klee-issue}.
+%After executing the $\tgep$ instruction at~\cref{line:issue-llvm-gep}, the value of \code{p2} is $a + 4294967296$,
+%assuming that the value of \code{p1} is $a$.
+%Since \klee ignores the overflow in this case, it continues to the next instruction at~\cref{line:issue-llvm-store}.
+%When \klee accesses a memory object (\ie $\tload$ and $\tstore$),
+%the SMT expression of the offset is always truncated to an SMT expression of sort $\smtsort{32}$.
+%So in this case,
+%the SMT expression $4294967296$ (of sort $\smtsort{64}$) is truncated to the SMT expression $0$ (of sort $\smtsort{32}$).
+%Therefore, this $\tstore$ instruction actually updates the first byte of the memory object allocated at~\cref{line:issue-llvm-malloc}.
+%We note that this behavior occurs in \klee without reporting any errors to the user.
 
 \begin{figure}[t]
 \begin{minipage}[t]{0.44\columnwidth}
@@ -72,32 +71,32 @@ We note that this behavior occurs in \klee without reporting any errors to the u
 \label{figure:klee-issue}
 \end{figure}
 
-% TODO: fix...
-\begin{algorithm}[t]
-\caption{The algorithm for handling $\tgep$ in \klee.}
-\label{alg:gep-klee}
-\begin{algorithmic}[1]
-
-\Function{compute-offset}{$\tau, o, \overline{j}$}
-    \If {$|\overline{j}| = 0$}
-        \State \Return $o$
-    \EndIf
-    \State $\overline{j} \gets j_1 :: \overline{j'}$
-    \If {$\tau = \arraytype{\tau'}{n}$}
-        \State $o \gets \bvadd_{64}(o, \bvmul_{64}(\bvsext_{64}(j_1), \bvconst{64}{|\tau'|}))$ \label{line:array-index}
-        \State \Return \Call{compute-offset}{$\tau', o, \overline{j'}$}
-    \EndIf
-    \If {$\tau = \structtype{\tau}{n}$}
-        \State ...
-    \EndIf
-    \State ...
-\EndFunction
-
-\Function{compute-pointer}{$\tau, p, j_0, \overline{j}$}
-    \State $o \gets \bvmul_{64}(\bvsext_{64}(j_0), \bvconst{64}{|\tau|})$ \label{line:first-index}
-    \State $r \gets \Call{compute-offset}{\tau, o, \overline{j}}$
-    \State \Return $\bvadd_{64}(p, r)$
-\EndFunction
-
-\end{algorithmic}
-\end{algorithm}
+%% TODO: fix...
+%\begin{algorithm}[t]
+%\caption{The algorithm for handling $\tgep$ in \klee.}
+%\label{alg:gep-klee}
+%\begin{algorithmic}[1]
+%
+%\Function{compute-offset}{$\tau, o, \overline{j}$}
+%    \If {$|\overline{j}| = 0$}
+%        \State \Return $o$
+%    \EndIf
+%    \State $\overline{j} \gets j_1 :: \overline{j'}$
+%    \If {$\tau = \arraytype{\tau'}{n}$}
+%        \State $o \gets \bvadd_{64}(o, \bvmul_{64}(\bvsext_{64}(j_1), \bvconst{64}{|\tau'|}))$ \label{line:array-index}
+%        \State \Return \Call{compute-offset}{$\tau', o, \overline{j'}$}
+%    \EndIf
+%    \If {$\tau = \structtype{\tau}{n}$}
+%        \State ...
+%    \EndIf
+%    \State ...
+%\EndFunction
+%
+%\Function{compute-pointer}{$\tau, p, j_0, \overline{j}$}
+%    \State $o \gets \bvmul_{64}(\bvsext_{64}(j_0), \bvconst{64}{|\tau|})$ \label{line:first-index}
+%    \State $r \gets \Call{compute-offset}{\tau, o, \overline{j}}$
+%    \State \Return $\bvadd_{64}(p, r)$
+%\EndFunction
+%
+%\end{algorithmic}
+%\end{algorithm}
