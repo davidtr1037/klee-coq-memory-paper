@@ -1,13 +1,8 @@
 \section{Implementation}
 \label{sec:implementation}
 
-% TODO: we fixed the issues in our version
 % TODO: we added a new allocator to be aligned with...
-% TODO: use an example where the size if casted to 0?
 % TODO: say that we model only nuw
-% TODO: check again the issue related to the offsets (w.r.t. official KLEE)
-% TODO: reported / confirmed / a patched was proposed / fixed
-% TODO: report 3 issues
 
 Our implementation consists of two main components:
 A formalization in \coq (9.0.1) and an extension of the \SE engine.
@@ -17,7 +12,12 @@ Our proof-generation approach (\Cref{sec:proof-generation}) is implemented on to
 a \emph{state-of-the-art} \SE engine operating on \llvm IR~\cite{llvm}.
 Some of the SMT transformations used in \klee are currently not supported by our implementation,
 but we plan to support them in future versions.
-We found several implementation issues in \klee that relate to memory modeling, which we discuss next.
+Although the $\tgep$ instruction may have attributes (\opcode{nuw}, \opcode{nusw}, and \opcode{inbounds}),
+our implementation currently supports only \opcode{nuw}.
+We found several implementation issues in \klee that relate to memory modeling, which we discuss next.\footnote{
+These issues were confirmed by the maintainers of KLEE.
+The link is omitted due to double-blind reviewing.
+}
 
 \paragraph{\textbf{\textit{Inconsistent modeling of the index type.}}}
 On one side,
@@ -37,7 +37,7 @@ For example, if we allocate an object of size $2^{32} + 10$,
 then the allocation size is internally casted to $10$,
 and if later we access that object at offset $10$, then we will get an out-of-bounds error, which is a false positive.
 
-\paragraph{\textbf{\textit{Incorrect Interpretation of $\tgep$.}}}
+\paragraph{\textbf{\textit{Incorrect Interpretation of \textup{$\tgep$}.}}}
 We found that the interpretation of $\tgep$ in \klee is not fully compliant with the \llvm reference,
 as it does not account for overflows in the offset computation.
 To fix this, we modified the interpretation of $\tgep$ as follows:
