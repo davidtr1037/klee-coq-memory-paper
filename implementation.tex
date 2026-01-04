@@ -57,16 +57,16 @@ Second, if the \code{nuw} attribute is enabled, we report an error when an overf
 %Therefore, this $\tstore$ instruction actually updates the first byte of the memory object allocated at~\cref{line:issue-llvm-malloc}.
 %We note that this behavior occurs in \klee without reporting any errors to the user.
 
-\begin{figure}[t]
-\begin{minipage}[t]{0.44\columnwidth}
-\lstinputlisting[basicstyle=\scriptsize\ttfamily,language=c,mathescape=true,breaklines=false]{code/alloc.simple.c}
-\end{minipage}
-\begin{minipage}[t]{0.52\columnwidth}
-\lstinputlisting[basicstyle=\scriptsize\ttfamily,language=c,mathescape=true,breaklines=false]{code/alloc.simple.ll}
-\end{minipage}
-\caption{A simple C program and its translation to \llvm IR.}
-\label{figure:klee-issue}
-\end{figure}
+%\begin{figure}[t]
+%\begin{minipage}[t]{0.44\columnwidth}
+%\lstinputlisting[basicstyle=\scriptsize\ttfamily,language=c,mathescape=true,breaklines=false]{code/alloc.simple.c}
+%\end{minipage}
+%\begin{minipage}[t]{0.52\columnwidth}
+%\lstinputlisting[basicstyle=\scriptsize\ttfamily,language=c,mathescape=true,breaklines=false]{code/alloc.simple.ll}
+%\end{minipage}
+%\caption{A simple C program and its translation to \llvm IR.}
+%\label{figure:klee-issue}
+%\end{figure}
 
 %% TODO: fix...
 %\begin{algorithm}[t]
