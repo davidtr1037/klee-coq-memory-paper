@@ -245,9 +245,9 @@ A \emph{memory object} is defined as a tuple:
 where $\addr$ is its base address, $\size$ is its size, and $\arrayvalue$ is a mapping that tracks the stored values.
 A stored value can be either a value of type $\Vals^{\bvsort{8}}$ (\ie a byte) or one of the special values $\tundef$ or $\tpoison$.
 The address space is defined by the unsigned range representable by the pointer index type.
-The memory is defined using a heap and an allocator.
-A heap $\heap \in \Heaps$ is a set memory objects.
-An allocator is an algorithm that defines the allocation scheme of memory objects.
+The memory is identified by a heap and an allocator.
+The heap is a set memory objects,
+and the allocator is an algorithm that defines the allocation scheme of memory objects.
 Whenever an allocator adds a new memory object to the heap,
 the address interval of that memory object must not overlap with the address intervals of existing memory objects.
 In addition, an address interval must not wrap around the address space.

@@ -8,11 +8,14 @@
 % TODO: requires the same allocator in KLEE
 % TODO: hard-code the array sort?
 
+In this section,
+we extend the symbolic semantics presented in~\cite{klee-rocq} to support the memory-related instructions given in~\Cref{figure:llvm-syntax}.
+
 A \emph{symbolic memory object} is defined as a tuple:
 \[ (\addr, \size, \smtarray) \in \SymMemoryObjects \quad \quad \SymMemoryObjects \triangleq \Vals^{\pointertype} \times \Vals^{\indextype} \times \arraysort{\smtsort{8}}{\smtsort{32}} \]
 which is similar to the definition of a concrete memory object,
 but now the contents are encoded using an SMT array, \ie a store expression.
-The symbolic heap and the symbolic allocator are defined similarly to their concrete counterparts.
+Then, the symbolic memory and the symbolic allocator are defined similarly to their concrete counterparts.
 
 \begin{definition}
 \label{def:symbolic-state}
