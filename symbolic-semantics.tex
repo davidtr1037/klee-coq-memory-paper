@@ -202,7 +202,7 @@ Otherwise, we use the \textit{read} procedure to obtain the accessed value.
 This procedure reads the corresponding sequence of $n$ symbolic bytes,
 and then translates them to a \textit{concat} expression of the appropriate sort.
 At last, we update the path constraints $\varphi$ with the condition $\rangecond(p, n, \symmo)$,
-which makes sure that accessing $n$ bytes starting from $p$ remains within the address interval of $\symmo$.
+which makes sure that the first $n$ addresses starting from $p$ are within the address interval of $\symmo$.
 % TODO: example?
 
 \textbf{\textit{Store.}}
