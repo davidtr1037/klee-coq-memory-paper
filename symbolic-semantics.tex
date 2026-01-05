@@ -15,7 +15,7 @@ we extend the symbolic semantics presented in~\cite{klee-rocq} to support the me
 A symbolic memory object is defined as a tuple:
 \[ (\addr, \size, \smtarray) \in \SymMemoryObjects \quad \quad \SymMemoryObjects \triangleq \Vals^{\pointertype} \times \Vals^{\indextype} \times \arraysort{\smtsort{\indexsort}}{\smtsort{8}} \]
 which is similar to the definition of a concrete memory object,
-but now the contents are encoded using an SMT array, \ie a store expression.
+but now the contents are encoded using an SMT array whose values are symbolic bytes, \ie SMT expressions of sort $\bvsort{8}$.
 Then, the symbolic memory and the symbolic allocator are defined similarly to their concrete counterparts (\Cref{def:memory}).
 \end{definition}
 
@@ -193,66 +193,63 @@ Otherwise, the result is undefined-behavior.
 Note that this rule might have multiple derivations, since $p$ may point to different memory objects depending on the SMT model.
 
 \textbf{\textit{Load.}}
-% TODO: what happens if p is undef/poison?
 % TODO: mentions the assumptions about n?
 When reading $n$ bytes from a pointer $p$,
 we check if there exists an SMT model $m$ and a memory object $\symmo$ in $\symmemory$ such that
-$m$ satisfies the path constraints $\pc$ and $m[p + n]$ points to the address interval of $\symmo$.
+$m$ satisfies the path constraints $\pc$ and the first $n$ addresses starting from $m[p]$ are within the address interval of $\symmo$.
 If that is not the case, then the result is undefined-behavior.
 Otherwise, we use the \textit{read} procedure to obtain the accessed value.
-This procedure reads the corresponding sequence of $n$ stored SMT expressions (of sort $\smtsort{8}$),
+This procedure reads the corresponding sequence of $n$ symbolic bytes,
 and then translates them to a \textit{concat} expression of the appropriate sort.
-At last, we update the path constraints $\varphi$ with the condition $\rangecond(p, |\tau|, \symmo)$,
-which makes sure that accessing $|\tau|$ bytes starting from $p$ remains within the address interval of $\symmo$.
+At last, we update the path constraints $\varphi$ with the condition $\rangecond(p, n, \symmo)$,
+which makes sure that accessing $n$ bytes starting from $p$ remains within the address interval of $\symmo$.
 % TODO: example?
 
 \textbf{\textit{Store.}}
-% TODO: what happens if p/v is undef/poison?
-When writing an expression $e$ to a pointer $p$,
-we check if there exists an SMT model $m$ and a memory object $\symmo$ in $\symmemory$ such that
-$m$ satisfies th path constraints $\pc$ and $m[p + n]$ points to the address interval of $\symmo$.
+When writing an expression $e$, whose size is $n$ bytes, to a pointer $p$,
+we check if there exists an SMT model $m$ and a memory object $\symmo \triangleq (\addr, \size, \smtarray)$ in $\symmemory$ such that
+$m$ satisfies th path constraints $\pc$ and the first $n$ addresses starting from $m[p]$ are within the address interval of $\symmo$.
 If that is not the case, then the result is undefined-behavior.
 Otherwise, we use the \textit{write} procedure to store the expression $e$.
-This procedure serializes the expression $e$ into a sequence of SMT expressions (of sort $\smtsort{8}$)
-and extends the SMT array $\smtarray$ with additional store expressions accordingly.
-Here as well, we update the path constraints $\varphi$ with the condition $\rangecond(p, |\tau|, \symmo)$.
+This procedure serializes the expression $e$ into a sequence of symbolic bytes and extends the SMT array $\smtarray$ with additional store expressions accordingly.
+At last, we update the path constraints $\varphi$ with the condition $\rangecond(p, n, \symmo)$.
 % TODO: example?
 
 \textbf{\textit{GetElementPtr.}}
-The symbolic semantics of $\tgep$, given in~\Cref{alg:symbolic-gep},
-is similar to the concrete semantics, but uses SMT expressions for the offset and address calculations.
+The symbolic semantics of $\tgep$ is similar to the concrete semantics,
+but uses SMT expressions for the offset and address calculations.
 While the concrete version may return $\tundef$ or $\tpoison$,
 the symbolic version always returns an SMT expression,
 since the symbolic domain does not model $\tundef$ and $\tpoison$.
 
-\begin{algorithm}[t]
-\caption{The symbolic semantics of $\tgep$ (without attributes).}
-\label{alg:symbolic-gep}
-\begin{algorithmic}[1]
-
-\Function{compute-offset}{$\tau, o, \overline{j}$}
-    \If {$|\overline{j}| = 0$}
-        \State \Return $o$
-    \EndIf
-    \State $\overline{j} \gets j_1 :: \overline{j'}$
-    \If {$\tau = \arraytype{\tau'}{n}$}
-        \State $o \gets \bvadd_{32}(o, \bvmul_{32}(\bvsext_{32}(j_1), \bvconst{32}{|\tau'|}))$ \label{line:array-index}
-        \State \Return \Call{compute-offset}{$\tau', o, \overline{j'}$}
-    \EndIf
-    \If {$\tau = \structtype{\tau}{n}$}
-        \State ...
-    \EndIf
-    \State ...
-\EndFunction
-
-\Function{eval-gep}{$\tau, p, j_0, \overline{j}$}
-    \State $o \gets \bvmul_{32}(\bvsext_{32}(j_0), \bvconst{32}{|\tau|})$ \label{line:first-index}
-    \State $r \gets \Call{compute-offset}{\tau, o, \overline{j}}$
-    \State \Return $\bvadd_{64}(p, \bvzext_{64}(r))$
-\EndFunction
-
-\end{algorithmic}
-\end{algorithm}
+%\begin{algorithm}[t]
+%\caption{The symbolic semantics of $\tgep$ (without attributes).}
+%\label{alg:symbolic-gep}
+%\begin{algorithmic}[1]
+%
+%\Function{compute-offset}{$\tau, o, \overline{j}$}
+%    \If {$|\overline{j}| = 0$}
+%        \State \Return $o$
+%    \EndIf
+%    \State $\overline{j} \gets j_1 :: \overline{j'}$
+%    \If {$\tau = \arraytype{\tau'}{n}$}
+%        \State $o \gets \bvadd_{32}(o, \bvmul_{32}(\bvsext_{32}(j_1), \bvconst{32}{|\tau'|}))$ \label{line:array-index}
+%        \State \Return \Call{compute-offset}{$\tau', o, \overline{j'}$}
+%    \EndIf
+%    \If {$\tau = \structtype{\tau}{n}$}
+%        \State ...
+%    \EndIf
+%    \State ...
+%\EndFunction
+%
+%\Function{eval-gep}{$\tau, p, j_0, \overline{j}$}
+%    \State $o \gets \bvmul_{32}(\bvsext_{32}(j_0), \bvconst{32}{|\tau|})$ \label{line:first-index}
+%    \State $r \gets \Call{compute-offset}{\tau, o, \overline{j}}$
+%    \State \Return $\bvadd_{64}(p, \bvzext_{64}(r))$
+%\EndFunction
+%
+%\end{algorithmic}
+%\end{algorithm}
 
 \begin{definition}
 \label{def:sym-error-state}
