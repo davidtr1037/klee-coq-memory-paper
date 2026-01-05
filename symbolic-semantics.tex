@@ -172,14 +172,14 @@ so here we extend the discussion to memory-related instructions.
 \label{figure:symbolic-semantics}
 \end{figure}
 
-\subsubsection{\textit{Malloc.}}
+\textbf{\textit{Malloc.}}
 % TODO: use the same pre-defined value
 The symbolic semantics of \textit{malloc} mirror the concrete semantics,
 differing only in the handling of content initialization.
 The SMT array of the newly allocated memory object is set to a constant array $\arrayconst{v}$,
 which maps all the indices to a pre-defined SMT expression $v$.
 
-\subsubsection{\textit{Free.}}
+\textbf{\textit{Free.}}
 % TODO: assume that the type of p is iptr?
 % TODO: use $\symmemory$ instead of $h$?
 When deallocating a pointer $p$,
@@ -192,7 +192,7 @@ and extend $\pc$ with the condition $\baseaddrcond(p, \symmo)$, which constraint
 Otherwise, the result is undefined-behavior.
 Note that this rule might have multiple derivations, since $p$ may be concretized to different base addresses depending on the SMT model.
 
-\subsubsection{\textit{Load.}}
+\textbf{\textit{Load.}}
 % TODO: what happens if p is undef/poison?
 % TODO: mentions the assumptions about n?
 When reading $n$ bytes from a pointer $p$,
@@ -206,7 +206,7 @@ At last, we update the path constraints $\varphi$ with the condition $\rangecond
 which makes sure that accessing $|\tau|$ bytes starting from $p$ remains within the address interval of $\symmo$.
 % TODO: example?
 
-\subsubsection{\textit{Store.}}
+\textbf{\textit{Store.}}
 % TODO: what happens if p/v is undef/poison?
 When writing an expression $e$ to a pointer $p$,
 we check if there exists an SMT model $m$ and a memory object $\symmo$ in $\symmemory$ such that
@@ -218,7 +218,7 @@ and extends the SMT array $\smtarray$ with additional store expressions accordin
 Here as well, we update the path constraints $\varphi$ with the condition $\rangecond(p, |\tau|, \symmo)$.
 % TODO: example?
 
-\subsubsection{\textit{GetElementPtr.}}
+\textbf{\textit{GetElementPtr.}}
 The symbolic semantics of $\tgep$, given in~\Cref{alg:symbolic-gep},
 is similar to the concrete semantics, but uses SMT expressions for the offset and address calculations.
 While the concrete version may return $\tundef$ or $\tpoison$,
