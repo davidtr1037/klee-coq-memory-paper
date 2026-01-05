@@ -240,6 +240,7 @@ we adopt the \emph{memory-object model}~\cite{klee,mossberg2019manticore} which 
 %\end{definition}
 
 \begin{definition}
+\label{def:memory}
 A \emph{memory object} is defined as a tuple:
 \[ (\addr, \size, \arrayvalue) \in \MemoryObjects \quad \quad \MemoryObjects \triangleq \Vals^{\pointertype} \times \Vals^{\indextype} \times (\Z \rightarrow \Vals^{\bvsort{8}} \cup \{\tundef, \tpoison\}) \]
 where $\addr$ is its base address, $\size$ is its size, and $\arrayvalue$ is a mapping that tracks the stored values.
