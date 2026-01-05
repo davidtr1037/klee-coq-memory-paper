@@ -11,22 +11,29 @@
 In this section,
 we extend the symbolic semantics presented in~\cite{klee-rocq} to support the memory-related instructions given in~\Cref{figure:llvm-syntax}.
 
-A \emph{symbolic memory object} is defined as a tuple:
-\[ (\addr, \size, \smtarray) \in \SymMemoryObjects \quad \quad \SymMemoryObjects \triangleq \Vals^{\pointertype} \times \Vals^{\indextype} \times \arraysort{\smtsort{8}}{\smtsort{32}} \]
+\begin{definition}
+A symbolic memory object is defined as a tuple:
+\[ (\addr, \size, \smtarray) \in \SymMemoryObjects \quad \quad \SymMemoryObjects \triangleq \Vals^{\pointertype} \times \Vals^{\indextype} \times \arraysort{\smtsort{\indexsort}}{\smtsort{8}} \]
 which is similar to the definition of a concrete memory object,
 but now the contents are encoded using an SMT array, \ie a store expression.
-Then, the symbolic memory and the symbolic allocator are defined similarly to their concrete counterparts.
+Then, the symbolic memory and the symbolic allocator are defined similarly to their concrete counterparts (\Cref{def:memory}).
+\end{definition}
 
 \begin{definition}
 \label{def:symbolic-state}
-A \emph{symbolic state} is a tuple $\symstate{\location}{\symlocalstore}{\symstack}{\symmemory}{\pc}$.
+A symbolic state is a tuple $\symstate{\location}{\symlocalstore}{\symstack}{\symmemory}{\pc}$.
 The location $\location \in \Locs$ is defined as before.
 The concrete store $\localstore \in \Stores$ is replaced with a symbolic store $\symlocalstore \in \SymStores$,
-where $\SymStores \triangleq \Ids \to \Exprs$ and $\Exprs$ is a set of \emph{SMT expressions}, \ie first-order terms.
+where $\SymStores \triangleq \Ids \to \Exprs$ and $\Exprs$ is a set of SMT expressions, \ie first-order terms.
 The symbolic stack $\symstack \in (\Locs \times \SymStores \times \Ids)^*$ is modified accordingly to hold symbolic stores instead of concrete ones.
 The symbolic memory $\symmemory \in (\SymMemoryObjects)^{*}$ is a sequence of symbolic memory objects.
-The \emph{path constraint} $\pc \in \Exprs$ is a formula of sort $\Bool$ which accumulates assumptions along the execution path.
+The path constraint $\pc \in \Exprs$ is a formula of sort $\Bool$ which accumulates assumptions along the execution path.
 \end{definition}
+
+\Cref{figure:symbolic-semantics} defines the symbolic operational small-step semantics of \llvm IR based on the syntax in~\Cref{figure:llvm-syntax}.
+The symbolic evaluation of expressions, \ie $\evalexprty{e}{\symlocalstore}{\tau}$, is defined similarly to the concrete case.
+The rules \rulenameref{Assign}, \rulenameref{Branch-True}, \rulenameref{Branch-False}, \rulenameref{Make-Symbolic}, and \rulenameref{Assume} were discussed in detail in~\cite{klee-rocq},
+so here we extend the discussion to memory-related instructions.
 
 \begin{figure}[t]
 \[
@@ -162,7 +169,7 @@ The \emph{path constraint} $\pc \in \Exprs$ is a formula of sort $\Bool$ which a
 \end{array}
 \]
 \caption{Symbolic operational small-step semantics of LLVM IR.}
-\label{fig:symbolic-semantics}
+\label{figure:symbolic-semantics}
 \end{figure}
 
 \subsubsection{\textit{Malloc.}}
