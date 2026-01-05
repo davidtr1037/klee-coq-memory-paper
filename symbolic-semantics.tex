@@ -176,21 +176,21 @@ so here we extend the discussion to memory-related instructions.
 % TODO: use the same pre-defined value
 The symbolic semantics of \textit{malloc} mirror the concrete semantics,
 differing only in the handling of content initialization.
-The SMT array of the newly allocated memory object is set to a constant array $\arrayconst{v}$,
-which maps all the indices to a pre-defined SMT expression $v$.
+The SMT array of the newly allocated memory object is set to a constant array $\arrayconst{\arrayinitvalue}$.
+%which maps all the indices to $\arrayinitvalue$.
 
 \textbf{\textit{Free.}}
 % TODO: assume that the type of p is iptr?
 % TODO: use $\symmemory$ instead of $h$?
 When deallocating a pointer $p$,
 recall that $p$ is an SMT expression which is not necessarily a constant SMT expression.
-Therefore, we check if there exists an SMT model $m$ and a memory object $\symmo \triangleq (\addr, \size, \arrayvalue)$ in $\symmemory$ such that
+Therefore, we check if there exists an SMT model $m$ and a memory object $\symmo \triangleq (\addr, \size, \smtarray)$ in $\symmemory$ such that
 $m$ satisfies the path constraints $\pc$ and $m[p]$ points to $\addr$.
 If that is the case,
 then we remove that memory object from $\symmemory$,
 and extend $\pc$ with the condition $\baseaddrcond(p, \symmo)$, which constraints $p$ to $\addr$.
 Otherwise, the result is undefined-behavior.
-Note that this rule might have multiple derivations, since $p$ may be concretized to different base addresses depending on the SMT model.
+Note that this rule might have multiple derivations, since $p$ may point to different memory objects depending on the SMT model.
 
 \textbf{\textit{Load.}}
 % TODO: what happens if p is undef/poison?
