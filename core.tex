@@ -104,11 +104,11 @@ to memory operations.}
 
 \subsection{Program Safety via Execution Trees}
 
-An execution tree is a data structure that records the paths that were explored during the analysis of the given program.
-Its formal definition can be found in Section 3.4 in~\cite{klee-rocq}.
-Following the approach from~\cite{klee-rocq},
+An execution tree is a data structure that records the paths explored during the analysis of a given program.
+In the following, we rely on its definition from~\cite{klee-rocq} (Section 3.4).
+Following the approach of~\cite{klee-rocq},
 we show how certain properties of execution trees can be used to prove program safety.
-To handle memory-related instructions,
+To accommodate memory-related instructions,
 we extend the relevant definitions, lemmas, and theorems.
 
 In general, the symbolic states derived by the symbolic semantics may differ from those computed by the \SE engine.
@@ -131,9 +131,9 @@ denoted by $s_1 \equiv s_2$, if $\location_1 = \location_2$, $\symlocalstore_1 \
 \end{definition}
 
 The safety property for execution trees is defined below.
-The rule makes sure that there are no error states in the tree, and furthermore,
+This property ensures that there are no error states in the tree, and furthermore,
 that every feasible successor $s'$ of any state $s$ occurring in the tree is also represented in the tree as a successor of $s$.
-Infeasible states can be ignored as they do not represent any concrete states.
+Infeasible states can be ignored, as they do not represent any concrete states.
 
 \begin{definition}
 \label{def:safe-et}
