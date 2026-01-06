@@ -73,17 +73,9 @@ Let $c$ and $c'$ be two concrete states.
 We say that there is a \emph{non-speculative} step between $c$ and $c'$, denoted by $c \nsstep c'$,
 if $c \step c'$ and both $c$ and $c'$ are poison-free.
 \end{definition}
-The non-speculative concrete semantics allows us to relate between symbolic and concrete states,
-which then allows us to prove reachability completeness.
-Establishing reachability completeness this way is an important step toward proving program safety w.r.t. the concrete semantics.
-
-\begin{definition}
-A concrete state $c \triangleq \progstate{\location}{\localstore}{\stack}{\memory}$ is \emph{poison-free}
-if $\localstore$, $\stack$, and $\memory$ do not contain $\tpoison$ values.
-Let $c$ and $c'$ be two concrete states.
-We say that there is a \emph{non-speculative} step between $c$ and $c'$, denoted by $c \nsstep c'$,
-if $c \step c'$ and both $c$ and $c'$ are poison-free.
-\end{definition}
+%The non-speculative concrete semantics allows us to relate between symbolic and concrete states,
+%which then allows us to prove reachability completeness.
+Establishing reachability completeness in this restrictive way is an important step toward proving program safety w.r.t. the concrete semantics.
 
 \begin{definition}
 \label{def:issafe-ns-step}
