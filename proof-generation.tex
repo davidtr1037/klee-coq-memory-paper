@@ -173,6 +173,8 @@ If there exist $n$, $\symmo$, and $t$ such that:
 then $\safeet(\tree(s, [t]))$.
 \end{lemma}
 
+Due to space limitations,
+the interface lemmas for the rest of the examples are defined in the appendix (\Cref{lemma:interface-store,lemma:interface-gep,lemma:interface-load}).
 \subsubsection{\textit{Example: Store.}}
 % TODO: explain how to prove that this is not an error state
 % TODO: the type is i8, so we add a single store expression
@@ -242,30 +244,6 @@ We define similar lemmas to handle stores of other types (\bvsort{16}, \bvsort{3
 As for the path constraints,
 note that $\rangecond(\bvconst{64}{\addr}, 1, \symmo) \equiv \true$, so the equivalence follows easily.
 
-% this intuition is packed/formulated in the following interface lemma
-% we generalize the proof sketch / intuition above to an interface lemma...
-The proof above is generalized into an interface lemma for $\tstore$, which is stated as~\Cref{lemma:interface-store}.
-%The interface lemma for \textit{store} is given as~\Cref{lemma:interface-store}.
-\begin{lemma}
-\label{lemma:interface-store}
-Let $s \triangleq \symstate{\location}{\symlocalstore}{\symstack}{\symmemory}{\pc}$,
-where \textup{$\instrat{\location} = \codequote{\tstore^{\tau}~e_1~e_2}$}.
-If there exist $\symmo$, $\symmo'_{opt}$, and $t$ such that:
-\begin{enumerate}
-    \item $\symmemory$ is well-formed
-    \item $\symmo \in \symmemory$
-    \item $\evalexprty{e_1}{\symlocalstore}{\tau} = v$
-    \item $\evalexprty{e_2}{\symlocalstore}{\bvsort{64}} = \bvconst{64}{p}$
-    \item $\isinbounds{\bvval{p}{64}}{|\tau|}{\symmo}$
-    \item $\symmo'_{opt} \equiv \writemo(\symmo, \bvconst{64}{p}, v)$
-    \item $t.\attrstate = \symstate{\nextinstr{\location}}{\symlocalstore}{\symstack}{\replace(\symmemory, \symmo'_{opt})}{\pc}$
-    \item $\safeet(t)$
-\end{enumerate}
-then $\safeet(\tree(s, [t]))$.
-\end{lemma}
-%To show that the subtree of $s$ is safe,
-%we can apply~\Cref{lemma:interface-store} with $\symmo$ as $(\bvval{\addr}{64}, \bvval{2}{32}, \smtarray)$.
-
 \subsubsection{\textit{Example: GetElementPtr.}}
 % TODO: explain how to prove that this is not an error state
 The initial symbolic state:
@@ -313,22 +291,6 @@ In our case, it unfolds to the following constraint:
 which is indeed unsatisfiable.
 To prove that $s' \equiv s'_{opt}$,
 it suffices to prove that their stores are equivalent, which holds since $e \equiv e_{opt}$.
-
-The proof above is generalized into an interface lemma for $\tgep$, which is stated as~\Cref{lemma:interface-store}.
-\begin{lemma}
-Let $s \triangleq \symstate{\location}{\symlocalstore}{\symstack}{\symmemory}{\pc}$,
-where \textup{$\instrat{\location} = \codequote{x~\texttt{=}~\tgep~\pointertypeof{\tau}~e~\overline{(\tau_i, e_i)}}$}.
-If there exist $\symlocalstore'_{opt}$ and $t$ such that:
-\begin{enumerate}
-    \item $\evalexprty{e_i}{\symlocalstore}{\tau_i} = k_i$
-    \item $\unsat(\pc \land \overflowcond(\tau, \overline{k_i}))$
-    \item \textup{$\symlocalstore[x \mapsto \evalexprty{\tgep~\pointertypeof{\tau}~e~\overline{(\tau_i, e_i)}}{\symlocalstore}{\tau^{*}}] \equiv \symlocalstore'_{opt}$}
-    \item $t.\attrstate = \symstate{\nextinstr{\location}}{\symlocalstore'_{opt}}{\symstack}{\symmemory}{\pc}$
-    \item $\safeet(t)$
-\end{enumerate}
-then $\safeet(\tree(s, [t]))$.
-\end{lemma}
-% TODO: show how to apply?
 
 \subsubsection{\textit{Example: Load.}}
 % TODO: remind that the repr is non-opt now
@@ -379,26 +341,3 @@ so by~\Cref{def:sym-error-state}, $s$ is not an error state.
 To prove that $s' \equiv s'_{opt}$, it suffices to prove the equivalence of their path constraints.
 Since $n < \bvconst{32}{2} \land \neg \rangecond(e, 1, \symmo)$ is unsatisfiable,
 this implies that $n < \bvconst{32}{2} \land \rangecond(e, 1, \symmo) \equiv n < \bvconst{32}{2}$.
-
-The proof above is generalized into an interface lemma for $\tload$, which is stated as~\Cref{lemma:interface-load}.
-\begin{lemma}
-\label{lemma:interface-load}
-Let $s \triangleq \symstate{\location}{\symlocalstore}{\symstack}{\symmemory}{\pc}$,
-where \textup{$\instrat{\location} = \codequote{x~\texttt{=}~\tload^{\tau}~e}$}.
-If there exist $\symmo$, $\symlocalstore'_{opt}$, and $t$ such that:
-\begin{enumerate}
-    \item $\symmemory$ is well-formed
-    \item $\symmo \in \symmemory$
-    \item $\evalexprty{e}{\symlocalstore}{\bvsort{64}} = p$
-    \item $\unsat(\pc \land \neg \rangecond(p, |\tau|, \symmo))$
-    \item $\symlocalstore[x \mapsto \readmo(\symmo, p, |\tau|)] \equiv \symlocalstore'_{opt}$
-    \item $t.\attrstate = \symstate{\nextinstr{\location}}{\symlocalstore'_{opt}}{\symstack}{\symmemory}{\pc}$
-    \item $\safeet(t)$
-\end{enumerate}
-then $\safeet(\tree(s, [t]))$.
-\end{lemma}
-
-% similarly to ..., we reuse terms to accelerate the ...
-% here, we extend this approach to handle ..
-% more spec., ...
-% what about interface lemmas?
