@@ -59,6 +59,24 @@ then that index must be a constant and lie within the range of $\bvsort{64}$.
 \subsection{Reachability Completeness}
 \label{sec:completeness}
 
+Recall from~\Cref{def:over-approx-state} that a concrete state containing a $\tpoison$ value cannot be represented by a symbolic state.
+As a result, we cannot prove the reachability completeness of the symbolic semantics w.r.t. the concrete semantics,
+since a sequence of steps in the concrete semantics involving $\tpoison$ values cannot be simulated by a sequence of steps in the symbolic semantics.
+Instead, we follow the approach from~\cite{klee-rocq},
+and prove reachability completeness w.r.t. the non-speculative semantics (Section 3.3 from~\cite{klee-rocq}),
+a subset of the concrete semantics restricted to concrete states that do not contain $\tpoison$ values.
+Formally, it is defined as follows:
+\begin{definition}
+A concrete state $c \triangleq \progstate{\location}{\localstore}{\stack}{\memory}$ is \emph{poison-free}
+if $\localstore$, $\stack$, and $\memory$ do not contain $\tpoison$ values.
+Let $c$ and $c'$ be two concrete states.
+We say that there is a \emph{non-speculative} step between $c$ and $c'$, denoted by $c \nsstep c'$,
+if $c \step c'$ and both $c$ and $c'$ are poison-free.
+\end{definition}
+The non-speculative concrete semantics allows us to relate between symbolic and concrete states,
+which then allows us to prove reachability completeness.
+Establishing reachability completeness this way is an important step toward proving program safety w.r.t. the concrete semantics.
+
 \begin{definition}
 A concrete state $c \triangleq \progstate{\location}{\localstore}{\stack}{\memory}$ is \emph{poison-free}
 if $\localstore$, $\stack$, and $\memory$ do not contain $\tpoison$ values.
