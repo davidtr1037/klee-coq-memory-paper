@@ -145,7 +145,7 @@ so $s$ is not an error state.
 To prove that $s' \equiv s'_{opt}$,
 it suffices to prove that their memory is equivalent.
 The SMT arrays in those two symbolic states are encoded differently,
-but they are actually equivalent, since the additional store expressions contain the same value $v$ as in $\arrayconst{v}$.
+but they are actually equivalent, since the additional store expressions contain the same value $\arrayinitvalue$ as in $\arrayconst{\arrayinitvalue}$.
 
 To handle such cases in general, we define an interface lemma for \textit{malloc}, which is stated as~\Cref{lemma:interface-malloc}.
 In this case, we can apply~\Cref{lemma:interface-malloc} with $n$ as 2, $\symmo$ as the memory object from $s'_{opt}$, and $t$ as the subtree of $s'_{opt}$.
