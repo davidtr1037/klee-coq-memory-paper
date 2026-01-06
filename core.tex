@@ -104,6 +104,16 @@ to memory operations.}
 
 \subsection{Program Safety via Execution Trees}
 
+An execution tree is a data structure that records the paths that were explored during the analysis of the given program.
+Its formal definition can be found in Section 3.4 in~\cite{klee-rocq}.
+Following the approach from~\cite{klee-rocq},
+we show how certain properties of execution trees can be used to prove program safety.
+To handle memory-related instructions,
+we extend the relevant definitions, lemmas, and theorems.
+
+In general, the symbolic states derived by the symbolic semantics may differ from those computed by the \SE engine.
+To relate between them, we further extend the definition of \emph{equivalence} for symbolic states.
+
 \begin{definition}
 The symbolic stores $\symlocalstore_1$ and $\symlocalstore_2$ are \emph{equivalent}, denoted by $\symlocalstore_1\equiv
 \symlocalstore_2$, if they are defined over the same variables,
@@ -119,6 +129,11 @@ if their elements are pointwise equivalent.
 The symbolic states $s_1 \triangleq \symstate{\location_1}{\symlocalstore_1}{\symstack_1}{\symmemory_1}{\pc_1}$ and $s_2 \triangleq \symstate{\location_2}{\symlocalstore_2}{\symstack_2}{\symmemory_2}{\pc_2}$ are \emph{equivalent},
 denoted by $s_1 \equiv s_2$, if $\location_1 = \location_2$, $\symlocalstore_1 \equiv \symlocalstore_2$, $\symstack_1 \equiv \symstack_2$, $\symmemory_1 \equiv \symmemory_2$, and $\pc_1 \equiv \pc_2$.
 \end{definition}
+
+The safety property for execution trees is defined below.
+The rule makes sure that there are no error states in the tree, and furthermore,
+that every feasible successor $s'$ of any state $s$ occurring in the tree is also represented in the tree as a successor of $s$.
+Infeasible states can be ignored as they do not represent any concrete states.
 
 \begin{definition}
 \label{def:safe-et}
@@ -136,11 +151,17 @@ The predicate $\safeet$ is defined inductively over execution trees:
 \]
 \end{definition}
 
+In the next theorem,
+we prove that if the execution tree of the whole program satisfies the safety property described above,
+then the program is safe w.r.t. the non-speculative concrete semantics.
+
 \begin{lemma}
 \label{lemma:safety-via-et-ns-step}
 Let $s_0 \triangleq \initsymstate(\module)$, and $l$ be a list of execution trees.
 If $\module$ is supported and $\safeet(\tree(s_0, l))$, then $\issafens(\module)$.
 \end{lemma}
+
+% theorem 2 (+ ns lemma)
 
 \begin{theorem}
 \label{theorem:safety-via-et}
