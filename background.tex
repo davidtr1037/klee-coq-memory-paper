@@ -411,7 +411,7 @@ Then $c$ is an error state, denoted by $\errorstate(c)$, if one of the following
         \item \textup{$op \in \{\opcode{shl}, \opcode{lshr}, \opcode{ashr}\}$ and $v_2 = \bvval{n}{w}$, and $n \geq w$}
     \end{enumerate}
     \item $\instrat{\location} = \textup{$\codequote{x \ \texttt{=} \ \tcall^{\pointertypeof{\bvsort{8}}} \ \intrinsicfunc{malloc}(\bvsort{64} \ e)}$}$,
-          and \textup{$\evalexprty{e}{\localstore}{\bvsort{64}} > \valoftype{max\_signed}{\indextype}$}.
+          and \textup{$\evalexprty{e}{\localstore}{\bvsort{64}} > \bvval{(2^{\indexwidth - 1} - 1)}{64}$}.
     \item $\instrat{\location} = \textup{$\codequote{\tcall~\intrinsicfunc{free}(\pointertypeof{\bvsort{8}} \ e)}$}$, \textup{$\evalexprty{e}{\localstore}{\pointertypeof{\bvsort{8}}} = p$}, and $\invalidbaseaddress(\memory, p)$.
     \item $\instrat{\location} = \textup{$\codequote{x \ \texttt{=} \ \tload^{\tau} \ e}$}$, \textup{$\evalexprty{e}{\localstore}{\pointertypeof{\tau}} = p$}, and $\invalidpointer(\memory, p, |\tau|)$.
     \item $\instrat{\location} = \textup{$\codequote{\tstore^{\tau} \ e_1 \ e_2}$}$, \textup{$\evalexprty{e_2}{\localstore}{\pointertypeof{\tau}} = p$}, and $\invalidpointer(\memory, p, |\tau|)$.

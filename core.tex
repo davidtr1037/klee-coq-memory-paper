@@ -142,7 +142,7 @@ The predicate $\safeet$ is defined inductively over execution trees:
 \begin{array}{c}
 \ruledef{Step}
 {
-    \neg \errorsymstate(s), \ \forall s'. \ (s \symstep s') \rightarrow \big(\infeasible(s') \lor (\exists t \in l. \ \safeet(t) \ \land \ s' \equivstate t.\attrstate) \big)
+    \neg \errorsymstate(s), \ \forall s'. \ (s \symstep s') \rightarrow \big(\infeasible(s') \lor (\exists t \in l. \ \safeet(t) \land s' \equivstate t.\attrstate) \big)
 }
 {
     \safeet(\tree(s, l))
