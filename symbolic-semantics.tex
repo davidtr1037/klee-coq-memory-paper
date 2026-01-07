@@ -13,7 +13,7 @@ we extend the symbolic semantics presented in~\cite{klee-rocq} to support the me
 
 \begin{definition}
 A symbolic memory object is defined as a tuple:
-\[ (\addr, \size, \smtarray) \in \SymMemoryObjects \quad \quad \SymMemoryObjects \triangleq \Vals^{\pointertype} \times \Vals^{\indextype} \times \arraysort{\smtsort{\indexsort}}{\smtsort{8}} \]
+\[ (\addr, \size, \smtarray) \in \SymMemoryObjects \quad \quad \SymMemoryObjects \triangleq \Vals^{\pointertype} \times \Vals^{\indextype} \times \arraysort{\smtsort{\indexwidth}}{\smtsort{8}} \]
 which is similar to the definition of a concrete memory object,
 but now the contents are encoded using an SMT array whose values are symbolic bytes, \ie SMT expressions of sort $\bvsort{8}$.
 Then, the symbolic memory and the symbolic allocator are defined similarly to their concrete counterparts (\Cref{def:memory}).
@@ -102,7 +102,7 @@ so here we extend the discussion to memory-related instructions.
 \ruledefsmall{Malloc}{
   \instrat{\location} = \codequote{x~\texttt{=}~\tcall^{\pointertypeof{\bvsort{8}}}~\intrinsicfunc{malloc}(\bvsort{64} ~ e)} \quad
   \evalexprty{e}{\symlocalstore}{\bvsort{64}} = n \quad
-  \allocate(\symmemory, n) = (\symmemory', p) \quad
+  \allocate(\symmemory, \bvextract_{\indexwidth}(n)) = (\symmemory', p) \quad
 }
 {
   \symstate{\location}{\symlocalstore}{\symstack}{\symmemory}{\pc}
@@ -271,7 +271,7 @@ denoted by $\symstack \overapproxvia{m} \stack$,
 if they are of equal size,
 and the frames of $\symstack$ represent the frames of $\stack$ via $m$, pointwise.
 A symbolic memory object $(\addr, \size, \smtarray)$ represents a memory object $(\addr, \size, \arrayvalue)$ via $m$ if
-$\arrayselect{\smtarray}{\bvconst{\indexsort}{k}}$ represents $\arrayvalue(\valoftype{k}{\indextype})$ via $m$ for every $k$ in the range of the index type.
+$\arrayselect{\smtarray}{\bvconst{\indexwidth}{k}}$ represents $\arrayvalue(\valoftype{k}{\indextype})$ via $m$ for every $k$ in the range of the index type.
 A symbolic memory $\symmemory$ represents a memory $\memory$ via $m$, denoted by $\symmemory \overapproxvia{m} \memory$,
 if the symbolic memory objects of $\symmemory$ represent the memory objects of $\memory$ via $m$, pointwise.
 A symbolic state $s \triangleq \symstate{\location}{\symlocalstore}{\symstack}{\symmemory}{\pc}$ \emph{represents} a concrete state $c \triangleq \progstate{\location}{\localstore}{\stack}{\memory}$ via $m$,

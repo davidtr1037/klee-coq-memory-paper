@@ -115,8 +115,10 @@
 \newcommand{\nsstep}{\stackrel{\hspace{-2pt}\raisebox{1pt}{\tiny{\textit{ns}}}}{\rightarrow}}
 \newcommand{\multinsstep}{\mathrel{{\nsstep}{}^*\!}}
 \newcommand{\issafens}{\mathit{safe_{ns}}}
-\newcommand{\pointertype}{\bvsort{ptr}}
-\newcommand{\indextype}{\bvsort{idx}}
+\newcommand{\pointerwidth}{\textsf{ptr}}
+\newcommand{\indexwidth}{\textsf{idx}}
+\newcommand{\pointertype}{\bvsort{\pointerwidth}}
+\newcommand{\indextype}{\bvsort{\indexwidth}}
 \newcommand{\addr}{b}
 \newcommand{\size}{s}
 \newcommand{\arrayvalue}{a}
@@ -162,7 +164,6 @@
 %\newcommand{\arraystore}[3]{\mathit{store}(#1, #2, #3)}
 \newcommand{\arraystore}[3]{#1[#2 \mapsto #3]}
 \newcommand{\arrayinitvalue}{\bvconst{8}{0}}
-\newcommand{\indexsort}{\textsf{idx}}
 
 % symbolic semantics
 \makeatletter
