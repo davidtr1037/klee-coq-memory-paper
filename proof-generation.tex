@@ -165,9 +165,9 @@ where \textup{$\instrat{\location} = \codequote{x~\texttt{=}~\tcall^{\bvsort{64}
 and let $b \triangleq \nfa{\symmemory}$.
 If there exist $n$, $\symmo$, and $t$ such that:
 \begin{enumerate}
-    \item $\evalexprty{e}{\symlocalstore}{\bvsort{64}} \equiv \bvconst{64}{n}$ and $\bvval{n}{64} < \bvval{(2^{\indexwidth - 1} - 1)}{64}$
-    \item $\symmo \equiv (\bvval{b}{64}, \bvval{n}{32}, \arrayconst{\arrayinitvalue})$
-    \item $t.\attrstate = \symstate{\nextinstr{\location}}{\symlocalstore[x \mapsto \bvconst{64}{b}]}{\symstack}{\symmemory \mathbin{++} [\symmo]}{\pc}$
+    \item \textup{$\evalexprty{e}{\symlocalstore}{\bvsort{64}} \equiv \bvconst{64}{n}$} and \textup{$\bvval{n}{64} < \bvval{(2^{\indexwidth - 1} - 1)}{64}$}
+    \item \textup{$\symmo \equiv (\bvval{b}{64}, \bvval{n}{32}, \arrayconst{\arrayinitvalue})$}
+    \item \textup{$t.\attrstate = \symstate{\nextinstr{\location}}{\symlocalstore[x \mapsto \bvconst{64}{b}]}{\symstack}{\symmo :: \symmemory}{\pc}$}
     \item $\safeet(t)$
 \end{enumerate}
 then $\safeet(\tree(s, [t]))$.
