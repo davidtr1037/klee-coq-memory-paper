@@ -5,8 +5,10 @@
 
 Our implementation consists of two main components:
 A formalization in \coq (9.0.1) and an extension of the \SE engine.
-Our formalization includes the definition of the semantics and the theory discussed before (\Cref{sec:background,sec:core}),
-and it consists of roughly 40K lines of code, excluding third-party dependencies.
+Our formalization is based on~\cite{klee-rocq}, and it includes the definition of the semantics and the theory discussed before (\Cref{sec:background,sec:core}).
+Our formalization consists of roughly 40K lines of code, excluding third-party dependencis,
+while the formalization from~\cite{klee-rocq} consists of 18K lines of code.
+This highlights the substantial manual proof effort required to model memory.
 Our proof generation approach (\Cref{sec:proof-generation}) is implemented on top of \klee~\cite{klee},
 a \emph{state-of-the-art} \SE engine operating on \llvm IR~\cite{llvm}.
 Some of the SMT transformations used in \klee are currently not supported by our implementation,
