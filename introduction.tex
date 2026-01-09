@@ -2,10 +2,27 @@
 ...
 
 % Context
-Trusting symbolic execution implementations.
-Remind why a fully verified implementation is too hard to achieve.
-Within that field, approach of proof logging.
-Mention recent proof logging efforts and tools.
+
+% TODO: mention velvet / ...
+% TODO: verified tool / certified tool
+% TODO: add more citations for verification?
+% TODO: define program safety
+% TODO: which is the case in other analysis tools as well
+Symbolic execution (\SE) is a program analysis technique with applications in many areas,
+including test generation, bug finding, and verification~\cite{CadarSen13,klee,exe,spf,bugredux,se-java-2004,se-numerical-2006,syminfer}.
+Although \SE is used for verification,
+one cannot trust unverified \SE tools to conclude that a program is safe,
+as was recently demonstrated in~\cite{klee-rocq}.
+Obtaining a verified implementation of a \SE tool is challenging.
+On the one hand,
+verifying existing implementations is hard,
+as they typically consist of large codebases with complex third-party dependencies.
+One the other hand,
+verified implementations extracted from proof assistants~\cite{fse23wise,icfp22:keuchel} were applied only for simple program languages,
+and they lack advanced features such as: search heuristics, constraint solving optimizations, and other performance optimizations.
+An alternative approach, based on \emph{translation validation}~\cite{samet,pnueli1998translation} and not aiming for a verified implementation,
+performs \emph{proof logging} during the analysis to generate a safety proof that is specific to the analyzed program.
+This approach was demonstrated, for example, for P4~\cite{lundberg2024proof} and a subset of LLVM with integers~\cite{klee-rocq}.
 
 % Gap
 The latest realistic implementation of symex (CPP26) supports only
