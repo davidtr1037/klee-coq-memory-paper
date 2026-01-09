@@ -27,16 +27,16 @@ This approach was demonstrated, for example, for P4~\cite{lundberg2024proof} and
 % Gap
 
 % TODO: LLVM provides some freedom for memory modeling
+% TODO: avoid dup: challenging / ...
 Memory modeling is one of the most complex components in \SE tools,
 as well as in program analysis in general.
 To extend the approach in~\cite{klee-rocq} for memory operations,
 one needs first to formalize the memory model of \llvm and then to extend the \SE engine to generate safety proofs accordingly.
 Formalizing the memory model of \llvm is challenging,
 due to the complex specifications related to various definitions such as: data layout, address spaces, allocated objects, pointers, and semantics of memory-related instructions.
-In addition, \SE tools use various memory optimizations,
-which complicates the proof-logging process, which complicates the proof generation process.
+In addition, \SE tools use various memory optimizations, which complicates the proof generation process.
 For example, \klee~\cite{klee} uses multiple representations for memory objects, uses SMT encoding optimizations, \etc
-Therefore, applying the proof-logging approach for \llvm programs with memory is challenging.
+Therefore, extending the proof-logging approach for \llvm programs with memory is challenging.
 
 % The latest realistic implementation of symex (CPP26) supports only a limited subset.
 % Challenges in symbolic memory model and formal reasoning.
