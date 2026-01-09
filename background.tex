@@ -287,7 +287,7 @@ so here we extend the discussion to memory-related instructions.
 When allocating a memory object,
 the size of the allocation must be non-negative and must not exceed the largest signed integer representable by the index type.
 As mentioned before, the address interval of the allocated memory object may not cross the unsigned boundary of the address space.
-If one of these properties is violated, the result is undefined-behavior.
+If one of these properties is violated, the result is undefined behavior.
 The mapping of the newly allocated memory object is set to a function that maps all the indices to $\bvval{0}{8}$.
 
 \subsubsection{\textit{Free.}}
@@ -295,14 +295,14 @@ The mapping of the newly allocated memory object is set to a function that maps 
 When deallocating a pointer value $p$,
 we first check if there exists a memory object $(\addr, \size, \arrayvalue)$ in the memory $\memory$ such that $p = \addr$.
 If that is the case, we remove that memory object from $\memory$.
-Otherwise, the result is undefined-behavior.
+Otherwise, the result is undefined behavior.
 
 \subsubsection{\textit{Load.}}
 % TODO: what happens if p is undef/poison?
 When reading $n$ bytes from a pointer value $p$,
 we need to make sure that there exists a memory object $(\addr, \size, \arrayvalue)$ in the memory $\memory$ such that
 (1) $p < p + n$ and (2) $\addr \leq p < \addr + \size$.
-If that is not the case, then the result is undefined-behavior.
+If that is not the case, then the result is undefined behavior.
 Otherwise, we use the \textit{read} procedure to obtain the accessed value.
 This procedure first reads the corresponding sequence of stored values.
 If one of these values is $\tpoison$, then it returns $\tpoison$.
@@ -314,7 +314,7 @@ Otherwise, we deserialize this sequence of values (bytes) into an integer of the
 When writing a value $v$ to a pointer value $p$,
 we need to make sure that there exists a memory object $(\addr, \size, \arrayvalue)$ in the memory $\memory$ such that
 (1) $p < p + n$ and (2) $\addr \leq p < \addr + \size$.
-If that is not the case, then the result is undefined-behavior.
+If that is not the case, then the result is undefined behavior.
 Otherwise, we use the \textit{write} procedure to store the value $v$.
 This procedure serializes the value $v$ into a sequence of bytes and updates the array $\arrayvalue$ accordingly.
 
