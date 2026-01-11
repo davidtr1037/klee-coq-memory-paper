@@ -1,5 +1,7 @@
 \section{Introduction}
 
+% TODO: first solution that generates machine-checked proofs for LLVM programs with memory
+
 % Context
 
 % TODO: mention loom / velvet / ...
@@ -70,24 +72,23 @@ Therefore, extending the proof-logging approach for \llvm programs with memory i
 
 % theoretical foundation
 In this work,
-we extend the approach in~\cite{klee-rocq} the support memory operations.
-We extend the concrete and symbolic semantics to support memory-related instructions.
-We extend the theoretical foundation which allows to prove program safety based on properties of execution trees.
-We extend \klee to geneate safety proofs based on our formalization.
+we apply proof logging to memory-manipulating \llvm programs,
+resulting in the first tool that can generate machined-checked safety proofs for this subset of \llvm.
+%we extend the proof logging approach in~\cite{klee-rocq} to support memory operations.
+First, we extend the concrete and symbolic semantics to support memory-related instructions.
+Then, we extend the theoretical foundation which allows to prove program safety based on properties of execution trees.
+Lastly, we extend \klee to generate safety proofs based on our formalization.
 To address the gap between the formalized symbolic semantics and the heavily-optimized behavior in \klee,
-we develop an additional theory consisting of \emph{interface lemmas} that help to interact with the various parts of our formalization.
+we develop an additional theory consisting of \emph{interface lemmas} that help to interact with various parts of our formalization.
 
 % TODO: mechanized concrete semantics? better modeling of GEP, etc.
 % TODO: theory for program safety based on execution trees
+% TODO: implemented ...
 \begin{paragraph}{\textbf{Main Contributions:}}
 \begin{itemize}
-% interface lemmas for an efficient interaction between
-% evaluation on real-world APIs with memory manipulations
-% implemented ...
-% bugs in KLEE
-\item Mechanized concrete and symbolic semantics for a subset of \llvm with memory.
-\item An extension of \klee that generates safety proofs using interface lemmas.
-\item We applied our approach on APIs from real-world benchmarks.
-      We identified several issues in \klee related to memory modeling.
+\item A formalization in \coq consisting of a concrete and symbolic semantics for a subset of \llvm with memory
+      and a supporting theory for constructing safety proofs.
+\item An extension of \klee that generates safety proofs based on our formalization.
+\item We evaluated our approach on APIs from real-world benchmarks, and found several issues in \klee related to memory modeling.
 \end{itemize}
 \end{paragraph}
