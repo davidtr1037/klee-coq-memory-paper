@@ -36,7 +36,7 @@ one needs to formalize the memory model of \llvm and extend the \SE engine to ge
 Formalizing the memory model of \llvm is complex,
 due to the detailed specifications related to various definitions such as:
 data layout, address spaces, allocated objects, pointers, and semantics of memory-related instructions.
-In addition, \SE tools use various memory optimizations, which complicates the proof generation process.
+Moreover, \SE tools use various memory optimizations, which complicates the proof generation process.
 For example, \klee~\cite{klee} uses multiple representations for memory objects, applies SMT encoding optimizations, \etc
 
 % The latest realistic implementation of symex (CPP26) supports only a limited subset.
