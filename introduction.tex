@@ -1,7 +1,5 @@
 \section{Introduction}
 
-% TODO: first solution that generates machine-checked proofs for LLVM programs with memory
-
 % Context
 
 % TODO: mention loom / velvet / ...
@@ -11,8 +9,8 @@
 % TODO: which is the case in other analysis tools as well
 Symbolic execution (\SE) is a program analysis technique with applications in many areas,
 including test generation, bug finding, and verification~\cite{CadarSen13,klee,exe,spf,bugredux,se-java-2004,se-numerical-2006,syminfer}.
-Although \SE can be used for verification tasks,
-one cannot trust unverified \SE tools to conclude that a program is safe,
+Although \SE has been used for verification tasks,
+one cannot trust unverified \SE tools to infer that a program is indeed safe,
 as was recently demonstrated in~\cite{klee-rocq}.
 Obtaining a verified implementation of a \SE tool is challenging.
 On the one hand,
@@ -21,8 +19,9 @@ as they typically consist of large codebases with complex third-party dependenci
 One the other hand,
 verified implementations extracted from proof assistants~\cite{fse23wise,icfp22:keuchel} were applied only for simple program languages,
 and they lack advanced features such as: search heuristics, constraint solving optimizations, and other performance optimizations.
-An alternative approach, based on \emph{translation validation}~\cite{samet,pnueli1998translation} and not aiming for a verified implementation,
-performs \emph{proof logging} during the analysis to generate a safety proof that is specific to the analyzed program.
+Proof logging is an alternative approach,
+inspired by \emph{translation validation}~\cite{samet,pnueli1998translation} and not aiming for a verified implementation,
+that generates during the analysis a safety proof that is specific to the analyzed program.
 % TODO: both don't support memory?
 This approach was demonstrated, for example, for P4~\cite{lundberg2024proof} and a subset of \llvm with integers~\cite{klee-rocq}.
 
