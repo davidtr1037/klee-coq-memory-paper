@@ -32,73 +32,75 @@ The path constraint $\pc \in \Exprs$ is a formula of sort $\Bool$ which accumula
 
 \Cref{figure:symbolic-semantics} defines the symbolic operational small-step semantics of \llvm IR based on the syntax in~\Cref{figure:llvm-syntax}.
 The symbolic evaluation of expressions, \ie $\evalexprty{e}{\symlocalstore}{\tau}$, is defined similarly to the concrete case.
-The rules \rulenameref{Assign}, \rulenameref{Branch-True}, \rulenameref{Branch-False}, \rulenameref{Make-Symbolic}, and \rulenameref{Assume} were discussed in detail in~\cite{klee-rocq},
-so here we extend the discussion to memory-related instructions.
+Here, as in~\Cref{sec:background},
+we focus on discussing the memory-related instructions.
+%The rules \rulenameref{Assign}, \rulenameref{Branch-True}, \rulenameref{Branch-False}, \rulenameref{Make-Symbolic}, and \rulenameref{Assume} were discussed in detail in~\cite{klee-rocq},
+%so here we extend the discussion to memory-related instructions.
 
 \begin{figure}[t]
 \[
 \begin{array}{c}
-\ruledefsmall{Assign}{
-  \instrat{\location} = \codequote{x ~\texttt{=}~ e} \quad
-  e = \codequote{\toper^\tau\sdots} / \codequote{\tcast^{\_ \to \tau}\sdots} \quad
-  \welldef{\evalexprty{e}{\symlocalstore}{\tau} \neq \bot}
-}
-{
-  \symstate{\location}{\symlocalstore}{\symstack}{\symmemory}{\pc}
-  \symstep
-  \symstate{\nextinstr{\location}}{\symlocalstore[x \mapsto \evalexprty{e}{\symlocalstore}{\tau}]}{\symstack}{\symmemory}{\pc}
-}
-\\[1.2em]
-\ruledefsmall{Branch-True}{
-  \instrat{\location} = \codequote{\tbr ~ e ~ b_1 ~ b_2}
-  \quad
-  \welldef{\location\triangleright b_i \neq \bot}
-  \quad
-  \welldef{\evalexprty{e}{\symlocalstore}{\bvsort1} \neq \bot}
-}
-{
-  \symstate{\location}{\symlocalstore}{\symstack}{\symmemory}{\pc}
-  \symstep
-  \symstate{\location\triangleright b_1}{\symlocalstore}{\symstack}{\symmemory}{\pc \land \evalexprty{e}{\symlocalstore}{\bvsort1}}
-}
-\\[1.2em]
-\ruledefsmall{Branch-False}{
-  \instrat{\location} = \codequote{\tbr ~ e ~ b_1 ~ b_2}
-  \quad
-  \welldef{\location\triangleright b_i \neq \bot}
-  \quad
-  \welldef{\evalexprty{e}{\symlocalstore}{\bvsort1} \neq \bot}
-}
-{
-  \symstate{\location}{\symlocalstore}{\symstack}{\symmemory}{\pc}
-  \symstep
-  \symstate{\location\triangleright b_2}{\symlocalstore}{\symstack}{\symmemory}{\pc \land \lnot\evalexprty{e}{\symlocalstore}{\bvsort1}}
-}
-\\[1.2em]
-\ruledefsmall{Make-Symbolic}{
-  \begin{array}{@{}c@{}}
-    \instrat{\location} = \codequote{x ~\texttt{=}~ \tcall ~ \intrinsicfunc{make\_symbolic}()}
-    \\
-    \alpha \not \in \freevars(\symlocalstore) \cup \freevars(\symstack)
-  \end{array}
-}
-{
-  \symstate{\location}{\symlocalstore}{\symstack}{\symmemory}{\pc}
-  \symstep
-  \symstate{\nextinstr{\location}}{\symlocalstore[x \mapsto \alpha]}{\symstack}{\symmemory}{\pc}
-}
-\\[1.2em]
-\ruledefsmall{Assume}{
-  \instrat{\location} = \codequote{\tcall ~ \intrinsicfunc{assume}(\bvsort{1} ~ e)}
-  \quad
-  \welldef{\evalexprty{e}{\symlocalstore}{\bvsort1} \neq \bot}
-}
-{
-  \symstate{\location}{\symlocalstore}{\symstack}{\symmemory}{\pc}
-  \symstep
-  \symstate{\nextinstr{\location}}{\symlocalstore}{\symstack}{\symmemory}{\pc \land \evalexprty{e}{\symlocalstore}{\bvsort1}}
-}
-\\[1em]
+%\ruledefsmall{Assign}{
+%  \instrat{\location} = \codequote{x ~\texttt{=}~ e} \quad
+%  e = \codequote{\toper^\tau\sdots} / \codequote{\tcast^{\_ \to \tau}\sdots} \quad
+%  \welldef{\evalexprty{e}{\symlocalstore}{\tau} \neq \bot}
+%}
+%{
+%  \symstate{\location}{\symlocalstore}{\symstack}{\symmemory}{\pc}
+%  \symstep
+%  \symstate{\nextinstr{\location}}{\symlocalstore[x \mapsto \evalexprty{e}{\symlocalstore}{\tau}]}{\symstack}{\symmemory}{\pc}
+%}
+%\\[1.2em]
+%\ruledefsmall{Branch-True}{
+%  \instrat{\location} = \codequote{\tbr ~ e ~ b_1 ~ b_2}
+%  \quad
+%  \welldef{\location\triangleright b_i \neq \bot}
+%  \quad
+%  \welldef{\evalexprty{e}{\symlocalstore}{\bvsort1} \neq \bot}
+%}
+%{
+%  \symstate{\location}{\symlocalstore}{\symstack}{\symmemory}{\pc}
+%  \symstep
+%  \symstate{\location\triangleright b_1}{\symlocalstore}{\symstack}{\symmemory}{\pc \land \evalexprty{e}{\symlocalstore}{\bvsort1}}
+%}
+%\\[1.2em]
+%\ruledefsmall{Branch-False}{
+%  \instrat{\location} = \codequote{\tbr ~ e ~ b_1 ~ b_2}
+%  \quad
+%  \welldef{\location\triangleright b_i \neq \bot}
+%  \quad
+%  \welldef{\evalexprty{e}{\symlocalstore}{\bvsort1} \neq \bot}
+%}
+%{
+%  \symstate{\location}{\symlocalstore}{\symstack}{\symmemory}{\pc}
+%  \symstep
+%  \symstate{\location\triangleright b_2}{\symlocalstore}{\symstack}{\symmemory}{\pc \land \lnot\evalexprty{e}{\symlocalstore}{\bvsort1}}
+%}
+%\\[1.2em]
+%\ruledefsmall{Make-Symbolic}{
+%  \begin{array}{@{}c@{}}
+%    \instrat{\location} = \codequote{x ~\texttt{=}~ \tcall ~ \intrinsicfunc{make\_symbolic}()}
+%    \\
+%    \alpha \not \in \freevars(\symlocalstore) \cup \freevars(\symstack)
+%  \end{array}
+%}
+%{
+%  \symstate{\location}{\symlocalstore}{\symstack}{\symmemory}{\pc}
+%  \symstep
+%  \symstate{\nextinstr{\location}}{\symlocalstore[x \mapsto \alpha]}{\symstack}{\symmemory}{\pc}
+%}
+%\\[1.2em]
+%\ruledefsmall{Assume}{
+%  \instrat{\location} = \codequote{\tcall ~ \intrinsicfunc{assume}(\bvsort{1} ~ e)}
+%  \quad
+%  \welldef{\evalexprty{e}{\symlocalstore}{\bvsort1} \neq \bot}
+%}
+%{
+%  \symstate{\location}{\symlocalstore}{\symstack}{\symmemory}{\pc}
+%  \symstep
+%  \symstate{\nextinstr{\location}}{\symlocalstore}{\symstack}{\symmemory}{\pc \land \evalexprty{e}{\symlocalstore}{\bvsort1}}
+%}
+%\\[1em]
 \ruledefsmall{Malloc}{
   \instrat{\location} = \codequote{x~\texttt{=}~\tcall^{\pointertypeof{\bvsort{8}}}~\intrinsicfunc{malloc}(\bvsort{64} ~ e)} \quad
   \evalexprty{e}{\symlocalstore}{\bvsort{64}} = n \quad
