@@ -1,4 +1,18 @@
-...
-% the only approach that considers/handles memory operations (memory modeling)
-% first tool that ...
-% generates correctness/safety proofs for real-world programs
+% TODO: goal: safety proofs using SE? certifying SE?
+
+% problem: modern SE tools don't provide formal guarantees
+% problem: providing formal safety guarantees for SE tools, so can't be used for verification / proving program safety
+% in particular, if one is interested in verification / proving safety, then ...
+
+% some approaches are based on extraction
+% but applied in rather simplistic settings
+
+% some approaches are based on proof-logging (perform soem form of proof logging), that...
+% which generate program specific proofs during the analysis (symbolic execution)
+% but applied only for a small subset of LLVM with integers / no support for memory / no support for real-world programs with memory
+% but has not been applied yet to real-world programs with memory, etc.
+
+% the first tool that can generate machined-checked safety proofs for programs with memory / includes memory modeling
+% our approach is based on proof logging
+% implementation: LLVM with memory / KLEE / Rocq
+% applied on real-world programs

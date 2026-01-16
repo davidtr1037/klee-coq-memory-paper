@@ -306,7 +306,7 @@ Otherwise, the result is undefined behavior.
 \subsubsection{\textit{Load.}}
 % TODO: what happens if p is undef/poison?
 When reading $n$ bytes from a pointer value $p$,
-we need to make sure that there exists a memory object $\langle\addr, \size, \arrayvalue\range$ in the memory $\memory$ such that
+we need to make sure that there exists a memory object $\langle\addr, \size, \arrayvalue\rangle$ in the memory $\memory$ such that
 (1) $p < p + n$ (\ie there is no overflow) and (2) $\addr \leq p < \addr + \size$.
 If that is not the case, then the result is undefined behavior.
 Otherwise, we use the \textit{read} procedure to obtain the accessed value.
