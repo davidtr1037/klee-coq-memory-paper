@@ -298,14 +298,14 @@ The mapping of the newly allocated memory object is set to a function that maps 
 \subsubsection{\textit{Free.}}
 % TODO: assume that the type of p is iptr?
 When deallocating a pointer value $p$,
-we first check if there exists a memory object $\mobj{\addr}{\size}{arrayvalue}$ in the memory $\memory$ such that $p = \addr$.
+we first check if there exists a memory object $\mobj{\addr}{\size}{\arrayvalue}$ in the memory $\memory$ such that $p = \addr$.
 If that is the case, we remove that memory object from $\memory$.
 Otherwise, the result is undefined behavior.
 
 \subsubsection{\textit{Load.}}
 % TODO: what happens if p is undef/poison?
 When reading $n$ bytes from a pointer value $p$,
-we need to make sure that there exists a memory object $\mobj{\addr}{size}{\arrayvalue}$ in the memory $\memory$ such that
+we need to make sure that there exists a memory object $\mobj{\addr}{\size}{\arrayvalue}$ in the memory $\memory$ such that
 (1) $p < p + n$ (\ie there is no overflow) and (2) $\addr \leq p < \addr + \size$.
 If that is not the case, then the result is undefined behavior.
 Otherwise, we use the \textit{read} procedure to obtain the accessed value.
@@ -317,7 +317,7 @@ Otherwise, we deserialize this sequence of values (bytes) into an integer of the
 \subsubsection{\textit{Store.}}
 % TODO: what happens if p/v is undef/poison?
 When writing a value $v$ to a pointer value $p$,
-we need to make sure that there exists a memory object $\mobj{\addr}{size}{\arrayvalue}$ in the memory $\memory$ such that
+we need to make sure that there exists a memory object $\mobj{\addr}{\size}{\arrayvalue}$ in the memory $\memory$ such that
 (1) $p < p + n$ and (2) $\addr \leq p < \addr + \size$.
 If that is not the case, then the result is undefined behavior.
 Otherwise, we use the \textit{write} procedure to store the value $v$.
