@@ -31,8 +31,8 @@ So far, however, proof logging has been applied only in relatively simplistic se
 % our approach is based on proof logging
 In this paper,
 we present the first symbolic execution tool that can generate machined-checked safety proofs for programs with memory.
-% two parts: formalization / instrumentation
-Our implementation consists of a \coq formalization of a subset of \llvm with memory instructions and an extension of \klee that generates safety proofs based in this formalization.
-%Our implementation is built on top of \klee and supports a subset of \llvm with memory instructions and generates proofs in \coq.
+% TODO: two parts: formalization / instrumentation
+We developed a \coq formalization of a subset of \llvm with memory instructions,
+and extended \klee to generate safety proofs based in this formalization.
 We evaluated our approach on APIs from real-world benchmarks,
 and found previously unknown memory-modeling issues in \klee.
