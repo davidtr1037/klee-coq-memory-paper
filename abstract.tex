@@ -17,22 +17,23 @@
 % implementation: LLVM with memory / KLEE / Rocq
 % applied on real-world programs
 
-Symbolic execution (\SE) is a program analysis technique that executes the program with symbolic inputs.
-Modern \SE tools are mainly designed for applicability and performance,
+%Symbolic execution (\SE) is a program analysis technique that executes the program with symbolic inputs.
+Modern symbolic execution (\SE) tools are mainly designed for applicability and performance,
 however, they do not provide formal guarantees for the correctness of their analysis results.
 In particular,
-if ones goal is verifying a program, then relying on such unverified implementations is insufficient.
+if the goal is program verification, then relying on such unverified \SE tools is insufficient.
 %One approach is to derive a verified \SE tool using extraction from proof assistants,
 %but this was applied only in rather simplistic settings.
 One approach to address this challenge is \emph{proof logging},
 which works by instrumenting the \SE tool to generate a proof that is specific to the analyzed program.
 %\ie they generate during the analysis proofs that are specific to the program under test,
-So far, however, proof logging has been applied only in relatively simplistic settings and has not been applied yet to real-world programs involving memory manipulation.
+However, proof logging has been applied so far only in relatively simplistic settings and has not been applied yet to real-world programs involving memory manipulation.
 % our approach is based on proof logging
 In this paper,
 we present the first symbolic execution tool that can generate machined-checked safety proofs for programs with memory.
 % TODO: two parts: formalization / instrumentation
 We developed a \coq formalization of a subset of \llvm with memory instructions,
 and extended \klee to generate safety proofs based in this formalization.
+% TODO: approach?
 We evaluated our approach on APIs from real-world benchmarks,
 and found previously unknown memory-modeling issues in \klee.
