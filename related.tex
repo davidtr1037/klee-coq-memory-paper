@@ -2,16 +2,17 @@
 
 The proof-logging approach proposed by Trabish et al.~\cite{klee-rocq} is restricted to a subset of \llvm with integers,
 whereas our approach extends support to memory operations, making it applicable to more realistic programs.
-\citet{lundberg2024proof} use symbolic execution to produce functional correctness proofs for P4 programs using HOL4.
+Lundberg et al.~\cite{lundberg2024proof} use symbolic execution to produce functional correctness proofs for P4 programs using HOL4.
 % TODO: no memory modeling...
 They devise a symbolic execution algorithm that outputs a collection of theorems that can be used to prove properties about the analysis results.
 
+% TODO: shorten
 Correnson et al.~\cite{fse23wise} formalize a Coq framework with concrete and symbolic semantics of a small prototype language.
 Based on this framework, they extract an executable OCaml implementation of a symbolic execution engine.
 Their implementation does not support memory operations, advanced search heuristics, SMT optimizations, and other performance optimizations.
 In addition, their formalization is coupled with a specific search heuristic (BFS),
 while our approach is agnostic to the underlying search heuristic.
-% TODO: do we need this one?
+% TODO: do we need this one? et al.?
 The approach proposed by~\cite{icfp22:keuchel} is similar to the work mentioned above,
 but based on axiomatic semantics instead.
 
