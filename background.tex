@@ -257,17 +257,16 @@ A stored value can be either a value of type $\Vals^{\bvsort{8}}$ (\ie a byte) o
 The address space is defined by the unsigned range representable by the pointer index type.
 \end{definition}
 
-Whenever an allocator adds a new memory object to the heap,
+Whenever an allocator creates a new memory object,
 the address interval of that memory object must not overlap with the address intervals of existing memory objects.
-In addition, an address interval must be fully contained within
-the address domain $\Vals^{\pointertype}$ (\ie $b+s$ must not overflow).
+In addition, an address interval must be fully contained within the address sapce, \ie $\addr + \size$ must not overflow.
 
 In this paper,
 we assume a linear allocator that allocates memory objects consecutively, while maintaining a fixed gap between,
 commonly referred to as a \emph{red-zone}.
-Modeling a generic allocator that allows arbitrary locations for memory objects would be far more challenging:
-first, modeling such allocators requires developing a more complex theory of memory (\Cref{sec:core});
-second, existing \SE tools do not support such allocators,
+Modeling a generic allocator that allows arbitrary locations for memory objects would be far more challenging.
+First, modeling such allocators requires developing a more complex theory of memory (\Cref{sec:core}).
+Second, existing \SE tools do not support such allocators,
 so generating safety proofs using these tools would require significant modifications to their implementations (\Cref{sec:proof-generation}).
 Therefore, we leave the modeling of such allocators to future work.
 
@@ -400,7 +399,7 @@ If one of these conditions is violated, the result is $\tpoison$.
 
 In the following,
 we define when a concrete state is considered to be an error state.
-We then define when a program---an \llvm module---is considered  safe.
+We then define when a program, \ie an \llvm module, is considered safe.
 
 % TODO: some text before?
 \begin{definition}
