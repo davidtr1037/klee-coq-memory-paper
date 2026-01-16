@@ -1,21 +1,5 @@
 % TODO: goal: safety proofs using SE? certifying SE?
-
-% problem: modern SE tools don't provide formal guarantees
-% problem: providing formal safety guarantees for SE tools, so can't be used for verification / proving program safety
-% in particular, if one is interested in verification / proving safety, then ...
-
-% some approaches are based on extraction
-% but applied in rather simplistic settings
-
-% some approaches are based on proof-logging (perform soem form of proof logging), that...
-% which generate program specific proofs during the analysis (symbolic execution)
-% but applied only for a small subset of LLVM with integers / no support for memory / no support for real-world programs with memory
-% but has not been applied yet to real-world programs with memory, etc.
-
-% the first tool that can generate machined-checked safety proofs for programs with memory / includes memory modeling
-% our approach is based on proof logging
-% implementation: LLVM with memory / KLEE / Rocq
-% applied on real-world programs
+% TODO: first?
 
 %Symbolic execution (\SE) is a program analysis technique that executes the program with symbolic inputs.
 Modern symbolic execution (\SE) tools are mainly designed for applicability and performance,
@@ -25,13 +9,13 @@ if the goal is program verification, then relying on such unverified \SE tools i
 %One approach is to derive a verified \SE tool using extraction from proof assistants,
 %but this was applied only in rather simplistic settings.
 One approach to address this challenge is \emph{proof logging},
-which works by instrumenting the \SE tool to generate a proof that is specific to the analyzed program.
+which works by instrumenting the \SE tool to generate a safety proof that is specific to the analyzed program.
 %\ie they generate during the analysis proofs that are specific to the program under test,
 However, proof logging has been applied so far only in relatively simplistic settings and has not been applied yet to real-world programs involving memory manipulation.
 % our approach is based on proof logging
 In this paper,
-we present the first symbolic execution tool that can generate machined-checked safety proofs for programs with memory.
-% TODO: two parts: formalization / instrumentation
+we present an approach for applying proof logging to memory-manipulating programs,
+extending \SE with the ability to generate safety proofs for this class of programs.
 We developed a \coq formalization of a subset of \llvm with memory instructions,
 and extended \klee to generate safety proofs based in this formalization.
 % TODO: approach?
