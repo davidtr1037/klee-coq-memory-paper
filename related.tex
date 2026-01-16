@@ -1,12 +1,10 @@
 \section{Related Work}
 
-% all the related work from the previous paper
-% our paper
-
-Trabish et al.~\cite{klee-rocq} propose an approach for generating machine-checked safety proofs using symbolic execution.
-Their approach supports only a subset of \llvm with integers,
-while our approach supports memory operations,
-making it applicable in more realistic settings.
+The proof-logging approach proposed by Trabish et al.~\cite{klee-rocq} is restricted to a subset of \llvm with integers,
+whereas our approach extends support to memory operations, making it applicable to more realistic programs.
+\citet{lundberg2024proof} use symbolic execution to produce functional correctness proofs for P4 programs using HOL4.
+% TODO: no memory modeling...
+They devise a symbolic execution algorithm that outputs a collection of theorems that can be used to prove properties about the analysis results.
 
 Correnson et al.~\cite{fse23wise} formalize a Coq framework with concrete and symbolic semantics of a small prototype language.
 Based on this framework, they extract an executable OCaml implementation of a symbolic execution engine.
