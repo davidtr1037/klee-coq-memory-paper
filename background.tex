@@ -220,11 +220,11 @@ and in this work,
 we adopt the \emph{memory-object model}~\cite{klee,mossberg2019manticore} which is widely used in \SE tools.
 
 \begin{definition}
-A \emph{concrete heap}, $\memory ::= \langle \{mo, \ldots\}, \textit{alloc}\rangle$,
+A \emph{concrete heap}, $\memory ::= \heaprepr{ \{mo, \ldots\} }{ \textit{alloc} }$,
 according to the memory-object model,
 consists of a set of memory objects (defined below, \Cref{def:memory}) and a \emph{memory allocator}, which is a
-stateful function $(\textrm{size}: \Nat) \mapsto \langle p, \memory'\rangle$,
-yielding a fresh-allocated address $p$ and a new heap state $\memory'$.
+stateful function $(\textrm{size}: \Nat) \mapsto \heaprepr{ p }{ \memory' }$,
+yielding a freshly-allocated address $p$ and a new heap state $\memory'$.
 
 We use $\Heaps$ to denote the set of all possible heaps.
 \si{do we need this?}
@@ -251,7 +251,7 @@ We use $\Heaps$ to denote the set of all possible heaps.
 \begin{definition}
 \label{def:memory}
 A \emph{memory object} is defined as a tuple:
-\[ \mo ::= \langle\addr, \size, \arrayvalue\rangle \in \MemoryObjects \quad \quad \MemoryObjects \triangleq \Vals^{\pointertype} \times \Vals^{\indextype} \times (\Z \rightarrow \Vals^{\bvsort{8}} \cup \{\tundef, \tpoison\}) \]
+\[ \mo ::= \mobj{\addr}{\size}{\arrayvalue} \in \MemoryObjects \quad \quad \MemoryObjects \triangleq \Vals^{\pointertype} \times \Vals^{\indextype} \times (\Z \rightarrow \Vals^{\bvsort{8}} \cup \{\tundef, \tpoison\}) \]
 where $\addr$ is its base address, $\size$ is its size, and $\arrayvalue$ is a mapping that tracks the stored values.
 A stored value can be either a value of type $\Vals^{\bvsort{8}}$ (\ie a byte) or one of the special values $\tundef$ or $\tpoison$.
 The address space is defined by the unsigned range representable by the pointer index type.
@@ -299,14 +299,14 @@ The mapping of the newly allocated memory object is set to a function that maps 
 \subsubsection{\textit{Free.}}
 % TODO: assume that the type of p is iptr?
 When deallocating a pointer value $p$,
-we first check if there exists a memory object $\langle\addr, \size, \arrayvalue\rangle$ in the memory $\memory$ such that $p = \addr$.
+we first check if there exists a memory object $\mobj{\addr}{\size}{arrayvalue}$ in the memory $\memory$ such that $p = \addr$.
 If that is the case, we remove that memory object from $\memory$.
 Otherwise, the result is undefined behavior.
 
 \subsubsection{\textit{Load.}}
 % TODO: what happens if p is undef/poison?
 When reading $n$ bytes from a pointer value $p$,
-we need to make sure that there exists a memory object $\langle\addr, \size, \arrayvalue\rangle$ in the memory $\memory$ such that
+we need to make sure that there exists a memory object $\mobj{\addr}{size}{\arrayvalue}$ in the memory $\memory$ such that
 (1) $p < p + n$ (\ie there is no overflow) and (2) $\addr \leq p < \addr + \size$.
 If that is not the case, then the result is undefined behavior.
 Otherwise, we use the \textit{read} procedure to obtain the accessed value.
@@ -318,7 +318,7 @@ Otherwise, we deserialize this sequence of values (bytes) into an integer of the
 \subsubsection{\textit{Store.}}
 % TODO: what happens if p/v is undef/poison?
 When writing a value $v$ to a pointer value $p$,
-we need to make sure that there exists a memory object $\langle\addr, \size, \arrayvalue\rangle$ in the memory $\memory$ such that
+we need to make sure that there exists a memory object $\mobj{\addr}{size}{\arrayvalue}$ in the memory $\memory$ such that
 (1) $p < p + n$ and (2) $\addr \leq p < \addr + \size$.
 If that is not the case, then the result is undefined behavior.
 Otherwise, we use the \textit{write} procedure to store the value $v$.
