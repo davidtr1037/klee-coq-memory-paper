@@ -280,7 +280,13 @@ where:
 \[ e_{opt} \triangleq \bvadd_{64}(\bvconst{64}{\addr}, \bvzext_{64}(\bvextract_{32}(\bvzext_{64}(n)))) \]
 Now, we need to prove that the subtree of $s$ is safe.
 % TODO: explain based on the definition for GEP
-To prove that $s$ is not an error state,
+To prove that $s$ is not an error state, we will use the following lemma:
+\begin{lemma}
+Let $\tau$ be a type, $p$ a pointer value of type $\bvsort{\pointerwidth}$, and $\overline{t_i}$ a sequence of SMT expressions.
+If $\evalgep(\tau, p, \overline{m[t_i]}) = \tpoison$,
+then $m \models \overflowcond(\tau, \overline{t_i})$.
+\end{lemma}
+Then, based on~\Cref{def:sym-error-state},
 it suffices to prove that $n < \bvconst{32}{2} \land \overflowcond(\bvsort{64}, [\bvzext_{64}(n)])$ is unsatisfiable.
 In our case, it unfolds to the following constraint:
 \[
