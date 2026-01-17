@@ -32,7 +32,7 @@ equipped with Intel Core i9-9900 and 32GB of RAM.
 % TODO: add citations to benchmarks
 % TODO: which SE paper uses SVComp?
 Our implementation supports memory operations,
-so our goal is to evaluate it on programs with memory manipulations.
+so our goal is to evaluate it on memory-manipulating programs.
 For this, we selected several benchmarks (\libtasn, \libosip, \coreutils, and \svcomp) that were used in the past in the context of \SE~\cite{klee,symsize-model,klee-rocq}.
 In \libtasn and \libosip, we selected a set of APIs,
 and for each API we constructed a test driver that runs it with symbolic inputs (integers, arrays, strings, \etc).
@@ -65,12 +65,12 @@ To overcome this, we modified the relevant parts in these programs to perform fi
         %\caption{...}
         %\label{figure:proof-size}
     \end{subfigure}
-    \caption{The proof time (left) and proof size (right) in each subject.}
+    \caption{The proof time (left) and proof size (right) in each program.}
     \label{figure:proof-results}
 \end{figure*}
 
 In this experiment,
-we run each subject using the \proofopt and \base modes in order to evaluate the validity and effectiveness of our approach,
+we run each program using the \proofopt and \base modes in order to evaluate the validity and effectiveness of our approach,
 The results are discussed below.
 
 \textbf{\text{RQ1.}}
@@ -85,9 +85,9 @@ The average slowdown is 1.34\x and the median slowdown is 1.26\x.
 The maximum slowdown is obtained in the \textit{strintcmp} API from \coreutils (2.30\x).
 
 \textbf{\text{RQ3.}}
-\Cref{figure:proof-results} shows the proof time and the proof size for each subject.
+\Cref{figure:proof-results} shows the proof time and the proof size for each program.
 The average and median proof times are 23.1 seconds and 122.9 seconds, respectively.
-The average and median proof sizes are approximately 17,000 KB and 5,000 KB, respectively.
+The average and median proof sizes are approximately 20,000 KB and 6,000 KB, respectively.
 In general,
 as the number of executed instructions increases,
 the size of the generated proof increases as well,
