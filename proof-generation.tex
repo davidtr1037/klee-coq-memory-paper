@@ -281,11 +281,11 @@ where:
 Now, we need to prove that the subtree of $s$ is safe.
 To prove that $s$ is not an error state, we will use the following lemma:
 % TODO: define overflowcond
+% TODO: where $\overflowcond$ computes an SMT formula that encodes the fact that an overflow occured.
 \begin{lemma}
 Let $\tau$ be a type, $p$ a pointer value of type $\bvsort{\pointerwidth}$, and $\overline{t_i}$ a sequence of SMT expressions.
 If $\evalgep(\tau, p, \overline{m[t_i]}) = \tpoison$,
 then $m \models \overflowcond(\tau, \overline{t_i})$.
-% TODO: where $\overflowcond$ computes an SMT formula that encodes the fact that an overflow occured.
 \end{lemma}
 Then, based on~\Cref{def:sym-error-state},
 it suffices to prove that $n < \bvconst{32}{2} \land \overflowcond(\bvsort{64}, [\bvzext_{64}(n)])$ is unsatisfiable.

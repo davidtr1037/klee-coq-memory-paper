@@ -1,12 +1,6 @@
 \section{Evaluation}
 \label{sec:evaluation}
 
-In our evaluation, we use the following modes:
-\proofopt is the proof-generating mode, and \base is vanilla \klee.
-As mentioned in~\Cref{sec:implementation},
-some of the SMT transformations are not supported by our formalization.
-Therefore, these transformations are disabled in \proofopt.
-
 The following research questions guide our evaluation:
 \begin{itemize}
     \item \textbf{RQ1}: Can our approach generate valid proofs?
@@ -17,6 +11,8 @@ The following research questions guide our evaluation:
 
 \subsection{Setup}
 
+We use the following modes in our evaluation:
+\proofopt is the proof-generating mode, and \base is vanilla \klee.
 Each mode is run using the following configuration:
 The search heuristic is set to DFS,
 the timeout is set to one hour,
@@ -53,6 +49,25 @@ which are currently unsupported by both \klee and our approach.
 To overcome this, we modified the relevant parts in these programs to perform fixed-size memory allocations instead.
 
 \subsection{Results}
+
+\begin{figure*}
+    \centering
+    \begin{subfigure}[b]{0.48\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{images/proof-time.pdf}
+        \caption{...}
+        \label{figure:proof-time}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}[b]{0.48\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{images/proof-size.pdf}
+        \caption{...}
+        \label{figure:proof-size}
+    \end{subfigure}
+    \caption{...}
+    \label{figure:results}
+\end{figure*}
 
 The results are shown in~\Cref{table:results}.
 % TODO ...
