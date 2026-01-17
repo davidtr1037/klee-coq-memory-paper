@@ -55,22 +55,22 @@ To overcome this, we modified the relevant parts in these programs to perform fi
     \begin{subfigure}[b]{0.48\textwidth}
         \centering
         \includegraphics[width=\textwidth]{images/proof-time.pdf}
-        \caption{...}
-        \label{figure:proof-time}
+        %\caption{...}
+        %\label{figure:proof-time}
     \end{subfigure}
     \hfill
     \begin{subfigure}[b]{0.48\textwidth}
         \centering
         \includegraphics[width=\textwidth]{images/proof-size.pdf}
-        \caption{...}
-        \label{figure:proof-size}
+        %\caption{...}
+        %\label{figure:proof-size}
     \end{subfigure}
-    \caption{...}
-    \label{figure:results}
+    \caption{The proof time (left) and proof size (right) in each subject.}
+    \label{figure:proof-results}
 \end{figure*}
 
 In this experiment,
-we run each program using the \proofopt and \base modes in order to evaluate the validity and effectiveness of our approach,
+we run each subject using the \proofopt and \base modes in order to evaluate the validity and effectiveness of our approach,
 The results are discussed below.
 
 \textbf{\text{RQ1.}}
@@ -82,9 +82,19 @@ To evaluate the overhead of proof generation during the analysis,
 we compare the analysis times of \proofopt and \base.
 The average slowdown is 1.34\x and the median slowdown is 1.26\x.
 % TODO: why?
-The maximum slowdown is obtained in the \textit{strintcmp} API from \coreutils (2.3\x).
+The maximum slowdown is obtained in the \textit{strintcmp} API from \coreutils (2.30\x).
 
 \textbf{\text{RQ3.}}
+\Cref{figure:proof-results} shows the proof time and the proof size for each subject.
+The average and median proof times are 23.1 seconds and 122.9 seconds, respectively.
+The average and median proof sizes are approximately 17,000 KB and 5,000 KB, respectively.
+In general,
+as the number of executed instructions increases,
+the size of the generated proof increases as well,
+which in turn increases the proof-checking time.
+There were two cases (\textit{test\_osip\_hash} and \textit{test\_hash\_pjw}) in which the proof time was rather high despite the number of executed instructions being relatively low.
+This was due to the presence of complex SMT array terms in the definitions of the symbolic states and in the application of the interface lemmas for $\tload$ and $\tstore$.
+We leave the optimization of such cases for future work.
 
 %\begin{table*}[t]
 %\caption{...}
