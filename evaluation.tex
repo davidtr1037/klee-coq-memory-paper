@@ -88,10 +88,11 @@ The maximum slowdown is obtained in the \textit{strintcmp} API from \coreutils (
 \Cref{figure:proof-results} shows the proof time and the proof size for each program.
 The average and median proof times are 23.1 seconds and 122.9 seconds, respectively.
 The average and median proof sizes are approximately 20,000 KB and 6,000 KB, respectively.
+% TODO: improve
 In general,
 as the number of executed instructions increases,
 the size of the generated proof increases as well,
-which in turn increases the proof-checking time.
+which in turn results in higher proof time.
 There were two cases (\textit{test\_osip\_hash} and \textit{test\_hash\_pjw}) in which the proof time was rather high despite the number of executed instructions being relatively low.
 This was due to the presence of complex SMT array terms in the definitions of the symbolic states and in the application of the interface lemmas for $\tload$ and $\tstore$.
 We leave the optimization of such cases for future work.
