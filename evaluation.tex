@@ -69,28 +69,42 @@ To overcome this, we modified the relevant parts in these programs to perform fi
     \label{figure:results}
 \end{figure*}
 
-The results are shown in~\Cref{table:results}.
-% TODO ...
+In this experiment,
+we run each program using the \proofopt and \base modes in order to evaluate the validity and effectiveness of our approach,
+The results are discussed below.
 
-\begin{table*}[t]
-\caption{...}
-\label{table:results}
-\centering
-\scriptsize{
-\begin{tabular}{|l|r|r|r|r|r|r|}
-\cline{1-7}
-\multicolumn{1}{|c|}{} &
-\multicolumn{2}{c|}{\textbf{Time}} &
-\multicolumn{1}{c|}{\textbf{Proof Time}} &
-\multicolumn{1}{c|}{\textbf{Proof Size}} &
-\multicolumn{1}{c|}{\textbf{\#Paths}} &
-\multicolumn{1}{c|}{\textbf{\#Inst}} \\
-\cline{2-7}
-\multicolumn{1}{|c|}{} &
-\multicolumn{1}{c|}{\makecell{\textbf{Base}}} &
-\multicolumn{1}{c|}{\makecell{\textbf{PG}}} & & & & \\
-\hline
-A & 0.1 & 0.1 & 1.4 & 1.9 & 4 & 82 \\ \hline
-\end{tabular}
-}
-\end{table*}
+\textbf{\text{RQ1.}}
+Our approach was able to generate valid proofs for all the programs,
+which means that they are safe w.r.t. the concrete \llvm semantics formalized in~\Cref{sec:background}.
+
+\textbf{\text{RQ2.}}
+To evaluate the overhead of proof generation during the analysis,
+we compare the analysis times of \proofopt and \base.
+The average slowdown is 1.34\x and the median slowdown is 1.26\x.
+% TODO: why?
+The maximum slowdown is obtained in the \textit{strintcmp} API from \coreutils (2.3\x).
+
+\textbf{\text{RQ3.}}
+
+%\begin{table*}[t]
+%\caption{...}
+%\label{table:results}
+%\centering
+%\scriptsize{
+%\begin{tabular}{|l|r|r|r|r|r|r|}
+%\cline{1-7}
+%\multicolumn{1}{|c|}{} &
+%\multicolumn{2}{c|}{\textbf{Time}} &
+%\multicolumn{1}{c|}{\textbf{Proof Time}} &
+%\multicolumn{1}{c|}{\textbf{Proof Size}} &
+%\multicolumn{1}{c|}{\textbf{\#Paths}} &
+%\multicolumn{1}{c|}{\textbf{\#Inst}} \\
+%\cline{2-7}
+%\multicolumn{1}{|c|}{} &
+%\multicolumn{1}{c|}{\makecell{\textbf{Base}}} &
+%\multicolumn{1}{c|}{\makecell{\textbf{PG}}} & & & & \\
+%\hline
+%A & 0.1 & 0.1 & 1.4 & 1.9 & 4 & 82 \\ \hline
+%\end{tabular}
+%}
+%\end{table*}
