@@ -5,13 +5,12 @@ The following research questions guide our evaluation:
 \begin{itemize}
     \item \textbf{RQ1}: Can our approach generate valid proofs?
     \item \textbf{RQ2}: What is the overhead of proof generation during symbolic execution?
-    % TODO: proof size?
-    \item \textbf{RQ3}: What is the time required to validate the generated proofs?
+    \item \textbf{RQ3}: What is the cost of validating the generated proofs?
 \end{itemize}
 
 \subsection{Setup}
 
-We use the following modes in our evaluation:
+In our evaluation, we use the following modes:
 \proofopt is the proof-generating mode, and \base is vanilla \klee.
 Each mode is run using the following configuration:
 The search heuristic is set to DFS,
@@ -47,6 +46,9 @@ In \svcomp, we selected a subset of programs from the \textit{array-memsafety} s
 Most of these programs perform memory allocations with symbolic sizes,
 which are currently unsupported by both \klee and our approach.
 To overcome this, we modified the relevant parts in these programs to perform fixed-size memory allocations instead.
+In total, our evaluation comprises 42 subjects.\footnote{
+A detailed breakdown is given in the appendix (\Cref{appendix:benchmarks}).
+}
 
 \subsection{Results}
 
