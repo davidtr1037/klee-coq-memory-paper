@@ -34,8 +34,13 @@ The path constraint $\pc \in \Exprs$ is a formula of sort $\Bool$ which accumula
 The symbolic evaluation of expressions, \ie $\evalexprty{e}{\symlocalstore}{\tau}$, is defined similarly to the concrete case.
 Here, as in~\Cref{sec:background},
 we focus on discussing the memory-related instructions.
-In some of the rules, we use the following definitions (where $\symmo \triangleq \mobj{\addr}{\size}{\smtarray}$):
-\[ \baseaddrcond(p, n, \symmo) \triangleq p = a, \ \rangecond(p, n, \symmo) \triangleq p < p + n \land p \geq \addr \land p + n < \addr + \size \]
+In some of the rules, we use the following definitions (where $\symmo \triangleq \mobj{\bvval{\addr}{\pointerwidth}}{\bvval{\size}{\indexwidth}}{\smtarray}$):
+\[
+\begin{array}{ll}
+\baseaddrcond(p, \symmo) & \triangleq p = \bvconst{\pointerwidth}{a} \\
+\rangecond(p, n, \symmo) & \triangleq p < \bvadd_{\pointerwidth}(p, n) \land p \geq \bvconst{\pointerwidth}{\addr} \land \bvadd_{\pointerwidth}(p, n) < \bvadd_{\pointerwidth}(\bvconst{\pointerwidth}{\addr}, \bvconst{\pointerwidth}{\size})
+\end{array}
+\]
 Informally,
 $\baseaddrcond$ denotes that $p$ points to the base address of $\symmo$,
 and $\rangecond$ denotes that the interval $[p, p + n)$ is fully contained within the address interval of $\symmo$.
