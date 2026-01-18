@@ -220,7 +220,7 @@ we adopt the \emph{memory-object model}~\cite{klee,mossberg2019manticore} which 
 \begin{definition}
 \label{def:memory}
 A \emph{concrete heap}, $\memory ::= \{\mo_1, \ldots, \mo_n\}$
-consists of a set of \emph[memory objects};
+consists of a set of \emph{memory objects};
 %
 a \emph{memory object} is defined as a tuple:
 \[ \mo ::= \mobj{\addr}{\size}{\arrayvalue} \in \MemoryObjects \quad \quad \MemoryObjects \triangleq \Vals^{\pointertype} \times \Vals^{\indextype} \times (\Z \rightarrow \Vals^{\bvsort{8}} \cup \{\tundef, \tpoison\}) \]
