@@ -128,12 +128,12 @@ The symbolic states $s_1 \triangleq \symstate{\location_1}{\symlocalstore_1}{\sy
 denoted by $s_1 \equiv s_2$, if $\location_1 = \location_2$, $\symlocalstore_1 \equiv \symlocalstore_2$, $\symstack_1 \equiv \symstack_2$, $\symmemory_1 \equiv \symmemory_2$, and $\pc_1 \equiv \pc_2$.
 \end{definition}
 
-The safety property for execution trees is defined below.\footnote{
+The safety property $\safeet$ for execution trees is defined inductively below.\footnote{
 The notation $\infeasible(s)$ denotes that the path constraints of $s$ are unsatisfiable.
 }
 \begin{definition}
 \label{def:safe-et}
-The predicate $\safeet$ is defined inductively over execution trees:
+Let $s$ be a symbolic state and $l$ a list of execution trees, then:
 \[
 \begin{array}{c}
 \ruledef{Step}
