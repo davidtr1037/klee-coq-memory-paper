@@ -185,7 +185,6 @@ and $\rangecond$ denotes that the interval $[p, p + n)$ is fully contained withi
 \end{figure}
 
 \textbf{\textit{Malloc.}}
-% TODO: use the same pre-defined value
 The symbolic semantics of \textit{malloc} mirror the concrete semantics,
 differing only in the handling of content initialization.
 The SMT array of the newly allocated memory object is set to a constant array $\arrayconst{\arrayinitvalue}$.
@@ -193,14 +192,13 @@ The SMT array of the newly allocated memory object is set to a constant array $\
 
 \textbf{\textit{Free.}}
 % TODO: assume that the type of p is iptr?
-% TODO: use $\symmemory$ instead of $h$?
 When deallocating a pointer $p$,
 recall that $p$ is an SMT expression which is not necessarily a constant SMT expression.
 Therefore, we check if there exists an SMT model $m$ and a memory object $\symmo \triangleq (\addr, \size, \smtarray)$ in $\symmemory$ such that
 $m$ satisfies the path constraints $\pc$ and $m[p]$ points to $\addr$.
 If that is the case,
 then we remove that memory object from $\symmemory$,
-and extend $\pc$ with the condition $\baseaddrcond(p, \symmo)$, which constraints $p$ to $\addr$.
+and extend $\pc$ with the condition $\baseaddrcond(p, \symmo)$.
 Otherwise, the result is undefined behavior.
 Note that this rule might have multiple derivations, since $p$ may point to different memory objects depending on the SMT model.
 
@@ -213,8 +211,8 @@ If that is not the case, then the result is undefined behavior.
 Otherwise, we use the \textit{read} procedure to obtain the accessed value.
 This procedure reads the corresponding sequence of $n$ symbolic bytes,
 and then translates them to a \textit{concat} expression of the appropriate sort.
-At last, we update the path constraints $\varphi$ with the condition $\rangecond(p, n, \symmo)$,
-which makes sure that the first $n$ addresses starting from $p$ are within the address interval of $\symmo$.
+At last, we update the path constraints $\varphi$ with the condition $\rangecond(p, n, \symmo)$.
+% which makes sure that the first $n$ addresses starting from $p$ are within the address interval of $\symmo$.
 % TODO: example?
 
 \textbf{\textit{Store.}}
