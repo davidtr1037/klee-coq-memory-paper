@@ -1,4 +1,4 @@
-\section{Background}
+\section{Basic Foundations and Definitions}
 \label{sec:background}
 
 % TODO: explain bit-vectors
@@ -71,11 +71,8 @@ An allocated object may not cross the unsigned boundary of the address space,
 and its size may not exceed the largest signed integer representable by the index type.
 % In addition, the index type also specifies the type used to represent the size of allocated objects.
 In the sequel,
-the bit-widths of the pointer type and the index type are denoted by $\textsf{ptr}$ and $\textsf{idx}$, respectively.
-
-\si{add spec of pointer values from llvmref}
-
-% TODO: assumptions in this paper (KLEE)
+the bit-widths of the pointer type and the index type are denoted by \textsf{ptr} and \textsf{idx}, respectively, with corresponding integral types
+\textsf{iptr} and \textsf{iidx}.
 
 \subsubsection{\textit{Concrete Semantics.}}
 \label{sec:concrete-semantics}
@@ -219,47 +216,27 @@ This flexibility allows different semantic interpretations,
 and in this work,
 we adopt the \emph{memory-object model}~\cite{klee,mossberg2019manticore} which is widely used in \SE tools.
 
-\begin{definition}
-A \emph{concrete heap}, $\memory ::= \heaprepr{ \{mo, \ldots\} }{ \textit{alloc} }$,
-according to the memory-object model,
-consists of a set of memory objects (defined below, \Cref{def:memory}) and a \emph{memory allocator}, which is a
-stateful function $(\textrm{size}: \Nat) \mapsto \heaprepr{ p }{ \memory' }$,
-yielding a freshly-allocated address $p$ and a new heap state $\memory'$.
-
-We use $\Heaps$ to denote the set of all possible heaps.
-\si{do we need this?}
-\end{definition}
-
-%is a mapping from (half-open, integer) intervals to arrays of bytes of a corresponding size.
-%\[
-%\begin{array}{l}
-%H = \Intervals^{\indextype} \rightharpoonup (\Vals^{\bvsort{8}}\cup\{\tundef, \tpoison\})[\,]
-%\\
-%\Intervals^{\tau} \eqdef \{[b,e) \mid b,e\in \!\Vals^{\tau}\!, \,b\leq e\}
-%\end{array}
-%\]
-%
-%The notation $E[\,]$ denotes a finite, fixed-size arrays of elements of $E$.
-%
-%With the following properties for $h\in\Heaps$:
-%\begin{itemize}
-%\item $\mathrm{dom}~h$ are pairwise-disjoint intervals.
-%\item $|h(\iota)| = |\iota|$ for all $\iota\in\mathrm{dom}~h$.
-%\end{itemize}
-%\end{definition}
-
+\si{make the allocator implicit}
 \begin{definition}
 \label{def:memory}
-A \emph{memory object} is defined as a tuple:
+A \emph{concrete heap}, $\memory ::= \{\mo_1, \ldots, \mo_n\}$
+consists of a set of \emph[memory objects};
+%
+a \emph{memory object} is defined as a tuple:
 \[ \mo ::= \mobj{\addr}{\size}{\arrayvalue} \in \MemoryObjects \quad \quad \MemoryObjects \triangleq \Vals^{\pointertype} \times \Vals^{\indextype} \times (\Z \rightarrow \Vals^{\bvsort{8}} \cup \{\tundef, \tpoison\}) \]
 where $\addr$ is its base address, $\size$ is its size, and $\arrayvalue$ is a mapping that tracks the stored values.
 A stored value can be either a value of type $\Vals^{\bvsort{8}}$ (\ie a byte) or one of the special values $\tundef$ or $\tpoison$.
-The address space is defined by the unsigned range representable by the pointer index type.
+%The address space is defined by the unsigned range representable by the pointer index type.
+Each memory object is associated with an address interval,
+$[b, b+s)$.
+We use $(\MemoryObjects)^*$ to refer to the set of possible heaps.
 \end{definition}
 
-Whenever an allocator creates a new memory object,
-the address interval of that memory object must not overlap with the address intervals of existing memory objects.
-In addition, an address interval must be fully contained within the address sapce, \ie $\addr + \size$ must not overflow.
+We assume the existence of an implicit \emph{allocator},
+which is a stateful function $(\MemoryObjects)^* \to \MemoryObjects$, providing a freshly-allocated memory
+object whose address interval must not overlap those
+of existing memory objects.
+Moreover, the address interval must be fully contained within the address space, \ie $\addr + \size$ must not overflow.
 
 In this paper,
 we assume a linear allocator that allocates memory objects consecutively, while maintaining a fixed gap between,
