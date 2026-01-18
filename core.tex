@@ -128,11 +128,9 @@ The symbolic states $s_1 \triangleq \symstate{\location_1}{\symlocalstore_1}{\sy
 denoted by $s_1 \equiv s_2$, if $\location_1 = \location_2$, $\symlocalstore_1 \equiv \symlocalstore_2$, $\symstack_1 \equiv \symstack_2$, $\symmemory_1 \equiv \symmemory_2$, and $\pc_1 \equiv \pc_2$.
 \end{definition}
 
-The safety property for execution trees is defined below.
-This property ensures that there are no error states in the tree, and furthermore,
-that every feasible successor $s'$ of any state $s$ occurring in the tree is also represented in the tree as a successor of $s$.
-Infeasible states can be ignored, as they do not represent any concrete states.
-
+The safety property for execution trees is defined below.\footnote{
+The notation $\infeasible(s)$ denotes that the path constraints of $s$ are unsatisfiable.
+}
 \begin{definition}
 \label{def:safe-et}
 The predicate $\safeet$ is defined inductively over execution trees:
@@ -148,6 +146,9 @@ The predicate $\safeet$ is defined inductively over execution trees:
 \end{array}
 \]
 \end{definition}
+This property ensures that there are no error states in the tree, and furthermore,
+that every feasible successor $s'$ of any state $s$ occurring in the tree is also represented in the tree as a successor of $s$.
+Infeasible states can be ignored, as they do not represent any concrete states.
 
 In the next theorem,
 we prove that if the execution tree of the whole program satisfies the safety property described above,
