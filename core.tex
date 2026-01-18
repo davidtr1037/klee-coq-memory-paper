@@ -44,17 +44,15 @@ approximates) the set of concrete reachable states.
 
 \input{symbolic-semantics.tex}
 
-\subsection{Module Assumptions}
-
-The approach presented in~\cite{klee-rocq} requires the module to satisfy certain assumptions.
-More specifically, it assumes that every operand of an instruction is \emph{safe},
-\ie it is neither $\tpoison$ nor does it contain potentially erroneous operations (\eg shift).
-In this work,
-we further extend these assumptions to operands of memory-related instructions.
-In addition,
-if the indexed type of a given index in a $\tgep$ instruction is a struct type,
-then that index must be a constant and lie within the range of $\bvsort{64}$.
-As a matter of notation, we say that a module is \emph{supported} if it satisfies all these assumptions.
+\textbf{\textit{Module Assumptions.}}
+The approach presented in~\cite{klee-rocq} assumes that the module is \emph{supported},
+\ie all instruction operands are neither $\tpoison$ nor involved in potentially erroneous operations (\eg shift).
+We further extend these assumptions to operands of memory-related instructions.
+Additional requirements for the $\tgep$ instruction are discussed in~\Cref{appendix:module-assumptions}.
+%In addition,
+%if the indexed type of a given index in a $\tgep$ instruction is a struct type,
+%then that index must be a constant and lie within the range of $\bvsort{64}$.
+%As a matter of notation, we say that a module is \emph{supported} if it satisfies all these assumptions.
 
 \subsection{Reachability Completeness}
 \label{sec:completeness}
