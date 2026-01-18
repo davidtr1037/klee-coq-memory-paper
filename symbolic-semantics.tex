@@ -34,6 +34,11 @@ The path constraint $\pc \in \Exprs$ is a formula of sort $\Bool$ which accumula
 The symbolic evaluation of expressions, \ie $\evalexprty{e}{\symlocalstore}{\tau}$, is defined similarly to the concrete case.
 Here, as in~\Cref{sec:background},
 we focus on discussing the memory-related instructions.
+In some of the rules, we use the following definitions (where $\symmo \triangleq \mobj{\addr}{\size}{\smtarray}$):
+\[ \baseaddrcond(p, n, \symmo) \triangleq p = a, \ \rangecond(p, n, \symmo) \triangleq p < p + n \land p \geq \addr \land p + n < \addr + \size \]
+Informally,
+$\baseaddrcond$ denotes that $p$ points to the base address of $\symmo$,
+and $\rangecond$ denotes that the interval $[p, p + n)$ is fully contained within the address interval of $\symmo$.
 %The rules \rulenameref{Assign}, \rulenameref{Branch-True}, \rulenameref{Branch-False}, \rulenameref{Make-Symbolic}, and \rulenameref{Assume} were discussed in detail in~\cite{klee-rocq},
 %so here we extend the discussion to memory-related instructions.
 

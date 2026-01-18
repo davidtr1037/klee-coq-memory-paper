@@ -46,7 +46,7 @@ approximates) the set of concrete reachable states.
 
 \textbf{\textit{Module Assumptions.}}
 The approach presented in~\cite{klee-rocq} assumes that the module is \emph{supported},
-\ie all instruction operands are neither $\tpoison$ nor involved in potentially erroneous operations (\eg shift).
+\ie all the instruction operands are neither $\tpoison$ nor involved in potentially erroneous operations (\eg shift).
 We further extend these assumptions to operands of memory-related instructions.
 Additional requirements for the $\tgep$ instruction are discussed in~\Cref{appendix:module-assumptions}.
 %In addition,
