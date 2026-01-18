@@ -28,11 +28,10 @@ equipped with Intel Core i9-9900 and 32GB of RAM.
 
 \subsection{Benchmarks}
 
-% TODO: which SE paper uses SVComp?
 Our implementation supports memory operations,
 so our goal is to evaluate it on memory-manipulating programs.
 For this, we selected several benchmarks (\libtasn~\cite{libtasn1}, \libosip~\cite{libosip}, \coreutils~\cite{coreutils}, and \svcomp~\cite{svcomp-github})
-that were used in the past in the context of \SE~\cite{klee,symsize-model,klee-rocq}.
+that were used in the past in the context of \SE~\cite{klee,symsize-model,compact-s-e,klee-rocq}.
 In \libtasn and \libosip, we selected a set of APIs,
 and for each API we constructed a test driver that runs it with symbolic inputs (integers, arrays, strings, \etc).
 To symbolically execute the programs in \coreutils,
