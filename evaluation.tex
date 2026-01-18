@@ -70,23 +70,23 @@ A detailed breakdown is given in the appendix (\Cref{appendix:benchmarks}).
     \label{figure:proof-results}
 \end{figure*}
 
-In this experiment,
-we run each program using the \proofopt and \base modes in order to evaluate the validity and effectiveness of our approach,
+In this experiment, we evaluate the validity and effectiveness of our approach.
+To so do, we run each subject using the \proofopt and \base modes.
 The results are discussed below.
 
 \textbf{\text{RQ1.}}
-Our approach was able to generate valid proofs for all the programs,
-which means that they are safe w.r.t. the concrete \llvm semantics formalized in~\Cref{sec:background}.
+Our approach was able to generate valid proofs for all the subjects,
+which means that those programs are safe w.r.t. the concrete \llvm semantics formalized in~\Cref{sec:background}.
 
 \textbf{\text{RQ2.}}
-To evaluate the overhead of proof generation during the analysis,
+% TODO: discuss more?
+To evaluate the overhead of proof generation during the symbolic execution,
 we compare the analysis times of \proofopt and \base.
 The average slowdown is 1.34\x and the median slowdown is 1.26\x.
-% TODO: why?
 The maximum slowdown is obtained in the \textit{strintcmp} API from \coreutils (2.30\x).
 
 \textbf{\text{RQ3.}}
-\Cref{figure:proof-results} shows the proof time and the proof size for each program.
+\Cref{figure:proof-results} shows the proof time and the proof size for each subject.
 The average and median proof times are 23.1 seconds and 122.9 seconds, respectively.
 The average and median proof sizes are approximately 20,000 KB and 6,000 KB, respectively.
 % TODO: improve
