@@ -63,10 +63,13 @@ The pointer type specifies the integral type used to represent pointer values.
 The index type specifies the type used for address calculations (\eg in \tgep).
 The size of the index type may not exceed the size of the pointer type.
 An allocated object is a region of the address space reserved by a memory-allocation operation,
-such as \textsf{alloca}, a heap allocation call (\eg \textit{malloc}), or a global variable definition.\footnote{
-The semantics presented in the paper support only heap allocations.
-However, our implementation supports the other memory-allocation operations as well.
-}
+such as \textsf{alloca}, a heap allocation call (\eg \textit{malloc}), or a global variable definition.
+% \si{this footnote seems pesky here. the syntax & semantics are
+%    minimal throughout. we can mention when discussing the malloc rule that similar principles apply}
+%\footnote{
+%The semantics presented in the paper support only heap allocations.
+%However, our implementation supports the other memory-allocation operations as well.
+%}
 An allocated object may not cross the unsigned boundary of the address space,
 and its size may not exceed the largest signed integer representable by the index type.
 % In addition, the index type also specifies the type used to represent the size of allocated objects.
@@ -133,7 +136,7 @@ the bit-widths of the pointer type and the index type are denoted by \textsf{ptr
 %  \progstate{\nextinstr{\location}}{\localstore}{\stack}{\memory}
 %}
 %\\[1em]
-\ruledefsmall{Malloc}{
+\ruledefsmall{Malloc}{\quad
   \instrat{\location} = \codequote{x~\texttt{=}~\tcall^{\pointertypeof{\bvsort{8}}}~\intrinsicfunc{malloc}(\bvsort{64} ~ e)} \quad
   \evalexprty{e}{\localstore}{\bvsort{64}} = \bvval{n}{64} \quad
   \allocate(\memory, \valoftype{n}{\indextype}) = (\memory', p) \quad
@@ -144,59 +147,70 @@ the bit-widths of the pointer type and the index type are denoted by \textsf{ptr
   \progstate{\nextinstr{\location}}{\localstore[x \mapsto p]}{\stack}{\memory'}
 }
 \\[1em]
-\ruledefsmall{Free}{
+\ruledefsmall{Free}{\quad
   \instrat{\location} = \codequote{\tcall~\intrinsicfunc{free}(\pointertypeof{\bvsort{8}} ~ e)} \quad
   \evalexprty{e}{\localstore}{\pointertypeof{\bvsort{8}}} = p \quad
   \mo \in \memory \quad
   \isbaseaddr{p}{\mo} \quad
-  \mathit{remove}(\memory, \mo) = \memory'
 }
 {
   \progstate{\location}{\localstore}{\stack}{\memory}
   \step
-  \progstate{\nextinstr{\location}}{\localstore}{\stack}{\memory'}
+  \progstate{\nextinstr{\location}}{\localstore}{\stack}
+    {\memory \setminus \{\mo\}}
 }
 \\[1em]
-\ruledefsmall{Load}{
+\ruledefsmall{Load}{\quad
   \instrat{\location} = \codequote{x~\texttt{=}~\tload^{\tau}~e} \quad
   \evalexprty{e}{\localstore}{\pointertypeof{\tau}} = p \quad
   \mo \in \memory \quad
-  \isinbounds{p}{|\tau|}{\mo} \quad
-  \mathit{read}(\mo, p, \tau) = v \quad
+  \isinbounds{p}{\tau}{\mo} \quad
 }
 {
   \progstate{\location}{\localstore}{\stack}{\memory}
   \step
-  \progstate{\nextinstr{\location}}{\localstore[x \mapsto v]}{\stack}{\memory}
+  \progstate{\nextinstr{\location}}
+    {\localstore[x \mapsto \moRead{\mo}{p}{\tau}]}
+    {\stack}{\memory}
 }
 \\[1em]
-\ruledefsmall{Store}{
+\ruledefsmall{Store}{\quad
   \instrat{\location} = \codequote{\tstore^{\tau}~e_1~e_2} \quad
   \evalexprty{e_1}{\localstore}{\tau} = v \quad
   \evalexprty{e_2}{\localstore}{\pointertypeof{\tau}} = p \quad
   \mo \in \memory \quad
-  \isinbounds{p}{|\tau|}{\mo} \quad
-  \mathit{write}(\mo, p, v) = \mo' \quad
-  \mathit{replace}(\memory, \mo') = \memory'
+  \isinbounds{p}{\tau}{\mo} \quad
 }
 {
   \progstate{\location}{\localstore}{\stack}{\memory}
   \step
-  \progstate{\nextinstr{\location}}{\localstore}{\stack}{\memory'}
+  \progstate{\nextinstr{\location}}{\localstore}{\stack}
+    {\heapWrite{\memory}{\mo}{p}{\tau}{v}}
 }
 \\[1em]
 \ruledefsmall{GetElementPtr}{
   \instrat{\location} = \codequote{x~\texttt{=}~\tgep~\pointertypeof{\tau}~e~\overline{(\tau_i, e_i)}} \quad
   |\overline{(\tau_i, e_i)}| > 0 \quad
   \evalexprty{e}{\localstore}{\pointertypeof{\tau}} = p \quad
-  \evalexprty{e_i}{\localstore}{\tau_i} = j_i \quad
-  \evalgep(\tau, p, \overline{j_i}) = v
+  \evalexprty{e_i}{\localstore}{\tau_i} = j_i
 }
 {
   \progstate{\location}{\localstore}{\stack}{\memory}
   \step
-  \progstate{\nextinstr{\location}}{\localstore[x \mapsto v]}{\stack}{\memory}
+  \progstate{\nextinstr{\location}}
+    {\localstore[x \mapsto \evalgep(\tau, p, \overline{j_i})]}
+    {\stack}{\memory}
 }
+\\[2em]
+\scalebox{0.9}{$
+\begin{array}{l@{\quad}l}
+
+\isinbounds{p}{\tau}{\mo} & \mbox{interval $[p,p+\sizeof{\tau})$ is contained within the address interval of $\mo$} \\
+\moRead{\mo}{p}{\tau}   & \mbox{read a value of type $\tau$ from memory object $\mo$ starting from byte address $p$} \\
+\moWrite{\mo}{p}{\tau}{v} & \mbox{write value $v$ of type $\tau$ into memory object $\mo$ at byte address $p$} \\
+\heapRpl{\memory}{\mo}{\mo'} & \mbox{replace memory object $\mo$ with $mo'$ ($\scriptstyle \memory\setminus\{\mo\}\cup\{\mo'\}$)}
+\end{array}
+$}
 \end{array}
 \]
 \caption{Operational small-step semantics of \llvm IR.}
@@ -216,7 +230,6 @@ This flexibility allows different semantic interpretations,
 and in this work,
 we adopt the \emph{memory-object model}~\cite{klee,mossberg2019manticore} which is widely used in \SE tools.
 
-\si{make the allocator implicit}
 \begin{definition}
 \label{def:memory}
 A \emph{concrete heap}, $\memory ::= \{\mo_1, \ldots, \mo_n\}$
@@ -254,7 +267,7 @@ A \emph{concrete state} is a tuple $\progstate{\location}{\localstore}{\stack}{\
 where $\location \in \Locs$ is a location,
 $\localstore \in \Stores$ is a \emph{local store} that maps variables to values in $\Vals$,
 $\stack \in (\Locs \times \Stores \times \Ids)^{*}$ is a call stack represented as a sequence of frames,
-and $\memory \in (\MemoryObjects)^{*}$ is a sequence of memory objects.\si{should be $\memory\in\Heaps$ as it also contains the allocator monad?}
+and $\memory \in (\MemoryObjects)^{*}$ is a sequence of memory objects.
 \end{definition}
 
 \Cref{figure:llvm-semantics} defines the operational small-step semantics of \llvm IR based on the syntax in~\Cref{figure:llvm-syntax}.
@@ -263,8 +276,9 @@ denoted as $\evalexprty{e}{\localstore}{\tau}$,
 is defined according to~\cite{klee-rocq} (Section 2.1.2).
 %The rules \rulenameref{Assign}, \rulenameref{Branch-True}, \rulenameref{Branch-False}, \rulenameref{Make-Symbolic}, and \rulenameref{Assume}
 %were discussed in detail in~\cite{klee-rocq},
-Here, we focus on discussing the memory-related instructions.
-The rules for other instructions (assignments, branches, \etc) were discussed in detail in~\cite{klee-rocq}.
+Here, we focus on discussing the memory-related instructions,
+as the rules for other instructions (assignments, branches, \etc) were already discussed in detail in~\cite{klee-rocq}.
+
 
 \subsubsection{\textit{Malloc.}}
 When allocating a memory object,
