@@ -130,10 +130,10 @@
 \newcommand{\signext}{\mathit{signext}}
 \newcommand{\convert}{\mathit{convert}}
 \newcommand{\sizeof}[1]{{\texttt{sizeof(}{#1}\texttt{)}}}
-%\newcommand{\isinbounds}[3]{\mathit{is\_inbounds}(#1, #2 #3)}
-\newcommand{\isinbounds}[3]{#1 \overset{#2}{\rightsquigarrow} #3}
 %\newcommand{\isbaseaddr}[2]{#1 \rightsquigarrow #2}
 \newcommand{\isbaseaddr}[2]{#2 = \mobj{#1}{\_}{\_}}
+%\newcommand{\isinbounds}[3]{\mathit{is\_inbounds}(#1, #2 #3)}
+\newcommand{\isinbounds}[3]{#1 \overset{#2}{\rightsquigarrow} #3}
 \newcommand{\invalidpointer}{\mathit{invalid\textit{-}pointer}}
 \newcommand{\invalidbaseaddress}{\mathit{invalid\textit{-}base\textit{-}address}}
 \newcommand{\nfa}[1]{\mathit{top}(#1)}
