@@ -129,7 +129,7 @@ s' \triangleq \symstate
     {[(\bvval{\addr}{64}, \bvval{2}{32}, \arrayconst{\arrayinitvalue})]}
     {\true}
 \]
-where $b \triangleq \nfa{\symmemory}$.
+where $\bvval{\addr}{64}$ is the allocated base address.
 At this point, the \SE engine uses an optimized representation for the allocated memory object, as no stores have been performed yet,
 so the symbolic state computed by the \SE engine is:
 \[
@@ -163,12 +163,12 @@ however, it is not the focus of this work.
 \label{lemma:interface-malloc}
 Let $s \triangleq \symstate{\location}{\symlocalstore}{\symstack}{\symmemory}{\pc}$,
 where \textup{$\instrat{\location} = \codequote{x~\texttt{=}~\tcall^{\bvsort{64}}~\intrinsicfunc{malloc}(e)}$},
-and let $b \triangleq \nfa{\symmemory}$.
+and let $\bvval{\addr}{64}$ be the allocated base address.
 If there exist $n$, $\symmo$, and $t$ such that:
 \begin{enumerate}
     \item \textup{$\evalexprty{e}{\symlocalstore}{\bvsort{64}} \equiv \bvconst{64}{n}$} and \textup{$\bvval{n}{64} < \bvval{(2^{\indexwidth - 1} - 1)}{64}$}
-    \item \textup{$\symmo \equiv (\bvval{b}{64}, \bvval{n}{32}, \arrayconst{\arrayinitvalue})$}
-    \item \textup{$t.\attrstate = \symstate{\nextinstr{\location}}{\symlocalstore[x \mapsto \bvconst{64}{b}]}{\symstack}{\symmo :: \symmemory}{\pc}$}
+    \item \textup{$\symmo \equiv (\bvval{\addr}{64}, \bvval{n}{32}, \arrayconst{\arrayinitvalue})$}
+    \item \textup{$t.\attrstate = \symstate{\nextinstr{\location}}{\symlocalstore[x \mapsto \bvconst{64}{\addr}]}{\symstack}{\symmo :: \symmemory}{\pc}$}
     \item $\safeet(t)$
 \end{enumerate}
 then $\safeet(\tree(s, [t]))$.
