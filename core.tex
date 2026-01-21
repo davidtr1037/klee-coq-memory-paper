@@ -127,23 +127,28 @@ The states $s_1 \triangleq \symstate{\location_1}{\symlocalstore_1}{\symstack_1}
 denoted by $s_1 \equiv s_2$, if $\location_1 = \location_2$, $\symlocalstore_1 \equiv \symlocalstore_2$, $\symstack_1 \equiv \symstack_2$, $\symmemory_1 \equiv \symmemory_2$, and $\pc_1 \equiv \pc_2$.
 \end{definition}
 
-The safety property $\safeet$ for execution trees is defined inductively below.\footnote{
-The notation $\infeasible(s)$ denotes that the path constraints of $s$ are unsatisfiable.
-}
+The safety property $\safeet$ for execution trees is defined inductively below.
 \begin{definition}
 \label{def:safe-et}
-Let $s$ be a symbolic state and $l$ a list of execution trees, then:
-\[
-\begin{array}{c}
-\ruledef{Step}
-{
-    \neg \errorsymstate(s), \ \forall s'. \ (s \symstep s') \rightarrow \big(\infeasible(s') \lor (\exists t \in l. \ \safeet(t) \land s' \equivstate t.\attrstate) \big)
-}
-{
-    \safeet(\tree(s, l))
-}
-\end{array}
-\]
+Let $s$ be a symbolic state and $l$ a list of execution trees.
+We say that $tree(s, l)$ is safe, denoted by $\safeet(\tree(s, l))$,
+if (1) $s$ is not an error state,
+and (2) if $s \symstep s'$ then either the path constraints of $s'$ are unsatisfiable or there exists a subtree $t \in l$ such that $\safeet(t)$ and $s' \equivstate t.\attrstate$.
+%\begin{enumerate}
+%    \item $s$ is not an error state.
+%    \item if $s \symstep s'$, then either the path constraints of $s'$ are unsatisfiable, or there exists $t \in l$ such that $\safeet(t)$ and $s' \equivstate t.\attrstate$.
+%\end{enumerate}
+%\[
+%\begin{array}{c}
+%\ruledef{Step}
+%{
+%    \neg \errorsymstate(s), \ \forall s'. \ (s \symstep s') \rightarrow \big(\infeasible(s') \lor (\exists t \in l. \ \safeet(t) \land s' \equivstate t.\attrstate) \big)
+%}
+%{
+%    \safeet(\tree(s, l))
+%}
+%\end{array}
+%\]
 \end{definition}
 This property ensures that there are no error states in the tree, and furthermore,
 that every feasible successor $s'$ of any state $s$ occurring in the tree is also represented in the tree as a successor of $s$.
