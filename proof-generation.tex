@@ -23,8 +23,8 @@ we give some background about the memory modeling in \klee.
 %we give some background about the memory modeling in \klee.
 
 % TODO: unique interval?
-In \klee, the memory of a symbolic state is represented as a linear address space containing memory objects.
-A memory object is associated with a concrete base address and a concrete size.
+In \klee, the memory of a symbolic state is represented as a linear address space containing memory objects,
+each associated with a concrete base address and a concrete size.
 To encode the contents of a memory object,
 \klee uses two representations: \emph{optimized} and \emph{non-optimized}.
 If all the stores to a given memory object were performed with a concrete offset,
@@ -40,7 +40,7 @@ Once this happens, the representation cannot be switched back to the optimized o
 %the SMT expression corresponding to the offset is truncated to an SMT expression of sort $\smtsort{32}$.
 
 For example, after executing~\cref{line:example-store} from~\Cref{figure:example-llvm},
-the contents of the memory object allocated at~\cref{line:example-malloc} are encoded using the optimized representation as follows:
+the contents of the memory object allocated at~\cref{line:example-malloc} are encoded using the optimized representation as:
 \[ \{ 0 \mapsto \bvconst{8}{7}, 1 \mapsto \bvconst{8}{0} \} \]
 If we were to execute the instruction \code{p[n] = 1} afterwards,
 then we would switch to the non-optimized representation resulting in the following encoding:
