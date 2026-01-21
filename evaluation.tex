@@ -4,7 +4,7 @@
 The following research questions guide our evaluation:
 \begin{itemize}
     \item \textbf{RQ1}: Can our approach generate valid proofs?
-    \item \textbf{RQ2}: What is the overhead of proof generation during symbolic execution?
+    \item \textbf{RQ2}: What is the overhead of proof logging during symbolic execution?
     \item \textbf{RQ3}: What is the cost of validating the generated proofs?
 \end{itemize}
 
@@ -59,7 +59,7 @@ Our approach was able to generate valid proofs for all the subjects,
 which means that those programs are safe w.r.t. the concrete \llvm semantics formalized in~\Cref{sec:background}.
 
 \textbf{\text{RQ2.}}
-To evaluate the overhead of proof generation during the symbolic execution,
+To evaluate the overhead of proof logging during the symbolic execution,
 we compare the analysis times of \proofopt and \base.
 The results are shown in the scatter plot from~\Cref{figure:time},
 where the x-axis and y-axis represent the analysis times with \base and \proofopt, respectively.
