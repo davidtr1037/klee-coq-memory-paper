@@ -28,6 +28,7 @@ only pertain to the symbolic states, effectively
 \emph{lifting} the proof from the concrete plane
 to the symbolic.
 
+\si{try to focus a bit}
 This framework has been previously instantiated as a proof of
 concept using a subset of LLVM IR that is 
 restricted to integeral values, and without
@@ -57,6 +58,7 @@ Additional requirements for the $\tgep$ instruction are discussed in~\Cref{appen
 \subsection{Reachability Completeness}
 \label{sec:completeness}
 
+\si{Replace this with a presentation of what reachability completeness}
 Recall from~\Cref{def:over-approx-state} that a concrete state containing a $\tpoison$ value cannot be represented by a symbolic state.
 As a result, we cannot prove the reachability completeness of the symbolic semantics w.r.t. the concrete semantics,
 since a sequence of steps in the concrete semantics involving $\tpoison$ values cannot be simulated by a sequence of steps in the symbolic semantics.

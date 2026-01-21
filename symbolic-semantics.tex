@@ -189,6 +189,7 @@ The symbolic semantics of \textit{malloc} mirror the concrete semantics,
 differing only in the handling of content initialization.
 The SMT array of the newly allocated memory object is set to a constant array $\arrayconst{\arrayinitvalue}$.
 %which maps all the indices to $\arrayinitvalue$.
+\si{mention that we use the same allocator as the concrete case because addresses and sizes are concrete}
 
 \textbf{\textit{Free.}}
 % TODO: assume that the type of p is iptr?
@@ -266,6 +267,7 @@ we say that a symbolic state \emph{represents} a concrete state if the latter ca
 This relation will be used to define symbolic error states (\Cref{def:sym-error-state}) and to establish reachability completeness (\Cref{sec:completeness}).
 In the following, we extend the definition given in~\cite{klee-rocq} to account for memory.
 
+\si{make this more implicit using the concept of lifting}
 \begin{definition}
 \label{def:over-approx-state}
 Let $m$ be a model.
