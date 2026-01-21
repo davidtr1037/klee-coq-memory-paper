@@ -105,7 +105,7 @@ to memory operations.}
 An execution tree is a data structure that records the paths explored during the analysis of a given program.
 In the following, we rely on its definition from~\cite{klee-rocq} (Section 3.4).
 Following the approach of~\cite{klee-rocq},
-we show how certain properties of execution trees can be used to prove program safety.
+we show that program safety can be proved based on certain safety properties of execution trees.
 To accommodate memory-related instructions,
 we extend the relevant definitions, lemmas, and theorems.
 
@@ -127,7 +127,7 @@ The states $s_1 \triangleq \symstate{\location_1}{\symlocalstore_1}{\symstack_1}
 denoted by $s_1 \equiv s_2$, if $\location_1 = \location_2$, $\symlocalstore_1 \equiv \symlocalstore_2$, $\symstack_1 \equiv \symstack_2$, $\symmemory_1 \equiv \symmemory_2$, and $\pc_1 \equiv \pc_2$.
 \end{definition}
 
-The safety property $\safeet$ for execution trees is defined inductively below.
+Now, the safety property of execution trees is defined inductively below.
 \begin{definition}
 \label{def:safe-et}
 Let $s$ be a symbolic state and $l$ a list of execution trees.
