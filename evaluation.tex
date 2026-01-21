@@ -50,25 +50,6 @@ A detailed breakdown is given in the appendix (\Cref{appendix:benchmarks}).
 
 \subsection{Results}
 
-\begin{figure*}
-    \centering
-    \begin{subfigure}[b]{0.48\textwidth}
-        \centering
-        \includegraphics[width=\textwidth]{images/proof-time.pdf}
-        %\caption{...}
-        %\label{figure:proof-time}
-    \end{subfigure}
-    \hfill
-    \begin{subfigure}[b]{0.48\textwidth}
-        \centering
-        \includegraphics[width=\textwidth]{images/proof-size.pdf}
-        %\caption{...}
-        %\label{figure:proof-size}
-    \end{subfigure}
-    \caption{The proof time (left) and proof size (right) in each program.}
-    \label{figure:proof-results}
-\end{figure*}
-
 In this experiment, we evaluate the validity and effectiveness of our approach.
 To so do, we run each subject using the \proofopt and \base modes.
 The results are discussed below.
@@ -96,6 +77,23 @@ which in turn results in higher proof time.
 There were two cases (\textit{test\_osip\_hash} and \textit{test\_hash\_pjw}) in which the proof time was rather high despite the number of executed instructions being relatively low.
 This was due to the presence of complex SMT array terms in the definitions of the symbolic states and in the application of the interface lemmas for $\tload$ and $\tstore$.
 We leave the optimization of such cases for future work.
+
+\begin{figure*}
+    \centering
+    \begin{subfigure}[b]{0.40\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{images/time.pdf}
+        \caption{Analysis time.}
+        \label{figure:time}
+    \end{subfigure}
+    \begin{subfigure}[b]{0.58\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{images/proof-scatter.pdf}
+        \caption{Proof time and proof size.}
+        \label{figure:proof-time-size}
+    \end{subfigure}
+    \hfill
+\end{figure*}
 
 %\begin{table*}[t]
 %\caption{...}
