@@ -64,12 +64,6 @@ The index type specifies the type used for address calculations (\eg in \tgep).
 The size of the index type may not exceed the size of the pointer type.
 An allocated object is a region of the address space reserved by a memory-allocation operation,
 such as \textsf{alloca}, a heap allocation call (\eg \textit{malloc}), or a global variable definition.
-% \si{this footnote seems pesky here. the syntax & semantics are
-%    minimal throughout. we can mention when discussing the malloc rule that similar principles apply}
-%\footnote{
-%The semantics presented in the paper support only heap allocations.
-%However, our implementation supports the other memory-allocation operations as well.
-%}
 An allocated object may not cross the unsigned boundary of the address space,
 and its size may not exceed the largest signed integer representable by the index type.
 % In addition, the index type also specifies the type used to represent the size of allocated objects.
@@ -277,7 +271,10 @@ as the rules for other instructions (assignments, branches, \etc) were already d
 
 
 \subsubsection{\textit{Malloc.}}
-When allocating a memory object,
+When allocating a memory object\footnote{
+The semantics presented in the paper consider only heap allocations.
+However, our implementation supports stack and global allocations as well.
+},
 the size of the allocation must be non-negative and must not exceed the largest signed integer representable by the index type.
 As mentioned before, the address interval of the allocated memory object may not cross the unsigned boundary of the address space.
 If one of these properties is violated, the result is undefined behavior.
