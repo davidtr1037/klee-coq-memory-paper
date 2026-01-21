@@ -154,17 +154,14 @@ This property ensures that there are no error states in the tree, and furthermor
 that every feasible successor $s'$ of any state $s$ occurring in the tree is also represented in the tree as a successor of $s$.
 Infeasible states can be ignored, as they do not represent any concrete states.
 
-In the next theorem,
-we prove that if the execution tree of the whole program satisfies the safety property described above,
-then the program is safe w.r.t. the non-speculative concrete semantics.
+The following theorem states that if the execution tree of the whole program satisfies the safety property described above,
+then the program is safe w.r.t. the concrete semantics.
 
-\begin{lemma}
-\label{lemma:safety-via-et-ns-step}
-Let $s_0 \triangleq \initsymstate(\module)$, and $l$ be a list of execution trees.
-If $\module$ is supported and $\safeet(\tree(s_0, l))$, then $\issafens(\module)$.
-\end{lemma}
-
-% theorem 2 (+ ns lemma)
+%\begin{lemma}
+%\label{lemma:safety-via-et-ns-step}
+%Let $s_0 \triangleq \initsymstate(\module)$, and $l$ be a list of execution trees.
+%If $\module$ is supported and $\safeet(\tree(s_0, l))$, then $\issafens(\module)$.
+%\end{lemma}
 
 \begin{theorem}
 \label{theorem:safety-via-et}
