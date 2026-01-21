@@ -268,18 +268,18 @@ In the following, we extend the definition given in~\cite{klee-rocq} to account 
 
 \begin{definition}
 \label{def:over-approx-state}
-Let $m$ be a structure.
+Let $m$ be a model.
 An SMT expression $e$ \emph{represents} a value $v \in \Vals$ via $m$,
 denoted by $e \overapproxvia{m} v$, if $\evalmodel{m}{e} = v$.
-A symbolic store $\symlocalstore$ \emph{represents} a concrete store $\localstore$ via $m$,
-denoted by $\symlocalstore \overapproxvia{m} \localstore$,
-if both stores are defined over the same variables and for each such variable $x$, $\mapaccess{\symlocalstore}{x} \overapproxvia{m} \mapaccess{\localstore}{x}$.
-A symbolic frame $\symstackframe{\location}{\symlocalstore}{x}$ \emph{represents} a concrete frame $\stackframe{\location}{\localstore}{x}$ via $m$
-if $\symlocalstore \overapproxvia{m} \localstore$.
-A symbolic stack $\symstack$ \emph{represents} a concrete stack $\stack$ via a structure $m$,
-denoted by $\symstack \overapproxvia{m} \stack$,
-if they are of equal size,
-and the frames of $\symstack$ represent the frames of $\stack$ via $m$, pointwise.
+%A symbolic store $\symlocalstore$ \emph{represents} a concrete store $\localstore$ via $m$,
+%denoted by $\symlocalstore \overapproxvia{m} \localstore$,
+%if both stores are defined over the same variables and for each such variable $x$, $\mapaccess{\symlocalstore}{x} \overapproxvia{m} \mapaccess{\localstore}{x}$.
+%A symbolic frame $\symstackframe{\location}{\symlocalstore}{x}$ \emph{represents} a concrete frame $\stackframe{\location}{\localstore}{x}$ via $m$
+%if $\symlocalstore \overapproxvia{m} \localstore$.
+%A symbolic stack $\symstack$ \emph{represents} a concrete stack $\stack$ via a model $m$,
+%denoted by $\symstack \overapproxvia{m} \stack$,
+%if they are of equal size,
+%and the frames of $\symstack$ represent the frames of $\stack$ via $m$, pointwise.
 A symbolic memory object $(\addr, \size, \smtarray)$ represents a memory object $(\addr, \size, \arrayvalue)$ via $m$ if
 $\arrayselect{\smtarray}{\bvconst{\indexwidth}{k}}$ represents $\arrayvalue(\valoftype{k}{\indextype})$ via $m$ for every $k$ in the range of the index type.
 A symbolic memory $\symmemory$ represents a memory $\memory$ via $m$, denoted by $\symmemory \overapproxvia{m} \memory$,
@@ -291,7 +291,7 @@ $\symstack \overapproxvia{m} \stack$,
 $\symmemory \overapproxvia{m} \memory$,
 and $\evalmodel{m}{\pc} = \true$.
 Furthermore, $s$ \emph{represents} $c$, denoted by $s \overapprox c$,
-if $s \overapproxvia{m} c$ for some structure $m$.
+if $s \overapproxvia{m} c$ for some model $m$.
 \end{definition}
 
 \begin{definition}

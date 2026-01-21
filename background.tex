@@ -453,13 +453,13 @@ Semantically,
 $\mathit{select}(a, i)$ returns the value stored at index $i$ in $a$,
 $\mathit{store}(a, i, v)$ return the array obtained from $a$ by updating the value at index $i$ to $v$,
 and $K(v)$ returns a constant array that maps all the indices to $v$.
-A \emph{structure} $m$ must map interpreted function symbols to their accepted functions over $\{0{,}1\}^w$.
+A \emph{model} $m$ must map interpreted function symbols to their accepted functions over $\{0{,}1\}^w$.
 As is typically done in the context of symbolic execution,
 we identify the $\Bool$ sort with $\mathsf{BV}[1]$,
 such that $\true$ and $\false$ correspond to $1$ and $0$, respectively.
 
 \begin{paragraph}{\textbf{Notations.}}
-We denote by $m[t]$ the interpretation of the term $t$ in a structure $m$.
-We denote by $t_1\equiv t_2$ the assertion that $m[t_1] = m[t_2]$ for any structure $m$.
+We denote by $m[t]$ the interpretation of the term $t$ in a model $m$.
+We denote by $t_1\equiv t_2$ the assertion that $m[t_1] = m[t_2]$ for any model $m$.
 We use $\arrayselect{a}{i}$ and $\arraystore{a}{i}{v}$ as shorthands for $\mathit{select}(a, i)$ and $\mathit{store}(a, i, v)$.
 \end{paragraph}
