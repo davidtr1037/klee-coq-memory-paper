@@ -79,6 +79,7 @@ Additional requirements for the $\tgep$ instruction are discussed in~\Cref{appen
 %then that index must be a constant and lie within the range of $\bvsort{64}$.
 %As a matter of notation, we say that a module is \emph{supported} if it satisfies all these assumptions.
 
+\ignore{
 \subsection{Reachability Completeness}
 \label{sec:completeness}
 
@@ -122,9 +123,7 @@ Let $c_{0} \triangleq \initstate(\module)$, and let $s_{0} \triangleq \initsymst
 If $\module$ is supported and $c_{0} \multinsstep c$,
 then there exists a symbolic state $s$ such that $s_{0} \symmultistep s$ and $s \overapprox c$.
 \end{theorem}
-
-\si{write about the additional cases introduced by the extension
-to memory operations.}
+}
 
 \subsection{Program Safety via Execution Trees}
 
