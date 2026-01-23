@@ -1,47 +1,71 @@
-\section{From Symbolic Execution to Formal Safety Proofs}
+\section{Approach}
 \label{sec:core}
 
-The framework introduced in~\cite{klee-rocq} defines
-some fundamental concepts that can be combined
-modularly and systematically into safety proofs.
-By safety proof, we mean a (machine-checkable) proof
-that the input LLVM IR module never encounters an
-error state, when evaluated according to the operational semantics defined in \Cref{sec:background}.
-This requires reasoning about the set of reachable program states, which is notoriously complex.
-Instead of conjuring a proof that directly relates (concrete) reachable states and error states,
-and to make better use of the information obtained
-from symbolic execution,
-\cite{klee-rocq} proposed a two-tier approach,
-introducing an intermediate \emph{symbolic semantics} layer.
+% required delta
+The proof logging approach presented in~\cite{klee-rocq} is restricted to a subset of \llvm with integers.
+We now outline the additional effort required to extend that approach to a subset of \llvm with memory operations.
 
-Symbolic execution is founded on the concept of
-\emph{symbolic states}---%
-program that may contain symbolic values---%
-where an interpreter manipulates these states
-in a way that is cognate to what a classical interpreter would do.
-The \emph{symbolic semantics} formalizes the
-expected behavior of such an interpreter.
-Presented with an execution trace of a specific implementation, we can then determine whether the
-engine followed the rules as dictated by the semantics.
-This provides the basis for safety proofs that
-only pertain to the symbolic states, effectively
-\emph{lifting} the proof from the concrete plane
-to the symbolic.
+% theory
+% TODO: the diff in lines is substantial
+We extend both the concrete and symbolic semantics to incorporate a memory model of \llvm and to support memory-related instructions.
+Then, we extend the proof of the supporting theory accordingly.
 
-\si{try to focus a bit}
-This framework has been previously instantiated as a proof of
-concept using a subset of LLVM IR that is 
-restricted to integeral values, and without
-dynamic memory allocation, arrays, or pointers.
-Indeed, adapting the supporting infrastructure to
-cover memory access semantic proved to be an arduous one.
-Beyond the definitions of the symbolic semantics
-corresponding to memory operations,
-the development described in this section culminates in a proof of \emph{reachability
-completeness} (\Cref{main-thm} below).
-Roughly, it claims that the set of reachable
-symbolic states sufficiently captures (over-%
-approximates) the set of concrete reachable states.
+% proof generation
+To prove that an execution tree is safe,
+we need to prove that if a symbolic state derived by the symbolic semantics is feasible,
+then it can be paired with an equivalent symbolic state in the execution tree.
+In practice, the \SE engine performs various optimizations,
+and as a result the symbolic states computed during the analysis,
+\ie the ones in the execution tree,
+may differ from those derived by the symbolic semantics.
+To facilitate proof automation,
+we introduce interface lemmas that help bridge this gap.
+
+% TODO: outline
+In~\Cref{sec:symbolic-semantics},
+we present the symbolic semantics, ...
+
+%The framework introduced in~\cite{klee-rocq} defines
+%some fundamental concepts that can be combined
+%modularly and systematically into safety proofs.
+%By safety proof, we mean a (machine-checkable) proof
+%that the input LLVM IR module never encounters an
+%error state, when evaluated according to the operational semantics defined in \Cref{sec:background}.
+%This requires reasoning about the set of reachable program states, which is notoriously complex.
+%Instead of conjuring a proof that directly relates (concrete) reachable states and error states,
+%and to make better use of the information obtained
+%from symbolic execution,
+%\cite{klee-rocq} proposed a two-tier approach,
+%introducing an intermediate \emph{symbolic semantics} layer.
+%
+%Symbolic execution is founded on the concept of
+%\emph{symbolic states}---%
+%program that may contain symbolic values---%
+%where an interpreter manipulates these states
+%in a way that is cognate to what a classical interpreter would do.
+%The \emph{symbolic semantics} formalizes the
+%expected behavior of such an interpreter.
+%Presented with an execution trace of a specific implementation, we can then determine whether the
+%engine followed the rules as dictated by the semantics.
+%This provides the basis for safety proofs that
+%only pertain to the symbolic states, effectively
+%\emph{lifting} the proof from the concrete plane
+%to the symbolic.
+%
+%\si{try to focus a bit}
+%This framework has been previously instantiated as a proof of
+%concept using a subset of LLVM IR that is 
+%restricted to integeral values, and without
+%dynamic memory allocation, arrays, or pointers.
+%Indeed, adapting the supporting infrastructure to
+%cover memory access semantic proved to be an arduous one.
+%Beyond the definitions of the symbolic semantics
+%corresponding to memory operations,
+%the development described in this section culminates in a proof of \emph{reachability
+%completeness} (\Cref{main-thm} below).
+%Roughly, it claims that the set of reachable
+%symbolic states sufficiently captures (over-%
+%approximates) the set of concrete reachable states.
 
 \input{symbolic-semantics.tex}
 
