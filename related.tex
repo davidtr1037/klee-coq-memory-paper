@@ -7,13 +7,41 @@ Lundberg et al.~\cite{lundberg2024proof} use symbolic execution to produce funct
 They devise a symbolic execution algorithm that outputs a collection of theorems that can be used to prove properties about the analysis results.
 
 % TODO: shorten
-Correnson et al.~\cite{fse23wise} formalize a Coq framework with concrete and symbolic semantics of a small prototype language.
-Based on this framework, they extract an executable OCaml implementation of a symbolic execution engine.
-Their implementation does not support memory operations, advanced search heuristics, SMT optimizations, and other performance optimizations.
-In addition, their formalization is coupled with a specific search heuristic (BFS),
-while our approach is agnostic to the underlying search heuristic.
-% TODO: do we need this one? et al.?
-The approach proposed by~\cite{icfp22:keuchel} is similar to the work mentioned above,
-but based on axiomatic semantics instead.
+Correnson et al.~\cite{fse23wise} a formally verified symbolic bug finder for a toy WHILE-style language in \coq.
+Their implementation does not support memory operations,
+and their formalization is coupled with a specific search heuristic (BFS).
+
+% TODO: needed?
+%The approach proposed by~\cite{icfp22:keuchel} is similar to the work mentioned above,
+%but based on axiomatic semantics instead.
+
+% TODO: foundational tools: WISE, Veil, Loom, ...
 
 % related: Loom -- automatic proofs, but not for a real language (Velvet).
+
+% veil
+
+% concurrent and distributed algorithms
+
+% In case automated verification fails or if the system’s description requires statements in a higher-order logic,
+% Veil provides an interactive verification mode, by virtue of being embedded in a general-purpose proof assistant.
+
+% providing both pushbutton verification for decidable fragments of first-order logic and the full power
+% of a modern higher-order proof assistant for when automation falls short.
+
+% Veil allows for seamless interaction between automated and human-assisted proofs, all done in Lean, 
+% allowing one to establish system specifications that are not expressible in first-order logic, and, thus, are beyond the reach of existing automated tools.
+
+% TODO: add citations
+Veil is a foundational program verifier developed in Lean.
+It provides automated verification for decidable fragments of first-order logic,
+and fallbacks to human-assisted ...
+% of a modern higher-order proof assistant for when automation falls short.
+
+
+% LOOM
+% foundational: provide strong guarantees that the result of successful verification they report is consistent with the runtime behaviour of the respective program that has been verified in it
+% Symbolic Execution with Angelic Non-Determinism
+
+% a Lean-based framework for implementing multimodal program verifiers that enjoy foundational correctness guarantees and provide support for automated proofs.
+% derived: veil 2 / velvet (supports arrays)

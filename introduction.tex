@@ -2,6 +2,10 @@
 
 % Context
 
+% TODO: provides a high degree of assurance
+% TODO: we are not aware of any such tool
+% TODO: The entire development of this paper comes with end-to-end correctness proofs done in Lean [37].
+
 % TODO: mention loom / velvet / ...
 % TODO: verified tool / certified tool
 % TODO: add more citations for verification?
@@ -67,7 +71,7 @@ For example, \klee~\cite{klee} uses multiple representations for memory objects,
 % theoretical foundation
 In this work,
 we apply proof logging to memory-manipulating \llvm programs,
-resulting in the first tool that can generate machined-checked safety proofs for this subset of \llvm.
+resulting in the first tool that generates machined-checked safety proofs for this subset of \llvm.
 %we extend the proof logging approach in~\cite{klee-rocq} to support memory operations.
 First, we extend the concrete and symbolic semantics to support memory-related instructions.
 Then, we extend the theoretical foundation which allows to prove program safety based on properties of execution trees.
