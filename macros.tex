@@ -136,10 +136,10 @@
 \newcommand{\evalgep}{\mathit{eval\textit{-}gep}}
 
 % general purpose
-\newcommand\moWrite[4]{#1[#2\overset{#3}{\mapsto}#4]}
 \newcommand\moRead[3]{#1[#2]^{#3}}
+\newcommand\moWrite[3]{#1[#2\mapsto#3]}
 \newcommand\heapReplace[3]{#1[#3/#2]}
-\newcommand\heapWrite[5]{\heapReplace{#1}{#2}{\moWrite{#2}{#3}{#4}{#5}}}
+\newcommand\heapWrite[4]{\heapReplace{#1}{#2}{\moWrite{#2}{#3}{#4}}}
 
 % SMT
 \newcommand{\true}{\mathit{true}}

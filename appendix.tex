@@ -65,7 +65,7 @@ If there exist $\symmo$, $\symmo'_{opt}$, and $t$ such that:
     \item $\evalexprty{e_1}{\symlocalstore}{\tau} = v$
     \item $\evalexprty{e_2}{\symlocalstore}{\bvsort{64}} = \bvconst{64}{p}$
     \item $\isinbounds{\bvval{p}{64}}{|\tau|}{\symmo}$
-    \item $\symmo'_{opt} \equiv \moWrite{\symmo}{\bvconst{64}{p}}{.}{v}$
+    \item $\symmo'_{opt} \equiv \moWrite{\symmo}{\bvconst{64}{p}}{v}$
     \item $t.\attrstate = \symstate{\nextinstr{\location}}{\symlocalstore}{\symstack}{\heapReplace{\symmemory}{\symmo}{\symmo'_{opt}}}{\pc}$
     \item $\safeet(t)$
 \end{enumerate}
