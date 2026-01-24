@@ -198,9 +198,9 @@ the bit-widths of the pointer type and the index type are denoted by \textsf{ptr
 
 \nextinstr{\location} & \mbox{next program location} \\
 \isinbounds{p}{\tau}{\mo} & \mbox{interval $[p,p+\sizeof{\tau})$ is contained within the address interval of $\mo$} \\
-\moRead{\mo}{p}{\tau}   & \mbox{read a value of type $\tau$ from memory object $\mo$ starting from byte address $p$} \\
-\moWrite{\mo}{p}{\tau}{v} & \mbox{write value $v$ of type $\tau$ into memory object $\mo$ at byte address $p$} \\
-\heapReplace{\memory}{\mo}{\mo'} & \mbox{replace memory object $\mo$ with $mo'$ ($\scriptstyle \memory\setminus\{\mo\}\cup\{\mo'\}$)}
+\moRead{\mo}{p}{\tau}   & \mbox{read a value of type $\tau$ from memory object $\mo$ starting from address $p$} \\
+\moWrite{\mo}{p}{\tau}{v} & \mbox{write value $v$ of type $\tau$ into memory object $\mo$ at address $p$} \\
+\heapReplace{\memory}{\mo}{\mo'} & \mbox{update $\memory$ by replacing memory object $\mo$ with $mo'$}
 \end{array}
 $}
 \end{array}
@@ -252,7 +252,7 @@ Therefore, we leave the modeling of such allocators to future work.
 %A location $\location\in\Locs$ is specified by a function identifier, block identifier, instruction index,
 %and an optional previous-block identifier.
 A \emph{concrete state} is a tuple $\progstate{\location}{\localstore}{\stack}{\memory}$,
-where $\location \in \Locs$ is a location,
+where $\location \in \Locs$ is a program location,
 $\localstore \in \Stores$ is a \emph{local store} that maps variables to values in $\Vals$,
 $\stack \in (\Locs \times \Stores \times \Ids)^{*}$ is a call stack represented as a sequence of frames,
 and $\memory \in (\MemoryObjects)^{*}$ is a sequence of memory objects.
@@ -350,22 +350,18 @@ Then $c$ is an error state, denoted by $\errorstate(c)$, if one of the following
     \end{enumerate}
     \item $\instrat{\location} = \textup{$\codequote{x \ \texttt{=} \ \tcall^{\pointertypeof{\bvsort{8}}} \ \intrinsicfunc{malloc}(\bvsort{64} \ e)}$}$,
           and \textup{$\evalexprty{e}{\localstore}{\bvsort{64}} > \bvval{(2^{\indexwidth - 1} - 1)}{64}$}.
-    \item $\instrat{\location} = \textup{$\codequote{\tcall~\intrinsicfunc{free}(\pointertypeof{\bvsort{8}} \ e)}$}$, \textup{$\evalexprty{e}{\localstore}{\pointertypeof{\bvsort{8}}} = p$}, and $\invalidbaseaddress(\memory, p)$.
-    \item $\instrat{\location} = \textup{$\codequote{x \ \texttt{=} \ \tload^{\tau} \ e}$}$, \textup{$\evalexprty{e}{\localstore}{\pointertypeof{\tau}} = p$}, and $\invalidpointer(\memory, p, |\tau|)$.
-    \item $\instrat{\location} = \textup{$\codequote{\tstore^{\tau} \ e_1 \ e_2}$}$, \textup{$\evalexprty{e_2}{\localstore}{\pointertypeof{\tau}} = p$}, and $\invalidpointer(\memory, p, |\tau|)$.
+    \item $\instrat{\location} = \textup{$\codequote{\tcall~\intrinsicfunc{free}(\pointertypeof{\bvsort{8}} \ e)}$}$, \textup{$\evalexprty{e}{\localstore}{\pointertypeof{\bvsort{8}}} = p$},
+          and there is no $\mo \in \memory$ s.t. $\isbaseaddr{p}{\mo}$.
+    \item $\instrat{\location} = \textup{$\codequote{x \ \texttt{=} \ \tload^{\tau} \ e}$}$, \textup{$\evalexprty{e}{\localstore}{\pointertypeof{\tau}} = p$},
+          and there is no $\mo \in \memory$ s.t. $\isinbounds{p}{|\tau|}{\mo}$.
+    \item $\instrat{\location} = \textup{$\codequote{\tstore^{\tau} \ e_1 \ e_2}$}$, \textup{$\evalexprty{e_2}{\localstore}{\pointertypeof{\tau}} = p$},
+          and there is no $\mo \in \memory$ s.t. $\isinbounds{p}{|\tau|}{\mo}$.
     % TODO: $|\overline{(\tau_i, e_i)}| > 0$
     \item $\instrat{\location} = \textup{$\codequote{x \ \texttt{=} \ \tgep~\pointertypeof{\tau} \ e \ \overline{(\tau_i, e_i)}}$}$, and:
     \begin{enumerate}
         \item \textup{$\evalexprty{e}{\localstore}{\pointertypeof{\tau}} = p$}, $\evalexprty{e_i}{\localstore}{\tau_i} = j_i$, and $\evalgep(\tau, p, \overline{j_i}) = \tpoison$.
     \end{enumerate}
 \end{enumerate}
-where:
-\[
-\begin{array}{ll}
-    \invalidpointer(\memory, p, n) & \triangleq \forall \mo \in \memory. \ \neg \isinbounds{p}{n}{\mo} \\
-    \invalidbaseaddress(\memory, p) & \triangleq \forall \mo \in \memory. \ \neg \isbaseaddr{p}{\mo}
-\end{array}
-\]
 \end{definition}
 
 \begin{definition}
