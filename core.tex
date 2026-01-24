@@ -1,11 +1,9 @@
 \section{Approach}
 \label{sec:core}
 
-% required delta
 The proof logging approach presented in~\cite{klee-rocq} is restricted to a subset of \llvm with integers.
 We now outline the additional effort required to extend that approach to a subset of \llvm with memory operations.
 
-% theory
 % TODO: the diff in lines is substantial
 We extend both the concrete and symbolic semantics to incorporate a memory model of \llvm and to support memory-related instructions.
 Then, we extend the proof of the supporting theory accordingly.
@@ -21,9 +19,12 @@ may differ from those derived by the symbolic semantics.
 To facilitate proof automation,
 we introduce interface lemmas that help bridge this gap.
 
-% TODO: outline
 In~\Cref{sec:symbolic-semantics},
-we present the symbolic semantics, ...
+we present our extended symbolic semantics.
+In~\Cref{sec:program-safety},
+we formalize the main theorem of our supporting theory.
+In~\Cref{sec:proof-generation},
+we present the extended instrumentation of the \SE engine.
 
 %The framework introduced in~\cite{klee-rocq} defines
 %some fundamental concepts that can be combined
@@ -126,6 +127,7 @@ then there exists a symbolic state $s$ such that $s_{0} \symmultistep s$ and $s 
 }
 
 \subsection{Program Safety via Execution Trees}
+\label{sec:program-safety}
 
 An execution tree is a data structure that records the paths explored during the analysis of a given program.
 In the following, we rely on its definition from~\cite{klee-rocq} (Section 3.4).
