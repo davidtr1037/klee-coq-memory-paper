@@ -4,9 +4,12 @@
 The proof logging approach presented in~\cite{klee-rocq} is restricted to a subset of \llvm with integers.
 We now outline the additional effort required to extend that approach to a subset of \llvm with memory operations.
 
-% TODO: the diff in lines is substantial
 We extend both the concrete and symbolic semantics to incorporate a memory model of \llvm and to support memory-related instructions.
 Then, we extend the proof of the supporting theory accordingly.
+Indeed, extending the supporting theory proved to arduous:
+The original formalization in~\cite{klee-rocq} consists of roughly 18,000 lines,
+whereas our extended formalization consists of roughly 40,000 lines,
+representing a substantial additioanl effort.
 
 % proof generation
 To prove that an execution tree is safe,
