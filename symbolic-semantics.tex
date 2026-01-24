@@ -163,7 +163,7 @@ and $\rangecond$ denotes that the interval $[p, p + n)$ is fully contained withi
   \symstate{\nextinstr{\location}}{\symlocalstore}{\symstack}{\heapWrite{\symmemory}{\symmo}{p}{\tau}{v}}{\pc \land \rangecond(p, |\tau|, \symmo)}
 }
 \\[1em]
-\ruledefsmall{GetElementPtr}{
+\ruledefsmall{GEP}{
   \instrat{\location} = \codequote{x~\texttt{=}~\tgep~\pointertypeof{\tau}~e~\overline{(\tau_i, e_i)}} \quad
   |\overline{(\tau_i, e_i)}| > 0 \quad
   \evalexprty{e}{\symlocalstore}{\pointertypeof{\tau}} = p \quad

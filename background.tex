@@ -179,7 +179,7 @@ the bit-widths of the pointer type and the index type are denoted by \textsf{ptr
   \progstate{\nextinstr{\location}}{\localstore}{\stack}{\heapWrite{\memory}{\mo}{p}{\tau}{v}}
 }
 \\[1em]
-\ruledefsmall{GetElementPtr}{
+\ruledefsmall{GEP}{
   \instrat{\location} = \codequote{x~\texttt{=}~\tgep~\pointertypeof{\tau}~e~\overline{(\tau_i, e_i)}} \quad
   |\overline{(\tau_i, e_i)}| > 0 \quad
   \evalexprty{e}{\localstore}{\pointertypeof{\tau}} = p \quad
