@@ -65,8 +65,8 @@ If there exist $\symmo$, $\symmo'_{opt}$, and $t$ such that:
     \item $\evalexprty{e_1}{\symlocalstore}{\tau} = v$
     \item $\evalexprty{e_2}{\symlocalstore}{\bvsort{64}} = \bvconst{64}{p}$
     \item $\isinbounds{\bvval{p}{64}}{|\tau|}{\symmo}$
-    \item $\symmo'_{opt} \equiv \writemo(\symmo, \bvconst{64}{p}, v)$
-    \item $t.\attrstate = \symstate{\nextinstr{\location}}{\symlocalstore}{\symstack}{\replace(\symmemory, \symmo'_{opt})}{\pc}$
+    \item $\symmo'_{opt} \equiv \moWrite{\symmo}{\bvconst{64}{p}}{.}{v}$
+    \item $t.\attrstate = \symstate{\nextinstr{\location}}{\symlocalstore}{\symstack}{\heapReplace{\symmemory}{\symmo}{\symmo'_{opt}}}{\pc}$
     \item $\safeet(t)$
 \end{enumerate}
 then $\safeet(\tree(s, [t]))$.
@@ -97,7 +97,7 @@ If there exist $\symmo$, $\symlocalstore'_{opt}$, and $t$ such that:
     \item $\symmo \in \symmemory$
     \item $\evalexprty{e}{\symlocalstore}{\bvsort{64}} = p$
     \item $\unsat(\pc \land \neg \rangecond(p, |\tau|, \symmo))$
-    \item $\symlocalstore[x \mapsto \readmo(\symmo, p, |\tau|)] \equiv \symlocalstore'_{opt}$
+    \item $\symlocalstore[x \mapsto \moRead{\symmo}{p}{\tau}] \equiv \symlocalstore'_{opt}$
     \item $t.\attrstate = \symstate{\nextinstr{\location}}{\symlocalstore'_{opt}}{\symstack}{\symmemory}{\pc}$
     \item $\safeet(t)$
 \end{enumerate}
