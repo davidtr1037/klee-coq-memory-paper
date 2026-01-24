@@ -2,8 +2,8 @@
 \subsection{Proof Generation}
 \label{sec:proof-generation}
 
-\Cref{theorem:safety-via-et} implies that if there exists an execution tree that satisfies the premise of the theorem,
-then we can obtain a safety proof for the input program.
+\Cref{theorem:safety-via-et} implies that the existence of a safe execution tree guarantees program safety.
+This result is crucial, as it provides the foundation for constructing safety proofs.
 In this section, we show how to compute such execution trees and how to prove their desired properties.
 % TODO: mention the section?
 Our approach is based on~\cite{klee-rocq}, which works as an instrumentation of the \SE engine, and we extend it to support memory operations.
