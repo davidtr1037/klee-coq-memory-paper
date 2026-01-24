@@ -323,14 +323,14 @@ the indexed type of the second index is the element type of the base pointer typ
 %the second index is indexed into the element type of the base pointer type, \etc
 The first indexed type must be a pointer type, and subsequent types can be either array types or struct types.
 
-We now describe the semantics of $\tgep$ in more detail.
+We now describe the semantics of $\tgep$ in more detail.\footnote{A pseudo-code is given in~\Cref{appendix:concrete-semantics}.}
 All the indices are first converted to values of the index type (sign-extended or truncated), and then translated into offsets.
 The first index $j_0$ is used to move accross the elements corresponding to the base pointer type,
 so it is multiplied by the type size of the element type of the base pointer type.
 The remaining indices $\overline{j}$ are translated into offsets based on the indexed type.
 If the indexed type is an array type,
 then the index is multiplied by the type size of the indexed type.
-If the indexed type is a struct type\footnote{The pseudo-code for this case is not shown due to space limitations.},
+If the indexed type is a struct type,
 then the index is translated into a field selector.
 The computed offsets are sequentially summed up,
 and then the resulting offset is converted to the pointer type and added to the base pointer $p$.
