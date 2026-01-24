@@ -327,11 +327,11 @@ The computed offsets are sequentially summed up,
 and then the resulting offset is converted to the pointer type and added to the base pointer.
 
 The $\tgep$ instruction may have attributes (\opcode{nuw}, \opcode{nusw}, and \opcode{inbounds}) that impose additional rules.
-For example, if the \opcode{nuw} attribute is enabled, then the following must hold:
+For example, when the \opcode{nuw} attribute is enabled, the following conditions must hold:
 (1) if the type of an index is larger than the index type, the truncation to the index type must preserve the unsigned value,
-(2) the multiplication of an index by the type size does not wrap the index type in an unsigned sense, and
-(3) the successive addition of each offset does not wrap the index type in an unsigned sense.
-If one of these conditions is violated, the result is $\tpoison$.
+(2) the multiplication of an index by the type size does not cause an unsigned overflow of the index type, and
+(3) the successive addition of each offset does not cause an unsigned overflow of the index type.
+If any of these conditions is violated, the result is $\tpoison$.
 
 In the following,
 we define when a concrete state is considered to be an error state.
