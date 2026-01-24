@@ -44,11 +44,11 @@ $
 In this paper,
 we focus on a subset of \llvm IR with memory operations, whose syntax is given in~\Cref{figure:llvm-syntax}.
 Integers are represented as bit-vectors of type $\bvsort{w}$, where \textsf{w} denotes the bit width.
-% TODO: the width of the pointer itself is fixed
-% TODO: mention the pointer index type?
 Array types are parametrized by an element type $\tau$ and a dimension $n$,
 while struct types are parametrized by a sequence of field types.
-We use the notation $\bvval{n}{w}$ to denote an integer value of type $\bvsort{$w$}$ whose (signed or unsigned) numerical value is $n$.
+We define $\Vals^{\bvsort{w}}$ as the set of all bit-vectors of type $\bvsort{w}$,
+including the special values $\tundef$ and $\tpoison$, which are defined in the \llvm reference.
+We use the notation $\bvval{n}{w}$ to denote a bit-vector of type $\bvsort{$w$}$ whose (signed or unsigned) numerical value is $n$.
 
 \subsubsection{\textit{LLVM Memory Model.}}
 
