@@ -271,11 +271,11 @@ as the rules for other instructions (assignments, branches, \etc) were already d
 
 
 \subsubsection{\textit{Malloc.}}
-When allocating a memory object\footnote{
+When allocating a memory object,
+the size of the allocation must be non-negative and must not exceed the largest signed integer representable by the index type.\footnote{
 The semantics presented in the paper consider only heap allocations.
 However, our implementation supports stack and global allocations as well.
-},
-the size of the allocation must be non-negative and must not exceed the largest signed integer representable by the index type.
+}
 As mentioned before, the address interval of the allocated memory object may not cross the unsigned boundary of the address space.
 If one of these properties is violated, the result is undefined behavior.
 The mapping of the newly allocated memory object is set to a function that maps all the indices to $\bvval{0}{8}$.
