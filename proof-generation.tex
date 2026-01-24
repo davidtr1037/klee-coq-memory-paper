@@ -201,7 +201,7 @@ s' \triangleq \symstate
     {\location_9}
     {\{ ..., \nameid{gep1} \mapsto \bvconst{64}{\addr} \}}
     {[]}
-    {[\writemo(\symmo', \bvconst{64}{\addr}, \bvconst{8}{7})]}
+    {[\moWrite{\symmo'}{\bvconst{64}{\addr}}{\bvsort{8}}{\bvconst{8}{7}}]}
     {n < \bvconst{32}{2} \land \rangecond(\bvconst{64}{\addr}, 1, \symmo'))}
 \]
 %where:
@@ -212,7 +212,7 @@ it must hold that $\symmo' = \symmo$, since $\bvconst{64}{\addr}$ is a constant 
 Therefore, although the \rulenameref{Store} rule may have multiple derivations in general,
 there is a single derivation in this case.
 In particular, it also implies that:
-\[ \writemo(\symmo', \bvconst{64}{\addr}, \bvconst{8}{7}) = (\bvval{\addr}{64}, \bvval{2}{32}, \arraystore{\smtarray}{(\bvextract_{32}(\bvsub(\bvconst{64}{\addr}, \bvconst{64}{\addr})))}{\bvconst{8}{7}}) \]
+\[ \moWrite{\symmo'}{\bvconst{64}{\addr}}{\bvsort{8}}{\bvconst{8}{7}} = (\bvval{\addr}{64}, \bvval{2}{32}, \arraystore{\smtarray}{(\bvextract_{32}(\bvsub(\bvconst{64}{\addr}, \bvconst{64}{\addr})))}{\bvconst{8}{7}}) \]
 
 On the other side, the symbolic state computed by the \SE engine is:
 \[
