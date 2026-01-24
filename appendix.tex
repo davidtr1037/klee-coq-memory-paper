@@ -3,6 +3,45 @@
 If the indexed type of a given index in a $\tgep$ instruction is a struct type,
 then that index must be a constant and lie within the range of $\bvsort{64}$.
 
+\section{Concrete Semantics}
+The semantics of the $\tgep$ instruction is given in~\Cref{alg:gep}.
+
+\begin{algorithm}[t]
+\caption{The semantics of $\tgep$ (without attributes).}
+\label{alg:gep}
+\begin{algorithmic}[1]
+
+\Function{compute-offset}{$\tau, o, \overline{j}$}
+    \If {$|\overline{j}| = 0$}
+        \State \Return $o$
+    \EndIf
+    \State $\overline{j} \gets j_1 :: \overline{j'}$
+    \If {$\tau = \arraytype{\tau'}{n}$}
+        \State $o \gets o + \convert_{\indextype}(j_1) \cdot \valoftype{|\tau'|}{\indextype}$ \label{line:array-index}
+        \State \Return \Call{compute-offset}{$\tau', o, \overline{j'}$}
+    \EndIf
+    \If {$\tau = \structtype{\tau}{n}$}
+        \State ...
+    \EndIf
+    \State ...
+\EndFunction
+
+\Function{eval\_gep}{$\tau, p, \overline{j}$}
+    \If {$\tpoison \in \overline{j}$}
+        \State \Return $\tpoison$
+    \EndIf
+    \If {$\tundef \in \overline{j}$}
+        \State \Return $\tundef$
+    \EndIf
+    \State $j_0 :: \overline{j} \gets \overline{j}$
+    \State $o \gets \convert_{\indextype}(j_0) \cdot \valoftype{|\tau|}{\indextype}$ \label{line:first-index}
+    \State $r \gets \Call{compute-offset}{\tau, o, \overline{j}}$
+    \State \Return $p + \zeroext_{\pointertype}(r)$
+\EndFunction
+
+\end{algorithmic}
+\end{algorithm}
+
 \section{Interface Lemmas}
 
 \begin{definition}

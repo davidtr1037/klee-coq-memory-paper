@@ -309,47 +309,8 @@ Otherwise, we use the \textit{write} procedure to store the value $v$.
 This procedure serializes the value $v$ into a sequence of bytes and updates the array $\arrayvalue$ accordingly.
 
 \subsubsection{\textit{GetElementPtr.}}
-% TODO: mention flags (nuw, nusw, inbounds)
 % TODO: address --> pointer?
 % TODO: index / offset
-% TODO: link to the lines
-
-\begin{algorithm}[t]
-\caption{The semantics of $\tgep$ (without attributes).}
-\label{alg:gep}
-\begin{algorithmic}[1]
-
-\Function{compute-offset}{$\tau, o, \overline{j}$}
-    \If {$|\overline{j}| = 0$}
-        \State \Return $o$
-    \EndIf
-    \State $\overline{j} \gets j_1 :: \overline{j'}$
-    \If {$\tau = \arraytype{\tau'}{n}$}
-        \State $o \gets o + \convert_{\indextype}(j_1) \cdot \valoftype{|\tau'|}{\indextype}$ \label{line:array-index}
-        \State \Return \Call{compute-offset}{$\tau', o, \overline{j'}$}
-    \EndIf
-    \If {$\tau = \structtype{\tau}{n}$}
-        \State ...
-    \EndIf
-    \State ...
-\EndFunction
-
-\Function{eval\_gep}{$\tau, p, \overline{j}$}
-    \If {$\tpoison \in \overline{j}$}
-        \State \Return $\tpoison$
-    \EndIf
-    \If {$\tundef \in \overline{j}$}
-        \State \Return $\tundef$
-    \EndIf
-    \State $j_0 :: \overline{j} \gets \overline{j}$
-    \State $o \gets \convert_{\indextype}(j_0) \cdot \valoftype{|\tau|}{\indextype}$ \label{line:first-index}
-    \State $r \gets \Call{compute-offset}{\tau, o, \overline{j}}$
-    \State \Return $p + \zeroext_{\pointertype}(r)$
-\EndFunction
-
-\end{algorithmic}
-\end{algorithm}
-
 
 The $\tgep$ instruction computes the address of a subelement of an aggregate data structure (array, struct, \etc.).
 Note that it only performs address calculations without accessing the memory.
@@ -362,13 +323,13 @@ the indexed type of the second index is the element type of the base pointer typ
 %the second index is indexed into the element type of the base pointer type, \etc
 The first indexed type must be a pointer type, and subsequent types can be either array types or struct types.
 
-The semantics of $\tgep$ is given in~\Cref{alg:gep}.
+We now describe the semantics of $\tgep$ in more detail.
 All the indices are first converted to values of the index type (sign-extended or truncated), and then translated into offsets.
 The first index $j_0$ is used to move accross the elements corresponding to the base pointer type,
-so it is multiplied by the type size of the element type of the base pointer type (\cref{line:first-index}).
+so it is multiplied by the type size of the element type of the base pointer type.
 The remaining indices $\overline{j}$ are translated into offsets based on the indexed type.
 If the indexed type is an array type,
-then the index is multiplied by the type size of the indexed type (\cref{line:array-index}).
+then the index is multiplied by the type size of the indexed type.
 If the indexed type is a struct type\footnote{The pseudo-code for this case is not shown due to space limitations.},
 then the index is translated into a field selector.
 The computed offsets are sequentially summed up,
