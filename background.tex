@@ -310,7 +310,9 @@ This procedure serializes the value $v$ into a sequence of bytes and updates the
 
 \subsubsection{\textit{GetElementPtr.}}
 
-The $\tgep$ instruction computes the address of a subelement of an aggregate data structure (array, struct, \etc.).\footnote{A pseudo-code is given in~\Cref{appendix:concrete-semantics}.}
+The $\tgep$ instruction computes the address of a subelement of an aggregate data structure (array, struct, \etc.).\footnote{
+\Cref{appendix:concrete-semantics} provides the pseudo-code of the semantics, defined as the function $\evalgep$.
+}
 The first argument is the base pointer to start from,
 and the remaining arguments are indices that indicate which of the elements of the aggregate object are indexed.
 All the indices are first converted to values of the index type (sign-extended or truncated), and then translated into offsets.
