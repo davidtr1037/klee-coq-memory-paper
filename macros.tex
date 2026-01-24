@@ -130,22 +130,18 @@
 \newcommand{\signext}{\mathit{signext}}
 \newcommand{\convert}{\mathit{convert}}
 \newcommand{\sizeof}[1]{{\texttt{sizeof(}{#1}\texttt{)}}}
-%\newcommand{\isbaseaddr}[2]{#1 \rightsquigarrow #2}
 \newcommand{\isbaseaddr}[2]{#2 = \mobj{#1}{\_}{\_}}
-%\newcommand{\isinbounds}[3]{\mathit{is\_inbounds}(#1, #2 #3)}
 \newcommand{\isinbounds}[3]{#1 \overset{#2}{\rightsquigarrow} #3}
 \newcommand{\invalidpointer}{\mathit{invalid\textit{-}pointer}}
 \newcommand{\invalidbaseaddress}{\mathit{invalid\textit{-}base\textit{-}address}}
 \newcommand{\allocate}{\mathit{allocate}}
-\newcommand{\replace}{\mathit{replace}}
-\newcommand{\readmo}{\mathit{read}}
-\newcommand{\writemo}{\mathit{write}}
 \newcommand{\evalgep}{\mathit{eval\textit{-}gep}}
 
+% general purpose
 \newcommand\moWrite[4]{#1[#2\overset{#3}{\mapsto}#4]}
 \newcommand\moRead[3]{#1[#2]^{#3}}
-\newcommand\heapRpl[3]{#1[#3/#2]}
-\newcommand\heapWrite[5]{\heapRpl{#1}{#2}{\moWrite{#2}{#3}{#4}{#5}}}
+\newcommand\heapReplace[3]{#1[#3/#2]}
+\newcommand\heapWrite[5]{\heapReplace{#1}{#2}{\moWrite{#2}{#3}{#4}{#5}}}
 
 % SMT
 \newcommand{\true}{\mathit{true}}
@@ -191,15 +187,15 @@
 \newcommand{\smtarray}{\tilde{a}}
 \newcommand{\symmo}{\widetilde{\mathit{mo}}}
 \newcommand{\symmemory}{\tilde{\mu}}
-%\newcommand{\symisinbounds}[4]{\mathit{is\_inbounds}(#1, #2, #3, #4)}
+\newcommand{\symisbaseaddr}[3]{#2 = \mobj{#3[#1]}{\_}{\_}}
 \newcommand{\symisinbounds}[4]{#4[#1] \overset{#2}\rightsquigarrow #3}
-%\newcommand{\symisbaseaddr}[3]{#3[#1] \rightsquigarrow #2}
-\newcommand{\symisbaseaddr}[3]{#3[#1] \rightsquigarrow #2}
 \newcommand{\baseaddrcond}{\mathit{bc}}
 \newcommand{\rangecond}{\mathit{rc}}
 \newcommand{\syminvalidpointer}{\mathit{invalid\_pointer}}
 \newcommand{\syminvalidbaseaddress}{\mathit{invalid\_base\_address}}
 \newcommand{\overflowcond}{\mathit{overflow}}
+\newcommand{\symallocate}{\mathit{allocate}}
+\newcommand{\symevalgep}{\mathit{eval\textit{-}gep}}
 
 % execution tree
 \newcommand{\equivstate}{\equiv}

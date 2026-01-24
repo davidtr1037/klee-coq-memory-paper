@@ -114,7 +114,7 @@ and $\rangecond$ denotes that the interval $[p, p + n)$ is fully contained withi
 \ruledefsmall{Malloc}{
   \instrat{\location} = \codequote{x~\texttt{=}~\tcall^{\pointertypeof{\bvsort{8}}}~\intrinsicfunc{malloc}(\bvsort{64} ~ e)} \quad
   \evalexprty{e}{\symlocalstore}{\bvsort{64}} = n \quad
-  \allocate(\symmemory, \bvextract_{\indexwidth}(n)) = (\symmemory', p) \quad
+  \symallocate(\symmemory, \bvextract_{\indexwidth}(n)) = (\symmemory', p) \quad
 }
 {
   \symstate{\location}{\symlocalstore}{\symstack}{\symmemory}{\pc}
@@ -141,13 +141,12 @@ and $\rangecond$ denotes that the interval $[p, p + n)$ is fully contained withi
   \evalexprty{e}{\symlocalstore}{\pointertypeof{\tau}} = p \quad
   m \models \pc \quad
   \symmo \in \symmemory \quad
-  \symisinbounds{p}{|\tau|}{mo}{m} \quad
-  \readmo(\symmo, p, |\tau|) = v \quad
+  \symisinbounds{p}{|\tau|}{mo}{m}
 }
 {
   \symstate{\location}{\symlocalstore}{\symstack}{\symmemory}{\pc}
   \symstep
-  \symstate{\nextinstr{\location}}{\symlocalstore[x \mapsto v]}{\symstack}{\symmemory}{\pc \land \rangecond(p, |\tau|, \symmo)}
+  \symstate{\nextinstr{\location}}{\symlocalstore[x \mapsto \moRead{\symmo}{p}{\tau}]}{\symstack}{\symmemory}{\pc \land \rangecond(p, |\tau|, \symmo)}
 }
 \\[1em]
 \ruledefsmall{Store}{
@@ -156,27 +155,24 @@ and $\rangecond$ denotes that the interval $[p, p + n)$ is fully contained withi
   \evalexprty{e_2}{\symlocalstore}{\pointertypeof{\tau}} = p \quad
   m \models \pc \quad
   \symmo \in \symmemory \quad
-  \symisinbounds{p}{|\tau|}{mo}{m} \quad
-  \writemo(\symmo, p, v) = \symmo' \quad
-  \replace(\symmemory, \symmo') = \symmemory'
+  \symisinbounds{p}{|\tau|}{mo}{m}
 }
 {
   \symstate{\location}{\symlocalstore}{\symstack}{\symmemory}{\pc}
   \symstep
-  \symstate{\nextinstr{\location}}{\symlocalstore}{\symstack}{\symmemory'}{\pc \land \rangecond(p, |\tau|, \symmo)}
+  \symstate{\nextinstr{\location}}{\symlocalstore}{\symstack}{\heapWrite{\symmemory}{\symmo}{p}{\tau}{v}}{\pc \land \rangecond(p, |\tau|, \symmo)}
 }
 \\[1em]
 \ruledefsmall{GetElementPtr}{
   \instrat{\location} = \codequote{x~\texttt{=}~\tgep~\pointertypeof{\tau}~e~\overline{(\tau_i, e_i)}} \quad
   |\overline{(\tau_i, e_i)}| > 0 \quad
   \evalexprty{e}{\symlocalstore}{\pointertypeof{\tau}} = p \quad
-  \evalexprty{e_i}{\symlocalstore}{\tau_i} = t_i \quad
-  \evalgep(\tau, p, \overline{t_i}) = v
+  \evalexprty{e_i}{\symlocalstore}{\tau_i} = t_i
 }
 {
   \symstate{\location}{\symlocalstore}{\symstack}{\symmemory}{\pc}
   \symstep
-  \symstate{\nextinstr{\location}}{\symlocalstore[x \mapsto v]}{\symstack}{\symmemory}{\pc}
+  \symstate{\nextinstr{\location}}{\symlocalstore[x \mapsto \symevalgep(\tau, p, \overline{t_i})]}{\symstack}{\symmemory}{\pc}
 }
 \end{array}
 \]
