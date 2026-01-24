@@ -14,6 +14,7 @@ representing a substantial additional effort.
 % proof generation
 To prove that an execution tree is safe,
 we need to prove that if a symbolic state derived by the symbolic semantics is feasible,
+\ie its path constraints are satisfiable,
 then it can be paired with an equivalent symbolic state in the execution tree.
 In practice, the \SE engine performs various optimizations,
 and as a result the symbolic states computed during the analysis,
