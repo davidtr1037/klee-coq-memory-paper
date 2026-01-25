@@ -1,11 +1,22 @@
-\section{Proof Logging via Symbolic Execution}
+\section{Symbolic-Execution Proof-Logging Framework}
 \label{sec:overview}
 
 % TODO: and also show the required delta to support ...
 In this section, we give an overview of the proof logging approach presented in~\cite{klee-rocq},
 which generates machine-checked safety proofs using symbolic execution.
 
-\si{Define what it means for a program to be safe (without going into the details of what an error state is)}
+%\si{Define what it means for a program to be safe (without going into the details of what an error state is)}
+
+\begin{paragraph}{\bf Program safety.~}
+For a program to be \emph{safe} it is required that no
+execution of the program lead to so-called
+\emph{error states}.
+To make such claims formally, \cite{klee-rocq} defines
+a concrete semantics of (a subset of) \llvm IR, based
+on Vellum~\cite{vellum}. This comprises of a definition
+of the space of concrete states $\Sigma$ and a small-step relation ${\to} \subseteq \Sigma^2$.
+It then defines the subset of error states, which intuitively consists of states where an invalid operation is about to take place, or where a user-defined assertion is violated.
+\end{paragraph}
 
 \si{explain that the artifact from the SE is an execution tree}
 
