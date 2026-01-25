@@ -357,7 +357,7 @@ Then $c$ is an error state, denoted by $\errorstate(c)$, if one of the following
     \item $\instrat{\location} = \textup{$\codequote{\tstore^{\tau} \ e_1 \ e_2}$}$, \textup{$\evalexprty{e_2}{\localstore}{\pointertypeof{\tau}} = p$},
           and there is no $\mo \in \memory$ s.t. $\isinbounds{p}{|\tau|}{\mo}$.
     % TODO: $|\overline{(\tau_i, e_i)}| > 0$
-    \item $\instrat{\location} = \textup{$\codequote{x \ \texttt{=} \ \tgep~\pointertypeof{\tau} \ e \ \overline{(\tau_i, e_i)}}$}$, and:
+    \item $\instrat{\location} = \textup{$\codequote{x \ \texttt{=} \ \tgep~\pointertypeof{\tau} \ e \ \overline{(\tau_i, e_i)}}$}$ and:
     \begin{enumerate}
         \item \textup{$\evalexprty{e}{\localstore}{\pointertypeof{\tau}} = p$}, $\evalexprty{e_i}{\localstore}{\tau_i} = j_i$, and $\evalgep(\tau, p, \overline{j_i}) = \tpoison$.
     \end{enumerate}
@@ -366,11 +366,11 @@ Then $c$ is an error state, denoted by $\errorstate(c)$, if one of the following
 
 \begin{definition}
 \label{def:safety}
-Let $f$ be the entry function in the module $\module$.
-The \emph{initial state} is defined as:
-\[ \initstate(\module) \triangleq \progstate{f\hspace{-2pt}.\funcentry}{\{\}}{[]}{[]} \]
+Let $\location$ be the entry program location of the module $\module$.
+The \emph{initial state} of $\module$, denoted by $\initstate(\module)$,
+is defined as $\progstate{\location}{\{\}}{[]}{[]}$.
 Now, let $c_0 \triangleq \initstate(\module)$.
-Then $\module$ is \emph{safe}, denoted by $\issafe(\module)$, if:
+Then the module $\module$ is \emph{safe}, denoted by $\issafe(\module)$, if:
 \[ \forall c. \ c_{0} \multistep c \implies \neg \errorstate(c) \]
 (The relation $\multistep$ is the reflexive-transitive closure of the relation $\step$.)
 \end{definition}
