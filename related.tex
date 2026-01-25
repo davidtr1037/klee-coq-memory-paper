@@ -7,9 +7,9 @@ Lundberg et al.~\cite{lundberg2024proof} use symbolic execution to produce funct
 They devise a symbolic execution algorithm that outputs a collection of theorems that can be used to prove properties about the analysis results.
 
 % TODO: shorten
-Correnson et al.~\cite{fse23wise} a formally verified symbolic bug finder for a toy WHILE-style language in \coq.
-Their implementation does not support memory operations,
-and their formalization is coupled with a specific search heuristic (BFS).
+Correnson et al.~\cite{fse23wise} develop a formally verified symbolic bug finder for a toy WHILE-style language in \coq.
+Their formalization does not support memory operations,
+and it is coupled with a specific search heuristic (BFS).
 
 % TODO: needed?
 %The approach proposed by~\cite{icfp22:keuchel} is similar to the work mentioned above,
@@ -29,7 +29,7 @@ and their formalization is coupled with a specific search heuristic (BFS).
 
 Veil~\cite{veil} is a foundational program verifier developed in Lean~\cite{moura2021lean}.
 It provides automated verification for decidable fragments of first-order logic,
-and when the automated verification fails, it fallbacks to an interactive verification mode.
+and when automation fails, it fallbacks to an interactive verification mode.
 It was evaluated on concurrent and distributed algorithms.
 
 % LOOM
@@ -41,6 +41,6 @@ and when automation fails, it fallbacks to an interactive proof mode, similarly 
 They derive two program verifiers using this framework:
 Velvet, a Dafny-style verifier for a prototype imperative language with support for arrays,
 and Veil 2.0, and extended version of Veil~\cite{veil}.
-Loom has not demonstrated on a real-world programming language with full memory support (\eg LLVM IR).
+Loom has not been demonstrated on a real-world programming language with full memory support (\eg LLVM IR).
 To the best of our knowledge,
-deriving a foundational program verifier for such programming languages requires non-trivial changes to its underlying theoretical foundations.
+deriving a foundational program verifier for such programming languages using Loom requires non-trivial changes to its underlying theoretical foundations.
