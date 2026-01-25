@@ -230,17 +230,17 @@ where $\addr$ is its base address, $\size$ is its size, and $\arrayvalue$ is a m
 A stored value can be either a value of type $\Vals^{\bvsort{8}}$ (\ie a byte) or one of the special values $\tundef$ or $\tpoison$.
 %The address space is defined by the unsigned range representable by the pointer index type.
 %Each memory object is associated with an address interval, $[\addr, \addr + \size)$.
-A heap is defined as a set of memory objects.
-We use $(\MemoryObjects)^*$ to refer to the set of possible heaps.
+A heap $\memory \in \Heaps$ is defined as a set of memory objects.
+%We use $(\MemoryObjects)^*$ to refer to the set of possible heaps.
 \end{definition}
 
 We assume an implicit \emph{allocator},
-which is a stateful function $(\MemoryObjects)^* \to \MemoryObjects$,
+which is a stateful function $\Heaps \to \MemoryObjects$,
 providing a freshly-allocated memory object whose address interval must not overlap those of existing memory objects.
 Moreover, the address interval must be fully contained within the address space, \ie $\addr + \size$ must not overflow.
 
 In this paper,
-we assume a linear allocator that allocates memory objects consecutively, while maintaining a fixed gap between,
+we assume a linear allocator that allocates memory objects consecutively, while maintaining a fixed gap between them,
 commonly referred to as a \emph{red-zone}.
 Modeling a generic allocator that allows arbitrary locations for memory objects would be far more challenging.
 First, modeling such allocators requires developing a more complex theory of memory (\Cref{sec:core}).
@@ -255,7 +255,7 @@ A \emph{concrete state} is a tuple $\progstate{\location}{\localstore}{\stack}{\
 where $\location \in \Locs$ is a program location,
 $\localstore \in \Stores$ is a \emph{local store} that maps variables to values in $\Vals$,
 $\stack \in (\Locs \times \Stores \times \Ids)^{*}$ is a call stack represented as a sequence of frames,
-and $\memory \in (\MemoryObjects)^{*}$ is a sequence of memory objects.
+and $\memory \in \Heaps$ is a heap.
 \end{definition}
 
 \Cref{figure:llvm-semantics} defines the operational small-step semantics of \llvm IR based on the syntax in~\Cref{figure:llvm-syntax}.
