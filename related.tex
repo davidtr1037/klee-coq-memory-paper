@@ -16,6 +16,8 @@ and their formalization is coupled with a specific search heuristic (BFS).
 %but based on axiomatic semantics instead.
 
 % TODO: foundational tools: WISE, Veil, Loom, ...
+% Verification tools that are proven sound in a general-purpose proof assistant with a small trusted core are commonly referred to as foundational.
+% foundational: provide strong guarantees that the result of successful verification they report is consistent with the runtime behaviour of the respective program that has been verified in it
 
 % veil
 
@@ -27,12 +29,18 @@ and their formalization is coupled with a specific search heuristic (BFS).
 
 Veil~\cite{veil} is a foundational program verifier developed in Lean~\cite{moura2021lean}.
 It provides automated verification for decidable fragments of first-order logic,
-and when the automated verification fails, it fallbacks to an interactive verification mode using the proof assistant.
+and when the automated verification fails, it fallbacks to an interactive verification mode.
 It was evaluated on concurrent and distributed algorithms.
 
 % LOOM
-% foundational: provide strong guarantees that the result of successful verification they report is consistent with the runtime behaviour of the respective program that has been verified in it
 % Symbolic Execution with Angelic Non-Determinism
 
 % a Lean-based framework for implementing multimodal program verifiers that enjoy foundational correctness guarantees and provide support for automated proofs.
 % derived: veil 2 / velvet (supports arrays)
+
+Loom~\cite{loom} is a framework that allows to construct foundational program verifiers.
+The derived program verifier provides support for proof automation using SMT solvers,
+and when automation fails, it fallbacks to an interactive proof mode, similarly to~\cite{veil}.
+They derive two program verifiers using this framework:
+Velvet, a Dafny-style verifier for a prototype imperative language with support for arrays,
+and Veil 2.0, and extended version of Veil~\cite{veil}.
