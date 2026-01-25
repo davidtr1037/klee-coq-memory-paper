@@ -17,14 +17,7 @@ and their formalization is coupled with a specific search heuristic (BFS).
 
 % TODO: foundational tools: WISE, Veil, Loom, ...
 
-% related: Loom -- automatic proofs, but not for a real language (Velvet).
-
 % veil
-
-% concurrent and distributed algorithms
-
-% In case automated verification fails or if the system’s description requires statements in a higher-order logic,
-% Veil provides an interactive verification mode, by virtue of being embedded in a general-purpose proof assistant.
 
 % providing both pushbutton verification for decidable fragments of first-order logic and the full power
 % of a modern higher-order proof assistant for when automation falls short.
@@ -32,12 +25,10 @@ and their formalization is coupled with a specific search heuristic (BFS).
 % Veil allows for seamless interaction between automated and human-assisted proofs, all done in Lean, 
 % allowing one to establish system specifications that are not expressible in first-order logic, and, thus, are beyond the reach of existing automated tools.
 
-% TODO: add citations
-Veil is a foundational program verifier developed in Lean.
+Veil~\cite{veil} is a foundational program verifier developed in Lean~\cite{moura2021lean}.
 It provides automated verification for decidable fragments of first-order logic,
-and fallbacks to human-assisted ...
-% of a modern higher-order proof assistant for when automation falls short.
-
+and when the automated verification fails, it fallbacks to an interactive verification mode using the proof assistant.
+It was evaluated on concurrent and distributed algorithms.
 
 % LOOM
 % foundational: provide strong guarantees that the result of successful verification they report is consistent with the runtime behaviour of the respective program that has been verified in it
