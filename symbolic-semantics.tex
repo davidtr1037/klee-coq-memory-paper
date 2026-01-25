@@ -259,10 +259,9 @@ since the symbolic domain does not model $\tundef$ and $\tpoison$.
 
 Informally,
 we say that a symbolic state \emph{represents} a concrete state if the latter can be obtained from the former via concretization using a model that satisfies the path constraints.
-This relation will be used to define symbolic error states (\Cref{def:sym-error-state}) and to establish reachability completeness (\Cref{sec:completeness}).
+This relation will be used to define symbolic error states (\Cref{def:sym-error-state}).
 In the following, we extend the definition given in~\cite{klee-rocq} to account for memory.
 
-\si{make this more implicit using the concept of lifting}
 \begin{definition}
 \label{def:over-approx-state}
 Let $m$ be a model.
