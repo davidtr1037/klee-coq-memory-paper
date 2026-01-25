@@ -35,12 +35,12 @@ It was evaluated on concurrent and distributed algorithms.
 % LOOM
 % Symbolic Execution with Angelic Non-Determinism
 
-% a Lean-based framework for implementing multimodal program verifiers that enjoy foundational correctness guarantees and provide support for automated proofs.
-% derived: veil 2 / velvet (supports arrays)
-
 Loom~\cite{loom-popl26} is a framework that allows to construct foundational program verifiers.
 The derived program verifier provides support for proof automation using SMT solvers,
 and when automation fails, it fallbacks to an interactive proof mode, similarly to~\cite{veil}.
 They derive two program verifiers using this framework:
 Velvet, a Dafny-style verifier for a prototype imperative language with support for arrays,
 and Veil 2.0, and extended version of Veil~\cite{veil}.
+Loom has not demonstrated on a real-world programming language with full memory support (\eg LLVM IR).
+To the best of our knowledge,
+deriving a foundational program verifier for such programming languages requires non-trivial changes to its underlying theoretical foundations.
