@@ -197,6 +197,7 @@ the bit-widths of the pointer type and the index type are denoted by \textsf{ptr
 \begin{array}{l@{\quad}l}
 
 \nextinstr{\location} & \mbox{next program location} \\
+\isbaseaddr{p}{\mo} & \mbox{$p$ is equal to the base address of $\mo$} \\
 \isinbounds{p}{\tau}{\mo} & \mbox{interval $[p,p+\sizeof{\tau})$ is contained within the address interval of $\mo$} \\
 \moRead{\mo}{p}{\tau} & \mbox{read a value of type $\tau$ from memory object $\mo$ starting from address $p$} \\
 \moWrite{\mo}{p}{v} & \mbox{write value $v$ into memory object $\mo$ at address $p$} \\

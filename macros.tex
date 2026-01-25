@@ -126,7 +126,7 @@
 \newcommand{\signext}{\mathit{signext}}
 \newcommand{\convert}{\mathit{convert}}
 \newcommand{\sizeof}[1]{{\texttt{sizeof(}{#1}\texttt{)}}}
-\newcommand{\isbaseaddr}[2]{#2 = \mobj{#1}{\_}{\_}}
+\newcommand{\isbaseaddr}[2]{#1 \overset{\scriptstyle{!}}{\rightsquigarrow} #2}
 \newcommand{\isinbounds}[3]{#1 \overset{#2}{\rightsquigarrow} #3}
 \newcommand{\allocate}{\mathit{allocate}}
 \newcommand{\evalgep}{\mathit{eval\textit{-}gep}}
