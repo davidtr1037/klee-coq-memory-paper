@@ -127,13 +127,12 @@ and $\rangecond$ denotes that the interval $[p, p + n)$ is fully contained withi
   \evalexprty{e}{\symlocalstore}{\pointertypeof{\bvsort{8}}} = p \quad
   m \models \pc \quad
   \symmo \in \symmemory \quad
-  \symisbaseaddr{p}{mo}{m} \quad
-  \mathit{remove}(\symmemory, \symmo) = \symmemory'
+  \symisbaseaddr{p}{mo}{m}
 }
 {
   \symstate{\location}{\symlocalstore}{\symstack}{\symmemory}{\pc}
   \symstep
-  \symstate{\nextinstr{\location}}{\symlocalstore}{\symstack}{\symmemory'}{\pc \land \baseaddrcond(p, \symmo)}
+  \symstate{\nextinstr{\location}}{\symlocalstore}{\symstack}{\symmemory \setminus \{\symmo\}}{\pc \land \baseaddrcond(p, \symmo)}
 }
 \\[1em]
 \ruledefsmall{Load}{
