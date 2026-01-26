@@ -107,10 +107,10 @@ since we create smaller proofs which mainly rely on simple tactics such as \text
 Now, we will show how to define such interface lemmas,
 and how to apply them in the context of the example from~\Cref{figure:example-llvm}.
 In this section, we will focus on memory-related instructions.
-We denote by $\location_n$ the program location that corresponds to line $n$ from~\Cref{figure:example-llvm}.
+We denote by $\location_n$ the program location that corresponds to line $n$ in~\Cref{figure:example-llvm}.
 
 \subsubsection{\textit{Example: Malloc.}}
-The initial symbolic state:
+The initial symbolic state at~\cref{line:llvm-malloc} is:
 \[
 s \triangleq \symstate
     {\location_3}
@@ -181,7 +181,7 @@ the interface lemmas for the rest of the examples are defined in the appendix (\
 % TODO: explain how to prove that this is not an error state
 % TODO: the type is i8, so we add a single store expression
 % TODO: fix the index expression
-The initial symbolic state:
+The initial symbolic state at~\cref{line:llvm-store} is:
 \[
 s \triangleq \symstate
     {\location_8}
@@ -248,7 +248,7 @@ note that $\rangecond(\bvconst{64}{\addr}, 1, \symmo) \equiv \true$, so the equi
 
 \subsubsection{\textit{Example: GetElementPtr.}}
 % TODO: explain how to prove that this is not an error state
-The initial symbolic state:
+The initial symbolic state at~\cref{line:example:gep} is:
 \[
 s \triangleq \symstate
     {\location_{10}}
@@ -303,7 +303,7 @@ it suffices to prove that their stores are equivalent, which holds since $e \equ
 
 \subsubsection{\textit{Example: Load.}}
 % TODO: remind that the repr is non-opt now
-The initial symbolic state:
+The initial symbolic state at~\cref{line:llvm-load} is:
 \[
 s \triangleq \symstate
     {\location_{11}}
