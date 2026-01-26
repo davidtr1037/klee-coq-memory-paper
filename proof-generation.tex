@@ -156,7 +156,7 @@ In this case, we can apply~\Cref{lemma:interface-malloc} with $n$ as 2, $\symmo$
 Note that this lemma assumes that the size argument of \textit{malloc} is evaluated to a concrete SMT expression.
 If that is not the case,
 then the \SE engine concretizes the symbolic expression,
-and then the analysis may be incomplete and a safety proof may not be derived.
+and then the analysis may be incomplete and a safety proof may not be derivable.
 There exist \SE engines that support symbolic-size allocations (\eg \cite{symsize-model}),
 however, it is not the focus of this work.
 
@@ -181,7 +181,7 @@ the interface lemmas for the rest of the examples are defined in the appendix (\
 % TODO: explain how to prove that this is not an error state
 % TODO: the type is i8, so we add a single store expression
 % TODO: fix the index expression
-The initial symbolic state at~\cref{line:llvm-store} is:
+The symbolic state at~\cref{line:llvm-store} is:
 \[
 s \triangleq \symstate
     {\location_8}
@@ -195,7 +195,7 @@ where:
 
 On one side, according to the symbolic semantics,
 if $s'$ is derived from $s$ then there exist an SMT model $m$ and a memory object $\symmo'$ such that
-$m \models \pc$, $\symmo' \in \symmemory$, and $\symisinbounds{\bvconst{64}{\addr}}{1}{\symmo'}{m}$, and then:
+$m \models \pc$, $\symmo' \in \symmemory$, and $\symisinbounds{\bvconst{64}{\addr}}{\bvsort{8}}{\symmo'}{m}$, and then:
 \[
 s' \triangleq \symstate
     {\location_9}
@@ -204,11 +204,9 @@ s' \triangleq \symstate
     {[\moWrite{\symmo'}{\bvconst{64}{\addr}}{\bvconst{8}{7}}]}
     {n < \bvconst{32}{2} \land \rangecond(\bvconst{64}{\addr}, 1, \symmo'))}
 \]
-%where:
-%\[ (\addr', \size', \smtarray') \triangleq \writemo(\symmo, \bvconst{64}{\addr}, \bvconst{8}{7}) \]
-We assume that $\symmemory$ is well-formed, which implies that address intervals of memory objects do not overlap.
-Then, since $\symmo' \in \symmemory$ and $\symisinbounds{\bvconst{64}{\addr}}{1}{\symmo'}{m}$,
-it must hold that $\symmo' = \symmo$, since $\bvconst{64}{\addr}$ is a constant SMT expression.
+Recall that we assume that address intervals of memory objects do not overlap.
+Since $\symmo' \in \symmemory$ and $\symisinbounds{\bvconst{64}{\addr}}{\bvsort{8}}{\symmo'}{m}$,
+then it must hold that $\symmo' = \symmo$, since $\bvconst{64}{\addr}$ is a constant SMT expression.
 Therefore, although the \rulenameref{Store} rule may have multiple derivations in general,
 there is a single derivation in this case.
 In particular, it also implies that:
@@ -224,8 +222,7 @@ s'_{opt} \triangleq \symstate
     {n < \bvconst{32}{2}}
 \]
 where:
-\[ \smtarray'_{opt} \triangleq \arraystore{\arraystore{\arrayconst{\arrayinitvalue}}{\bvconst{32}{0}}{\bvconst{8}{7}}}{\bvconst{32}{1}}{\arrayinitvalue}, \ \symmo'_{opt} \triangleq (\bvval{\addr}{64}, \bvval{2}{32}, \smtarray'_{opt}) \]
-
+\[ \symmo'_{opt} \triangleq (\bvval{\addr}{64}, \bvval{2}{32}, \smtarray'_{opt}), \ \smtarray'_{opt} \triangleq \arraystore{\arraystore{\arrayconst{\arrayinitvalue}}{\bvconst{32}{0}}{\bvconst{8}{7}}}{\bvconst{32}{1}}{\arrayinitvalue} \]
 Now, we have to prove that the subtree of $s$ is safe.
 Note that $s$ is not an error state,
 since $\evalexprty{\nameid{gep1}}{\symlocalstore}{\bvsort{64}} = \bvconst{64}{\addr}$ for every SMT model $m$.
@@ -241,14 +238,14 @@ and assume that $k \equiv \bvconst{32}{i}$ and $v' \equiv v'_{opt}$, then:
 \[ \arraystore{\arraystore{\arraystore{a}{\bvconst{32}{i}}{v}[...]}{\bvconst{32}{(i + n)}}{...}}{k}{v'} \equiv \arraystore{\arraystore{a}{\bvconst{32}{i}}{v'_{opt}}[...]}{\bvconst{32}{(i + n)}}{...} \]
 \end{lemma}
 This lemma can be applied in our case,
-since $\bvextract_{32}(\bvsub(\bvconst{64}{\addr}, \bvconst{64}{\addr})) \equiv \bvconst{32}{0}$.
+since $\bvextract_{32}(\bvsub(\bvconst{64}{\addr}, \bvconst{64}{\addr})) \equiv \bvconst{32}{0}$ and $\bvconst{8}{7} \equiv \bvconst{8}{7}$.
 We define similar lemmas to handle stores of other types (\bvsort{16}, \bvsort{32}, and \bvsort{64}).
 As for the path constraints,
 note that $\rangecond(\bvconst{64}{\addr}, 1, \symmo) \equiv \true$, so the equivalence follows easily.
 
 \subsubsection{\textit{Example: GetElementPtr.}}
 % TODO: explain how to prove that this is not an error state
-The initial symbolic state at~\cref{line:example:gep} is:
+The symbolic state at~\cref{line:llvm-gep} is:
 \[
 s \triangleq \symstate
     {\location_{10}}
@@ -303,7 +300,7 @@ it suffices to prove that their stores are equivalent, which holds since $e \equ
 
 \subsubsection{\textit{Example: Load.}}
 % TODO: remind that the repr is non-opt now
-The initial symbolic state at~\cref{line:llvm-load} is:
+The symbolic state at~\cref{line:llvm-load} is:
 \[
 s \triangleq \symstate
     {\location_{11}}
@@ -319,7 +316,7 @@ where:
 
 On one side, according to the symbolic semantics,
 if $s'$ is derived from $s$ then there exist an SMT model $m$ and a memory object $\symmo' \triangleq (\addr', \size', \smtarray')$ such that
-$m \models \pc$, $\symmo' \in \symmemory$, and $\symisinbounds{e}{1}{\symmo'}{m}$, and then:
+$m \models \pc$, $\symmo' \in \symmemory$, and $\symisinbounds{e}{\bvsort{8}}{\symmo'}{m}$, and then:
 % TODO: should add 0_{32}?
 \[
 s' \triangleq \symstate
