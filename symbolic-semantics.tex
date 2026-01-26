@@ -184,13 +184,11 @@ and $\rangecond$ denotes that the interval $[p, p + n)$ is fully contained withi
 The symbolic semantics of \textit{malloc} mirror the concrete semantics,
 differing only in the handling of content initialization.
 The SMT array of the newly allocated memory object is set to a constant array $\arrayconst{\arrayinitvalue}$.
-%which maps all the indices to $\arrayinitvalue$.
-\si{mention that we use the same allocator as the concrete case because addresses and sizes are concrete}
 
 \textbf{\textit{Free.}}
 % TODO: assume that the type of p is iptr?
 When deallocating a pointer $p$,
-recall that $p$ is an SMT expression which is not necessarily a constant SMT expression.
+recall that $p$ is an SMT expression which is not necessarily a constant one.
 Therefore, we check if there exists an SMT model $m$ and a memory object $\symmo \triangleq (\addr, \size, \smtarray)$ in $\symmemory$ such that
 $m$ satisfies the path constraints $\pc$ and $m[p]$ points to $\addr$.
 If that is the case,
@@ -204,10 +202,10 @@ Note that this rule might have multiple derivations, since $p$ may point to diff
 When reading $n$ bytes from a pointer $p$,
 we check if there exists an SMT model $m$ and a memory object $\symmo$ in $\symmemory$ such that
 $m$ satisfies the path constraints $\pc$ and the first $n$ addresses starting from $m[p]$ are within the address interval of $\symmo$.
-If that is not the case, then the result is undefined behavior.
-Otherwise, we use the \textit{read} procedure to obtain the accessed value.
-This procedure reads the corresponding sequence of $n$ symbolic bytes,
-and then translates them to a \textit{concat} expression of the appropriate sort.
+If that is not the case, the result is undefined behavior.
+Otherwise, to read the accessed value,
+we read the corresponding sequence of $n$ symbolic bytes,
+and then translate them to a \textit{concat} expression of the appropriate sort.
 At last, we update the path constraints $\varphi$ with the condition $\rangecond(p, n, \symmo)$.
 % which makes sure that the first $n$ addresses starting from $p$ are within the address interval of $\symmo$.
 % TODO: example?
@@ -216,15 +214,15 @@ At last, we update the path constraints $\varphi$ with the condition $\rangecond
 When writing an expression $e$, whose size is $n$ bytes, to a pointer $p$,
 we check if there exists an SMT model $m$ and a memory object $\symmo \triangleq (\addr, \size, \smtarray)$ in $\symmemory$ such that
 $m$ satisfies th path constraints $\pc$ and the first $n$ addresses starting from $m[p]$ are within the address interval of $\symmo$.
-If that is not the case, then the result is undefined behavior.
-Otherwise, we use the \textit{write} procedure to store the expression $e$.
-This procedure serializes the expression $e$ into a sequence of symbolic bytes and extends the SMT array $\smtarray$ with additional store expressions accordingly.
+If that is not the case, the result is undefined behavior.
+Otherwise, to store the expression $e$,
+we serialize $e$ into a sequence of symbolic bytes and extend the SMT array $\smtarray$ with additional store expressions accordingly.
 At last, we update the path constraints $\varphi$ with the condition $\rangecond(p, n, \symmo)$.
 % TODO: example?
 
 \textbf{\textit{GetElementPtr.}}
 The symbolic semantics of $\tgep$ is similar to the concrete semantics,
-but uses SMT expressions for the offset and address calculations.
+but uses SMT expressions for offset and address calculations.
 While the concrete version may return $\tundef$ or $\tpoison$,
 the symbolic version always returns an SMT expression,
 since the symbolic domain does not model $\tundef$ and $\tpoison$.
