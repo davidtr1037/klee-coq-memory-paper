@@ -264,7 +264,7 @@ Here, we focus on discussing the memory-related instructions,
 as the rules for other instructions (assignments, branches, \etc) were already discussed in detail in~\cite{klee-rocq}.
 
 
-\subsubsection{\textit{Malloc.}}
+\textbf{\textit{Malloc.}}
 When allocating a memory object,
 the size of the allocation must be non-negative and must not exceed the largest signed integer representable by the index type.\footnote{
 The semantics presented in the paper consider only heap allocations.
@@ -274,14 +274,14 @@ As mentioned before, the address interval of the allocated memory object may not
 If one of these properties is violated, the result is undefined behavior.
 The mapping of the newly allocated memory object is set to a function that maps all the indices to $\bvval{0}{8}$.
 
-\subsubsection{\textit{Free.}}
+\textbf{\textit{Free.}}
 % TODO: assume that the type of p is iptr?
 When deallocating a pointer value $p$,
 we first check if there exists a memory object $\mobj{\addr}{\size}{\arrayvalue}$ in the memory $\memory$ such that $p = \addr$.
 If that is the case, we remove that memory object from $\memory$.
 Otherwise, the result is undefined behavior.
 
-\subsubsection{\textit{Load.}}
+\textbf{\textit{Load.}}
 % TODO: what happens if p is undef/poison?
 When reading $n$ bytes from a pointer value $p$,
 we need to make sure that there exists a memory object $\mobj{\addr}{\size}{\arrayvalue}$ in the memory $\memory$ such that
@@ -293,7 +293,7 @@ If one of these values is $\tpoison$, then it returns $\tpoison$.
 If one of these values is $\tundef$, then it returns $\tundef$.
 Otherwise, we deserialize this sequence of values (bytes) into an integer of the appropriate type.
 
-\subsubsection{\textit{Store.}}
+\textbf{\textit{Store.}}
 % TODO: what happens if p/v is undef/poison?
 When writing a value $v$ to a pointer value $p$,
 we need to make sure that there exists a memory object $\mobj{\addr}{\size}{\arrayvalue}$ in the memory $\memory$ such that
@@ -302,8 +302,7 @@ If that is not the case, then the result is undefined behavior.
 Otherwise, we use the \textit{write} procedure to store the value $v$.
 This procedure serializes the value $v$ into a sequence of bytes and updates the array $\arrayvalue$ accordingly.
 
-\subsubsection{\textit{GetElementPtr.}}
-
+\textbf{\textit{GetElementPtr.}}
 The $\tgep$ instruction computes the address of a subelement of an aggregate data structure (array, struct, \etc.).\footnote{
 \Cref{appendix:concrete-semantics} provides the pseudo-code of the semantics, defined as the function $\evalgep$.
 }
@@ -319,7 +318,6 @@ If the indexed type is a struct type,
 then the index is translated into a field selector.
 The computed offsets are sequentially summed up,
 and then the resulting offset is converted to the pointer type and added to the base pointer.
-
 The $\tgep$ instruction may have attributes (\opcode{nuw}, \opcode{nusw}, and \opcode{inbounds}) that impose additional rules.
 For example, when the \opcode{nuw} attribute is enabled, the following conditions must hold:
 (1) if the type of an index is larger than the index type, the truncation to the index type must preserve the unsigned value,
