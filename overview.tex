@@ -43,8 +43,8 @@ Alongside the concrete states and semantics ($\States$, $\to$),
 The symbolic state space coincides with that used by \SE engines,
 where SMT-like expressions replace concrete values.
 A central result of this construction is \emph{reachability completeness}:
-Forall $s_0, s \in \States$ s.t.\@ $s_0$ is an initial state and $s_0 \to^* s$,
-there exist $\tilde{s}_0, \tilde{s}\in \SymStates$ such that $\tilde{s}_0$ is an initial symbolic state,
+Forall $s_0, s \in \States$ s.t.\@ $s_0$ is an initial state, $s_0 \to^* s$, and this sequence of transitions does not introduce $\tpoison$ values,
+then there exist $\tilde{s}_0, \tilde{s}\in \SymStates$ such that $\tilde{s}_0$ is an initial symbolic state,
 $\tilde{s}_0\symstep^*\tilde{s}$, and $\tilde{s}$ \emph{represents} $s$,
 in the sense that $s$ can be obtained from $\tilde{s}$ by substituting symbolic variables with appropriate concrete values.
 This yields the \emph{program safety} theorem:
