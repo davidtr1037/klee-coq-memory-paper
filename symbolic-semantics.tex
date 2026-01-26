@@ -277,8 +277,8 @@ denoted by $e \overapproxvia{m} v$, if $\evalmodel{m}{e} = v$.
 %and the frames of $\symstack$ represent the frames of $\stack$ via $m$, pointwise.
 A symbolic memory object $(\addr, \size, \smtarray)$ represents a memory object $(\addr, \size, \arrayvalue)$ via $m$ if
 $\arrayselect{\smtarray}{\bvconst{\indexwidth}{k}}$ represents $\arrayvalue(\valoftype{k}{\indextype})$ via $m$ for every $k$ in the range of the index type.
-A symbolic memory $\symmemory$ represents a memory $\memory$ via $m$, denoted by $\symmemory \overapproxvia{m} \memory$,
-if the symbolic memory objects of $\symmemory$ represent the memory objects of $\memory$ via $m$, pointwise.
+A symbolic heap $\symmemory$ represents a heap $\memory$ via $m$, denoted by $\symmemory \overapproxvia{m} \memory$,
+if the symbolic memory objects of $\symmemory$ represent the memory objects of $\memory$ via $m$.
 A symbolic state $s \triangleq \symstate{\location}{\symlocalstore}{\symstack}{\symmemory}{\pc}$ \emph{represents} a concrete state $c \triangleq \progstate{\location}{\localstore}{\stack}{\memory}$ via $m$,
 denoted by $s \overapproxvia{m} c$,
 if $\symlocalstore \overapproxvia{m} \localstore$,
