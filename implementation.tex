@@ -15,10 +15,7 @@ Some of the SMT transformations used in \klee are currently not supported by our
 but we plan to support them in future versions.
 Although the $\tgep$ instruction may have attributes (\opcode{nuw}, \opcode{nusw}, and \opcode{inbounds}),
 our implementation currently supports only \opcode{nuw}.
-We found several implementation issues in \klee that relate to memory modeling, which we discuss next.\footnote{
-These issues were confirmed by the maintainers of KLEE.
-The link is omitted due to double-blind reviewing.
-}
+We found several implementation issues in \klee that relate to memory modeling, which we discuss next.
 
 \paragraph{\textbf{\textit{Inconsistent modeling of the index type.}}}
 On one side,
