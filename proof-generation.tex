@@ -311,8 +311,7 @@ s \triangleq \symstate
 \]
 where:
 \[ e \triangleq \bvadd_{64}(\bvconst{64}{\addr}, \bvzext_{64}(\bvextract_{32}(\bvzext_{64}(n)))) \]
-\[ \smtarray \triangleq \arraystore{\arraystore{\arrayconst{\arrayinitvalue}}{\bvconst{32}{0}}{\bvconst{8}{7}}}{\bvconst{32}{1}}{\arrayinitvalue} \]
-\[ \symmo \triangleq (\bvval{\addr}{64}, \bvval{2}{32}, \smtarray) \]
+\[ \symmo \triangleq (\bvval{\addr}{64}, \bvval{2}{32}, \smtarray), \ \smtarray \triangleq \arraystore{\arraystore{\arrayconst{\arrayinitvalue}}{\bvconst{32}{0}}{\bvconst{8}{7}}}{\bvconst{32}{1}}{\arrayinitvalue} \]
 
 On one side, according to the symbolic semantics,
 if $s'$ is derived from $s$ then there exist an SMT model $m$ and a memory object $\symmo' \triangleq (\addr', \size', \smtarray')$ such that
