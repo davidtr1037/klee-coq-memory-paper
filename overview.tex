@@ -54,7 +54,7 @@ Alongside the concrete states and semantics ($\States$, $\to$),
 The symbolic state space is the same one used by SE engines,
 where SMT-like expressions replace concrete values.
 
-A central theorem of this construction is \emph{reachability completeness}: forall $s_0, s \in \States$ s.t.\@ $s_0$ is an initial state and $\s_0 \to^* s$, there exist corresponding $\tilde{s}_0, \tilde{s}\in \SymStates$ such that $\tilde{s}_0$ is an initial (symbolic) state and $\tilde{s}$ \emph{represents} $s$, in the sense that $s$ can be obtained from $\tilde{s}$ via substituting the symbolic variables occuring in it with appropriate concrete values.
+A central theorem of this construction is \emph{reachability completeness}: forall $s_0, s \in \States$ s.t.\@ $s_0$ is an initial state and $s_0 \to^* s$, there exist corresponding $\tilde{s}_0, \tilde{s}\in \SymStates$ such that $\tilde{s}_0$ is an initial (symbolic) state and $\tilde{s}$ \emph{represents} $s$, in the sense that $s$ can be obtained from $\tilde{s}$ via substituting the symbolic variables occuring in it with appropriate concrete values.
 
 %\si{put in the definition of reachability completeness without going into the details of n.s.\@ semantics and also leaving out the definition of the initial state}
 \end{paragraph}
