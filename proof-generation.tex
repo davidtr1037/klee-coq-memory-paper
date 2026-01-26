@@ -68,8 +68,7 @@ the internal mapping $\{0 \mapsto e_0, 1 \mapsto e_1, \ldots\}$ is translated to
 \[ \arraystore{\arraystore{\arrayconst{\arrayinitvalue}}{\bvconst{32}{0}}{e_0}}{\bvconst{32}{1}}{e_1} \ldots \]
 In the case of a non-optimized representation,
 the internal sequence of store expressions is directly translated to a sequence of store expressions in \coq.
-% TODO: into a heap?
-Accordingly, the internal memory is translated into a list of memory objects in \coq.
+Accordingly, the internal heap is translated into a list of memory objects in \coq.
 The translation of other components is done similarly to~\cite{klee-rocq}.
 
 \subsubsection{Proving Execution Tree Safety using Interface Lemmas}
