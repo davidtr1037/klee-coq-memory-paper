@@ -38,23 +38,21 @@ An execution tree is error-free if it does not contain symbolic error states,
 and it is complete if every feasible symbolic state derivable by the symbolic \llvm semantics can be paired by an equivalent symbolic state in the execution tree.
 \end{comment}
 
-\begin{paragraph}{\bf Symbolic semantics \& reachability completeness.~}
+{\it Symbolic Semantics and Reachability Completeness.}
 Alongside the concrete states and semantics ($\States$, $\to$),
 \cite{klee-rocq} defines analogue \emph{symbolic states} and
-\emph{symbolic (small-step) semantics} ($\SymStates$, $\symstep$).
-The symbolic state space is the same one used by SE engines,
+\emph{symbolic semantics} ($\SymStates$, $\symstep$).
+The symbolic state space coincides with that used by \SE engines,
 where SMT-like expressions replace concrete values.
-
-A central theorem of this construction is \emph{reachability completeness}: forall $s_0, s \in \States$ s.t.\@ $s_0$ is an initial state and $s_0 \to^* s$, there exist corresponding $\tilde{s}_0, \tilde{s}\in \SymStates$ such that $\tilde{s}_0$ is an initial (symbolic) state, $\tilde{s}_0\symstep^*\tilde{s}$, and $\tilde{s}$ \emph{represents} $s$, in the sense that $s$ can be obtained from $\tilde{s}$ via substituting the symbolic variables occuring in it with appropriate concrete values.
-
-From that follows the \emph{program safety theorem} stating that if we have an
-execution tree, and we can show that it is \emph{complete}---%
-\ie the paths therein cover all of the reachable \emph{symbolic} states,
-according to the formal symbolic semantics---%
-and if the states in the tree represent only non-error states,
+A central result of this construction is \emph{reachability completeness}:
+Forall $s_0, s \in \States$ s.t.\@ $s_0$ is an initial state and $s_0 \to^* s$,
+there exist $\tilde{s}_0, \tilde{s}\in \SymStates$ such that $\tilde{s}_0$ is an initial (symbolic) state,
+$\tilde{s}_0\symstep^*\tilde{s}$, and $\tilde{s}$ \emph{represents} $s$,
+in the sense that $s$ can be obtained from $\tilde{s}$ by substituting symbolic variables with appropriate concrete values.
+This yields the \emph{program safety} theorem:
+If an execution tree is \emph{complete}, \ie its paths cover all the feasible symbolic states according to the symbolic semantics,
+and if the states in the execution tree represent only non-error states,
 then the analyzed program is safe.
-\end{paragraph}
-
 
 \begin{paragraph}{\bf Proof generation.~}
 %
