@@ -17,10 +17,10 @@ The search heuristic is set to DFS,
 the timeout is set to one hour,
 and the memory limit is set to 4GB.
 %and the SMT solver is set to STP~\cite{stp}.
-In all the modes, we measure the following metrics:
+We measure the following metrics:
 analysis time, number of explored paths, and number of executed instructions.
 In the \proofopt mode,
-we measure the \emph{proof time}, \ie the time required to validate the generated proof using \coqc,
+we also measure the \emph{proof time}, \ie the time required to validate the generated proof using \coqc,
 and the \emph{proof size}, \ie the size of the compiled proof file (\code{.vo} file) created by \coqc.
 We performed our experiments on Ubuntu 24.04,
 equipped with Intel Core i9-9900 and 32GB of RAM.
@@ -77,18 +77,18 @@ as the number of executed instructions increases,
 the size of the generated proof increases as well,
 which in turn results in higher proof time.
 There were two cases (\textit{test\_osip\_hash} and \textit{test\_hash\_pjw}) in which the proof time was rather high despite the number of executed instructions being relatively low.
-This was due to the presence of complex SMT array terms in the definitions of the symbolic states and in the application of the interface lemmas for $\tload$ and $\tstore$.
+This occured due to the presence of complex SMT array terms in the definitions of the symbolic states and in the application of the interface lemmas for $\tload$ and $\tstore$.
 We leave the optimization of such cases for future work.
 
 \begin{figure*}
     \centering
-    \begin{subfigure}[b]{0.40\textwidth}
+    \begin{subfigure}[b]{0.48\textwidth}
         \centering
         \includegraphics[width=\textwidth]{images/time.pdf}
         \caption{Analysis time.}
         \label{figure:time}
     \end{subfigure}
-    \begin{subfigure}[b]{0.58\textwidth}
+    \begin{subfigure}[b]{0.48\textwidth}
         \centering
         \includegraphics[width=\textwidth]{images/proof-scatter.pdf}
         \caption{Proof time and proof size.}
