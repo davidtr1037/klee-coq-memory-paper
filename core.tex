@@ -134,7 +134,7 @@ then there exists a symbolic state $s$ such that $s_{0} \symmultistep s$ and $s 
 \label{sec:program-safety}
 
 An execution tree is a data structure that records the paths explored during the analysis of a given program.
-In the following, we rely on its definition from~\cite{klee-rocq} (Section 3.4).
+We denote by $\tree(s, l)$ the execution tree $t$ in which $s$ is the root symbolic state ($s.\attrstate$) and $l$ is a list of successor subtrees ($t.\attrchildren$).
 Following the approach of~\cite{klee-rocq},
 we show that program safety can be proved based on certain safety properties of execution trees.
 To accommodate memory-related instructions,
@@ -152,8 +152,8 @@ we further extend the definition of \emph{equivalence} for symbolic states that 
 %The symbolic stacks $\symstack_1$ and $\symstack_2$ are \emph{equivalent}, denoted by $\symstack_1 \equiv \symstack_2$,
 %if their elements are pointwise equivalent.
 The memory objects $(\addr, \size, \smtarray_1)$ and $(\addr, \size, \smtarray_2)$ are equivalent if $\smtarray_1 \equiv \smtarray_2$.
-The memories $\symmemory_1$ and $\symmemory_2$ are equivalent, denoted by $\symmemory_1 \equiv \symmemory_2$,
-if their elements are pointwise equivalent.
+The heaps $\symmemory_1$ and $\symmemory_2$ are equivalent, denoted by $\symmemory_1 \equiv \symmemory_2$,
+if their memory objects are equivalent.
 The states $s_1 \triangleq \symstate{\location_1}{\symlocalstore_1}{\symstack_1}{\symmemory_1}{\pc_1}$ and $s_2 \triangleq \symstate{\location_2}{\symlocalstore_2}{\symstack_2}{\symmemory_2}{\pc_2}$ are equivalent,
 denoted by $s_1 \equiv s_2$, if $\location_1 = \location_2$, $\symlocalstore_1 \equiv \symlocalstore_2$, $\symstack_1 \equiv \symstack_2$, $\symmemory_1 \equiv \symmemory_2$, and $\pc_1 \equiv \pc_2$.
 \end{definition}
