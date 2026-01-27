@@ -9,10 +9,9 @@ Our formalization is based on~\cite{klee-rocq}, and it includes the definition o
 Our \coq formalization consists of roughly 40K lines of code, excluding third-party dependencis.
 Our proof generation approach (\Cref{sec:proof-generation}) is implemented on top of \klee~\cite{klee},
 a \emph{state-of-the-art} \SE engine operating on \llvm IR~\cite{llvm}.
-Some of the SMT transformations used in \klee are currently not supported by our implementation,
+Currently, some of the SMT transformations used in \klee are not supported by our implementation,
 but we plan to support them in future versions.
-Although the $\tgep$ instruction may have attributes (\opcode{nuw}, \opcode{nusw}, and \opcode{inbounds}),
-our implementation currently supports only \opcode{nuw}.
+In the $\tgep$ instruction, our implementation currently supports only the \opcode{nuw} attribute.
 We found several implementation issues in \klee that relate to memory modeling, which we discuss next.
 
 \textbf{\textit{Inconsistent modeling of the index type.}}
