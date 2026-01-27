@@ -40,7 +40,8 @@ $
 In this paper,
 we focus on a subset of \llvm IR with memory operations, whose syntax is given in~\Cref{figure:llvm-syntax}.
 Integers are represented as bit-vectors of type $\bvsort{w}$, where \textsf{w} denotes the bit width.
-Array types are parametrized by an element type $\tau$ and a dimension $n$,
+To those, we add \emph{array types},
+parametrized by an element type $\tau$ and a dimension $n$,
 while struct types are parametrized by a sequence of field types.
 We define $\Vals^{\bvsort{w}}$ as the set of all bit-vectors of type $\bvsort{w}$,
 including the special values $\tundef$ and $\tpoison$, which are defined in the \llvm reference.
