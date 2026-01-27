@@ -34,12 +34,16 @@ then the allocation size is internally casted to $10$,
 and if later we access that object at offset $10$, then we will get an out-of-bounds error, which is a false positive.
 
 \textbf{\textit{Incorrect Interpretation of \textup{$\tgep$}.}}
-We found that the interpretation of $\tgep$ in \klee is not fully compliant with the \llvm reference,
-as it does not account for overflows in the offset computation.
-To fix this, we modified the interpretation of $\tgep$ as follows:
-First, we modified the offset computation to conform to the index type $\bvsort{32}$,
-ensuring consistency with the index sort $\smtsort{32}$ used in the SMT arrays.
-Second, if the \code{nuw} attribute is enabled, we report an error when an overflow occurs.
+\klee does not account for overflows in the offset computation, thus not fully compliant with the \llvm reference.
+To fix this,
+we modified the offset computation to conform to the index type $\bvsort{32}$,
+ensuring consistency with the index sort $\smtsort{32}$ used in the SMT arrays,
+and we report an error when such overflows occur.
+
+%To fix this, we modified the interpretation of $\tgep$ as follows:
+%First, we modified the offset computation to conform to the index type $\bvsort{32}$,
+%ensuring consistency with the index sort $\smtsort{32}$ used in the SMT arrays.
+%Second, if the \code{nuw} attribute is enabled, we report an error when an overflow occurs.
 
 %The lack of overflow checks has some additional consequences,
 %as can be demonstrated by~\Cref{figure:klee-issue}.
