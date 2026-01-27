@@ -278,26 +278,29 @@ we first check if there exists a memory object $\mobj{\addr}{\size}{\arrayvalue}
 If that is the case, we remove that memory object from $\memory$.
 Otherwise, the result is undefined behavior.
 
-\textbf{\textit{Load.}}
+\textbf{\textit{Load and Store.}}
 % TODO: what happens if p is undef/poison?
-When reading $n$ bytes from a pointer value $p$,
-we need to make sure that there exists a memory object $\mobj{\addr}{\size}{\arrayvalue}$ in the memory $\memory$ such that
+When accessing $n$ bytes from a pointer value $p$,
+we need to make sure that there exists a memory object $\mobj{\addr}{\size}{\arrayvalue}$ in the heap $\memory$ such that
 (1) $p < p + n$ (\ie there is no overflow) and (2) $\addr \leq p < \addr + \size$.
 If that is not the case, then the result is undefined behavior.
-Otherwise, we use the \textit{read} procedure to obtain the accessed value.
-This procedure first reads the corresponding sequence of stored values.
-If one of these values is $\tpoison$, then it returns $\tpoison$.
-If one of these values is $\tundef$, then it returns $\tundef$.
+Otherwise, we perform a read or write operation.
+For a read operation,
+we first read the corresponding sequence of stored values.
+If one of these values is $\tpoison$, we return $\tpoison$,
+and otherwise, if one of these values is $\tundef$, we return $\tundef$.
 Otherwise, we deserialize this sequence of values (bytes) into an integer of the appropriate type.
+For a write operation,
+we serialize the value $v$ into a sequence of bytes and update the array $\arrayvalue$ accordingly.
 
-\textbf{\textit{Store.}}
-% TODO: what happens if p/v is undef/poison?
-When writing a value $v$ to a pointer value $p$,
-we need to make sure that there exists a memory object $\mobj{\addr}{\size}{\arrayvalue}$ in the memory $\memory$ such that
-(1) $p < p + n$ and (2) $\addr \leq p < \addr + \size$.
-If that is not the case, then the result is undefined behavior.
-Otherwise, we use the \textit{write} procedure to store the value $v$.
-This procedure serializes the value $v$ into a sequence of bytes and updates the array $\arrayvalue$ accordingly.
+%\textbf{\textit{Store.}}
+%% TODO: what happens if p/v is undef/poison?
+%When writing a value $v$ to a pointer value $p$,
+%we need to make sure that there exists a memory object $\mobj{\addr}{\size}{\arrayvalue}$ in the memory $\memory$ such that
+%(1) $p < p + n$ and (2) $\addr \leq p < \addr + \size$.
+%If that is not the case, then the result is undefined behavior.
+%Otherwise, we use the \textit{write} procedure to store the value $v$.
+%This procedure serializes the value $v$ into a sequence of bytes and updates the array $\arrayvalue$ accordingly.
 
 \textbf{\textit{GetElementPtr.}}
 The $\tgep$ instruction computes the address of a subelement of an aggregate data structure (array, struct, \etc.).\footnote{
