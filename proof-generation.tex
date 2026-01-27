@@ -208,7 +208,7 @@ then it must hold that $\symmo' = \symmo$, since $\bvconst{64}{\addr}$ is a cons
 Therefore, although the \rulenameref{Store} rule may have multiple derivations in general,
 there is a single derivation in this case.
 In particular, it also implies that:
-\[ \moWrite{\symmo'}{\bvconst{64}{\addr}}{\bvconst{8}{7}} = (\bvval{\addr}{64}, \bvval{2}{32}, \arraystore{\smtarray}{(\bvextract_{32}(\bvsub(\bvconst{64}{\addr}, \bvconst{64}{\addr})))}{\bvconst{8}{7}}) \]
+\[ \moWrite{\symmo'}{\bvconst{64}{\addr}}{\bvconst{8}{7}} = (\bvval{\addr}{64}, \bvval{2}{32}, \arraystore{\smtarray}{(\bvextract_{32}(\bvsub{\bvsort{64}}{\bvconst{64}{\addr}}{\bvconst{64}{\addr}}))}{\bvconst{8}{7}}) \]
 
 On the other side, the symbolic state computed by the \SE engine is:
 \[
@@ -236,7 +236,7 @@ and assume that $k \equiv \bvconst{32}{i}$ and $v' \equiv v'_{opt}$, then:
 \[ \arraystore{\arraystore{\arraystore{a}{\bvconst{32}{i}}{v}[...]}{\bvconst{32}{(i + n)}}{t_n}}{k}{v'} \equiv \arraystore{\arraystore{a}{\bvconst{32}{i}}{v'_{opt}}[...]}{\bvconst{32}{(i + n)}}{t_n} \]
 \end{lemma}
 This lemma can be applied in our case,
-since $\bvextract_{32}(\bvsub(\bvconst{64}{\addr}, \bvconst{64}{\addr})) \equiv \bvconst{32}{0}$ and $\bvconst{8}{7} \equiv \bvconst{8}{7}$.
+since $\bvextract_{32}(\bvsub{\bvsort{64}}{\bvconst{64}{\addr}}{\bvconst{64}{\addr}}) \equiv \bvconst{32}{0}$ and $\bvconst{8}{7} \equiv \bvconst{8}{7}$.
 We define similar lemmas to handle stores of other types (\bvsort{16}, \bvsort{32}, and \bvsort{64}).
 As for the path constraints,
 note that $\rangecond(\bvconst{64}{\addr}, 1, \symmo) \equiv \true$, so the equivalence follows easily.
@@ -319,7 +319,7 @@ $m \models \pc$, $\symmo' \in \symmemory$, and $\symisinbounds{e}{\bvsort{8}}{\s
 \[
 s' \triangleq \symstate
     {\location_{10}}
-    {\{ ..., \nameid{gep2} \mapsto e, \nameid{v} \mapsto \arrayselect{\smtarray'}{\bvextract_{32}(\bvsub_{64}(e, \bvconst{64}{\addr}))} \}}
+    {\{ ..., \nameid{gep2} \mapsto e, \nameid{v} \mapsto \arrayselect{\smtarray'}{\bvextract_{32}(\bvsub{\bvsort{64}}{e}{\bvconst{64}{\addr}})} \}}
     {[]}
     {[\symmo]}
     {n < \bvconst{32}{2} \land \rangecond(e, 1, \symmo')}
@@ -334,7 +334,7 @@ One the other side, the symbolic state computed by the \SE engine is:
 \[
 s'_{opt} \triangleq \symstate
     {\location_{10}}
-    {\{ ..., \nameid{gep2} \mapsto e, \nameid{v} \mapsto \arrayselect{\smtarray}{\bvextract_{32}(\bvsub_{64}(e, \bvconst{64}{\addr}))} \}}
+    {\{ ..., \nameid{gep2} \mapsto e, \nameid{v} \mapsto \arrayselect{\smtarray}{\bvextract_{32}(\bvsub{\bvsort{64}}{e}{\bvconst{64}{\addr}})} \}}
     {[]}
     {[\symmo]}
     {n < \bvconst{32}{2}}
