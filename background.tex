@@ -222,12 +222,9 @@ we adopt the \emph{memory-object model}~\cite{klee,mossberg2019manticore} which 
 \label{def:memory}
 A memory object is defined as a tuple:
 \[ \mobj{\addr}{\size}{\arrayvalue} \in \MemoryObjects \quad \quad \MemoryObjects \triangleq \Vals^{\pointertype} \times \Vals^{\indextype} \times (\Z \rightarrow \Vals^{\bvsort{8}} \cup \{\tundef, \tpoison\}) \]
-where $\addr$ is its base address, $\size$ is its size, and $\arrayvalue$ is a mapping that tracks the stored values.
-A stored value can be either a value of type $\Vals^{\bvsort{8}}$ (\ie a byte) or one of the special values $\tundef$ or $\tpoison$.
-%The address space is defined by the unsigned range representable by the pointer index type.
-%Each memory object is associated with an address interval, $[\addr, \addr + \size)$.
+where $\addr$ is its base address, $\size$ is its size, and $\arrayvalue$ is a mapping that tracks the stored values,
+which can be either values of type $\Vals^{\bvsort{8}}$ (\ie a byte) or one of the special values $\tundef$ or $\tpoison$.
 A heap $\memory \in \Heaps$ is defined as a set of memory objects.
-%We use $(\MemoryObjects)^*$ to refer to the set of possible heaps.
 \end{definition}
 
 We assume an implicit \emph{allocator},
