@@ -40,12 +40,11 @@ Once this happens, the representation cannot be switched back to the optimized o
 %Therefore, when a memory object is accessed,
 %the SMT expression corresponding to the offset is truncated to an SMT expression of sort $\smtsort{32}$.
 
-For example, after executing~\cref{line:example-store} of the C program from~\Cref{figure:example-llvm},
-the contents of the memory object allocated at~\cref{line:example-malloc} are encoded using the optimized representation as:
-\[ \{ 0 \mapsto \bvconst{8}{7}, 1 \mapsto \bvconst{8}{0} \} \]
-If we were to execute the instruction \code{p[n] = 1} afterwards,
-then we would switch to the non-optimized representation resulting in the following encoding:
-\[ \arraystore{\arraystore{\arraystore{\arrayconst{\arrayinitvalue}}{\bvconst{32}{0}}{\bvconst{8}{7}}}{\bvconst{32}{1}}{\bvconst{8}{0}}}{n}{\bvconst{8}{1}} \]
+For example, after executing~\cref{line:example-store} of the C program in~\Cref{figure:example-llvm},
+the contents of the memory object allocated at~\cref{line:example-malloc} are encoded using the optimized representation as $\{ 0 \mapsto \bvconst{8}{7}, 1 \mapsto \bvconst{8}{0} \}$.
+If afterwards, we were to execute the instruction \code{p[n] = 1},
+then we would switch to the non-optimized representation, resulting in the following encoding:
+$\arraystore{\arraystore{\arraystore{\arrayconst{\arrayinitvalue}}{\bvconst{32}{0}}{\bvconst{8}{7}}}{\bvconst{32}{1}}{\bvconst{8}{0}}}{n}{\bvconst{8}{1}}$.
 
 \begin{figure}
 \begin{minipage}[t]{0.60\columnwidth}
@@ -98,7 +97,7 @@ as such a proof requires expensive \coq tactics such as: \textit{inversion}, \te
 Instead, we adapt the approach proposed in~\cite{klee-rocq},
 and create for each instruction type a generic lemma that can be used to infer execution tree safety.
 We call these lemmas \emph{interface} lemmas,
-as they help to create an effective interaction between the pre-defined and auto-generated sections of the proof.
+as they facilitate an effective interaction between the pre-defined and auto-generated sections of the proof.
 By using such interface lemmas,
 we accelerate both proof generation and proof checking,
 since we create smaller proofs which mainly rely on simple tactics such as \textit{apply} and \textit{reflexivity}.
