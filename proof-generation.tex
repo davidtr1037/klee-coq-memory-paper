@@ -318,7 +318,7 @@ $m \models \pc$, $\symmo' \in \symmemory$, and $\symisinbounds{e}{\bvsort{8}}{\s
 % TODO: should add 0_{32}?
 \[
 s' \triangleq \symstate
-    {\location_{12}}
+    {\location_{10}}
     {\{ ..., \nameid{gep2} \mapsto e, \nameid{v} \mapsto \arrayselect{\smtarray'}{\bvextract_{32}(\bvsub_{64}(e, \bvconst{64}{\addr}))} \}}
     {[]}
     {[\symmo]}
@@ -333,7 +333,7 @@ In particular, it must hold that $\symmo' = \symmo$ (and $\smtarray' = \smtarray
 One the other side, the symbolic state computed by the \SE engine is:
 \[
 s'_{opt} \triangleq \symstate
-    {\location_{12}}
+    {\location_{10}}
     {\{ ..., \nameid{gep2} \mapsto e, \nameid{v} \mapsto \arrayselect{\smtarray}{\bvextract_{32}(\bvsub_{64}(e, \bvconst{64}{\addr}))} \}}
     {[]}
     {[\symmo]}
