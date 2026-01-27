@@ -108,32 +108,32 @@ In this section, we will focus on memory-related instructions.
 We denote by $\location_n$ the program location that corresponds to line $n$ in~\Cref{figure:example-llvm}.
 
 \subsubsection{\textit{Example: Malloc.}}
-The initial symbolic state at~\cref{line:llvm-malloc} is:
-\[
-s \triangleq \symstate
-    {\location_3}
-    {\{ \}}
-    {[]}
-    {[]}
-    {\true}
-\]
+The initial symbolic state at~\cref{line:llvm-malloc} is $s \triangleq \symstate{\location_1}{\{ \}}{[]}{[]}{\true}$.
+%\[
+%s \triangleq \symstate
+%    {\location_1}
+%    {\{ \}}
+%    {[]}
+%    {[]}
+%    {\true}
+%\]
 In general, the \rulenameref{Malloc} rule may result in multiple derivations,
 but in this case, the size argument of \textit{malloc} is evaluated to a constant SMT expression,
-so the only derived symbolic state is:
-\[
-s' \triangleq \symstate
-    {\location_4}
-    {\{ \nameid{p} \mapsto \bvconst{64}{\addr} \}}
-    {[]}
-    {[(\bvval{\addr}{64}, \bvval{2}{32}, \arrayconst{\arrayinitvalue})]}
-    {\true}
-\]
+so the only derived symbolic state is $s' \triangleq \symstate{\location_2}{\{ \nameid{p} \mapsto \bvconst{64}{\addr} \}}{[]}{[(\bvval{\addr}{64}, \bvval{2}{32}, \arrayconst{\arrayinitvalue})]}{\true}$,
+%\[
+%s' \triangleq \symstate
+%    {\location_2}
+%    {\{ \nameid{p} \mapsto \bvconst{64}{\addr} \}}
+%    {[]}
+%    {[(\bvval{\addr}{64}, \bvval{2}{32}, \arrayconst{\arrayinitvalue})]}
+%    {\true}
+%\]
 where $\bvval{\addr}{64}$ is the allocated base address.
 At this point, the \SE engine uses an optimized representation for the allocated memory object, as no stores have been performed yet,
 so the symbolic state computed by the \SE engine is:
 \[
 s'_{opt} \triangleq \symstate
-    {\location_4}
+    {\location_2}
     {\{ \nameid{p} \mapsto \bvconst{64}{\addr} \}}
     {[]}
     {[(\bvval{\addr}{64}, \bvval{2}{32}, \arraystore{\arraystore{\arrayconst{\arrayinitvalue}}{\bvconst{32}{0}}{\arrayinitvalue}}{\bvconst{32}{1}}{\arrayinitvalue})]}
