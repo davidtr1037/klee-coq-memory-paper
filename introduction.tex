@@ -21,11 +21,15 @@ On the one hand,
 verifying existing implementations requires a huge effort,
 as they typically consist of large codebases with complex third-party dependencies.
 One the other hand,
-verified implementations extracted from proof assistants~\cite{fse23wise,icfp22:keuchel} were applied only for simple program languages,
-and they lack advanced features such as: search heuristics, constraint solving optimizations, and other performance optimizations.
+verified implementations extracted from proof assistants~\cite{fse23wise,icfp22:keuchel} were applied only for simple programming languages,
+and they lack advanced features such as search heuristics, constraint solving optimizations, and other performance optimizations.
 Proof logging~\cite{lundberg2024proof,klee-rocq} is an alternative approach,
-inspired by \emph{translation validation}~\cite{samet,pnueli1998translation} and not aiming for a verified implementation,
-that generates during the analysis a safety proof that is specific to the analyzed program.
+inspired by \emph{translation validation}~\cite{samet,pnueli1998translation}. Rather than aiming for a verified implementation,
+the tool emits, during the analysis, a safety proof that is specific to the analyzed program.
+The term itself evolved in the field of constraint solving, indicating the
+need to store some metadata while the solver is exploring the search space,
+in order to be able to produce proofs later~\cite{de2008proofs}.
+It is still prevalent in modern solver architectures~
 
 % Gap
 
