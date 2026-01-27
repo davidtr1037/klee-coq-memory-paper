@@ -182,7 +182,7 @@ the interface lemmas for the rest of the examples are defined in the appendix (\
 The symbolic state at~\cref{line:llvm-store} is:
 \[
 s \triangleq \symstate
-    {\location_8}
+    {\location_6}
     {\{ ..., \nameid{gep1} \mapsto \bvconst{64}{\addr} \}}
     {[]}
     {[\symmo]}
@@ -196,7 +196,7 @@ if $s'$ is derived from $s$ then there exist an SMT model $m$ and a memory objec
 $m \models \pc$, $\symmo' \in \symmemory$, and $\symisinbounds{\bvconst{64}{\addr}}{\bvsort{8}}{\symmo'}{m}$, and then:
 \[
 s' \triangleq \symstate
-    {\location_9}
+    {\location_7}
     {\{ ..., \nameid{gep1} \mapsto \bvconst{64}{\addr} \}}
     {[]}
     {[\moWrite{\symmo'}{\bvconst{64}{\addr}}{\bvconst{8}{7}}]}
@@ -213,7 +213,7 @@ In particular, it also implies that:
 On the other side, the symbolic state computed by the \SE engine is:
 \[
 s'_{opt} \triangleq \symstate
-    {\location_9}
+    {\location_7}
     {\{ ..., \nameid{gep1} \mapsto \bvconst{64}{\addr} \}}
     {[]}
     {[\symmo'_{opt}]}
