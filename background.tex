@@ -364,9 +364,8 @@ Let $\location$ be the entry program location of the module $\module$.
 The \emph{initial state} of $\module$, denoted by $\initstate(\module)$,
 is defined as $\progstate{\location}{\{\}}{[]}{[]}$.
 Now, let $c_0 \triangleq \initstate(\module)$.
-Then the module $\module$ is \emph{safe}, denoted by $\issafe(\module)$, if:
-\[ \forall c. \ c_{0} \multistep c \implies \neg \errorstate(c) \]
-(The relation $\multistep$ is the reflexive-transitive closure of the relation $\step$.)
+Then the module $\module$ is \emph{safe}, denoted by $\issafe(\module)$,
+if for every $c$ s.t. $c_{0} \multistep c$, $c$ is not an error state (the relation $\multistep$ is the reflexive-transitive closure of $\step$).
 \end{definition}
 
 % TODO: needed only internally
