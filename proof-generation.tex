@@ -246,7 +246,7 @@ note that $\rangecond(\bvconst{64}{\addr}, 1, \symmo) \equiv \true$, so the equi
 The symbolic state at~\cref{line:llvm-gep} is:
 \[
 s \triangleq \symstate
-    {\location_{10}}
+    {\location_8}
     {\{ ..., \nameid{idx} \mapsto \bvzext_{64}(n) \}}
     {[]}
     {...}
@@ -255,7 +255,7 @@ s \triangleq \symstate
 According to the symbolic semantics, the derived symbolic state is:
 \[
 s' \triangleq \symstate
-    {\location_{11}}
+    {\location_9}
     {\{ ..., \nameid{idx} \mapsto \bvzext_{64}(n), \nameid{gep2} \mapsto e \}}
     {[]}
     {...}
@@ -266,7 +266,7 @@ where:
 The symbolic state computed by the \SE engine is:
 \[
 s'_{opt} \triangleq \symstate
-    {\location_{11}}
+    {\location_9}
     {\{ ..., \nameid{idx} \mapsto \bvzext_{64}(n), \nameid{gep2} \mapsto e_{opt} \}}
     {[]}
     {...}
@@ -275,9 +275,10 @@ s'_{opt} \triangleq \symstate
 where:
 \[ e_{opt} \triangleq \bvadd_{64}(\bvconst{64}{\addr}, \bvzext_{64}(\bvextract_{32}(\bvzext_{64}(n)))) \]
 Now, we need to prove that the subtree of $s$ is safe.
-To prove that $s$ is not an error state, we will use the following lemma:
-% TODO: define overflowcond
-% TODO: where $\overflowcond$ computes an SMT formula that encodes the fact that an overflow occured.
+To prove that $s$ is not an error state, we will use the following lemma:\footnote{
+Informally, $\overflowcond$ computes an SMT formula that encodes the fact that an overflow occured.
+Its formal definition is omitted due to space limitations.
+}
 \begin{lemma}
 Let $\tau$ be a type, $p$ a pointer value of type $\bvsort{\pointerwidth}$, and $\overline{t_i}$ a sequence of SMT expressions.
 If $\evalgep(\tau, p, \overline{m[t_i]}) = \tpoison$,
@@ -301,7 +302,7 @@ it suffices to prove that their stores are equivalent, which holds since $e \equ
 The symbolic state at~\cref{line:llvm-load} is:
 \[
 s \triangleq \symstate
-    {\location_{11}}
+    {\location_9}
     {\{ ..., \nameid{gep2} \mapsto e \}}
     {[]}
     {[\symmo]}
