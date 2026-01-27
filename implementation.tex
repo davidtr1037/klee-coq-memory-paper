@@ -15,7 +15,7 @@ Although the $\tgep$ instruction may have attributes (\opcode{nuw}, \opcode{nusw
 our implementation currently supports only \opcode{nuw}.
 We found several implementation issues in \klee that relate to memory modeling, which we discuss next.
 
-\paragraph{\textbf{\textit{Inconsistent modeling of the index type.}}}
+\textbf{\textit{Inconsistent modeling of the index type.}}
 On one side,
 \klee uses SMT arrays of sort $\arraysort{\smtsort{32}}{\smtsort{8}}$ to represent the contents of memory objects,
 which suggests that the modeled index type is $\bvsort{32}$.
@@ -23,7 +23,7 @@ On the other side,
 \klee computes the offsets in the interpretation of $\tgep$ using SMT expressions of sort $\smtsort{64}$,
 which suggests that the modeled index type is $\bvsort{64}$.
 
-\paragraph{\textbf{\textit{Memory Allocation.}}}
+\textbf{\textit{Memory Allocation.}}
 According to the \llvm semantics,
 if the allocation size exceeds the largest \emph{signed integer} representable by the index type,
 then the result is undefined behavior.
@@ -33,7 +33,7 @@ For example, if we allocate an object of size $2^{32} + 10$,
 then the allocation size is internally casted to $10$,
 and if later we access that object at offset $10$, then we will get an out-of-bounds error, which is a false positive.
 
-\paragraph{\textbf{\textit{Incorrect Interpretation of \textup{$\tgep$}.}}}
+\textbf{\textit{Incorrect Interpretation of \textup{$\tgep$}.}}
 We found that the interpretation of $\tgep$ in \klee is not fully compliant with the \llvm reference,
 as it does not account for overflows in the offset computation.
 To fix this, we modified the interpretation of $\tgep$ as follows:

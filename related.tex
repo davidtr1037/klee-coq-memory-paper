@@ -1,10 +1,10 @@
 \section{Related Work}
 
-The proof-logging approach proposed by Trabish et al.~\cite{klee-rocq} is restricted to a subset of \llvm with integers,
-whereas our approach extends support to memory operations, making it applicable to more realistic programs.
-Lundberg et al.~\cite{lundberg2024proof} use symbolic execution to produce functional correctness proofs for P4 programs using HOL4.
+The proof-logging approach proposed by Trabish et al.~\cite{klee-rocq} is restricted to a subset of \llvm with integers.
+Lundberg et al.~\cite{lundberg2024proof} use \SE to produce functional correctness proofs for P4 programs using HOL4.
 % TODO: no memory modeling...
-They devise a symbolic execution algorithm that outputs a collection of theorems that can be used to prove properties about the analysis results.
+%They devise a symbolic execution algorithm that outputs a collection of theorems that can be used to prove properties about the analysis results.
+Our approach extends support to memory operations, thus making it applicable to more realistic programs.
 
 % TODO: shorten
 Correnson et al.~\cite{fse23wise} develop a formally verified symbolic bug finder for a toy WHILE-style language in \coq.
@@ -38,9 +38,7 @@ It was evaluated on concurrent and distributed algorithms.
 Loom~\cite{loom-popl26} is a framework that allows to construct foundational program verifiers.
 The derived program verifier provides support for proof automation using SMT solvers,
 and when automation fails, it fallbacks to an interactive proof mode, similarly to~\cite{veil}.
-They derive two program verifiers using this framework:
-Velvet, a Dafny-style verifier for a prototype imperative language with support for arrays,
-and Veil 2.0, and extended version of Veil~\cite{veil}.
-Loom has not been demonstrated on a real-world programming language with full memory support (\eg LLVM IR).
+They derive Velvet, a Dafny-style verifier for a prototype imperative language with support for arrays.
+However, Loom has not been demonstrated on a real-world programming language with full memory support (\eg LLVM IR).
 To the best of our knowledge,
 deriving a foundational program verifier for such programming languages using Loom requires non-trivial changes to its underlying theoretical foundations.
