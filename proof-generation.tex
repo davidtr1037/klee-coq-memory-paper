@@ -290,7 +290,7 @@ In our case, it unfolds to the following constraint:
 \[
 \begin{array}{ll}
 n < \bvconst{32}{2} \land \big( & (\bvzext_{64}(n) > \bvconst{64}{4294967295}) \lor \\
-& (\bvmul{\bvsort{64}}{\bvzext_{64}(\bvextract_{32}(\bvzext_{64}(n)))}{\bvconst{64}{1}}) > \bvconst{64}{4294967295})\big)
+& (\bvmul{\bvsort{64}}{\bvzext_{64}(\bvextract_{32}(\bvzext_{64}(n)))}{\bvconst{64}{1}}) > \bvconst{64}{4294967295}\big)
 \end{array}
 \]
 which is indeed unsatisfiable.
