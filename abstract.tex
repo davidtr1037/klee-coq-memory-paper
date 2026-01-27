@@ -2,10 +2,10 @@
 % TODO: first?
 
 %Symbolic execution (\SE) is a program analysis technique that executes the program with symbolic inputs.
-Modern symbolic execution (\SE) tools are mainly designed for applicability and performance,
-however, they do not provide formal guarantees for the correctness of their analysis results.
+Modern symbolic execution (\SE) tools are mainly designed for identifying bugs in programs, focusing on applicability and performance.
+As such, they do not provide formal guarantees for the correctness of their analysis results.
 In particular,
-if the goal is program verification, then relying on such unverified \SE tools is insufficient.
+for tasks such as program verification, relying on such unverified \SE tools is insufficient.
 %One approach is to derive a verified \SE tool using extraction from proof assistants,
 %but this was applied only in rather simplistic settings.
 One approach to address this challenge is \emph{proof logging},
