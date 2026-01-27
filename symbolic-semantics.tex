@@ -24,11 +24,10 @@ The symbolic allocator is defined similarly to its concrete counterparts (\Cref{
 \label{def:symbolic-state}
 A symbolic state is a tuple $\symstate{\location}{\symlocalstore}{\symstack}{\symmemory}{\pc}$.
 The location $\location \in \Locs$ is defined as before.
-The concrete store $\localstore \in \Stores$ is replaced with a symbolic store $\symlocalstore \in \SymStores$,
-where $\SymStores \triangleq \Ids \to \Exprs$ and $\Exprs$ is a set of SMT expressions, \ie first-order terms.
-The symbolic stack $\symstack \in (\Locs \times \SymStores \times \Ids)^*$ is modified accordingly to hold symbolic stores instead of concrete ones.
+The concrete store $\localstore \in \Stores$ is replaced with a symbolic store $\symlocalstore \in \SymStores$ that maps variables to SMT expressions.
+The symbolic stack $\symstack$ is modified accordingly to hold symbolic stores instead of concrete ones.
 The concrete heap $\memory \in \Heaps$ is replaced with a symbolic one $\symmemory \in \SymHeaps$.
-The path constraint $\pc \in \Exprs$ is a formula of sort $\Bool$ which accumulates assumptions along the execution path.
+The path constraint $\pc$ is a formula of sort $\Bool$ that accumulates assumptions along the execution path.
 \end{definition}
 
 \Cref{figure:symbolic-semantics} defines the symbolic operational small-step semantics of \llvm IR based on the syntax in~\Cref{figure:llvm-syntax}.

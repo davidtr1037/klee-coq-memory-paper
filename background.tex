@@ -247,7 +247,7 @@ Therefore, we leave the modeling of such allocators to future work.
 A \emph{concrete state} is a tuple $\progstate{\location}{\localstore}{\stack}{\memory}$,
 where $\location \in \Locs$ is a program location,
 $\localstore \in \Stores$ is a \emph{local store} that maps variables to values in $\Vals$,
-$\stack \in (\Locs \times \Stores \times \Ids)^{*}$ is a call stack represented as a sequence of frames,
+$\stack$ is a call stack represented as a sequence of frames,
 and $\memory \in \Heaps$ is a heap.
 \end{definition}
 
