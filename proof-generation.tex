@@ -262,7 +262,7 @@ s' \triangleq \symstate
     {n < \bvconst{32}{2}}
 \]
 where:
-\[ e \triangleq \bvadd_{64}(\bvconst{64}{\addr}, \bvzext_{64}(\bvmul_{32}(\bvextract_{32}(\bvzext_{64}(n)), \bvconst{32}{1}))) \]
+\[ e \triangleq \bvadd{\bvsort{64}}{\bvconst{64}{\addr}}{\bvzext_{64}(\bvmul_{32}(\bvextract_{32}(\bvzext_{64}(n)), \bvconst{32}{1}))} ) \]
 The symbolic state computed by the \SE engine is:
 \[
 s'_{opt} \triangleq \symstate
@@ -273,7 +273,7 @@ s'_{opt} \triangleq \symstate
     {n < \bvconst{32}{2}}
 \]
 where:
-\[ e_{opt} \triangleq \bvadd_{64}(\bvconst{64}{\addr}, \bvzext_{64}(\bvextract_{32}(\bvzext_{64}(n)))) \]
+\[ e_{opt} \triangleq \bvadd{\bvsort{64}}{\bvconst{64}{\addr}}{\bvzext_{64}(\bvextract_{32}(\bvzext_{64}(n)))} \]
 Now, we need to prove that the subtree of $s$ is safe.
 To prove that $s$ is not an error state, we will use the following lemma:\footnote{
 Informally, $\overflowcond$ computes an SMT formula that encodes the fact that an overflow occured.
@@ -309,7 +309,7 @@ s \triangleq \symstate
     {n < \bvconst{32}{2}}
 \]
 where:
-\[ e \triangleq \bvadd_{64}(\bvconst{64}{\addr}, \bvzext_{64}(\bvextract_{32}(\bvzext_{64}(n)))) \]
+\[ e \triangleq \bvadd{\bvsort{64}}{\bvconst{64}{\addr}}{\bvzext_{64}(\bvextract_{32}(\bvzext_{64}(n)))} \]
 \[ \symmo \triangleq (\bvval{\addr}{64}, \bvval{2}{32}, \smtarray), \ \smtarray \triangleq \arraystore{\arraystore{\arrayconst{\arrayinitvalue}}{\bvconst{32}{0}}{\bvconst{8}{7}}}{\bvconst{32}{1}}{\arrayinitvalue} \]
 
 On one side, according to the symbolic semantics,
