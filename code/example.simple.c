@@ -3,9 +3,8 @@ int main() {
   unsigned n = make_symbolic();
   assume(n < 2);
   p[0] = 7; /*@ \label{line:example-store} @*/
-  if (p[n] == 7) {
+  if (p[n] == 7)
     return 1;
-  } else {
+  else
     return 0;
-  }
 }
