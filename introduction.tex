@@ -78,8 +78,8 @@ For example, \klee~\cite{klee} uses multiple representations for memory objects,
 % solution: interface lemmas / additional theory
 
 % theoretical foundation
-In this work,
-we apply proof logging to memory-manipulating \llvm programs,
+In this paper,
+we apply proof logging to memory-manipulating programs in \llvm,
 resulting in the first tool that generates machined-checked safety proofs for this subset of \llvm.
 Our approach builds on~\cite{klee-rocq} and introduces several substantial extensions, requiring a significant theoretical and engineering effort.
 First, we extend the concrete and symbolic semantics to support memory-related instructions.
@@ -95,7 +95,7 @@ The entire development of this paper comes with proofs in \coq~\cite{rocq}.
 % TODO: implemented ...
 \begin{paragraph}{\textbf{Main Contributions:}}
 \begin{itemize}
-\item A formalization in \coq consisting of a concrete and symbolic semantics for a subset of \llvm with memory
+\item A formalization in \coq consisting of a concrete and symbolic semantics for a subset of \llvm with memory operations
       and a supporting theory for constructing safety proofs.
 \item An extension of \klee that generates safety proofs based on our formalization.
 \item We evaluated our approach on APIs from real-world benchmarks, and found several issues in \klee related to memory modeling.\footnote{
