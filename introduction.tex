@@ -77,7 +77,7 @@ For example, \klee~\cite{klee} uses multiple representations for memory objects,
 In this work,
 we apply proof logging to memory-manipulating \llvm programs,
 resulting in the first tool that generates machined-checked safety proofs for this subset of \llvm.
-%we extend the proof logging approach in~\cite{klee-rocq} to support memory operations.
+Our approach builds on~\cite{klee-rocq} and introduces several substantial extensions, requiring a significant theoretical and engineering effort.
 First, we extend the concrete and symbolic semantics to support memory-related instructions.
 Then, we extend the theoretical foundation which allows to prove program safety based on properties of execution trees.
 Lastly, we extend \klee to generate safety proofs based on our formalization.
