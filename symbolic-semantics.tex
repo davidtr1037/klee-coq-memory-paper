@@ -222,7 +222,9 @@ In both cases, we update the path constraints $\varphi$ with the condition $\ran
 
 \textbf{\textit{GetElementPtr.}}
 The symbolic semantics of $\tgep$ is similar to the concrete semantics,
-but uses SMT expressions for offset and address calculations.
+but uses SMT expressions for offset and address calculations.\footnote{
+A pseudo-code of the symbolic semantics of $\tgep$ is given in~\Cref{appendix:symbolic-semantics}.
+}
 While the concrete version may return $\tundef$ or $\tpoison$,
 the symbolic version always returns an SMT expression,
 since the symbolic domain does not model $\tundef$ and $\tpoison$.
