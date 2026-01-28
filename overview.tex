@@ -26,14 +26,13 @@ This comprises of a definition of the space of concrete states $\States$ and a s
 It then defines the subset of error states,
 which intuitively consists of states where an invalid operation is about to occur or where a user-defined assertion is violated.
 
-{\it Analyzing Execution Trees.}
+{\it Execution Trees.}
 When \SE terminates, the paths explored during the analysis of the program form an \emph{execution tree},
 whose nodes correspond to the \emph{symbolic states} computed by the \SE engine.
 Each such symbolic state represents a set of concrete states.
-To generate a formal proof of program safety from an execution tree without reasoning directly about the concrete states and the concrete semantics,
-which would be complex and cumbersome,
-the development in~\cite{klee-rocq} provides a theoretical foundation that lifts the entire reasoning to the symbolic state space.
-%\si{still have to incorporate some content from the commented text below}
+%To generate a formal proof of program safety from an execution tree without reasoning directly about the concrete states and the concrete semantics,
+%which would be complex and cumbersome,
+%the development in~\cite{klee-rocq} provides a theoretical foundation that lifts the entire reasoning to the symbolic state space.
 
 \begin{comment}
 To construct a safety proof for a given program,
@@ -47,14 +46,14 @@ An execution tree is error-free if it does not contain symbolic error states,
 and it is complete if every feasible symbolic state derivable by the symbolic \llvm semantics can be paired by an equivalent symbolic state in the execution tree.
 \end{comment}
 
-{\it Symbolic Semantics and Reachability Completeness.}
+{\it Program Safety via Symbolic Semantics.}
 Alongside the concrete space ($\States$, $\to$),
 \cite{klee-rocq} defines analogue \emph{symbolic states} and
 \emph{symbolic semantics} ($\SymStates$, $\symstep$).
 The symbolic state space coincides with that used by \SE engines,
 where SMT-like expressions replace concrete values.
-A central result of this construction is \emph{reachability completeness}:
-For all $s_0, s \in \States$ s.t.\@ $s_0$ is an initial state, $s_0 \to^* s$, and this sequence of transitions does not introduce $\tpoison$ values,
+A central result of this construction is \emph{reachability completeness}, which lifts the entire reasoning to the symbolic domain:
+For all $s_0, s \in \States$ s.t.\@ $s_0$ is an initial state, $s_0 \to^* s$, and this sequence of transitions does not introduce $\tpoison$ values~\cite{llvmref},
 then there exist $\tilde{s}_0, \tilde{s}\in \SymStates$ such that $\tilde{s}_0$ is an initial symbolic state,
 $\tilde{s}_0\,{\symstep}{}^*\,\tilde{s}$, and $\tilde{s}$ \emph{represents} $s$,
 in the sense that $s$ can be obtained from $\tilde{s}$ by substituting symbolic variables with appropriate concrete values.
