@@ -25,7 +25,6 @@ The semantics of the $\tgep$ instruction is given in~\Cref{alg:gep}.
     \If {$\tau = \structtype{\tau}{n}$}
         \State ...
     \EndIf
-    \State ...
 \EndFunction
 
 \Function{eval\_gep}{$\tau, p, \overline{j}$}
@@ -39,6 +38,39 @@ The semantics of the $\tgep$ instruction is given in~\Cref{alg:gep}.
     \State $o \gets \convert_{\indextype}(j_0) \cdot \valoftype{|\tau|}{\indextype}$ \label{line:first-index}
     \State $r \gets \Call{compute-offset}{\tau, o, \overline{j}}$
     \State \Return $p + \zeroext_{\pointertype}(r)$
+\EndFunction
+
+\end{algorithmic}
+\end{algorithm}
+
+\section{Symbolic Semantics}
+\label{appendix:symbolic-semantics}
+% TODO: handle the struct case
+The symbolic semantics of the $\tgep$ instruction is given in~\Cref{alg:symbolic-gep}.
+
+\begin{algorithm}[t]
+\caption{The symbolic semantics of $\tgep$ (without attributes).}
+\label{alg:symbolic-gep}
+\begin{algorithmic}[1]
+
+\Function{compute-offset}{$\tau, o, \overline{j}$}
+    \If {$|\overline{j}| = 0$}
+        \State \Return $o$
+    \EndIf
+    \State $\overline{j} \gets j_1 :: \overline{j'}$
+    \If {$\tau = \arraytype{\tau'}{n}$}
+        \State $o \gets \bvadd{\bvsort{32}}{o}{\bvmul{\bvsort{32}}{\bvsext_{32}(j_1)}{\bvconst{32}{|\tau'|}}}$ \label{line:array-index}
+        \State \Return \Call{compute-offset}{$\tau', o, \overline{j'}$}
+    \EndIf
+    \If {$\tau = \structtype{\tau}{n}$}
+        \State ...
+    \EndIf
+\EndFunction
+
+\Function{eval-gep}{$\tau, p, j_0, \overline{j}$}
+    \State $o \gets \bvmul{\bvsort{32}}{\bvsext_{32}(j_0)}{\bvconst{32}{|\tau|}}$ \label{line:first-index}
+    \State $r \gets \Call{compute-offset}{\tau, o, \overline{j}}$
+    \State \Return $\bvadd{\bvsort{64}}{p}{\bvzext_{64}(r)}$
 \EndFunction
 
 \end{algorithmic}
