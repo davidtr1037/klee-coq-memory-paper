@@ -111,8 +111,6 @@ then $\safeet(\tree(s, [t]))$.
 \label{appendix:benchmarks}
 
 \begin{table*}[t]
-\caption{Benchmarks.}
-\label{table:benchmarks}
 \centering
 \begin{tabular}{|l|l|r|}
 \hline
@@ -127,18 +125,22 @@ then $\safeet(\tree(s, [t]))$.
 \svcomp & latest & 22 \\
 \hline
 \end{tabular}
+\caption{Benchmarks.}
+\label{table:benchmarks}
 \end{table*}
 
 \Cref{table:benchmarks} shows the version of each benchmark and the number of subjects in each benchmark.
 
+\subsection{Results}
+\label{appendix:results}
+\Cref{table:extended-results} shows the detailed results for each subject.
+
 \begin{table*}[t]
-\caption{Extended results for each subject.}
-\label{table:benchmarks}
 \small{
 \begin{tabular}{|l|l|r|r|r|r|r|r|}
 \hline
 \textbf{Benchmark} & \textbf{Subject} & \makecell{\textbf{Time}} & \makecell{\textbf{Time}} & \makecell{\textbf{Proof}} & \makecell{\textbf{Proof}} & \textbf{\#Inst} & \textbf{\#Path} \\
-& & \makecell{\textbf{\base}} & \makecell{\textbf{\proofopt}} & \makecell{\textbf{Time}} & \makecell{\textbf{Time}} & & \\
+& & \makecell{\textbf{\base}} & \makecell{\textbf{\proofopt}} & \makecell{\textbf{Time}} & \makecell{\textbf{Size}} & & \\
 \hline
 \libtasn & test\_asn1\_bit\_der & 4.3 & 5.0 & 160.4 & 32111 & 10004 & 301 \\
 & test\_asn1\_get\_length\_ber & 8.0 & 12.7 & 201.9 & 109704 & 32019 & 456 \\
@@ -188,4 +190,6 @@ then $\safeet(\tree(s, [t]))$.
 \hline
 \end{tabular}
 }
+\caption{Extended results for each subject.}
+\label{table:extended-results}
 \end{table*}
