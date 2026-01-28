@@ -23,14 +23,19 @@ as they typically consist of large codebases with complex third-party dependenci
 One the other hand,
 verified implementations extracted from proof assistants~\cite{fse23wise,icfp22:keuchel} were applied only for simple programming languages,
 and they lack advanced features such as search heuristics, constraint solving optimizations, and other performance optimizations.
-Proof logging~\cite{lundberg2024proof,klee-rocq,de2008proofs,flippo2024multi} is an alternative approach,
+Proof logging~\cite{lundberg2024proof,klee-rocq,de2008proofs,marx2013proof,flippo2024multi,mcilree2024proof,van2025efficient} is an alternative approach,
 inspired by \emph{translation validation}~\cite{samet,pnueli1998translation}.
 Rather than aiming for a verified implementation,
 the \SE tool emits, during the analysis, a safety proof that is specific to the analyzed program.
+
+%Proof logging~\cite{lundberg2024proof,klee-rocq} is an alternative approach,
+%inspired by \emph{translation validation}~\cite{samet,pnueli1998translation}. Rather than aiming for a verified implementation,
+%the tool emits, during the analysis, a safety proof that is specific to the analyzed program.
 %The term itself evolved in the field of constraint solving, indicating the
 %need to store some metadata while the solver is exploring the search space,
 %in order to be able to produce proofs later~\cite{de2008proofs}.
-%It is still prevalent in modern solver architectures~
+%It is still prevalent in modern solver architectures%
+%~\cite{van2025efficient,flippo2024multi,marx2013proof,mcilree2024proof}.
 
 % Gap
 
