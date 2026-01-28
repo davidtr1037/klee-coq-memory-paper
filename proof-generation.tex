@@ -1,4 +1,4 @@
-\subsection{Instrumenting the Symbolic Execution Engine}
+\subsection{Proof Generation}
 \label{sec:proof-generation}
 
 \Cref{theorem:safety-via-et} implies that the existence of a safe execution tree guarantees program safety.
@@ -102,7 +102,7 @@ we accelerate both proof generation and proof checking,
 since we create smaller proofs which mainly rely on simple tactics such as \textit{apply} and \textit{reflexivity}.
 
 Now, we will show how to define such interface lemmas,
-and how to apply them in the context of the \llvm IR program from~\Cref{figure:example-llvm}.
+and how to apply them in the context of the \llvm IR program on the left of~\Cref{figure:example-llvm}.
 In this section, we will focus on memory-related instructions.
 We denote by $\location_n$ the program location that corresponds to line $n$ in~\Cref{figure:example-llvm}.
 
