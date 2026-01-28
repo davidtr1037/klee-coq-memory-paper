@@ -4,7 +4,6 @@
 
 % TODO: provides a high degree of assurance
 % TODO: we are not aware of any such tool
-% TODO: the entire development of this paper comes with end-to-end correctness proofs done in Lean [37].
 
 % TODO: mention loom / velvet / ...
 % TODO: verified tool / certified tool
@@ -88,6 +87,8 @@ Then, we extend the theoretical foundation which allows to prove program safety 
 Lastly, we extend \klee to generate safety proofs based on our formalization.
 To address the gap between the formalized symbolic semantics and the heavily-optimized behavior in \klee,
 we develop an additional theory that help to interact with various parts of our formalization.
+
+The entire development of this paper comes with end-to-end correctness proofs done in \coq~\cite{rocq}.
 
 % TODO: mechanized concrete semantics? better modeling of GEP, etc.
 % TODO: theory for program safety based on execution trees
