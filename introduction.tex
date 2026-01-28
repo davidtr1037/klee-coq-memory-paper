@@ -4,13 +4,13 @@
 
 % TODO: provides a high degree of assurance
 % TODO: we are not aware of any such tool
-% TODO: The entire development of this paper comes with end-to-end correctness proofs done in Lean [37].
+% TODO: the entire development of this paper comes with end-to-end correctness proofs done in Lean [37].
 
 % TODO: mention loom / velvet / ...
 % TODO: verified tool / certified tool
 % TODO: add more citations for verification?
 % TODO: define program safety
-% TODO: which is the case in other analysis tools as well
+
 Symbolic execution (\SE) is a program analysis technique with applications in many areas,
 including test generation, bug finding, and verification~\cite{CadarSen13,klee,exe,spf,bugredux,se-java-2004,se-numerical-2006,syminfer}.
 Although \SE has been used for verification tasks,
@@ -23,13 +23,14 @@ as they typically consist of large codebases with complex third-party dependenci
 One the other hand,
 verified implementations extracted from proof assistants~\cite{fse23wise,icfp22:keuchel} were applied only for simple programming languages,
 and they lack advanced features such as search heuristics, constraint solving optimizations, and other performance optimizations.
-Proof logging~\cite{lundberg2024proof,klee-rocq} is an alternative approach,
-inspired by \emph{translation validation}~\cite{samet,pnueli1998translation}. Rather than aiming for a verified implementation,
-the tool emits, during the analysis, a safety proof that is specific to the analyzed program.
-The term itself evolved in the field of constraint solving, indicating the
-need to store some metadata while the solver is exploring the search space,
-in order to be able to produce proofs later~\cite{de2008proofs}.
-It is still prevalent in modern solver architectures~
+Proof logging~\cite{lundberg2024proof,klee-rocq,de2008proofs,flippo2024multi} is an alternative approach,
+inspired by \emph{translation validation}~\cite{samet,pnueli1998translation}.
+Rather than aiming for a verified implementation,
+the \SE tool emits, during the analysis, a safety proof that is specific to the analyzed program.
+%The term itself evolved in the field of constraint solving, indicating the
+%need to store some metadata while the solver is exploring the search space,
+%in order to be able to produce proofs later~\cite{de2008proofs}.
+%It is still prevalent in modern solver architectures~
 
 % Gap
 
