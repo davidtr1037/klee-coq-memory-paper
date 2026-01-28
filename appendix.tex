@@ -46,13 +46,33 @@ The semantics of the $\tgep$ instruction is given in~\Cref{alg:gep}.
 
 \section{Interface Lemmas}
 
+In this section,
+we provide the formalization of the interface lemmas for $\tload$, $\tstore$, and $\tgep$.
+
 \begin{definition}
 \label{def:sym-well-formed}
 A memory object $(\addr, \size, \smtarray)$ is well-formed if its address interval does not wrap around the address space,
 \ie $a + \zeroext_{\bvsort{64}}(s)$ does not overflow.
-A memory $\symmemory$ is well-formed if all the memory objects are well-formed and there are no memory objects with overlapping address intervals.
+A heap $\symmemory$ is well-formed if all its memory objects are well-formed and there are no memory objects with overlapping address intervals.
 A symbolic state $\symstate{\location}{\symlocalstore}{\symstack}{\symmemory}{\pc}$ is well-formed if $\symmemory$ is well-formed.
 \end{definition}
+
+\begin{lemma}
+\label{lemma:interface-load}
+Let $s \triangleq \symstate{\location}{\symlocalstore}{\symstack}{\symmemory}{\pc}$,
+where \textup{$\instrat{\location} = \codequote{x~\texttt{=}~\tload^{\tau}~e}$}.
+If there exist $\symmo$, $\symlocalstore'_{opt}$, and $t$ such that:
+\begin{enumerate}
+    \item $\symmemory$ is well-formed
+    \item $\symmo \in \symmemory$
+    \item $\evalexprty{e}{\symlocalstore}{\bvsort{64}} = p$
+    \item $\unsat(\pc \land \neg \rangecond(p, |\tau|, \symmo))$
+    \item $\symlocalstore[x \mapsto \moRead{\symmo}{p}{\tau}] \equiv \symlocalstore'_{opt}$
+    \item $t.\attrstate = \symstate{\nextinstr{\location}}{\symlocalstore'_{opt}}{\symstack}{\symmemory}{\pc}$
+    \item $\safeet(t)$
+\end{enumerate}
+then $\safeet(\tree(s, [t]))$.
+\end{lemma}
 
 \begin{lemma}
 \label{lemma:interface-store}
@@ -81,23 +101,6 @@ If there exist $\symlocalstore'_{opt}$ and $t$ such that:
     \item $\evalexprty{e_i}{\symlocalstore}{\tau_i} = k_i$
     \item $\unsat(\pc \land \overflowcond(\tau, \overline{k_i}))$
     \item \textup{$\symlocalstore[x \mapsto \evalexprty{\tgep~\pointertypeof{\tau}~e~\overline{(\tau_i, e_i)}}{\symlocalstore}{\tau^{*}}] \equiv \symlocalstore'_{opt}$}
-    \item $t.\attrstate = \symstate{\nextinstr{\location}}{\symlocalstore'_{opt}}{\symstack}{\symmemory}{\pc}$
-    \item $\safeet(t)$
-\end{enumerate}
-then $\safeet(\tree(s, [t]))$.
-\end{lemma}
-
-\begin{lemma}
-\label{lemma:interface-load}
-Let $s \triangleq \symstate{\location}{\symlocalstore}{\symstack}{\symmemory}{\pc}$,
-where \textup{$\instrat{\location} = \codequote{x~\texttt{=}~\tload^{\tau}~e}$}.
-If there exist $\symmo$, $\symlocalstore'_{opt}$, and $t$ such that:
-\begin{enumerate}
-    \item $\symmemory$ is well-formed
-    \item $\symmo \in \symmemory$
-    \item $\evalexprty{e}{\symlocalstore}{\bvsort{64}} = p$
-    \item $\unsat(\pc \land \neg \rangecond(p, |\tau|, \symmo))$
-    \item $\symlocalstore[x \mapsto \moRead{\symmo}{p}{\tau}] \equiv \symlocalstore'_{opt}$
     \item $t.\attrstate = \symstate{\nextinstr{\location}}{\symlocalstore'_{opt}}{\symstack}{\symmemory}{\pc}$
     \item $\safeet(t)$
 \end{enumerate}
