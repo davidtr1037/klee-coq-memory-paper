@@ -49,7 +49,8 @@ The semantics of the $\tgep$ instruction is given in~\Cref{alg:gep}.
 The symbolic semantics of the $\tgep$ instruction is given in~\Cref{alg:symbolic-gep}.
 Here, you may assume that $\bvsext_{32}(t)$ is defined as follows:
 If the width of $t$ is less than 32 it performs sign extension,
-and if the width of $t$ is greater than 32 it performs truncation.
+if the width of $t$ is greater than 32 it performs truncation,
+and otherwise it returns $t$.
 
 \begin{algorithm}[t]
 \caption{The symbolic semantics of $\tgep$ (without attributes).}
