@@ -131,96 +131,61 @@ then $\safeet(\tree(s, [t]))$.
 
 \Cref{table:benchmarks} shows the version of each benchmark and the number of subjects in each benchmark.
 
-
 \begin{table*}[t]
-\caption{Benchmarks.}
+\caption{Extended results for each subject.}
 \label{table:benchmarks}
-\begin{tabular}{|l|l|r|r|r|r|}
+\small{
+\begin{tabular}{|l|l|r|r|r|r|r|r|}
 \hline
-Benchmark & Subject & Time (\base) & Time (\proofopt) & Proof Time & Proof Size \\
+\textbf{Benchmark} & \textbf{Subject} & \multicolumn{2}{|c|}{\textbf{Analysis Time}} & \multicolumn{2}{|c|}{\textbf{Proof}} & \textbf{\#Inst} & \textbf{\#Path} \\
+& & \textbf{\base} & \textbf{\proofopt} & \textbf{Time} & \textbf{Size} & & \\
 \hline
-\libtasn & test\_asn1\_bit\_der & 4.3 & 5.0 & 160.4 & 32111 \\
-\cline{2-6}
-& test\_asn1\_get\_length\_ber & 8.0 & 12.7 & 201.9 & 109704 \\
-\cline{2-6}
-& test\_asn1\_get\_length\_der & 0.8 & 1.0 & 31.7 & 6855 \\
-\cline{2-6}
-& test\_asn1\_get\_object\_id\_der & 2.6 & 5.7 & 628.4 & 136632 \\
-\cline{2-6}
-& test\_asn1\_get\_octet\_der & 4.0 & 4.6 & 166.3 & 32013 \\
-\cline{2-6}
-& test\_asn1\_get\_tag\_der & 0.5 & 0.7 & 47.2 & 10981 \\
+\libtasn & test\_asn1\_bit\_der & 4.3 & 5.0 & 160.4 & 32111 & 10004 & 301 \\
+& test\_asn1\_get\_length\_ber & 8.0 & 12.7 & 201.9 & 109704 & 32019 & 456 \\
+& test\_asn1\_get\_length\_der & 0.8 & 1.0 & 31.7 & 6855 & 1897 & 92 \\
+& test\_asn1\_get\_object\_id\_der & 2.6 & 5.7 & 628.4 & 136632 & 44573 & 266 \\
+& test\_asn1\_get\_octet\_der & 4.0 & 4.6 & 166.3 & 32013 & 9619 & 282 \\
+& test\_asn1\_get\_tag\_der & 0.5 & 0.7 & 47.2 & 10981 & 2412 & 51 \\
 \hline
-\libosip & test\_osip\_dequote & 0.1 & 0.2 & 20.4 & 5037 \\
-& test\_osip\_hash & 0.1 & 0.1 & 1116.6 & 1158 \\
-\cline{2-6}
-& test\_osip\_str\_append & 0.1 & 0.2 & 8.4 & 2007 \\
-\cline{2-6}
-& test\_osip\_strcasecmp & 0.2 & 0.2 & 16.7 & 4134 \\
-\cline{2-6}
-& test\_osip\_strncasecmp & 0.3 & 0.3 & 15.6 & 3816 \\
-\cline{2-6}
-& test\_osip\_strncpy & 0.1 & 0.1 & 22.6 & 5915 \\
-\cline{2-6}
-& test\_osip\_tolower & 0.1 & 0.1 & 8.6 & 1399 \\
+\libosip & test\_osip\_dequote & 0.1 & 0.2 & 20.4 & 5037 & 1997 & 32 \\
+& test\_osip\_hash & 0.1 & 0.1 & 1116.6 & 1158 & 532 & 21 \\
+& test\_osip\_str\_append & 0.1 & 0.2 & 8.4 & 2007 & 769 & 21 \\
+& test\_osip\_strcasecmp & 0.2 & 0.2 & 16.7 & 4134 & 1844 & 41 \\
+& test\_osip\_strncasecmp & 0.3 & 0.3 & 15.6 & 3816 & 1397 & 40 \\
+& test\_osip\_strncpy & 0.1 & 0.1 & 22.6 & 5915 & 1933 & 21 \\
+& test\_osip\_tolower & 0.1 & 0.1 & 8.6 & 1399 & 628 & 21 \\
 \hline
-\coreutils & test\_base32 & 0.1 & 0.1 & 25.3 & 5089 \\
-\cline{2-6}
-& test\_base64 & 0.1 & 0.1 & 19.8 & 4576 \\
-\cline{2-6}
-& test\_base\_len & 0.1 & 0.2 & 30.6 & 7280 \\
-\cline{2-6}
-& test\_hash\_pjw & 0.1 & 0.1 & 1104.5 & 1474 \\
-\cline{2-6}
-& test\_last\_component & 0.1 & 0.1 & 11.7 & 2838 \\
-\cline{2-6}
-& test\_strintcmp & 0.6 & 1.4 & 163.1 & 42527 \\
-\cline{2-6}
-& test\_strip\_trailing\_slashes & 0.1 & 0.2 & 40.2 & 9570 \\
+\coreutils & test\_base32 & 0.1 & 0.1 & 25.3 & 5089 & 665 & 1 \\
+& test\_base64 & 0.1 & 0.1 & 19.8 & 4576 & 709 & 1 \\
+& test\_base\_len & 0.1 & 0.2 & 30.6 & 7280 & 3629 & 211 \\
+& test\_hash\_pjw & 0.1 & 0.1 & 1104.5 & 1474 & 663 & 21 \\
+& test\_last\_component & 0.1 & 0.1 & 11.7 & 2838 & 1218 & 63 \\
+& test\_strintcmp & 0.6 & 1.4 & 163.1 & 42527 & 13517 & 275 \\
+& test\_strip\_trailing\_slashes & 0.1 & 0.2 & 40.2 & 9570 & 4842 & 63 \\
 \hline
-\svcomp & bubblesort-alloca-2 & 0.2 & 0.3 & 25.0 & 5584 \\
-\cline{2-6}
-& cstrchr-alloca-2 & 0.2 & 0.3 & 5.0 & 1121 \\
-\cline{2-6}
-& cstrcmp-alloca-2 & 0.1 & 0.2 & 7.8 & 1869 \\
-\cline{2-6}
-& cstrcpy-alloca-1 & 0.1 & 0.1 & 3.1 & 608 \\
-\cline{2-6}
-& cstrcspn-alloca-1 & 4.9 & 6.8 & 147.7 & 34291 \\
-\cline{2-6}
-& cstrlen-alloca-2 & 0.1 & 0.1 & 2.8 & 525 \\
-\cline{2-6}
-& cstrncat-alloca-2 & 0.1 & 0.1 & 1.4 & 113 \\
-\cline{2-6}
-& cstrncmp-alloca-1 & 0.3 & 0.3 & 8.6 & 2036 \\
-\cline{2-6}
-& cstrncpy-alloca-2 & 0.1 & 0.1 & 7.6 & 1748 \\
-\cline{2-6}
-& cstrpbrk-alloca-2 & 0.7 & 0.9 & 17.7 & 4318 \\
-\cline{2-6}
-& cstrspn-alloca-1 & 0.7 & 0.9 & 20.1 & 4990 \\
-\cline{2-6}
-& diff-alloca-2 & 5.2 & 7.5 & 398.4 & 96115 \\
-\cline{2-6}
-& insertionsort-alloca-1 & 0.2 & 0.2 & 12.9 & 2736 \\
-\cline{2-6}
-& java\_BubbleSort-alloca-1 & 0.2 & 0.3 & 23.6 & 5212 \\
-\cline{2-6}
-& lis-alloca-1 & 0.3 & 0.5 & 46.2 & 12737 \\
-\cline{2-6}
-& mult\_array-alloca-1 & 0.1 & 0.3 & 43.3 & 10789 \\
-\cline{2-6}
-& rec\_strlen-alloca-1 & 0.1 & 0.1 & 3.6 & 751 \\
-\cline{2-6}
-& selectionsort-alloca-1 & 0.3 & 0.5 & 35.0 & 7861 \\
-\cline{2-6}
-& stroeder1-alloca-1 & 0.1 & 0.1 & 3.3 & 648 \\
-\cline{2-6}
-& strreplace-alloca-2 & 7.3 & 8.7 & 148.7 & 35976 \\
-\cline{2-6}
-& subseq-alloca-2 & 1.7 & 3.9 & 351.4 & 85773 \\
-\cline{2-6}
-& substring-alloca-2 & 0.2 & 0.3 & 11.5 & 2701 \\
+\svcomp & bubblesort-alloca-2 & 0.2 & 0.3 & 25.0 & 5584 & 1910 & 24 \\
+& cstrchr-alloca-2 & 0.2 & 0.3 & 5.0 & 1121 & 513 & 38 \\
+& cstrcmp-alloca-2 & 0.1 & 0.2 & 7.8 & 1869 & 761 & 37 \\
+& cstrcpy-alloca-1 & 0.1 & 0.1 & 3.1 & 608 & 258 & 10 \\
+& cstrcspn-alloca-1 & 4.9 & 6.8 & 147.7 & 34291 & 12848 & 460 \\
+& cstrlen-alloca-2 & 0.1 & 0.1 & 2.8 & 525 & 252 & 10 \\
+& cstrncat-alloca-2 & 0.1 & 0.1 & 1.4 & 113 & 24 & 3 \\
+& cstrncmp-alloca-1 & 0.3 & 0.3 & 8.6 & 2036 & 780 & 41 \\
+& cstrncpy-alloca-2 & 0.1 & 0.1 & 7.6 & 1748 & 716 & 10 \\
+& cstrpbrk-alloca-2 & 0.7 & 0.9 & 17.7 & 4318 & 1662 & 64 \\
+& cstrspn-alloca-1 & 0.7 & 0.9 & 20.1 & 4990 & 1918 & 64 \\
+& diff-alloca-2 & 5.2 & 7.5 & 398.4 & 96115 & 32558 & 625 \\
+& insertionsort-alloca-1 & 0.2 & 0.2 & 12.9 & 2736 & 955 & 24 \\
+& java\_BubbleSort-alloca-1 & 0.2 & 0.3 & 23.6 & 5212 & 1764 & 24 \\
+& lis-alloca-1 & 0.3 & 0.5 & 46.2 & 12737 & 3292 & 24 \\
+& mult\_array-alloca-1 & 0.1 & 0.3 & 43.3 & 10789 & 1526 & 1 \\
+& rec\_strlen-alloca-1 & 0.1 & 0.1 & 3.6 & 751 & 401 & 10 \\
+& selectionsort-alloca-1 & 0.3 & 0.5 & 35.0 & 7861 & 2540 & 33 \\
+& stroeder1-alloca-1 & 0.1 & 0.1 & 3.3 & 648 & 258 & 1 \\
+& strreplace-alloca-2 & 7.3 & 8.7 & 148.7 & 35976 & 15466 & 1023 \\
+& subseq-alloca-2 & 1.7 & 3.9 & 351.4 & 85773 & 33988 & 1790 \\
+& substring-alloca-2 & 0.2 & 0.3 & 11.5 & 2701 & 1037 & 32 \\
 \hline
 \end{tabular}
+}
 \end{table*}
