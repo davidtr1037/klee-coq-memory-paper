@@ -1,11 +1,6 @@
 \subsection{Symbolic Semantics}
 \label{sec:symbolic-semantics}
-% TODO: some background about SE
-% TODO: symbolic state
 
-% TODO: allocator
-% TODO: explain why deterministic
-% TODO: requires the same allocator in KLEE
 % TODO: hard-code the array sort?
 
 In this section,
@@ -17,7 +12,8 @@ A symbolic memory object is defined as a tuple:
 which is similar to the definition of a concrete memory object,
 but now the contents are encoded using an SMT array whose values are symbolic bytes, \ie SMT expressions of sort $\bvsort{8}$.
 A symbolic heap $\symmemory \in \SymHeaps$ is defined as a set of symbolic memory objects.
-The symbolic allocator is defined similarly to its concrete counterparts (\Cref{def:memory}).
+% TODO: define again?
+The symbolic allocator is defined similarly to its concrete counterpart (\Cref{def:memory}).
 \end{definition}
 
 \begin{definition}
@@ -38,7 +34,7 @@ In some of the rules, we use the following definitions (where $\symmo \triangleq
 \[
 \begin{array}{ll}
 \baseaddrcond(p, \symmo) & \triangleq p = \bvconst{\pointerwidth}{a} \\
-\rangecond(p, n, \symmo) & \triangleq p < \bvadd_{\pointerwidth}(p, n) \land p \geq \bvconst{\pointerwidth}{\addr} \land \bvadd_{\pointerwidth}(p, n) < \bvadd_{\pointerwidth}(\bvconst{\pointerwidth}{\addr}, \bvconst{\pointerwidth}{\size})
+    \rangecond(p, n, \symmo) & \triangleq p < \bvadd{\pointerwidth}{p}{n} \land p \geq \bvconst{\pointerwidth}{\addr} \land \bvadd{\pointerwidth}{p}{n} < \bvadd{\pointerwidth}{\bvconst{\pointerwidth}{\addr}}{\bvconst{\pointerwidth}{\size}}
 \end{array}
 \]
 Informally,

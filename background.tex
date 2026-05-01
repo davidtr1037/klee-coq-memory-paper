@@ -50,12 +50,13 @@ We use the notation $\bvval{n}{w}$ to denote a bit-vector of type $\bvsort{$w$}$
 \subsubsection{\textit{LLVM Memory Model.}}
 
 % TODO: mention address space
+% TODO: add citation
 According to the \llvm reference, a \emph{data layout} specifies how data is to be laid out in memory.
 %The data layout consists of a list of specifications,
 %including endianness, alignment rules, \etc
 In particular, it defines various properties related to pointers, such as \emph{pointer type} and \emph{index type}.
 The pointer type specifies the integral type used to represent pointer values.
-The index type specifies the type used for address calculations (\eg in \tgep).
+The index type specifies the integral type used for address calculations (\eg in \tgep).
 The size of the index type may not exceed the size of the pointer type.
 An allocated object is a region of the address space reserved by a memory-allocation operation,
 such as \textsf{alloca}, a heap allocation call (\eg \textit{malloc}), or a global variable definition.
@@ -390,7 +391,7 @@ In our context, we assume that both $I$ and $V$ are bit-vector sorts.
 It defines the interpreted function symbols \textit{select}, \textit{store}, and \textit{K}.
 Semantically,
 $\mathit{select}(a, i)$ returns the value stored at index $i$ in $a$,
-$\mathit{store}(a, i, v)$ return the array obtained from $a$ by updating the value at index $i$ to $v$,
+$\mathit{store}(a, i, v)$ returns the array obtained from $a$ by updating the value at index $i$ to $v$,
 and $K(v)$ returns a constant array that maps all the indices to $v$.
 %A \emph{model} $m$ must map interpreted function symbols to their accepted functions over $\{0{,}1\}^w$.
 As is typically done \SE tools,
