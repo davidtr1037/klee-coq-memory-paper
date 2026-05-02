@@ -29,7 +29,7 @@ To encode the contents of a memory object,
 \klee uses two representations: \emph{optimized} and \emph{non-optimized}.
 If all the stores to a given memory object were performed with a concrete offset,
 then \klee uses the optimized representation where the contents are encoded as a mapping between constant offsets and symbolic values.
-When there is a store with a symbolic offset,
+When there is at least one store with a symbolic offset,
 \klee switches to the non-optimized representation,
 by translating the optimized representation into an SMT array, \ie a sequence of store expressions.
 Once this happens, the representation cannot be switched back to the optimized one.
@@ -87,7 +87,7 @@ The translation of other components is done similarly to~\cite{klee-rocq}.
 % explain the UNSAT query in symbolic load/store
 
 First, we generate the definition of the execution tree in a bottom-up manner.
-Then, we have to prove that the resulting execution tree satisfies the $\safeet$ relation.
+Then, we have to prove that the resulting execution tree satisfies the $\safeet$ relation (\Cref{def:safe-et}).
 We generate this proof in a bottom-up manner as well, showing that each subtree satisfies the required properties.
 The proof of each subtree corresponds to a single instruction that was executed during the analysis.
 Generating an explicit proof from scratch for each subtree is expensive in terms of proof generation,
@@ -157,10 +157,11 @@ and then the analysis may be incomplete and a safety proof may not be derivable.
 There exist \SE engines that support symbolic-size allocations (\eg \cite{symsize-model}),
 however, it is not the focus of this work.
 
+% TODO: b_{i64} is the base address of MO
 \begin{lemma}
 \label{lemma:interface-malloc}
 Let $s \triangleq \symstate{\location}{\symlocalstore}{\symstack}{\symmemory}{\pc}$,
-where \textup{$\instrat{\location} = \codequote{x~\texttt{=}~\tcall^{\bvsort{64}}~\intrinsicfunc{malloc}(e)}$},
+where \textup{$\instrat{\location} = \codequote{x~\texttt{=}~\tcall^{\pointertypeof{\bvsort{8}}}~\intrinsicfunc{malloc}(\bvsort{64} ~ e)}$},
 and let $\bvval{\addr}{64}$ be the allocated base address.
 If there exist $n$, $\symmo$, and $t$ such that:
 \begin{enumerate}
