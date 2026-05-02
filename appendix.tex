@@ -18,7 +18,7 @@ The semantics of the $\tgep$ instruction is given in~\Cref{alg:gep}.
     \If {$|\overline{j}| = 0$}
         \State \Return $o$
     \EndIf
-    \State $\overline{j} \gets j_1 :: \overline{j'}$
+    \State $j_1 :: \overline{j'} \gets \overline{j}$
     \If {$\tau = \arraytype{\tau'}{n}$}
         \State $o \gets o + \convert_{\indextype}(j_1) \cdot \valoftype{|\tau'|}{\indextype}$ \label{line:array-index}
         \State \Return \Call{compute-offset}{$\tau', o, \overline{j'}$}
@@ -35,9 +35,9 @@ The semantics of the $\tgep$ instruction is given in~\Cref{alg:gep}.
     \If {$\tundef \in \overline{j}$}
         \State \Return $\tundef$
     \EndIf
-    \State $j_0 :: \overline{j} \gets \overline{j}$
+    \State $j_0 :: \overline{j'} \gets \overline{j}$
     \State $o \gets \convert_{\indextype}(j_0) \cdot \valoftype{|\tau|}{\indextype}$ \label{line:first-index}
-    \State $r \gets \Call{compute-offset}{\tau, o, \overline{j}}$
+    \State $r \gets \Call{compute-offset}{\tau, o, \overline{j'}}$
     \State \Return $p + \zeroext_{\pointertype}(r)$
 \EndFunction
 
@@ -62,7 +62,7 @@ and otherwise it returns $t$.
     \If {$|\overline{j}| = 0$}
         \State \Return $o$
     \EndIf
-    \State $\overline{j} \gets j_1 :: \overline{j'}$
+    \State $j_1 :: \overline{j'} \gets \overline{j}$
     \If {$\tau = \arraytype{\tau'}{n}$}
         \State $o \gets \bvadd{\bvsort{32}}{o}{\bvmul{\bvsort{32}}{\bvsext_{32}(j_1)}{\bvconst{32}{|\tau'|}}}$ \label{line:array-index}
         \State \Return \Call{compute-offset}{$\tau', o, \overline{j'}$}
@@ -72,9 +72,10 @@ and otherwise it returns $t$.
     \EndIf
 \EndFunction
 
-\Function{eval-gep}{$\tau, p, j_0, \overline{j}$}
+\Function{eval-gep}{$\tau, p, \overline{j}$}
+    \State $j_0 :: \overline{j'} \gets \overline{j}$
     \State $o \gets \bvmul{\bvsort{32}}{\bvsext_{32}(j_0)}{\bvconst{32}{|\tau|}}$ \label{line:first-index}
-    \State $r \gets \Call{compute-offset}{\tau, o, \overline{j}}$
+    \State $r \gets \Call{compute-offset}{\tau, o, \overline{j'}}$
     \State \Return $\bvadd{\bvsort{64}}{p}{\bvzext_{64}(r)}$
 \EndFunction
 
