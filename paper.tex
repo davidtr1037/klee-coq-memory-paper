@@ -1,7 +1,22 @@
-\documentclass[runningheads]{llncs}
+\documentclass[acmsmall,screen,review,anonymous,nonacm]{acmart}
 
-\usepackage{booktabs} % For formal tables
-\usepackage{amsmath,amssymb}
+\AtBeginDocument{%
+  \providecommand\BibTeX{{%
+    Bib\TeX}}}
+
+\setcopyright{acmlicensed}
+\copyrightyear{2018}
+\acmYear{2018}
+\acmDOI{XXXXXXX.XXXXXXX}
+
+\acmJournal{JACM}
+\acmVolume{37}
+\acmNumber{4}
+\acmArticle{111}
+\acmMonth{8}
+
+\usepackage{booktabs}
+\usepackage{amsmath}
 \usepackage{stmaryrd}
 \usepackage{dsfont}
 \usepackage[normalem]{ulem}
@@ -58,15 +73,12 @@
 % Proof-Logging Symbolic Execution for Real-World Programs
 \title{Proof-Logging Symbolic Execution for Real-World Programs}
 
-\author{}
-\institute{}
-
-\maketitle
-
 \begin{abstract}
 \input{abstract.tex}
 \keywords{Symbolic Execution \and Proof Assistants \and Verification.}
 \end{abstract}
+
+\maketitle
 
 \input{introduction.tex}
 \input{overview.tex}
@@ -76,7 +88,7 @@
 \input{evaluation.tex}
 \input{related.tex}
 
-\bibliographystyle{splncs04}
+\bibliographystyle{ACM-Reference-Format}
 \bibliography{bib_files/cadar-macros,bib_files/cadar,bib_files/cadar-crossrefs,bib_files/biblio,bib_files/klee,bib_files/combined}
 
 \newpage
