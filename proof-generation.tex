@@ -189,7 +189,7 @@ s \triangleq \symstate
     {n < \bvconst{32}{2}}
 \]
 where:
-\[ \smtarray \triangleq \arraystore{\arraystore{\arrayconst{\arrayinitvalue}}{\bvconst{32}{0}}{\arrayinitvalue}}{\bvconst{32}{1}}{\arrayinitvalue}, \ \symmo \triangleq (\bvval{\addr}{64}, \bvval{2}{32}, \smtarray) \]
+\[ \symmo \triangleq (\bvval{\addr}{64}, \bvval{2}{32}, \smtarray), \ \smtarray \triangleq \arraystore{\arraystore{\arrayconst{\arrayinitvalue}}{\bvconst{32}{0}}{\arrayinitvalue}}{\bvconst{32}{1}}{\arrayinitvalue} \]
 
 On one side, according to the symbolic semantics,
 if $s'$ is derived from $s$ then there exist a model $m$ and a memory object $\symmo'$ such that
@@ -203,10 +203,12 @@ s' \triangleq \symstate
     {n < \bvconst{32}{2} \land \rangecond(\bvconst{64}{\addr}, 1, \symmo'))}
 \]
 Recall that we assume that address intervals of memory objects do not overlap.
+% TODO: improve the explaination
 Since $\symmo' \in \symmemory$ and $\symisinbounds{\bvconst{64}{\addr}}{\bvsort{8}}{\symmo'}{m}$,
 then it must hold that $\symmo' = \symmo$, since $\bvconst{64}{\addr}$ is a constant SMT expression.
 Therefore, although the \rulenameref{Store} rule may have multiple derivations in general,
 there is a single derivation in this case.
+% TODO: why?
 In particular, it also implies that:
 \[ \moWrite{\symmo'}{\bvconst{64}{\addr}}{\bvconst{8}{7}} = (\bvval{\addr}{64}, \bvval{2}{32}, \arraystore{\smtarray}{(\bvextract_{32}(\bvsub{\bvsort{64}}{\bvconst{64}{\addr}}{\bvconst{64}{\addr}}))}{\bvconst{8}{7}}) \]
 
@@ -222,6 +224,7 @@ s'_{opt} \triangleq \symstate
 where:
 \[ \symmo'_{opt} \triangleq (\bvval{\addr}{64}, \bvval{2}{32}, \smtarray'_{opt}), \ \smtarray'_{opt} \triangleq \arraystore{\arraystore{\arrayconst{\arrayinitvalue}}{\bvconst{32}{0}}{\bvconst{8}{7}}}{\bvconst{32}{1}}{\arrayinitvalue} \]
 Now, we have to prove that the subtree of $s$ is safe.
+% TODO: improve
 Note that $s$ is not an error state,
 since $\evalexprty{\nameid{gep1}}{\symlocalstore}{\bvsort{64}} = \bvconst{64}{\addr}$ for every model $m$.
 To prove that $s' \equiv s'_{opt}$, it suffices to prove the equivalence of their memory and path constraints.
@@ -235,9 +238,11 @@ Let $\bvconst{32}{i}$, ..., $\bvconst{32}{(i + n)}$ be subsequent constant SMT e
 and assume that $k \equiv \bvconst{32}{i}$ and $v' \equiv v'_{opt}$, then:
 \[ \arraystore{\arraystore{\arraystore{a}{\bvconst{32}{i}}{v}[...]}{\bvconst{32}{(i + n)}}{t_n}}{k}{v'} \equiv \arraystore{\arraystore{a}{\bvconst{32}{i}}{v'_{opt}}[...]}{\bvconst{32}{(i + n)}}{t_n} \]
 \end{lemma}
+% TODO: explain what this lemma says...
 This lemma can be applied in our case,
 since $\bvextract_{32}(\bvsub{\bvsort{64}}{\bvconst{64}{\addr}}{\bvconst{64}{\addr}}) \equiv \bvconst{32}{0}$ and $\bvconst{8}{7} \equiv \bvconst{8}{7}$.
 We define similar lemmas to handle stores of other types (\bvsort{16}, \bvsort{32}, and \bvsort{64}).
+% TODO: unfold rc
 As for the path constraints,
 note that $\rangecond(\bvconst{64}{\addr}, 1, \symmo) \equiv \true$, so the equivalence follows easily.
 
@@ -252,6 +257,7 @@ s \triangleq \symstate
     {...}
     {n < \bvconst{32}{2}}
 \]
+% TODO: explain the computations
 According to the symbolic semantics, the derived symbolic state is:
 \[
 s' \triangleq \symstate
