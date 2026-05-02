@@ -285,6 +285,7 @@ To prove that $s$ is not an error state, we will use the following lemma:\footno
 Informally, $\overflowcond$ computes an SMT formula that encodes the fact that an overflow occured.
 Its formal definition is omitted due to space limitations.
 }
+% TODO: what about the PC?
 \begin{lemma}
 Let $\tau$ be a type, $p$ a pointer value of type $\bvsort{\pointerwidth}$, and $\overline{t_i}$ a sequence of SMT expressions.
 If $\evalgep(\tau, p, \overline{m[t_i]}) = \tpoison$,
@@ -292,6 +293,7 @@ then $m \models \overflowcond(\tau, \overline{t_i})$.
 \end{lemma}
 Then, based on~\Cref{def:sym-error-state},
 it suffices to prove that $n < \bvconst{32}{2} \land \overflowcond(\bvsort{64}, [\bvzext_{64}(n)])$ is unsatisfiable.
+% TODO: why?
 In our case, it unfolds to the following constraint:
 \[
 \begin{array}{ll}
@@ -300,6 +302,7 @@ n < \bvconst{32}{2} \land \big( & (\bvzext_{64}(n) > \bvconst{64}{4294967295}) \
 \end{array}
 \]
 which is indeed unsatisfiable.
+% TODO: why?
 To prove that $s' \equiv s'_{opt}$,
 it suffices to prove that their stores are equivalent, which holds since $e \equiv e_{opt}$.
 
