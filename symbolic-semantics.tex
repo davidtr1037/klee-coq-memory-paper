@@ -34,7 +34,7 @@ In some of the rules, we use the following definitions (where $\symmo \triangleq
 \[
 \begin{array}{ll}
 \baseaddrcond(p, \symmo) & \triangleq p = \bvconst{\pointerwidth}{a} \\
-    \rangecond(p, n, \symmo) & \triangleq p < \bvadd{\pointerwidth}{p}{n} \land p \geq \bvconst{\pointerwidth}{\addr} \land \bvadd{\pointerwidth}{p}{n} < \bvadd{\pointerwidth}{\bvconst{\pointerwidth}{\addr}}{\bvconst{\pointerwidth}{\size}}
+\rangecond(p, n, \symmo) & \triangleq p < \bvadd{\pointerwidth}{p}{n} \land p \geq \bvconst{\pointerwidth}{\addr} \land \bvadd{\pointerwidth}{p}{n} < \bvadd{\pointerwidth}{\bvconst{\pointerwidth}{\addr}}{\bvconst{\pointerwidth}{\size}}
 \end{array}
 \]
 Informally,
@@ -46,67 +46,6 @@ and $\rangecond$ denotes that the interval $[p, p + n)$ is fully contained withi
 \begin{figure}[t]
 \[
 \begin{array}{c}
-%\ruledefsmall{Assign}{
-%  \instrat{\location} = \codequote{x ~\texttt{=}~ e} \quad
-%  e = \codequote{\toper^\tau\sdots} / \codequote{\tcast^{\_ \to \tau}\sdots} \quad
-%  \welldef{\evalexprty{e}{\symlocalstore}{\tau} \neq \bot}
-%}
-%{
-%  \symstate{\location}{\symlocalstore}{\symstack}{\symmemory}{\pc}
-%  \symstep
-%  \symstate{\nextinstr{\location}}{\symlocalstore[x \mapsto \evalexprty{e}{\symlocalstore}{\tau}]}{\symstack}{\symmemory}{\pc}
-%}
-%\\[1.2em]
-%\ruledefsmall{Branch-True}{
-%  \instrat{\location} = \codequote{\tbr ~ e ~ b_1 ~ b_2}
-%  \quad
-%  \welldef{\location\triangleright b_i \neq \bot}
-%  \quad
-%  \welldef{\evalexprty{e}{\symlocalstore}{\bvsort1} \neq \bot}
-%}
-%{
-%  \symstate{\location}{\symlocalstore}{\symstack}{\symmemory}{\pc}
-%  \symstep
-%  \symstate{\location\triangleright b_1}{\symlocalstore}{\symstack}{\symmemory}{\pc \land \evalexprty{e}{\symlocalstore}{\bvsort1}}
-%}
-%\\[1.2em]
-%\ruledefsmall{Branch-False}{
-%  \instrat{\location} = \codequote{\tbr ~ e ~ b_1 ~ b_2}
-%  \quad
-%  \welldef{\location\triangleright b_i \neq \bot}
-%  \quad
-%  \welldef{\evalexprty{e}{\symlocalstore}{\bvsort1} \neq \bot}
-%}
-%{
-%  \symstate{\location}{\symlocalstore}{\symstack}{\symmemory}{\pc}
-%  \symstep
-%  \symstate{\location\triangleright b_2}{\symlocalstore}{\symstack}{\symmemory}{\pc \land \lnot\evalexprty{e}{\symlocalstore}{\bvsort1}}
-%}
-%\\[1.2em]
-%\ruledefsmall{Make-Symbolic}{
-%  \begin{array}{@{}c@{}}
-%    \instrat{\location} = \codequote{x ~\texttt{=}~ \tcall ~ \intrinsicfunc{make\_symbolic}()}
-%    \\
-%    \alpha \not \in \freevars(\symlocalstore) \cup \freevars(\symstack)
-%  \end{array}
-%}
-%{
-%  \symstate{\location}{\symlocalstore}{\symstack}{\symmemory}{\pc}
-%  \symstep
-%  \symstate{\nextinstr{\location}}{\symlocalstore[x \mapsto \alpha]}{\symstack}{\symmemory}{\pc}
-%}
-%\\[1.2em]
-%\ruledefsmall{Assume}{
-%  \instrat{\location} = \codequote{\tcall ~ \intrinsicfunc{assume}(\bvsort{1} ~ e)}
-%  \quad
-%  \welldef{\evalexprty{e}{\symlocalstore}{\bvsort1} \neq \bot}
-%}
-%{
-%  \symstate{\location}{\symlocalstore}{\symstack}{\symmemory}{\pc}
-%  \symstep
-%  \symstate{\nextinstr{\location}}{\symlocalstore}{\symstack}{\symmemory}{\pc \land \evalexprty{e}{\symlocalstore}{\bvsort1}}
-%}
-%\\[1em]
 \ruledefsmall{Malloc}{
   \instrat{\location} = \codequote{x~\texttt{=}~\tcall^{\pointertypeof{\bvsort{8}}}~\intrinsicfunc{malloc}(\bvsort{64} ~ e)} \quad
   \evalexprty{e}{\symlocalstore}{\bvsort{64}} = n \quad
@@ -224,35 +163,6 @@ A pseudo-code of the symbolic semantics of $\tgep$ is given in~\Cref{appendix:sy
 While the concrete version may return $\tundef$ or $\tpoison$,
 the symbolic version always returns an SMT expression,
 since the symbolic domain does not model $\tundef$ and $\tpoison$.
-
-%\begin{algorithm}[t]
-%\caption{The symbolic semantics of $\tgep$ (without attributes).}
-%\label{alg:symbolic-gep}
-%\begin{algorithmic}[1]
-%
-%\Function{compute-offset}{$\tau, o, \overline{j}$}
-%    \If {$|\overline{j}| = 0$}
-%        \State \Return $o$
-%    \EndIf
-%    \State $\overline{j} \gets j_1 :: \overline{j'}$
-%    \If {$\tau = \arraytype{\tau'}{n}$}
-%        \State $o \gets \bvadd_{32}(o, \bvmul_{32}(\bvsext_{32}(j_1), \bvconst{32}{|\tau'|}))$ \label{line:array-index}
-%        \State \Return \Call{compute-offset}{$\tau', o, \overline{j'}$}
-%    \EndIf
-%    \If {$\tau = \structtype{\tau}{n}$}
-%        \State ...
-%    \EndIf
-%    \State ...
-%\EndFunction
-%
-%\Function{eval-gep}{$\tau, p, j_0, \overline{j}$}
-%    \State $o \gets \bvmul_{32}(\bvsext_{32}(j_0), \bvconst{32}{|\tau|})$ \label{line:first-index}
-%    \State $r \gets \Call{compute-offset}{\tau, o, \overline{j}}$
-%    \State \Return $\bvadd_{64}(p, \bvzext_{64}(r))$
-%\EndFunction
-%
-%\end{algorithmic}
-%\end{algorithm}
 
 % TODO: improve / define s and c
 % TODO: the main usage is not for error states
