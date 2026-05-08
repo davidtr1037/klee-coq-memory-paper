@@ -33,7 +33,7 @@ we focus on discussing the memory-related instructions.
 In some of the rules, we use the following definitions (where $\symmo \triangleq \mobj{\bvval{\addr}{\pointerwidth}}{\bvval{\size}{\indexwidth}}{\smtarray}$):
 \[
 \begin{array}{ll}
-\baseaddrcond(p, \symmo) & \triangleq p = \bvconst{\pointerwidth}{a} \\
+\baseaddrcond(p, \symmo) & \triangleq p = \bvconst{\pointerwidth}{\addr} \\
 \rangecond(p, n, \symmo) & \triangleq p < \bvadd{\pointerwidth}{p}{n} \land p \geq \bvconst{\pointerwidth}{\addr} \land \bvadd{\pointerwidth}{p}{n} < \bvadd{\pointerwidth}{\bvconst{\pointerwidth}{\addr}}{\bvconst{\pointerwidth}{\size}}
 \end{array}
 \]
@@ -171,6 +171,7 @@ we say that a symbolic state \emph{represents} a concrete state if the latter ca
 This relation will be used to define symbolic error states (\Cref{def:sym-error-state}).
 In the following, we extend the definition given in~\cite{klee-rocq} (Definition 3.4) to account for memory.
 
+% TODO: same number of memory objects
 \begin{definition}
 \label{def:over-approx-state}
 Let $m$ be a model.
