@@ -243,6 +243,7 @@ Second, existing \SE tools do not support such allocators,
 so generating safety proofs using these tools would require significant modifications to their implementations (\Cref{sec:proof-generation}).
 Therefore, we leave the modeling of such allocators to future work.
 
+% TODO: define a frame
 \begin{definition}\label{def:state}
 %A location $\location\in\Locs$ is specified by a function identifier, block identifier, instruction index,
 %and an optional previous-block identifier.
@@ -266,7 +267,7 @@ as the rules for other instructions (assignments, branches, \etc) were already d
 \textbf{\textit{Malloc.}}
 When allocating a memory object,
 the size of the allocation must be non-negative and must not exceed the largest signed integer representable by the index type.\footnote{
-The semantics presented in the paper consider only heap allocations.
+The semantics presented in this paper considers only heap allocations.
 However, our implementation supports stack and global allocations as well.
 }
 As mentioned before, the address interval of the allocated memory object may not cross the unsigned boundary of the address space.
@@ -284,7 +285,7 @@ Otherwise, the result is undefined behavior.
 % TODO: what happens if p is undef/poison?
 When accessing $n$ bytes from a pointer value $p$,
 we need to make sure that there exists a memory object $\mobj{\addr}{\size}{\arrayvalue}$ in the heap $\memory$ such that
-(1) $p < p + n$ (\ie there is no overflow) and (2) $\addr \leq p < \addr + \size$.
+(1) $p < p + n$ (\ie there is no overflow) and (2) $p \geq \addr \ \land \ p + n < \addr + \size$.
 If that is not the case, then the result is undefined behavior.
 Otherwise, we perform a read or write operation.
 For a read operation,

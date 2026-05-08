@@ -29,7 +29,7 @@ then the result is undefined behavior.
 However, \klee currently does not check this condition.
 Moreover, \klee silently truncates the allocation size to the \code{uint32\_t} type, without reporting any error to the user, which may lead to unexpected behavior.
 For example, if we allocate an object of size $2^{32} + 10$,
-then the allocation size is internally casted to $10$,
+then the allocation size is internally cast to $10$,
 and if later we access that object at offset $10$, then we will get an out-of-bounds error, which is a false positive.
 
 \textbf{\textit{Incorrect Interpretation of \textup{$\tgep$}.}}

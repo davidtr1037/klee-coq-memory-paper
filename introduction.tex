@@ -19,7 +19,7 @@ Obtaining a \SE tool that is both practical and verified is hard.
 On the one hand,
 verifying existing implementations requires a huge effort,
 as they typically consist of large codebases with complex third-party dependencies.
-One the other hand,
+On the other hand,
 verified implementations extracted from proof assistants~\cite{fse23wise,icfp22:keuchel} were applied only for simple programming languages,
 and they lack advanced features such as search heuristics, constraint solving optimizations, and other performance optimizations.
 Proof logging~\cite{lundberg2024proof,klee-rocq,de2008proofs,marx2013proof,flippo2024multi,mcilree2024proof,van2025efficient} is an alternative approach,
@@ -46,10 +46,9 @@ Memory modeling is one of the most complex components in \SE tools,
 and applying proof logging in this context is a challenge as well.
 For example, to extend the approach in~\cite{klee-rocq} for memory operations,
 one needs to formalize the memory model of \llvm and extend the \SE engine to generate safety proofs accordingly.
-Formalizing the memory model of \llvm is complex,
-due to the detailed specifications related to various definitions such as:
+Formalizing the memory model of \llvm is complex due to the detailed specifications related to various definitions such as:
 data layout, address spaces, dynamic allocations, pointers, and semantics of memory-related instructions.
-Moreover, \SE tools use various optimizations for memory modeling, which complicates the proof generation process.
+Moreover, \SE tools use various optimizations for memory modeling, which complicate the proof generation process.
 For example, \klee~\cite{klee} uses multiple representations for memory objects, applies SMT encoding optimizations, \etc
 
 % The latest realistic implementation of symex (CPP26) supports only a limited subset.
@@ -87,7 +86,7 @@ First, we extend the concrete and symbolic semantics to support memory-related i
 Then, we extend the theoretical foundation which allows to prove program safety based on properties of execution trees.
 Lastly, we extend \klee to generate safety proofs based on our formalization.
 To address the gap between the formalized symbolic semantics and the heavily-optimized behavior in \klee,
-we develop an additional theory that help to interact with various parts of our formalization.
+we develop an additional theory that helps to interact with various parts of our formalization.
 
 The entire development of this paper comes with proofs in \coq~\cite{rocq}.
 
