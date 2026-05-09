@@ -1,0 +1,251 @@
+\subsection{\textit{Concrete Semantics.}}
+\label{sec:concrete-semantics}
+
+\begin{figure}
+\[
+\begin{array}{cl}
+\ruledefsmall{Malloc}{\quad
+  \instrat{\location} = \codequote{x~\texttt{=}~\tcall^{\pointertypeof{\bvsort{8}}}~\intrinsicfunc{malloc}(\bvsort{64} ~ e)} \quad
+  \evalexprty{e}{\localstore}{\bvsort{64}} = \bvval{n}{64} \quad
+  \allocate(\memory, \valoftype{n}{\indextype}) = (\memory', p) \quad
+}
+{
+  \progstate{\location}{\localstore}{\stack}{\memory}
+  \step
+  \progstate{\nextinstr{\location}}{\localstore[x \mapsto p]}{\stack}{\memory'}
+}
+\\[1em]
+\ruledefsmall{Free}{\quad
+  \instrat{\location} = \codequote{\tcall~\intrinsicfunc{free}(\pointertypeof{\bvsort{8}} ~ e)} \quad
+  \evalexprty{e}{\localstore}{\pointertypeof{\bvsort{8}}} = p \quad
+  \mo \in \memory \quad
+  \isbaseaddr{p}{\mo} \quad
+}
+{
+  \progstate{\location}{\localstore}{\stack}{\memory}
+  \step
+  \progstate{\nextinstr{\location}}{\localstore}{\stack}{\memory \setminus \{\mo\}}
+}
+\\[1em]
+\ruledefsmall{Load}{\quad
+  \instrat{\location} = \codequote{x~\texttt{=}~\tload^{\tau}~e} \quad
+  \evalexprty{e}{\localstore}{\pointertypeof{\tau}} = p \quad
+  \mo \in \memory \quad
+  \isinbounds{p}{\tau}{\mo} \quad
+}
+{
+  \progstate{\location}{\localstore}{\stack}{\memory}
+  \step
+  \progstate{\nextinstr{\location}}
+    {\localstore[x \mapsto \moRead{\mo}{p}{\tau}]}
+    {\stack}{\memory}
+}
+\\[1em]
+\ruledefsmall{Store}{\quad
+  \instrat{\location} = \codequote{\tstore^{\tau}~e_1~e_2} \quad
+  \evalexprty{e_1}{\localstore}{\tau} = v \quad
+  \evalexprty{e_2}{\localstore}{\pointertypeof{\tau}} = p \quad
+  \mo \in \memory \quad
+  \isinbounds{p}{\tau}{\mo} \quad
+}
+{
+  \progstate{\location}{\localstore}{\stack}{\memory}
+  \step
+  \progstate{\nextinstr{\location}}{\localstore}{\stack}{\heapWrite{\memory}{\mo}{p}{v}}
+}
+\\[1em]
+\ruledefsmall{GEP}{
+  \instrat{\location} = \codequote{x~\texttt{=}~\tgep~\pointertypeof{\tau}~e~\overline{(\tau_i, e_i)}} \quad
+  |\overline{(\tau_i, e_i)}| > 0 \quad
+  \evalexprty{e}{\localstore}{\pointertypeof{\tau}} = p \quad
+  \evalexprty{e_i}{\localstore}{\tau_i} = j_i
+}
+{
+  \progstate{\location}{\localstore}{\stack}{\memory}
+  \step
+  \progstate{\nextinstr{\location}}
+    {\localstore[x \mapsto \evalgep(\tau, p, \overline{j_i})]}
+    {\stack}{\memory}
+}
+\\[2em]
+\scalebox{0.8}{$
+\begin{array}{l@{\quad}l}
+\nextinstr{\location} & \mbox{next program location} \\
+\isbaseaddr{p}{\mo} & \mbox{$p$ is equal to the base address of $\mo$} \\
+\isinbounds{p}{\tau}{\mo} & \mbox{interval $[p, p + \sizeof{\tau})$ is contained within the address interval of $\mo$} \\
+\moRead{\mo}{p}{\tau} & \mbox{read a value of type $\tau$ from memory object $\mo$ starting from address $p$} \\
+\moWrite{\mo}{p}{v} & \mbox{write value $v$ into memory object $\mo$ at address $p$} \\
+\heapReplace{\memory}{\mo}{\mo'} & \mbox{update $\memory$ by replacing memory object $\mo$ with $mo'$}
+\end{array}
+$}
+\end{array}
+\]
+\caption{Operational small-step semantics of \llvm IR.}
+\label{figure:llvm-semantics}
+\end{figure}
+
+% TODO: ignore alignment details
+% TODO: say that we assume: pointer type = i64 / index type = i32
+% TODO: say the LLVM allows some freedom in the repr of memory objects / address spaces / etc.
+% TODO: UB is interpreted as an error
+
+%The most common depiction of program memory (a.k.a.\@ the ``flat model'') is a single,
+%large block of memory bytes, with addresses being simple byte indexes.
+The \llvm reference leaves some aspects of the memory model unspecified,
+such as the representation of allocated objects and address spaces.
+This flexibility allows different semantic interpretations,
+and in this work,
+we adopt the \emph{memory-object model}~\cite{klee,mossberg2019manticore} which is widely used in \SE tools.
+
+\begin{definition}
+\label{def:memory}
+A memory object is defined as a tuple:
+\[ \mobj{\addr}{\size}{\arrayvalue} \in \MemoryObjects \quad \quad \MemoryObjects \triangleq \Vals^{\pointertype} \times \Vals^{\indextype} \times (\Z \rightarrow \Vals^{\bvsort{8}} \cup \{\tundef, \tpoison\}) \]
+where $\addr$ is its base address, $\size$ is its size, and $\arrayvalue$ is a mapping that tracks the stored values,
+which can be either values of type $\Vals^{\bvsort{8}}$ (\ie a byte) or one of the special values $\tundef$ or $\tpoison$.
+A heap $\memory \in \Heaps$ is defined as a set of memory objects.
+\end{definition}
+
+We assume an implicit \emph{allocator},
+which is a stateful function $\Heaps \to \MemoryObjects$,
+providing a freshly-allocated memory object whose address interval must not overlap those of existing memory objects.
+Moreover, the address interval must be fully contained within the address space, \ie $\addr + \size$ must not overflow.
+
+In this paper,
+we assume a linear allocator that allocates memory objects consecutively, while maintaining a fixed gap between them,
+commonly referred to as a \emph{red-zone}.
+Modeling a generic allocator that allows arbitrary locations for memory objects would be far more challenging.
+First, modeling such allocators requires developing a more complex theory of memory (\Cref{sec:core}).
+Second, existing \SE tools do not support such allocators,
+so generating safety proofs using these tools would require significant modifications to their implementations (\Cref{sec:proof-generation}).
+Therefore, we leave the modeling of such allocators to future work.
+
+% TODO: define a frame
+\begin{definition}
+\label{def:state}
+%A location $\location\in\Locs$ is specified by a function identifier, block identifier, instruction index,
+%and an optional previous-block identifier.
+A \emph{concrete state} is a tuple $\progstate{\location}{\localstore}{\stack}{\memory}$,
+where $\location \in \Locs$ is a program location,
+$\localstore \in \Stores$ is a \emph{local store} that maps variables to values in $\Vals$,
+$\stack$ is a call stack represented as a sequence of frames,
+and $\memory \in \Heaps$ is a heap.
+\end{definition}
+
+\Cref{figure:llvm-semantics} defines the operational small-step semantics of \llvm IR based on the syntax in~\Cref{figure:llvm-syntax}.
+The evaluation semantics of an expression $e$ in a context of a local store $\localstore \in \Stores$ when a value of type $\tau$ is expected,
+denoted as $\evalexprty{e}{\localstore}{\tau}$,
+is defined according to~\cite{klee-rocq} (Section 2.1.2).
+%The rules \rulenameref{Assign}, \rulenameref{Branch-True}, \rulenameref{Branch-False}, \rulenameref{Make-Symbolic}, and \rulenameref{Assume}
+%were discussed in detail in~\cite{klee-rocq},
+Here, we focus on discussing the memory-related instructions,
+as the rules for other instructions (assignments, branches, \etc) were already discussed in detail in~\cite{klee-rocq}.
+
+
+\textbf{\textit{Malloc.}}
+When allocating a memory object,
+the size of the allocation must be non-negative and must not exceed the largest signed integer representable by the index type.\footnote{
+The semantics presented in this paper considers only heap allocations.
+However, our implementation supports stack and global allocations as well.
+}
+As mentioned before, the address interval of the allocated memory object may not cross the unsigned boundary of the address space.
+If one of these properties is violated, the result is undefined behavior.
+The mapping of the newly allocated memory object is set to a function that maps all the indices to $\bvval{0}{8}$.
+
+\textbf{\textit{Free.}}
+% TODO: assume that the type of p is iptr?
+When deallocating a pointer value $p$,
+we first check if there exists a memory object $\mobj{\addr}{\size}{\arrayvalue}$ in the memory $\memory$ such that $p = \addr$.
+If that is the case, we remove that memory object from $\memory$.
+Otherwise, the result is undefined behavior.
+
+\textbf{\textit{Load and Store.}}
+% TODO: what happens if p is undef/poison?
+When accessing $n$ bytes from a pointer value $p$,
+we need to make sure that there exists a memory object $\mobj{\addr}{\size}{\arrayvalue}$ in the heap $\memory$ such that
+(1) $p < p + n$ (\ie there is no overflow) and (2) $p \geq \addr \ \land \ p + n < \addr + \size$.
+If that is not the case, then the result is undefined behavior.
+Otherwise, we perform a read or write operation.
+For a read operation,
+we first read the corresponding sequence of stored values.
+If one of these values is $\tpoison$, we return $\tpoison$,
+and otherwise, if one of these values is $\tundef$, we return $\tundef$.
+Otherwise, we deserialize this sequence of values (bytes) into an integer of the appropriate type.
+For a write operation,
+we serialize the value $v$ into a sequence of bytes and update the array $\arrayvalue$ accordingly.
+
+%\textbf{\textit{Store.}}
+%% TODO: what happens if p/v is undef/poison?
+%When writing a value $v$ to a pointer value $p$,
+%we need to make sure that there exists a memory object $\mobj{\addr}{\size}{\arrayvalue}$ in the memory $\memory$ such that
+%(1) $p < p + n$ and (2) $\addr \leq p < \addr + \size$.
+%If that is not the case, then the result is undefined behavior.
+%Otherwise, we use the \textit{write} procedure to store the value $v$.
+%This procedure serializes the value $v$ into a sequence of bytes and updates the array $\arrayvalue$ accordingly.
+
+\textbf{\textit{GetElementPtr.}}
+The $\tgep$ instruction computes the address of a subelement of an aggregate data structure (array, struct, \etc.).\footnote{
+\Cref{appendix:concrete-semantics} provides the pseudo-code of the semantics, defined as $\evalgep$.
+}
+The first argument is the base pointer to start from,
+and the remaining arguments are indices that indicate which of the elements of the aggregate object are indexed.
+All the indices are first converted to values of the index type (sign-extended or truncated), and then translated into offsets.
+The first index is used to move accross the elements corresponding to the base pointer type,
+so it is multiplied by the type size of the element type of the base pointer type.
+The remaining indices are translated into offsets based on the indexed type.
+If the indexed type is an array type,
+then the index is multiplied by the type size of the indexed type.
+If the indexed type is a struct type,
+then the index is translated into a field selector.
+The computed offsets are sequentially summed up,
+and then the resulting offset is converted to the pointer type and added to the base pointer.
+The $\tgep$ instruction may have attributes (\opcode{nuw}, \opcode{nusw}, and \opcode{inbounds}) that impose additional rules.
+For example, when the \opcode{nuw} attribute is enabled, the following conditions must hold:
+(1) if the type of an index is larger than the index type, the truncation to the index type must preserve the unsigned value,
+(2) the multiplication of an index by the type size does not cause an unsigned overflow of the index type, and
+(3) the successive addition of each offset does not cause an unsigned overflow of the index type.
+If any of these conditions is violated, the result is $\tpoison$.
+
+In the following,
+we define when a concrete state is considered to be an error state.
+We then define when a program, \ie an \llvm module, is considered safe.
+
+% TODO: some text before?
+% TODO: say that some notations are defined in Figure X
+\begin{definition}
+\label{def:error-state}
+Let $c \triangleq \progstate{\location}{\localstore}{\stack}{\memory}$ be a concrete state.
+Then $c$ is an error state, denoted by $\errorstate(c)$, if one of the following holds:
+\begin{enumerate}
+    \item $\instrat{\location} = \textup{$\codequote{\tunreachable}$}$
+    \item $\instrat{\location} = \textup{$\codequote{x \ \texttt{=} \ op \ \bvsort{w} \ e_1 \ e_2}$}$, and one of the following holds, where $v_k \triangleq \evalexprty{e_k}{\localstore}{\bvsort{w}}$:
+    \begin{enumerate}[left=-3pt]
+        \item \textup{$op \in \{\opcode{udiv}, \opcode{sdiv}, \opcode{urem}, \opcode{srem}\}$ and $v_2 = \bvval{0}{w}$}
+        \item \textup{$op = \opcode{sdiv}$, $v_1 = \bvval{(-2^{w - 1})}{w}$, and $v_2 = \bvval{(-1)}{w}$}
+        \item \textup{$op \in \{\opcode{shl}, \opcode{lshr}, \opcode{ashr}\}$ and $v_2 = \bvval{n}{w}$, and $n \geq w$}
+    \end{enumerate}
+    \item $\instrat{\location} = \textup{$\codequote{x \ \texttt{=} \ \tcall^{\pointertypeof{\bvsort{8}}} \ \intrinsicfunc{malloc}(\bvsort{64} \ e)}$}$,
+          and \textup{$\evalexprty{e}{\localstore}{\bvsort{64}} > \bvval{(2^{\indexwidth - 1} - 1)}{64}$}.
+    \item $\instrat{\location} = \textup{$\codequote{\tcall~\intrinsicfunc{free}(\pointertypeof{\bvsort{8}} \ e)}$}$, \textup{$\evalexprty{e}{\localstore}{\pointertypeof{\bvsort{8}}} = p$},
+          and there is no $\mo \in \memory$ s.t. $\isbaseaddr{p}{\mo}$.
+    \item $\instrat{\location} = \textup{$\codequote{x \ \texttt{=} \ \tload^{\tau} \ e}$}$, \textup{$\evalexprty{e}{\localstore}{\pointertypeof{\tau}} = p$},
+          and there is no $\mo \in \memory$ s.t. $\isinbounds{p}{|\tau|}{\mo}$.
+    \item $\instrat{\location} = \textup{$\codequote{\tstore^{\tau} \ e_1 \ e_2}$}$, \textup{$\evalexprty{e_2}{\localstore}{\pointertypeof{\tau}} = p$},
+          and there is no $\mo \in \memory$ s.t. $\isinbounds{p}{|\tau|}{\mo}$.
+    % TODO: $|\overline{(\tau_i, e_i)}| > 0$
+    \item $\instrat{\location} = \textup{$\codequote{x \ \texttt{=} \ \tgep~\pointertypeof{\tau} \ e \ \overline{(\tau_i, e_i)}}$}$ and:
+    \begin{enumerate}
+        \item \textup{$\evalexprty{e}{\localstore}{\pointertypeof{\tau}} = p$}, $\evalexprty{e_i}{\localstore}{\tau_i} = j_i$, and $\evalgep(\tau, p, \overline{j_i}) = \tpoison$.
+    \end{enumerate}
+\end{enumerate}
+\end{definition}
+
+\begin{definition}
+\label{def:safety}
+Let $\location$ be the entry program location of the module $\module$.
+The \emph{initial state} of $\module$, denoted by $\initstate(\module)$,
+is defined as $\progstate{\location}{\{\}}{[]}{[]}$.
+Now, let $c_0 \triangleq \initstate(\module)$.
+Then the module $\module$ is \emph{safe}, denoted by $\issafe(\module)$,
+if for every $c$ s.t. $c_{0} \multistep c$, $c$ is not an error state (the relation $\multistep$ is the reflexive-transitive closure of $\step$).
+\end{definition}
