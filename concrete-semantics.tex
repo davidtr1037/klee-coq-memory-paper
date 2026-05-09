@@ -91,11 +91,13 @@ $}
 
 %The most common depiction of program memory (a.k.a.\@ the ``flat model'') is a single,
 %large block of memory bytes, with addresses being simple byte indexes.
+
+In this section, we define the operational small-step semantics of \llvm IR based on the syntax in~\Cref{figure:llvm-syntax}.
 The \llvm reference leaves some aspects of the memory model unspecified,
 such as the representation of allocated objects and address spaces.
 This flexibility allows different semantic interpretations,
 and in this work,
-we adopt the \emph{memory-object model}~\cite{klee,mossberg2019manticore} which is widely used in \SE tools.
+we adopt the \emph{memory-object model} which is widely used in \SE tools~\cite{klee,mossberg2019manticore}.
 
 \begin{definition}
 \label{def:memory}
