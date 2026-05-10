@@ -1,10 +1,12 @@
-\subsection{Symbolic Semantics}
+\section{Symbolic Semantics}
 \label{sec:symbolic-semantics}
 
 % TODO: hard-code the array sort?
 
+%In this section,
+%we present our the symbolic semantics presented in~\cite{klee-rocq} to support the memory-related instructions given in~\Cref{figure:llvm-syntax}.
 In this section,
-we extend the symbolic semantics presented in~\cite{klee-rocq} to support the memory-related instructions given in~\Cref{figure:llvm-syntax}.
+we define the symbolic operational small-step semantics of \llvm IR based on the syntax in~\Cref{figure:llvm-syntax}.
 
 \begin{definition}
 A symbolic memory object is defined as a tuple:
@@ -110,7 +112,7 @@ and $\rangecond$ denotes that the interval $[p, p + n)$ is fully contained withi
 }
 \end{array}
 \]
-\caption{Symbolic operational small-step semantics of LLVM IR.}
+\caption{Symbolic operational small-step semantics of \llvm IR.}
 \label{figure:symbolic-semantics}
 \end{figure}
 
@@ -171,6 +173,7 @@ we say that a symbolic state \emph{represents} a concrete state if the latter ca
 This relation will be used to define symbolic error states (\Cref{def:sym-error-state}).
 In the following, we extend the definition given in~\cite{klee-rocq} (Definition 3.4) to account for memory.
 
+% TODO: remove from this section
 % TODO: same number of memory objects
 \begin{definition}
 \label{def:over-approx-state}
