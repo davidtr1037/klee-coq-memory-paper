@@ -61,7 +61,7 @@ We define $\Vals^{\bvsort{w}}$ as the set containing all bit-vectors of type $\b
 Then, we define $\Vals$ as the set of all values, \ie the union of $\Vals^{\bvsort{w}}$ over all $w$.
 
 \paragraph{Notations}
-We denote by $\bvval{n}{w}$ a bit-vector of type $\bvsort{$w$}$ whose (signed or unsigned) numerical value is $n$.
+We denote by $\bvval{n}{w}$ a bit-vector of type $\bvsort{$w$}$ whose numerical value is $n$.
 We denote by $|\tau|$ the size, in bytes, of the type $\tau$.
 
 \subsubsection{\textit{LLVM Memory Model.}}
@@ -116,4 +116,5 @@ such that $\true$ and $\false$ correspond to $1$ and $0$, respectively.
 We denote by $m[t]$ the interpretation of the term $t$ in a model $m$.
 We denote by $t_1\equiv t_2$ the assertion that $m[t_1] = m[t_2]$ for any model $m$.
 We use $\arrayselect{a}{i}$ and $\arraystore{a}{i}{v}$ as shorthands for $\mathit{select}(a, i)$ and $\mathit{store}(a, i, v)$.
+We denote by $\bvconst{w}{n}$ a constant bit-vector of sort $\smtsort{w}$ whose numerical value is $n$.
 \end{paragraph}
