@@ -48,7 +48,7 @@ Integers are represented as bit-vectors of type $\bvsort{w}$, where \textsf{w} d
 Pointer types ($\pointertypeof{\tau}$) are parametrized by an element type $\tau$.
 Array types ($\arraytype{\tau}{n}$) are parametrized by an element type $\tau$ and a dimension $n$.
 
-\paragraph{Special Values}
+\paragraph{Values}
 The \llvm reference~\cite{llvmref} defines the special values $\tundef$ and $\tpoison$.
 The $\tundef$ value represents an unspecified bit-pattern.
 Such values are useful for compiler optimizations, since $\tundef$ can be substituted by an arbitrary value.
