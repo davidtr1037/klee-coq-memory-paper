@@ -18,7 +18,7 @@ we adopt the \emph{memory-object model} which is widely used in \SE tools~\cite{
 
 \subsection{Memory Modeling}
 
-Now, we define the major components of the memory model:
+We first define the major components of the memory model:
 memory objects, the heap, and the memory allocator.
 
 \begin{definition}
@@ -114,6 +114,8 @@ Therefore, we leave the modeling of such memory allocators to future work.
 \\[2em]
 \scalebox{0.8}{$
 \begin{array}{l@{\quad}l}
+\module & \mbox{module} \\
+\instrat{\location} & \mbox{instruction at location $\location$ in $\module$} \\
 \nextinstr{\location} & \mbox{next program location} \\
 \isbaseaddr{p}{\mo} & \mbox{$p$ is equal to the base address of $\mo$} \\
 \isinbounds{p}{\tau}{\mo} & \mbox{interval $[p, p + \sizeof{\tau})$ is contained within the address interval of $\mo$} \\
@@ -127,6 +129,12 @@ $}
 \caption{Operational small-step semantics of \llvm IR.}
 \label{figure:llvm-semantics}
 \end{figure}
+
+In the following,
+we define the concrete state and the derivation rules of the operational small-step semantics.
+In this paper,
+we consider a concrete state with a local store and a heap.
+However, our formalization (in \coq) and implementation (on top of \klee) support also stack frames, stack allocations (\ie $\talloca$), and global variables.
 
 % TODO: define a frame
 \begin{definition}
@@ -152,10 +160,7 @@ as the rules for other instructions (assignments, branches, \etc) were already d
 
 \textbf{\textit{Malloc.}}
 When allocating a memory object,
-the size of the allocation must be non-negative and must not exceed the largest signed integer representable by the index type.\footnote{
-The semantics presented in this paper considers only heap allocations.
-However, our implementation supports stack and global allocations as well.
-}
+the size of the allocation must be non-negative and must not exceed the largest signed integer representable by the index type.
 As mentioned before, the address interval of the allocated memory object may not cross the unsigned boundary of the address space.
 If one of these properties is violated, the result is undefined behavior.
 The mapping of the newly allocated memory object is set to a function that maps all the indices to $\bvval{0}{8}$.
