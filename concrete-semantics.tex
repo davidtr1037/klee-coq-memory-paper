@@ -1,6 +1,50 @@
 \section{Concrete Semantics}
 \label{sec:concrete-semantics}
 
+% TODO: ignore alignment details
+% TODO: say that we assume: pointer type = i64 / index type = i32
+% TODO: say the LLVM allows some freedom in the repr of memory objects / address spaces / etc.
+% TODO: UB is interpreted as an error
+
+%The most common depiction of program memory (a.k.a.\@ the ``flat model'') is a single,
+%large block of memory bytes, with addresses being simple byte indexes.
+
+In this section, we define the operational small-step semantics of \llvm IR based on the syntax in~\Cref{figure:llvm-syntax}.
+The \llvm reference~\cite{llvmref} leaves some aspects of the memory model unspecified,
+such as the representation of allocated objects and address spaces.
+This flexibility allows different semantic interpretations,
+and in this work,
+we adopt the \emph{memory-object model} which is widely used in \SE tools~\cite{klee,mossberg2019manticore}.
+
+\subsection{Memory Modeling}
+
+Now, we define the major components of the memory model:
+memory objects, the heap, and the memory allocator.
+
+\begin{definition}
+\label{def:memory}
+A memory object is defined as a tuple:
+\[ \mobj{\addr}{\size}{\arrayvalue} \in \MemoryObjects \quad \quad \MemoryObjects \triangleq \Vals^{\pointertype} \times \Vals^{\indextype} \times (\Z \rightarrow \Vals^{\bvsort{8}}) \]
+where $\addr$ is its base address, $\size$ is its size, and $\arrayvalue$ is a mapping that tracks the stored values,
+which can be either bit-vectors of type $\bvsort{8}$ (\ie a \emph{byte}) or one of the special values $\tundef$ or $\tpoison$.
+A heap $\memory \in \Heaps$ is defined as a set of memory objects.
+\end{definition}
+
+We assume an implicit \emph{memory allocator},
+providing a freshly-allocated memory object whose address interval must not overlap with those of existing memory objects.
+Moreover, the address interval must be fully contained within the address space, \ie $\addr + \size$ must not overflow.
+
+In this paper,
+we assume a linear memory allocator that allocates memory objects consecutively, while maintaining a fixed gap between them,
+commonly referred to as a \emph{red-zone}.
+Modeling a generic memory allocator that allows arbitrary locations for memory objects would be far more challenging.
+First, modeling such memory allocators requires developing a more complex theory of memory (\Cref{sec:core}).
+Second, existing \SE tools do not support such memory allocators,
+so generating safety proofs using these tools would require significant modifications to their implementations (\Cref{sec:proof-generation}).
+Therefore, we leave the modeling of such memory allocators to future work.
+
+\subsection{Operational Small-Step Semantics}
+
 \begin{figure}
 \[
 \begin{array}{cl}
@@ -83,44 +127,6 @@ $}
 \caption{Operational small-step semantics of \llvm IR.}
 \label{figure:llvm-semantics}
 \end{figure}
-
-% TODO: ignore alignment details
-% TODO: say that we assume: pointer type = i64 / index type = i32
-% TODO: say the LLVM allows some freedom in the repr of memory objects / address spaces / etc.
-% TODO: UB is interpreted as an error
-
-%The most common depiction of program memory (a.k.a.\@ the ``flat model'') is a single,
-%large block of memory bytes, with addresses being simple byte indexes.
-
-In this section, we define the operational small-step semantics of \llvm IR based on the syntax in~\Cref{figure:llvm-syntax}.
-The \llvm reference leaves some aspects of the memory model unspecified,
-such as the representation of allocated objects and address spaces.
-This flexibility allows different semantic interpretations,
-and in this work,
-we adopt the \emph{memory-object model} which is widely used in \SE tools~\cite{klee,mossberg2019manticore}.
-
-\begin{definition}
-\label{def:memory}
-A memory object is defined as a tuple:
-\[ \mobj{\addr}{\size}{\arrayvalue} \in \MemoryObjects \quad \quad \MemoryObjects \triangleq \Vals^{\pointertype} \times \Vals^{\indextype} \times (\Z \rightarrow \Vals^{\bvsort{8}} \cup \{\tundef, \tpoison\}) \]
-where $\addr$ is its base address, $\size$ is its size, and $\arrayvalue$ is a mapping that tracks the stored values,
-which can be either values of type $\Vals^{\bvsort{8}}$ (\ie a byte) or one of the special values $\tundef$ or $\tpoison$.
-A heap $\memory \in \Heaps$ is defined as a set of memory objects.
-\end{definition}
-
-We assume an implicit \emph{allocator},
-which is a stateful function $\Heaps \to \MemoryObjects$,
-providing a freshly-allocated memory object whose address interval must not overlap those of existing memory objects.
-Moreover, the address interval must be fully contained within the address space, \ie $\addr + \size$ must not overflow.
-
-In this paper,
-we assume a linear allocator that allocates memory objects consecutively, while maintaining a fixed gap between them,
-commonly referred to as a \emph{red-zone}.
-Modeling a generic allocator that allows arbitrary locations for memory objects would be far more challenging.
-First, modeling such allocators requires developing a more complex theory of memory (\Cref{sec:core}).
-Second, existing \SE tools do not support such allocators,
-so generating safety proofs using these tools would require significant modifications to their implementations (\Cref{sec:proof-generation}).
-Therefore, we leave the modeling of such allocators to future work.
 
 % TODO: define a frame
 \begin{definition}
