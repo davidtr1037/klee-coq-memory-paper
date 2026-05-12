@@ -122,7 +122,8 @@
 \newcommand{\heaprepr}[2]{\langle{#1},{#2}\rangle}
 \newcommand{\zeroext}{\mathit{zeroext}}
 \newcommand{\signext}{\mathit{signext}}
-\newcommand{\convert}{\mathit{convert}}
+\newcommand{\convertfunc}[1]{\mathit{convert}_{#1}}
+\newcommand{\convert}[2]{\convertfunc{#1}{(#2)}}
 \newcommand{\sizeof}[1]{|#1|}
 \newcommand{\isbaseaddr}[2]{#1 \overset{\scriptstyle{!}}{\rightsquigarrow} #2}
 \newcommand{\isinbounds}[3]{#1 \overset{#2}{\rightsquigarrow} #3}

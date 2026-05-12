@@ -201,6 +201,10 @@ In general, the $\tgep$ instruction computes the address of a subelement of an a
 The semantics of the $\tgep$ instruction is given in~\Cref{alg:gep}.\footnote{
 The semantics presented here consider only arrays, however, our formalization and implementation support also structs.
 }
+The algorithm uses the function $\convertfunc{\indexwidth}$ which receives a bit-vector $\bvval{n}{w}$ (of type $\bvsort{w}$) and returns a bit-vector of type $\indextype$ as follows:
+If the width of $\bvval{n}{w}$ is less than $\indexwidth$ it performs sign-extension,
+if the width of $\bvval{n}{w}$ is greater than $\indexwidth$ it performs truncation,
+and otherwise it just returns $\bvval{n}{w}$.
 The first argument is the base pointer to start from,
 and the remaining arguments are indices that indicate which of the elements of the aggregate object are indexed.
 All the indices are first converted to values of the index type (sign-extended or truncated), and then translated into offsets.
@@ -231,15 +235,12 @@ If any of these conditions is violated, the result is $\tpoison$.
     \EndIf
     \State $j_1 :: \overline{j'} \gets \overline{j}$
     \If {$\tau = \arraytype{\tau'}{n}$}
-        \State $o \gets o + \convert_{\indextype}(j_1) \cdot \valoftype{|\tau'|}{\indextype}$ \label{line:array-index}
+        \State $o \gets o + \convert{\indextype}{j_1} \cdot \valoftype{|\tau'|}{\indextype}$ \label{line:array-index}
         \State \Return \Call{compute-offset}{$\tau', o, \overline{j'}$}
-    \EndIf
-    \If {$\tau = \structtype{\tau}{n}$}
-        \State ...
     \EndIf
 \EndFunction
 
-\Function{eval\_gep}{$\tau, p, \overline{j}$}
+\Function{eval-gep}{$\tau, p, \overline{j}$}
     \If {$\tpoison \in \overline{j}$}
         \State \Return $\tpoison$
     \EndIf
@@ -247,7 +248,7 @@ If any of these conditions is violated, the result is $\tpoison$.
         \State \Return $\tundef$
     \EndIf
     \State $j_0 :: \overline{j'} \gets \overline{j}$
-    \State $o \gets \convert_{\indextype}(j_0) \cdot \valoftype{|\tau|}{\indextype}$ \label{line:first-index}
+    \State $o \gets \convert{\indextype}{j_0} \cdot \valoftype{|\tau|}{\indextype}$ \label{line:first-index}
     \State $r \gets \Call{compute-offset}{\tau, o, \overline{j'}}$
     \State \Return $p + \zeroext_{\pointertype}(r)$
 \EndFunction
