@@ -197,8 +197,9 @@ we serialize the value $v$ into a sequence of bytes and update the array $\array
 %This procedure serializes the value $v$ into a sequence of bytes and updates the array $\arrayvalue$ accordingly.
 
 \textbf{\textit{GetElementPtr.}}
-The $\tgep$ instruction computes the address of a subelement of an aggregate data structure (array, struct, \etc.).\footnote{
-\Cref{appendix:concrete-semantics} provides the pseudo-code of the semantics, defined as $\evalgep$.
+In general, the $\tgep$ instruction computes the address of a subelement of an aggregate data structure (array, struct, \etc.).
+The semantics of the $\tgep$ instruction is given in~\Cref{alg:gep}.\footnote{
+The semantics presented here consider only arrays, however, our formalization and implementation support also structs.
 }
 The first argument is the base pointer to start from,
 and the remaining arguments are indices that indicate which of the elements of the aggregate object are indexed.
@@ -218,6 +219,41 @@ For example, when the \opcode{nuw} attribute is enabled, the following condition
 (2) the multiplication of an index by the type size does not cause an unsigned overflow of the index type, and
 (3) the successive addition of each offset does not cause an unsigned overflow of the index type.
 If any of these conditions is violated, the result is $\tpoison$.
+
+\begin{algorithm}[t]
+\caption{The semantics of $\tgep$ (without attributes).}
+\label{alg:gep}
+\begin{algorithmic}[1]
+
+\Function{compute-offset}{$\tau, o, \overline{j}$}
+    \If {$|\overline{j}| = 0$}
+        \State \Return $o$
+    \EndIf
+    \State $j_1 :: \overline{j'} \gets \overline{j}$
+    \If {$\tau = \arraytype{\tau'}{n}$}
+        \State $o \gets o + \convert_{\indextype}(j_1) \cdot \valoftype{|\tau'|}{\indextype}$ \label{line:array-index}
+        \State \Return \Call{compute-offset}{$\tau', o, \overline{j'}$}
+    \EndIf
+    \If {$\tau = \structtype{\tau}{n}$}
+        \State ...
+    \EndIf
+\EndFunction
+
+\Function{eval\_gep}{$\tau, p, \overline{j}$}
+    \If {$\tpoison \in \overline{j}$}
+        \State \Return $\tpoison$
+    \EndIf
+    \If {$\tundef \in \overline{j}$}
+        \State \Return $\tundef$
+    \EndIf
+    \State $j_0 :: \overline{j'} \gets \overline{j}$
+    \State $o \gets \convert_{\indextype}(j_0) \cdot \valoftype{|\tau|}{\indextype}$ \label{line:first-index}
+    \State $r \gets \Call{compute-offset}{\tau, o, \overline{j'}}$
+    \State \Return $p + \zeroext_{\pointertype}(r)$
+\EndFunction
+
+\end{algorithmic}
+\end{algorithm}
 
 In the following,
 we define when a concrete state is considered to be an error state.
