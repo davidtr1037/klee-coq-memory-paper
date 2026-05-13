@@ -198,25 +198,27 @@ we serialize the value $v$ into a sequence of bytes and update the array $\array
 
 \textbf{\textit{GetElementPtr.}}
 In general, the $\tgep$ instruction computes the address of a subelement of an aggregate data structure (array, struct, \etc.).
-The semantics of the $\tgep$ instruction is given in~\Cref{alg:gep}.\footnote{
+The function $\evalgep$ in~\Cref{alg:gep} defines a simplified semantics of the $\tgep$ instruction.\footnote{
 The semantics presented here consider only arrays, however, our formalization and implementation support also structs.
 }
 The algorithm uses the function $\convertfunc{\indexwidth}$ which receives a bit-vector $\bvval{n}{w}$ (of type $\bvsort{w}$) and returns a bit-vector of type $\indextype$ as follows:
 If the width of $\bvval{n}{w}$ is less than $\indexwidth$ it performs sign-extension,
 if the width of $\bvval{n}{w}$ is greater than $\indexwidth$ it performs truncation,
 and otherwise it just returns $\bvval{n}{w}$.
-The first argument is the base pointer to start from,
+%
+The first argument of $\evalgep$ is the type of the base pointer,
+the second argument is the base pointer to start from,
 and the remaining arguments are indices that indicate which of the elements of the aggregate object are indexed.
-All the indices are first converted to values of the index type (sign-extended or truncated), and then translated into offsets.
+All the indices are first converted to values of the index type (sign-extended or truncated), and then translated into offsets (\cref{line:gep:array-index,line:gep:first-index}).
 The first index is used to move accross the elements corresponding to the base pointer type,
-so it is multiplied by the type size of the element type of the base pointer type.
+so it is multiplied by the type size of the element type of the base pointer type (\cref{line:gep:first-index}).
 The remaining indices are translated into offsets based on the indexed type.
 If the indexed type is an array type,
-then the index is multiplied by the type size of the indexed type.
-If the indexed type is a struct type,
-then the index is translated into a field selector.
+then the index is multiplied by the type size of the indexed type (\cref{line:gep:array-index}).
+%If the indexed type is a struct type,
+%then the index is translated into a field selector.
 The computed offsets are sequentially summed up,
-and then the resulting offset is converted to the pointer type and added to the base pointer.
+and then the resulting offset is converted to the pointer type and added to the base pointer (\cref{line:gep:add-offset}).
 The $\tgep$ instruction may have attributes (\opcode{nuw}, \opcode{nusw}, and \opcode{inbounds}) that impose additional rules.
 For example, when the \opcode{nuw} attribute is enabled, the following conditions must hold:
 (1) if the type of an index is larger than the index type, the truncation to the index type must preserve the unsigned value,
@@ -235,8 +237,8 @@ If any of these conditions is violated, the result is $\tpoison$.
     \EndIf
     \State $j_1 :: \overline{j'} \gets \overline{j}$
     \If {$\tau = \arraytype{\tau'}{n}$}
-        \State $o \gets o + \convert{\indextype}{j_1} \cdot \valoftype{|\tau'|}{\indextype}$ \label{line:array-index}
-        \State \Return \Call{compute-offset}{$\tau', o, \overline{j'}$}
+        \State $o' \gets \convert{\indextype}{j_1} \cdot \valoftype{|\tau'|}{\indextype}$ \label{line:gep:array-index}
+        \State \Return \Call{compute-offset}{$\tau', o + o', \overline{j'}$}
     \EndIf
 \EndFunction
 
@@ -248,9 +250,9 @@ If any of these conditions is violated, the result is $\tpoison$.
         \State \Return $\tundef$
     \EndIf
     \State $j_0 :: \overline{j'} \gets \overline{j}$
-    \State $o \gets \convert{\indextype}{j_0} \cdot \valoftype{|\tau|}{\indextype}$ \label{line:first-index}
+    \State $o \gets \convert{\indextype}{j_0} \cdot \valoftype{|\tau|}{\indextype}$ \label{line:gep:first-index}
     \State $r \gets \Call{compute-offset}{\tau, o, \overline{j'}}$
-    \State \Return $p + \zeroext_{\pointertype}(r)$
+    \State \Return $p + \zeroext_{\pointertype}(r)$ \label{line:gep:add-offset}
 \EndFunction
 
 \end{algorithmic}
