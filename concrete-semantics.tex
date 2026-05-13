@@ -219,6 +219,7 @@ then the index is multiplied by the type size of the indexed type (\cref{line:ge
 %then the index is translated into a field selector.
 The computed offsets are sequentially summed up,
 and then the resulting offset is converted to the pointer type and added to the base pointer (\cref{line:gep:add-offset}).
+%
 The $\tgep$ instruction may have attributes (\opcode{nuw}, \opcode{nusw}, and \opcode{inbounds}) that impose additional rules.
 For example, when the \opcode{nuw} attribute is enabled, the following conditions must hold:
 (1) if the type of an index is larger than the index type, the truncation to the index type must preserve the unsigned value,
@@ -261,6 +262,8 @@ If any of these conditions is violated, the result is $\tpoison$.
 In the following,
 we define when a concrete state is considered to be an error state.
 We then define when a program, \ie an \llvm module, is considered safe.
+Intuitively, an error arises when there is an operation that triggers undefined behavior or an operation that involves $\tpoison$ values.
+The formal definition as given below.
 
 % TODO: some text before?
 % TODO: say that some notations are defined in Figure X
