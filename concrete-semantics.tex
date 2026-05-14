@@ -201,11 +201,7 @@ In general, the $\tgep$ instruction computes the address of a subelement of an a
 The function $\evalgep$ in~\Cref{alg:gep} defines a simplified semantics of the $\tgep$ instruction.\footnote{
 The semantics presented here consider only arrays, however, our formalization and implementation support also structs.
 }
-The algorithm uses the function $\convertfunc{\indexwidth}$ which receives a bit-vector $\bvval{n}{w}$ (of type $\bvsort{w}$) and returns a bit-vector of type $\indextype$ as follows:
-If the width of $\bvval{n}{w}$ is less than $\indexwidth$ it performs sign-extension,
-if the width of $\bvval{n}{w}$ is greater than $\indexwidth$ it performs truncation,
-and otherwise it just returns $\bvval{n}{w}$.
-%
+The algorithm uses the functions $\signextfunc{\indexwidth}$ and $\zeroextfunc{\indexwidth}$ defined in~\Cref{sec:llvm-ir}.
 The first argument of $\evalgep$ is the type of the base pointer,
 the second argument is the base pointer to start from,
 and the remaining arguments are indices that indicate which of the elements of the aggregate object are indexed.
@@ -238,7 +234,7 @@ If any of these conditions is violated, the result is $\tpoison$.
     \EndIf
     \State $j_1 :: \overline{j'} \gets \overline{j}$
     \If {$\tau = \arraytype{\tau'}{n}$}
-        \State $o' \gets \convert{\indextype}{j_1} \cdot \valoftype{|\tau'|}{\indextype}$ \label{line:gep:array-index}
+        \State $o' \gets \signext{\indextype}{j_1} \cdot \valoftype{|\tau'|}{\indextype}$ \label{line:gep:array-index}
         \State \Return \Call{compute-offset}{$\tau', o + o', \overline{j'}$}
     \EndIf
 \EndFunction
@@ -251,9 +247,9 @@ If any of these conditions is violated, the result is $\tpoison$.
         \State \Return $\tundef$
     \EndIf
     \State $j_0 :: \overline{j'} \gets \overline{j}$
-    \State $o \gets \convert{\indextype}{j_0} \cdot \valoftype{|\tau|}{\indextype}$ \label{line:gep:first-index}
+    \State $o \gets \signext{\indextype}{j_0} \cdot \valoftype{|\tau|}{\indextype}$ \label{line:gep:first-index}
     \State $r \gets \Call{compute-offset}{\tau, o, \overline{j'}}$
-    \State \Return $p + \zeroext_{\pointertype}(r)$ \label{line:gep:add-offset}
+    \State \Return $p + \zeroext{\pointertype}{r}$ \label{line:gep:add-offset}
 \EndFunction
 
 \end{algorithmic}

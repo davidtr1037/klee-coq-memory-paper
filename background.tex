@@ -7,6 +7,7 @@ In this section,
 we provide background on \llvm IR~\cite{llvm} and on satisfiability modulo theories (SMT).
 
 \subsection{LLVM IR}
+\label{sec:llvm-ir}
 
 \llvm IR is a low-level intermediate representation for languages such as C, C++, and Rust.
 Beyond its role in compilation,
@@ -63,6 +64,10 @@ Then, we define $\Vals$ as the set of all values, \ie the union of $\Vals^{\bvso
 \paragraph{Notations}
 We denote by $\bvval{n}{w}$ a bit-vector of type $\bvsort{$w$}$ whose numerical value is $n$.
 We denote by $|\tau|$ the size of the type $\tau$ in bytes.
+We denote by $\zeroext{w}{\bvval{n}{w'}}$ ($\signext{w}{\bvval{n}{w'}}$) a function that returns a bit-vector of type $\bvsort{w}$, defined as follows:
+if $w' < w$ then it performs zero-extension (sign-extension),
+if $w' > w$ then it performs truncation,
+and otherwise if returns $\bvval{n}{w'}$.
 
 \subsubsection{\textit{LLVM Memory Model.}}
 
