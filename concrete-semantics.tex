@@ -47,6 +47,30 @@ Therefore, we leave the modeling of such memory allocators to future work.
 
 \begin{figure}
 \[
+\begin{array}{c}
+\ruledefsmall{}
+{
+    n \in \Z
+}
+{
+    \evalexprty{n}{\localstore}{\tau} = \valoftype{n}{\tau}
+}
+\quad\quad
+\ruledefsmall{}
+{
+    \mapaccess{\localstore}{x} \in \Vals^{\tau}
+}
+{
+    \evalexprty{x}{\localstore}{\tau} = \mapaccess{\localstore}{x}
+}
+\end{array}
+\]
+\caption{...}
+\label{figure:llvm-evaluation}
+\end{figure}
+
+\begin{figure}
+\[
 \begin{array}{cl}
 \ruledefsmall{Malloc}{\quad
   \instrat{\location} = \codequote{x~\texttt{=}~\tcall^{\pointertypeof{\bvsort{8}}}~\intrinsicfunc{malloc}(\bvsort{64} ~ e)} \quad
