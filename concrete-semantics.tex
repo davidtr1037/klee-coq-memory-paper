@@ -48,7 +48,7 @@ Therefore, we leave the modeling of such memory allocators to future work.
 \begin{figure}
 \[
 \begin{array}{c}
-\ruledefsmall{}
+\ruledef{}
 {
     n \in \Z
 }
@@ -56,7 +56,7 @@ Therefore, we leave the modeling of such memory allocators to future work.
     \evalexprty{n}{\localstore}{\tau} = \valoftype{n}{\tau}
 }
 \quad\quad
-\ruledefsmall{}
+\ruledef{}
 {
     \mapaccess{\localstore}{x} \in \Vals^{\tau}
 }
@@ -65,7 +65,7 @@ Therefore, we leave the modeling of such memory allocators to future work.
 }
 \\
 \\
-\ruledefsmall{}
+\ruledef{}
 {
     \sem{\toper^{\tau}} : \Vals^{\tau} \times \Vals^{\tau} \to \Vals^{\tau'}
 }
@@ -73,7 +73,7 @@ Therefore, we leave the modeling of such memory allocators to future work.
     \evalexprty{\toper^\tau~e_1~e_2}{\localstore}{\tau} = {\toper^\tau}\big(\evalexprty{e_1}{\localstore}{\tau}, \evalexprty{e_2}{\localstore}{\tau}\big)
 }
 \quad\quad
-\ruledefsmall{}
+\ruledef{}
 {
     \sem{\tcast^{\tau\to\tau'}} : \Vals^{\tau} \to \Vals^{\tau'}
 }
@@ -89,7 +89,7 @@ Therefore, we leave the modeling of such memory allocators to future work.
 \begin{figure}
 \[
 \begin{array}{cl}
-\ruledefsmall{Malloc}{\quad
+\ruledef{Malloc}{\quad
   \instrat{\location} = \codequote{x~\texttt{=}~\tcall^{\pointertypeof{\bvsort{8}}}~\intrinsicfunc{malloc}(\bvsort{64} ~ e)} \quad
   \evalexprty{e}{\localstore}{\bvsort{64}} = \bvval{n}{64} \quad
   \allocate(\memory, \valoftype{n}{\indextype}) = (\memory', p) \quad
@@ -100,7 +100,7 @@ Therefore, we leave the modeling of such memory allocators to future work.
   \progstate{\nextinstr{\location}}{\localstore[x \mapsto p]}{\stack}{\memory'}
 }
 \\[1em]
-\ruledefsmall{Free}{\quad
+\ruledef{Free}{\quad
   \instrat{\location} = \codequote{\tcall~\intrinsicfunc{free}(\pointertypeof{\bvsort{8}} ~ e)} \quad
   \evalexprty{e}{\localstore}{\pointertypeof{\bvsort{8}}} = p \quad
   \mo \in \memory \quad
@@ -112,7 +112,7 @@ Therefore, we leave the modeling of such memory allocators to future work.
   \progstate{\nextinstr{\location}}{\localstore}{\stack}{\memory \setminus \{\mo\}}
 }
 \\[1em]
-\ruledefsmall{Load}{\quad
+\ruledef{Load}{\quad
   \instrat{\location} = \codequote{x~\texttt{=}~\tload^{\tau}~e} \quad
   \evalexprty{e}{\localstore}{\pointertypeof{\tau}} = p \quad
   \mo \in \memory \quad
@@ -126,7 +126,7 @@ Therefore, we leave the modeling of such memory allocators to future work.
     {\stack}{\memory}
 }
 \\[1em]
-\ruledefsmall{Store}{\quad
+\ruledef{Store}{\quad
   \instrat{\location} = \codequote{\tstore^{\tau}~e_1~e_2} \quad
   \evalexprty{e_1}{\localstore}{\tau} = v \quad
   \evalexprty{e_2}{\localstore}{\pointertypeof{\tau}} = p \quad
@@ -139,7 +139,7 @@ Therefore, we leave the modeling of such memory allocators to future work.
   \progstate{\nextinstr{\location}}{\localstore}{\stack}{\heapWrite{\memory}{\mo}{p}{v}}
 }
 \\[1em]
-\ruledefsmall{GEP}{
+\ruledef{GEP}{
   \instrat{\location} = \codequote{x~\texttt{=}~\tgep~\pointertypeof{\tau}~e~\overline{(\tau_i, e_i)}} \quad
   |\overline{(\tau_i, e_i)}| > 0 \quad
   \evalexprty{e}{\localstore}{\pointertypeof{\tau}} = p \quad

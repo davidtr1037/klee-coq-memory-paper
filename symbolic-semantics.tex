@@ -48,7 +48,7 @@ and $\rangecond$ denotes that the interval $[p, p + n)$ is fully contained withi
 \begin{figure}[t]
 \[
 \begin{array}{c}
-\ruledefsmall{Malloc}{
+\ruledef{Malloc}{
   \instrat{\location} = \codequote{x~\texttt{=}~\tcall^{\pointertypeof{\bvsort{8}}}~\intrinsicfunc{malloc}(\bvsort{64} ~ e)} \quad
   \evalexprty{e}{\symlocalstore}{\bvsort{64}} = n \quad
   \symallocate(\symmemory, \bvextract_{\indexwidth}(n)) = (\symmemory', p) \quad
@@ -59,7 +59,7 @@ and $\rangecond$ denotes that the interval $[p, p + n)$ is fully contained withi
   \symstate{\nextinstr{\location}}{\symlocalstore[x \mapsto p]}{\symstack}{\symmemory'}{\pc}
 }
 \\[1em]
-\ruledefsmall{Free}{
+\ruledef{Free}{
   \instrat{\location} = \codequote{\tcall~\intrinsicfunc{free}(\pointertypeof{\bvsort{8}} ~ e)} \quad
   \evalexprty{e}{\symlocalstore}{\pointertypeof{\bvsort{8}}} = p \quad
   m \models \pc \quad
@@ -72,7 +72,7 @@ and $\rangecond$ denotes that the interval $[p, p + n)$ is fully contained withi
   \symstate{\nextinstr{\location}}{\symlocalstore}{\symstack}{\symmemory \setminus \{\symmo\}}{\pc \land \baseaddrcond(p, \symmo)}
 }
 \\[1em]
-\ruledefsmall{Load}{
+\ruledef{Load}{
   \instrat{\location} = \codequote{x~\texttt{=}~\tload^{\tau}~e} \quad
   \evalexprty{e}{\symlocalstore}{\pointertypeof{\tau}} = p \quad
   m \models \pc \quad
@@ -85,7 +85,7 @@ and $\rangecond$ denotes that the interval $[p, p + n)$ is fully contained withi
   \symstate{\nextinstr{\location}}{\symlocalstore[x \mapsto \moRead{\symmo}{p}{\tau}]}{\symstack}{\symmemory}{\pc \land \rangecond(p, |\tau|, \symmo)}
 }
 \\[1em]
-\ruledefsmall{Store}{
+\ruledef{Store}{
   \instrat{\location} = \codequote{\tstore^{\tau}~e_1~e_2} \quad
   \evalexprty{e_1}{\symlocalstore}{\tau} = v \quad
   \evalexprty{e_2}{\symlocalstore}{\pointertypeof{\tau}} = p \quad
@@ -99,7 +99,7 @@ and $\rangecond$ denotes that the interval $[p, p + n)$ is fully contained withi
   \symstate{\nextinstr{\location}}{\symlocalstore}{\symstack}{\heapWrite{\symmemory}{\symmo}{p}{v}}{\pc \land \rangecond(p, |\tau|, \symmo)}
 }
 \\[1em]
-\ruledefsmall{GEP}{
+\ruledef{GEP}{
   \instrat{\location} = \codequote{x~\texttt{=}~\tgep~\pointertypeof{\tau}~e~\overline{(\tau_i, e_i)}} \quad
   |\overline{(\tau_i, e_i)}| > 0 \quad
   \evalexprty{e}{\symlocalstore}{\pointertypeof{\tau}} = p \quad
