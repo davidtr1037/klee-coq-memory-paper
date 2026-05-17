@@ -8,18 +8,16 @@ we discuss the key aspects and implications of our work.
 % our work provide the tools to address semantic gaps
 % for performance, depends on the gap size
 While our current implementation targets \klee, %our underlying architecture is modular.
-we believe that our approach can be applied to other \SE engines whose semantics differ from those of \klee.
-\klee's symbolic semantics significantly differs from our symbolic semantics (\Cref{sec:symbolic-semantics}),
-and our approach provides the mechanisms to bridge such gaps.
+we believe that our approach can be adapted to other \SE engines whose semantics differ from those of \klee.
+As demonstrated in the case of \klee, our approach is designed to bridge such semantic gaps.
+%Indeed, \klee's symbolic semantics differs significantly from our symbolic semantics (\Cref{sec:symbolic-semantics}),
+%but our approach is designed to bridge this gap.
 First, we develop a theory that allows us to prove that the SMT transformations in \klee preserve semantic equivalence.
-Second, we use interface lemmas which help to bridge the gap between \klee's dual representation of memory objects and our symbolic semantics.
-
-%Regarding the impact on performance (proof compilation time, \etc),
-%In general, if there is a substantial semantic gap,
-%the manual proof effort and the proof checking cost are likely to increase.
-%Otherwise, we expect the performance to be similar.
-
-\paragraph{...}
+Second, we use interface lemmas which help to bridge the gap between \klee's optimized memory modeling and our memory modeling.
+In general, the gap between the symbolic semantics of the \SE engine and our symbolic semantics has an impact on performance,
+as it affects both proof generation and proof compilation.
+In \SE engines where this gap is substantial, the performance might decrease.
+Otherwise, the performance is expected to be comparable to our results.
 
 \paragraph{...}
 
