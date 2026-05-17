@@ -67,9 +67,11 @@ Otherwise, we deserialize this sequence of values (bytes) into an integer of typ
 \paragraph{Write}
 The \emph{write} operation is defined using the following function:
 \[ \moWriteFunc : \MemoryObjects \times \Vals^{\pointertype} \times \Vals \to \MemoryObjects \]
-The $\moWriteFunc$ function receives a memory object $\mo$, a pointer $p$, and a value $v$.
+The $\moWriteFunc$ function receives a memory object $\mo$ (\ie $\mobj{\addr}{\size}{\arrayvalue}$), a pointer $p$, and a value $v$.
 First, it serializes the value $v$ into a sequence of bytes.
-Then, it uses these bytes to update the corresponding cells of the array $\arrayvalue$ starting from $p$.
+%Then, it uses these bytes to update the corresponding cells of the array $\arrayvalue$ starting from $p$.
+Then, it uses these bytes to return a new memory object $\mobj{\addr}{\size}{\arrayvalue'}$,
+where $\arrayvalue'$ is derived from $\arrayvalue$ by updating the corresponding cells of $\arrayvalue$ starting from $p$.
 
 \paragraph{Memory Allocation Scheme}
 In this paper,
