@@ -34,7 +34,7 @@ Now, we define the operations provided by the memory model:
 allocation, deallocation, read, and write.
 
 \paragraph{Allocation}
-The allocation operation is defined using the following function:
+The \emph{allocation} operation is defined using the following function:
 \[ \allocate : \Heaps \times \Vals^{\indextype} \to \Heaps \times \Vals^{\pointertype} \]
 The function $\allocate$ receives a heap $\memory$ and an allocation size $\size$,
 and attempts to provide a memory object $\mobj{\addr}{\size}{\arrayvalue}$ that satisfies the following:
@@ -48,18 +48,30 @@ Otherwise, the result is $\none$.
 The mapping $\arrayvalue$ of the newly allocated memory object is set to a function that maps all the indices to $\bvval{0}{8}$.
 
 \paragraph{Deallocation}
-The deallocation operation is defined using the following function:
+The \emph{deallocation} operation is defined using the following function:
 \[ \deallocate : \Heaps \times \MemoryObjects \to \Heaps \]
 The function $\deallocate$ receives a heap $\memory$ and a memory object $\mo$,
 and returns $\memory \setminus \mo$.
 
 \paragraph{Read}
+The \emph{read} operation is defined using the following function:
+\[ \moReadFunc : \MemoryObjects \times \Vals^{\pointertype} \times \Types \to \Vals \]
+The $\moReadFunc$ function receives a memory object $\mo$, a pointer $p$, and a type $\tau$.\footnote{
+Here, we assume that $\tau$ is one of the following types: $\bvsort{8}$, $\bvsort{16}$, $\bvsort{32}$, $\bvsort{64}$.
+}
+First, it reads the consecutive $|\tau|$ cells starting from $p$ into a sequence of values of type $\Vals^{\bvsort{8}}$.
+If one of these values is $\tpoison$, then the result is $\tpoison$,
+and otherwise, if one of these values is $\tundef$, then the result is $\tundef$.
+Otherwise, we deserialize this sequence of values (bytes) into an integer of type $\tau$.
+
 \paragraph{Write}
+The \emph{write} operation is defined using the following function:
+\[ \moWriteFunc : \MemoryObjects \times \Vals^{\pointertype} \times \Vals \to \MemoryObjects \]
+The $\moWriteFunc$ function receives a memory object $\mo$, a pointer $p$, and a value $v$.
+First, it serializes the value $v$ into a sequence of bytes.
+Then, it uses these bytes to update the corresponding cells of the array $\arrayvalue$ starting from $p$.
 
-We assume an implicit \emph{memory allocator},
-providing a freshly-allocated memory object whose address interval must not overlap with those of existing memory objects.
-Moreover, the address interval must be fully contained within the address space, \ie $\addr + \size$ must not overflow.
-
+\paragraph{Memory Allocation Scheme}
 In this paper,
 we assume a linear memory allocator that allocates memory objects consecutively while maintaining a fixed gap between them,
 commonly referred to as a \emph{red-zone}.
