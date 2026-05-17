@@ -273,7 +273,7 @@ Otherwise, we perform a read or write operation.
 %and otherwise, if one of these values is $\tundef$, we return $\tundef$.
 %Otherwise, we deserialize this sequence of values (bytes) into an integer of the appropriate type.
 For a read operation,
-we call the $\moReadFunc$ function (\Cref{sec:memory-modeling}) to read the appropriate value.
+we call the $\moReadFunc$ function (\Cref{sec:memory-modeling}) to read the value from $\mo$ and update the local store accordingly.
 %For a write operation,
 %we serialize the value $v$ into a sequence of bytes and update the array $\arrayvalue$ accordingly.
 For a write operation,
@@ -289,7 +289,7 @@ we call the $\moWriteFunc$ function (\Cref{sec:memory-modeling}) to update the c
 %This procedure serializes the value $v$ into a sequence of bytes and updates the array $\arrayvalue$ accordingly.
 
 \textbf{\textit{GetElementPtr.}}
-In general, the $\tgep$ instruction computes the address of a subelement of an aggregate data structure (array, struct, \etc.).
+In general, the $\tgep$ instruction computes the address of a subelement of an aggregate data structure (array, struct, \etc).
 The function $\evalgep$ in~\Cref{alg:gep} defines a simplified semantics of the $\tgep$ instruction.\footnote{
 The semantics presented here consider only arrays, however, our formalization and implementation support also structs.
 }
