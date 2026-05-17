@@ -267,13 +267,17 @@ we need to make sure that there exists a memory object $\mobj{\addr}{\size}{\arr
 (1) $p < p + n$ (\ie there is no overflow) and (2) $p \geq \addr \ \land \ p + n < \addr + \size$.
 If that is not the case, then the result is undefined behavior.
 Otherwise, we perform a read or write operation.
+%For a read operation,
+%we first read the corresponding sequence of stored values.
+%If one of these values is $\tpoison$, we return $\tpoison$,
+%and otherwise, if one of these values is $\tundef$, we return $\tundef$.
+%Otherwise, we deserialize this sequence of values (bytes) into an integer of the appropriate type.
 For a read operation,
-we first read the corresponding sequence of stored values.
-If one of these values is $\tpoison$, we return $\tpoison$,
-and otherwise, if one of these values is $\tundef$, we return $\tundef$.
-Otherwise, we deserialize this sequence of values (bytes) into an integer of the appropriate type.
+we call the $\moReadFunc$ function (\Cref{sec:memory-modeling}) to read the appropriate value.
+%For a write operation,
+%we serialize the value $v$ into a sequence of bytes and update the array $\arrayvalue$ accordingly.
 For a write operation,
-we serialize the value $v$ into a sequence of bytes and update the array $\arrayvalue$ accordingly.
+we call the $\moWriteFunc$ function (\Cref{sec:memory-modeling}) to update the contents of $\mo$ accordingly.
 
 %\textbf{\textit{Store.}}
 %% TODO: what happens if p/v is undef/poison?
