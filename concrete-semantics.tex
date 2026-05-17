@@ -89,7 +89,7 @@ Therefore, we leave the modeling of such memory allocators to future work.
 \begin{figure}
 \[
 \begin{array}{c}
-\ruledef{}
+\ruledefnoname
 {
     n \in \Z
 }
@@ -97,7 +97,7 @@ Therefore, we leave the modeling of such memory allocators to future work.
     \evalexprty{n}{\localstore}{\tau} = \valoftype{n}{\tau}
 }
 \quad\quad
-\ruledef{}
+\ruledefnoname
 {
     \mapaccess{\localstore}{x} \in \Vals^{\tau}
 }
@@ -106,7 +106,7 @@ Therefore, we leave the modeling of such memory allocators to future work.
 }
 \\
 \\
-\ruledef{}
+\ruledefnoname
 {
     \sem{\toper^{\tau}} : \Vals^{\tau} \times \Vals^{\tau} \to \Vals^{\tau'}
 }
@@ -114,7 +114,7 @@ Therefore, we leave the modeling of such memory allocators to future work.
     \evalexprty{\toper^\tau~e_1~e_2}{\localstore}{\tau} = {\toper^\tau}\big(\evalexprty{e_1}{\localstore}{\tau}, \evalexprty{e_2}{\localstore}{\tau}\big)
 }
 \quad\quad
-\ruledef{}
+\ruledefnoname
 {
     \sem{\tcast^{\tau\to\tau'}} : \Vals^{\tau} \to \Vals^{\tau'}
 }
