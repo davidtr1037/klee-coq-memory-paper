@@ -231,7 +231,6 @@ $\stack$ is a call stack represented as a sequence of frames,
 and $\memory \in \Heaps$ is a heap.
 \end{definition}
 
-%When expressions do not adhere to the expected types, \ie they are \emph{ill-typed}, the semantics is undefined (marked by $\bot$).
 \Cref{figure:expr-semantics} defines the evaluation semantics of \llvm expressions.
 The typed semantics of an expression, denoted by $\evalexprty{e}{\localstore}{\tau}$,
 defines the value of $e$ given a local store $\localstore \in \Stores$ in a context where a value of type $\tau$ is expected.
