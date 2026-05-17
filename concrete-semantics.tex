@@ -123,8 +123,8 @@ Therefore, we leave the modeling of such memory allocators to future work.
 }
 \end{array}
 \]
-\caption{...}
-\label{figure:llvm-evaluation}
+\caption{Evaluation semantics of \llvm expressions.}
+\label{figure:expr-semantics}
 \end{figure}
 
 \begin{figure}
@@ -230,6 +230,13 @@ $\localstore \in \Stores$ is a \emph{local store} that maps variables to values 
 $\stack$ is a call stack represented as a sequence of frames,
 and $\memory \in \Heaps$ is a heap.
 \end{definition}
+
+%When expressions do not adhere to the expected types, \ie they are \emph{ill-typed}, the semantics is undefined (marked by $\bot$).
+\Cref{figure:expr-semantics} defines the evaluation semantics of \llvm expressions.
+The typed semantics of an expression, denoted by $\evalexprty{e}{\localstore}{\tau}$,
+defines the value of $e$ given a local store $\localstore \in \Stores$ in a context where a value of type $\tau$ is expected.
+Operators are parameterized by bit-vector types,
+and their semantics are functions whose domains and ranges depend on those types (\eg $\sem{\textsf{add}^\tau} : \Vals^\tau\times\Vals^\tau\to\Vals^\tau$).
 
 \Cref{figure:llvm-semantics} defines the operational small-step semantics of \llvm IR based on the syntax in~\Cref{figure:llvm-syntax}.
 The evaluation semantics of an expression $e$ in a context of a local store $\localstore \in \Stores$ when a value of type $\tau$ is expected,
