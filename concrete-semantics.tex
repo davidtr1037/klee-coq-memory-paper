@@ -17,6 +17,7 @@ and in this work,
 we adopt the \emph{memory-object model} which is widely used in \SE tools~\cite{klee,mossberg2019manticore}.
 
 \subsection{Memory Modeling}
+\label{sec:memory-modeling}
 
 We first define the major components of the memory model:
 memory objects, the heap.
@@ -129,10 +130,10 @@ Therefore, we leave the modeling of such memory allocators to future work.
 \begin{figure}
 \[
 \begin{array}{cl}
-\ruledef{Malloc}{\quad
+\ruledef{Malloc}{
   \instrat{\location} = \codequote{x~\texttt{=}~\tcall^{\pointertypeof{\bvsort{8}}}~\intrinsicfunc{malloc}(\bvsort{64} ~ e)} \quad
   \evalexprty{e}{\localstore}{\bvsort{64}} = \bvval{n}{64} \quad
-  \allocate(\memory, \valoftype{n}{\indextype}) = (\memory', p) \quad
+  \allocate(\memory, \valoftype{n}{\indextype}) = (\memory', p)
 }
 {
   \progstate{\location}{\localstore}{\stack}{\memory}
@@ -140,23 +141,24 @@ Therefore, we leave the modeling of such memory allocators to future work.
   \progstate{\nextinstr{\location}}{\localstore[x \mapsto p]}{\stack}{\memory'}
 }
 \\[1em]
-\ruledef{Free}{\quad
+\ruledef{Free}{
   \instrat{\location} = \codequote{\tcall~\intrinsicfunc{free}(\pointertypeof{\bvsort{8}} ~ e)} \quad
   \evalexprty{e}{\localstore}{\pointertypeof{\bvsort{8}}} = p \quad
   \mo \in \memory \quad
   \isbaseaddr{p}{\mo} \quad
+  \deallocate(\memory, \mo) = \memory'
 }
 {
   \progstate{\location}{\localstore}{\stack}{\memory}
   \step
-  \progstate{\nextinstr{\location}}{\localstore}{\stack}{\memory \setminus \{\mo\}}
+  \progstate{\nextinstr{\location}}{\localstore}{\stack}{\memory'}
 }
 \\[1em]
-\ruledef{Load}{\quad
+\ruledef{Load}{
   \instrat{\location} = \codequote{x~\texttt{=}~\tload^{\tau}~e} \quad
   \evalexprty{e}{\localstore}{\pointertypeof{\tau}} = p \quad
   \mo \in \memory \quad
-  \isinbounds{p}{\tau}{\mo} \quad
+  \isinbounds{p}{\tau}{\mo}
 }
 {
   \progstate{\location}{\localstore}{\stack}{\memory}
@@ -166,12 +168,12 @@ Therefore, we leave the modeling of such memory allocators to future work.
     {\stack}{\memory}
 }
 \\[1em]
-\ruledef{Store}{\quad
+\ruledef{Store}{
   \instrat{\location} = \codequote{\tstore^{\tau}~e_1~e_2} \quad
   \evalexprty{e_1}{\localstore}{\tau} = v \quad
   \evalexprty{e_2}{\localstore}{\pointertypeof{\tau}} = p \quad
   \mo \in \memory \quad
-  \isinbounds{p}{\tau}{\mo} \quad
+  \isinbounds{p}{\tau}{\mo}
 }
 {
   \progstate{\location}{\localstore}{\stack}{\memory}
@@ -240,16 +242,22 @@ as the rules for other instructions (assignments, branches, \etc) were already d
 
 \textbf{\textit{Malloc.}}
 When allocating a memory object,
-the size of the allocation must be non-negative and must not exceed the largest signed integer representable by the index type.
-As mentioned before, the address interval of the allocated memory object may not cross the unsigned boundary of the address space.
-If one of these properties is violated, the result is undefined behavior.
-The mapping of the newly allocated memory object is set to a function that maps all the indices to $\bvval{0}{8}$.
+we call the $\allocate$ function defined in~\Cref{sec:memory-modeling}.
+If $\allocate$ succeeds, then we update the local store and the heap accordingly.
+Otherwise, the result is undefined behavior.
+
+%When allocating a memory object,
+%the size of the allocation must be non-negative and must not exceed the largest signed integer representable by the index type.
+%As mentioned before, the address interval of the allocated memory object may not cross the unsigned boundary of the address space.
+%If one of these properties is violated, the result is undefined behavior.
+%The mapping of the newly allocated memory object is set to a function that maps all the indices to $\bvval{0}{8}$.
 
 \textbf{\textit{Free.}}
 % TODO: assume that the type of p is iptr?
 When deallocating a pointer value $p$,
-we first check if there exists a memory object $\mobj{\addr}{\size}{\arrayvalue}$ in the memory $\memory$ such that $p = \addr$.
-If that is the case, we remove that memory object from $\memory$.
+we first check if there exists a memory object $\mobj{\addr}{\size}{\arrayvalue}$ in the heap $\memory$ such that $p = \addr$.
+%If that is the case, then we update the heap using the $\deallocate$ function.
+If that is the case, we remove that memory object from $\memory$ using the $\deallocate$ function.
 Otherwise, the result is undefined behavior.
 
 \textbf{\textit{Load and Store.}}
