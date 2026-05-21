@@ -173,6 +173,35 @@ we say that a symbolic state \emph{represents} a concrete state if the latter ca
 This relation will be used to define symbolic error states (\Cref{def:sym-error-state}).
 In the following, we extend the definition given in~\cite{klee-rocq} (Definition 3.4) to account for memory.
 
+\begin{algorithm}[t]
+\caption{The symbolic semantics of $\tgep$ (without attributes).}
+\label{alg:symbolic-gep}
+\begin{algorithmic}[1]
+
+\Function{compute-offset}{$\tau, o, \overline{j}$}
+    \If {$|\overline{j}| = 0$}
+        \State \Return $o$
+    \EndIf
+    \State $j_1 :: \overline{j'} \gets \overline{j}$
+    \If {$\tau = \arraytype{\tau'}{n}$}
+        \State $o \gets \bvadd{\bvsort{32}}{o}{\bvmul{\bvsort{32}}{\bvsext_{32}(j_1)}{\bvconst{32}{|\tau'|}}}$ \label{line:array-index}
+        \State \Return \Call{compute-offset}{$\tau', o, \overline{j'}$}
+    \EndIf
+    \If {$\tau = \structtype{\tau}{n}$}
+        \State ...
+    \EndIf
+\EndFunction
+
+\Function{eval-gep}{$\tau, p, \overline{j}$}
+    \State $j_0 :: \overline{j'} \gets \overline{j}$
+    \State $o \gets \bvmul{\bvsort{32}}{\bvsext_{32}(j_0)}{\bvconst{32}{|\tau|}}$ \label{line:first-index}
+    \State $r \gets \Call{compute-offset}{\tau, o, \overline{j'}}$
+    \State \Return $\bvadd{\bvsort{64}}{p}{\bvzext_{64}(r)}$
+\EndFunction
+
+\end{algorithmic}
+\end{algorithm}
+
 % TODO: remove from this section
 % TODO: same number of memory objects
 \begin{definition}
