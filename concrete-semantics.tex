@@ -347,8 +347,8 @@ If any of these conditions is violated, the result is $\tpoison$.
     \If {$\tundef \in \overline{j}$}
         \State \Return $\tundef$
     \EndIf
-    \State $j_0 :: \overline{j'} \gets \overline{j}$
-    \State $o \gets \signext{\indexwidth}{j_0} \cdot \valoftype{|\tau|}{\indextype}$ \label{line:gep:first-index}
+    \State $j_1 :: \overline{j'} \gets \overline{j}$
+    \State $o \gets \signext{\indexwidth}{j_1} \cdot \valoftype{|\tau|}{\indextype}$ \label{line:gep:first-index}
     \State $r \gets \Call{compute-offset}{\tau, o, \overline{j'}}$
     \State \Return $p + \zeroext{\pointerwidth}{r}$ \label{line:gep:add-offset}
 \EndFunction
