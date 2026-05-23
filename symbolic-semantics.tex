@@ -8,15 +8,66 @@
 In this section,
 we define our symbolic operational small-step semantics of \llvm IR based on the syntax in~\Cref{figure:llvm-syntax}.
 
+\subsection{Symbolic Memory Modeling}
+\label{sec:symbolic-memory-modeling}
+
+% TODO: not that similar...
+First, we define the major components of our symbolic memory model.
+At a high-level, the symbolic memory model is similar to its concrete counterpart (\Cref{sec:memory-modeling}).
+The core difference is that the symbolic memory model uses SMT expressions instead of concrete values (\ie bit-vectors).
+
 \begin{definition}
 A symbolic memory object is defined as a tuple:
 \[ (\addr, \size, \smtarray) \in \SymMemoryObjects \quad \quad \SymMemoryObjects \triangleq \Vals^{\pointertype} \times \Vals^{\indextype} \times \arraysort{\smtsort{\indexwidth}}{\smtsort{8}} \]
+% TODO: remove 'similar'
 which is similar to the definition of a concrete memory object,
-but now the contents are encoded using an SMT array whose values are symbolic bytes, \ie SMT expressions of sort $\bvsort{8}$.
+but now the contents are encoded using an SMT array whose values are \emph{symbolic bytes}, \ie SMT expressions of sort $\smtsort{8}$.
 A symbolic heap $\symmemory \in \SymHeaps$ is defined as a set of symbolic memory objects.
-% TODO: define again?
-The symbolic memory allocator is defined similarly to its concrete counterpart (\Cref{def:memory}).
 \end{definition}
+
+Now, we define the operations provided by the symbolic memory model:
+allocation, deallocation, read, and write.
+
+\paragraph{Allocation}
+The \emph{allocation} operation is defined using the following function:
+\[ \symallocate : \SymHeaps \times \bvsort{\indexwidth} \to \SymHeaps \times \bvsort{\pointerwidth} \]
+The function $\symallocate$ receives a symbolic heap $\symmemory$ and an allocation size $\size$,
+and attempts to provide a symbolic memory object $\mobj{\addr}{\size}{\smtarray}$ that satisfies the following:
+\begin{enumerate}
+    \item $[\addr, \addr + \size)$ is fully contained within the address space (\ie $\addr < \addr + \size$)
+    \item $[\addr, \addr + \size)$ does not overlap with address intervals of existing memory objects
+    \item $s \geq 0$ and does not exceed the largest signed integer representable by the index type
+\end{enumerate}
+If such a symbolic memory object can be provided, then the result is the tuple $\langle \memory \cup \mobj{\addr}{\size}{\smtarray}, \addr \rangle$.
+Otherwise, the result is $\none$.
+The SMT array $\smtarray$ is set to the constant array $\arrayconst{\arrayinitvalue}$.
+
+\paragraph{Deallocation}
+The \emph{deallocation} operation is defined using the following function:
+\[ \symdeallocate : \SymHeaps \times \SymMemoryObjects \to \SymHeaps \]
+The function $\symdeallocate$ receives a heap $\symmemory$ and a memory object $\symmo$,
+and returns $\symmemory \setminus \symmo$.
+
+\paragraph{Read}
+The \emph{read} operation is defined using the following function:
+\[ \moSymReadFunc : \SymMemoryObjects \times \smtsort{\pointerwidth} \times \Types \to ??? \]
+The $\moSymReadFunc$ function receives a memory object $\symmo$, a pointer $p$, and a type $\tau$.
+First, it reads the consecutive $|\tau|$ cells starting from $p$ into a sequence of symbolic bytes (SMT expressions of sort $\smtsort{8}$).
+Then, it translates them to a \textit{concat} expression of the appropriate sort.
+
+\paragraph{Write}
+The \emph{write} operation is defined using the following function:
+\[ \moSymWriteFunc : \SymMemoryObjects \times \Vals^{\pointertype} \times ??? \to \SymMemoryObjects \]
+The $\moSymWriteFunc$ function receives a memory object $\symmo$ (\ie $\mobj{\addr}{\size}{\smtarray}$), a pointer $p$, and an SMT expression $e$.
+First, it serializes the $e$ into a sequence of symbolic bytes.
+Then, it uses these symbolic bytes to return a new symbolic memory object $\mobj{\addr}{\size}{\arrayvalue'}$,
+where $\smtarray'$ is derived from $\smyarray$ using store expressions at the corresponding offsets.
+
+% TODO: extend
+\paragraph{Memory Allocation Scheme}
+The symbolic memory allocator is defined similarly to its concrete counterpart (\Cref{def:memory}).
+
+\subsection{Symbolic Operational Small-Step Semantics}
 
 \begin{definition}
 \label{def:symbolic-state}
