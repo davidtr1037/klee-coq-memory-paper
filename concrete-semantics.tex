@@ -180,7 +180,7 @@ Therefore, we leave the modeling of such memory allocators to future work.
 {
   \progstate{\location}{\localstore}{\stack}{\memory}
   \step
-  \progstate{\nextinstr{\location}}{\localstore}{\stack}{\heapWrite{\memory}{\mo}{p}{v}}
+  \progstate{\nextinstr{\location}}{\localstore}{\stack}{\heapwrite{\memory}{\mo}{p}{v}}
 }
 \\[1em]
 \ruledefsmall{GEP}{
@@ -206,7 +206,7 @@ Therefore, we leave the modeling of such memory allocators to future work.
 \isinbounds{p}{\tau}{\mo} & \mbox{interval $[p, p + \sizeof{\tau})$ is contained within the address interval of $\mo$} \\
 \moread{\mo}{p}{\tau} & \mbox{read a value of type $\tau$ from memory object $\mo$ starting from address $p$} \\
 \mowrite{\mo}{p}{v} & \mbox{write value $v$ into memory object $\mo$ at address $p$} \\
-\heapReplace{\memory}{\mo}{\mo'} & \mbox{update $\memory$ by replacing memory object $\mo$ with $mo'$}
+\heapreplace{\memory}{\mo}{\mo'} & \mbox{update $\memory$ by replacing memory object $\mo$ with $mo'$}
 \end{array}
 $}
 \end{array}

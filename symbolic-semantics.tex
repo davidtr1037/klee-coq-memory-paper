@@ -54,7 +54,7 @@ The \emph{write} operation is defined using the following function:
 \[ \symmowritefunc : \SymMemoryObjects \times \pointertype \times ??? \to \SymMemoryObjects \]
 The $\symmowritefunc$ function receives a memory object $\symmo$ (\ie $\mobj{\addr}{\size}{\smtarray}$), a pointer $p$, and an SMT expression $e$.
 First, it serializes $e$ into a sequence of symbolic bytes.
-Then, it uses these symbolic bytes to create a new symbolic memory object $\mobj{\addr}{\size}{\arrayvalue'}$,
+Then, it uses these symbolic bytes to create a new symbolic memory object $\mobj{\addr}{\size}{\smtarray'}$,
 where $\smtarray'$ is obtained by extending $\smtarray$ with additional store expressions at the corresponding offsets.
 
 % TODO: extend
@@ -108,12 +108,13 @@ and $\rangecond$ denotes that the interval $[p, p + n)$ is fully contained withi
   \evalexprty{e}{\symlocalstore}{\pointertypeof{\bvsort{8}}} = p \quad
   m \models \pc \quad
   \symmo \in \symmemory \quad
-  \symisbaseaddr{p}{mo}{m}
+  \symisbaseaddr{p}{mo}{m} \quad
+  \deallocate(\symmemory, \mo) = \symmemory'
 }
 {
   \symstate{\location}{\symlocalstore}{\symstack}{\symmemory}{\pc}
   \symstep
-  \symstate{\nextinstr{\location}}{\symlocalstore}{\symstack}{\symmemory \setminus \{\symmo\}}{\pc \land \baseaddrcond(p, \symmo)}
+  \symstate{\nextinstr{\location}}{\symlocalstore}{\symstack}{\symmemory'}{\pc \land \baseaddrcond(p, \symmo)}
 }
 \\[1em]
 \ruledefsmall{Load}{
@@ -140,7 +141,7 @@ and $\rangecond$ denotes that the interval $[p, p + n)$ is fully contained withi
 {
   \symstate{\location}{\symlocalstore}{\symstack}{\symmemory}{\pc}
   \symstep
-  \symstate{\nextinstr{\location}}{\symlocalstore}{\symstack}{\heapWrite{\symmemory}{\symmo}{p}{v}}{\pc \land \rangecond(p, |\tau|, \symmo)}
+  \symstate{\nextinstr{\location}}{\symlocalstore}{\symstack}{\symheapwrite{\symmemory}{\symmo}{p}{v}}{\pc \land \rangecond(p, |\tau|, \symmo)}
 }
 \\[1em]
 \ruledefsmall{GEP}{
