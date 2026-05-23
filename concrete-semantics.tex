@@ -113,7 +113,7 @@ Therefore, we leave the modeling of such memory allocators to future work.
     \sem{\toper^{\tau}} : \Vals^{\tau} \times \Vals^{\tau} \to \Vals^{\tau'}
 }
 {
-    \evalexprty{\toper^\tau~e_1~e_2}{\localstore}{\tau} = {\toper^\tau}\big(\evalexprty{e_1}{\localstore}{\tau}, \evalexprty{e_2}{\localstore}{\tau}\big)
+    \evalexprty{\toper^\tau~e_1~e_2}{\localstore}{\tau} = \sem{\toper^\tau}\big(\evalexprty{e_1}{\localstore}{\tau}, \evalexprty{e_2}{\localstore}{\tau}\big)
 }
 \quad\quad
 \ruledefnonamesmall
@@ -122,7 +122,7 @@ Therefore, we leave the modeling of such memory allocators to future work.
     \sem{\tcast^{\tau\to\tau'}} : \Vals^{\tau} \to \Vals^{\tau'}
 }
 {
-    \sem{\tcast^{\tau\to\tau'}}\big(\evalexprty{e}{\localstore}{\tau}\big)
+    \evalexprty{\tcast^{\tau\to\tau'}~e}{\localstore}{\tau'} = \sem{\tcast^{\tau\to\tau'}}\big(\evalexprty{e}{\localstore}{\tau}\big)
 }
 \end{array}
 \]
