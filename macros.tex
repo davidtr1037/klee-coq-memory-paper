@@ -135,12 +135,11 @@
 \newcommand{\none}{\bot}
 
 % general purpose
-\newcommand\moreadfunc{\mathit{rd}}
-\newcommand\moread[3]{\moreadfunc(#1,#2,#3)}
-\newcommand\mowritefunc{\mathit{wr}}
-\newcommand\mowrite[3]{\mowritefunc(#1,#2,#3)}
+\newcommand\moreadfunc[1]{\mathit{rd}_{#1}}
+\newcommand\moread[3]{\moreadfunc{#1}(#2,#3)}
+\newcommand\mowritefunc[1]{\mathit{wr}_{#1}}
+\newcommand\mowrite[4]{\mowritefunc{#1}(#2,#3,#4)}
 \newcommand\heapreplace[3]{#1[#3/#2]}
-\newcommand\heapwrite[4]{\heapreplace{#1}{#2}{\mowrite{#2}{#3}{#4}}}
 
 % SMT
 \newcommand{\true}{\mathit{true}}
