@@ -112,7 +112,7 @@ Therefore, we leave the modeling of such memory allocators to future work.
     \sem{\toper^{\tau}} : \Vals^{\tau} \times \Vals^{\tau} \to \Vals^{\tau'}
 }
 {
-    \evalexprty{\toper^\tau~e_1~e_2}{\localstore}{\tau} = \sem{\toper^\tau}\big(\evalexprty{e_1}{\localstore}{\tau}, \evalexprty{e_2}{\localstore}{\tau}\big)
+    \evalexprty{\toper^\tau~e_1~e_2}{\localstore}{\tau'} = \sem{\toper^\tau}\big(\evalexprty{e_1}{\localstore}{\tau}, \evalexprty{e_2}{\localstore}{\tau}\big)
 }
 \quad\quad
 \ruledefnonamesmall
@@ -229,7 +229,6 @@ However, our formalization (in \coq) and implementation (on top of \klee) suppor
 A \emph{concrete state} is a tuple $\progstate{\location}{\localstore}{\stack}{\memory}$,
 where $\location \in \Locs$ is a program location,
 $\localstore \in \Stores$ is a \emph{local store} that maps variables to values in $\Vals$,
-$\stack$ is a call stack represented as a sequence of frames,
 and $\memory \in \Heaps$ is a heap.
 \end{definition}
 
@@ -240,13 +239,7 @@ Operators are parameterized by bit-vector types,
 and their semantics are functions whose domains and ranges depend on those types (\eg $\sem{\textsf{add}^\tau} : \Vals^\tau\times\Vals^\tau\to\Vals^\tau$).
 
 \Cref{figure:llvm-semantics} defines the operational small-step semantics of \llvm IR based on the syntax in~\Cref{figure:llvm-syntax}.
-The evaluation semantics of an expression $e$ in a context of a local store $\localstore \in \Stores$ when a value of type $\tau$ is expected,
-denoted as $\evalexprty{e}{\localstore}{\tau}$,
-is defined according to~\cite{klee-rocq} (Section 2.1.2).
-%The rules \rulenameref{Assign}, \rulenameref{Branch-True}, \rulenameref{Branch-False}, \rulenameref{Make-Symbolic}, and \rulenameref{Assume}
-%were discussed in detail in~\cite{klee-rocq},
-Here, we focus on discussing the memory-related instructions,
-as the rules for other instructions (assignments, branches, \etc) were already discussed in detail in~\cite{klee-rocq}.
+In the following, we discuss the derivation rules in more detail.
 
 \textbf{\textit{Malloc.}}
 When allocating a memory object,
