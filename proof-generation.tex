@@ -200,7 +200,7 @@ s' \triangleq \symstate
     {\location_7}
     {\{ ..., \nameid{gep1} \mapsto \bvconst{64}{\addr} \}}
     {[]}
-    {[\moWrite{\symmo'}{\bvconst{64}{\addr}}{\bvconst{8}{7}}]}
+    {[\symmowrite{\symmo'}{\bvconst{64}{\addr}}{\bvconst{8}{7}}]}
     {n < \bvconst{32}{2} \land \rangecond(\bvconst{64}{\addr}, 1, \symmo'))}
 \]
 Recall that we assume that address intervals of memory objects do not overlap.
@@ -211,7 +211,7 @@ Therefore, although the \rulenameref{Store} rule may have multiple derivations i
 there is a single derivation in this case.
 % TODO: why?
 In particular, it also implies that:
-\[ \moWrite{\symmo'}{\bvconst{64}{\addr}}{\bvconst{8}{7}} = (\bvval{\addr}{64}, \bvval{2}{32}, \arraystore{\smtarray}{(\bvextract_{32}(\bvsub{\bvsort{64}}{\bvconst{64}{\addr}}{\bvconst{64}{\addr}}))}{\bvconst{8}{7}}) \]
+\[ \symmowrite{\symmo'}{\bvconst{64}{\addr}}{\bvconst{8}{7}} = (\bvval{\addr}{64}, \bvval{2}{32}, \arraystore{\smtarray}{(\bvextract_{32}(\bvsub{\bvsort{64}}{\bvconst{64}{\addr}}{\bvconst{64}{\addr}}))}{\bvconst{8}{7}}) \]
 
 On the other side, the symbolic state computed by the \SE engine is:
 \[

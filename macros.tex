@@ -135,12 +135,12 @@
 \newcommand{\none}{\bot}
 
 % general purpose
-\newcommand\moReadFunc{\mathit{read}}
-\newcommand\moRead[3]{\moReadFunc(#1,#2,#3)}
-\newcommand\moWriteFunc{\mathit{write}}
-\newcommand\moWrite[3]{\moWriteFunc(#1,#2,#3)}
+\newcommand\moreadfunc{\mathit{read}}
+\newcommand\moread[3]{\moreadfunc(#1,#2,#3)}
+\newcommand\mowritefunc{\mathit{write}}
+\newcommand\mowrite[3]{\mowritefunc(#1,#2,#3)}
 \newcommand\heapReplace[3]{#1[#3/#2]}
-\newcommand\heapWrite[4]{\heapReplace{#1}{#2}{\moWrite{#2}{#3}{#4}}}
+\newcommand\heapWrite[4]{\heapReplace{#1}{#2}{\mowrite{#2}{#3}{#4}}}
 
 % SMT
 \newcommand{\true}{\mathit{true}}
@@ -198,10 +198,10 @@
 \newcommand{\symallocate}{\widetilde{\mathit{alloc}}}
 \newcommand{\symdeallocate}{\widetilde{\mathit{dealloc}}}
 \newcommand{\symevalgep}{\mathit{eval\textit{-}gep}}
-\newcommand{\moSymReadFunc}{\mathit{read}}
-\newcommand{\moSymRead}[3]{\moSymReadFunc(#1,#2,#3)}
-\newcommand{\moSymWriteFunc}{\mathit{write}}
-\newcommand{\moSymWrite}[3]{\moSymWriteFunc(#1,#2,#3)}
+\newcommand{\symmoreadfunc}{\mathit{read}}
+\newcommand{\symmoread}[3]{\symmoreadfunc(#1,#2,#3)}
+\newcommand{\symmowritefunc}{\mathit{write}}
+\newcommand{\symmowrite}[3]{\symmowritefunc(#1,#2,#3)}
 
 % execution tree
 \newcommand{\equivstate}{\equiv}

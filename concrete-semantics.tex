@@ -55,8 +55,8 @@ and returns $\memory \setminus \mo$.
 
 \paragraph{Read}
 The \emph{read} operation is defined using the following function:
-\[ \moReadFunc : \MemoryObjects \times \pointertype \times \Types \to \Vals \]
-The $\moReadFunc$ function receives a memory object $\mo$, a pointer $p$, and a type $\tau$.\footnote{
+\[ \moreadfunc : \MemoryObjects \times \pointertype \times \Types \to \Vals \]
+The $\moreadfunc$ function receives a memory object $\mo$, a pointer $p$, and a type $\tau$.\footnote{
 Here, we assume that $\tau$ is one of the following types: $\bvsort{8}$, $\bvsort{16}$, $\bvsort{32}$, $\bvsort{64}$.
 }
 First, it reads the consecutive $|\tau|$ cells starting from $p$ into a sequence of values of type $\Vals^{\bvsort{8}}$.
@@ -66,8 +66,8 @@ Otherwise, we deserialize this sequence of values (bytes) into an integer of typ
 
 \paragraph{Write}
 The \emph{write} operation is defined using the following function:
-\[ \moWriteFunc : \MemoryObjects \times \pointertype \times \Vals \to \MemoryObjects \]
-The $\moWriteFunc$ function receives a memory object $\mo$ (\ie $\mobj{\addr}{\size}{\arrayvalue}$), a pointer $p$, and a value $v$.
+\[ \mowritefunc : \MemoryObjects \times \pointertype \times \Vals \to \MemoryObjects \]
+The $\mowritefunc$ function receives a memory object $\mo$ (\ie $\mobj{\addr}{\size}{\arrayvalue}$), a pointer $p$, and a value $v$.
 First, it serializes the value $v$ into a sequence of bytes.
 %Then, it uses these bytes to update the corresponding cells of the array $\arrayvalue$ starting from $p$.
 Then, it uses these bytes to create a new memory object $\mobj{\addr}{\size}{\arrayvalue'}$,
@@ -166,7 +166,7 @@ Therefore, we leave the modeling of such memory allocators to future work.
   \progstate{\location}{\localstore}{\stack}{\memory}
   \step
   \progstate{\nextinstr{\location}}
-    {\localstore[x \mapsto \moRead{\mo}{p}{\tau}]}
+    {\localstore[x \mapsto \moread{\mo}{p}{\tau}]}
     {\stack}{\memory}
 }
 \\[1em]
@@ -204,8 +204,8 @@ Therefore, we leave the modeling of such memory allocators to future work.
 \nextinstr{\location} & \mbox{next program location} \\
 \isbaseaddr{p}{\mo} & \mbox{$p$ is equal to the base address of $\mo$} \\
 \isinbounds{p}{\tau}{\mo} & \mbox{interval $[p, p + \sizeof{\tau})$ is contained within the address interval of $\mo$} \\
-\moRead{\mo}{p}{\tau} & \mbox{read a value of type $\tau$ from memory object $\mo$ starting from address $p$} \\
-\moWrite{\mo}{p}{v} & \mbox{write value $v$ into memory object $\mo$ at address $p$} \\
+\moread{\mo}{p}{\tau} & \mbox{read a value of type $\tau$ from memory object $\mo$ starting from address $p$} \\
+\mowrite{\mo}{p}{v} & \mbox{write value $v$ into memory object $\mo$ at address $p$} \\
 \heapReplace{\memory}{\mo}{\mo'} & \mbox{update $\memory$ by replacing memory object $\mo$ with $mo'$}
 \end{array}
 $}
@@ -281,11 +281,11 @@ Otherwise, we perform a read or write operation.
 %and otherwise, if one of these values is $\tundef$, we return $\tundef$.
 %Otherwise, we deserialize this sequence of values (bytes) into an integer of the appropriate type.
 For a read operation,
-we call the $\moReadFunc$ function (\Cref{sec:memory-modeling}) to read the value from $\mo$ and update the local store accordingly.
+we call the $\moreadfunc$ function (\Cref{sec:memory-modeling}) to read the value from $\mo$ and update the local store accordingly.
 %For a write operation,
 %we serialize the value $v$ into a sequence of bytes and update the array $\arrayvalue$ accordingly.
 For a write operation,
-we call the $\moWriteFunc$ function (\Cref{sec:memory-modeling}) to update the contents of $\mo$ accordingly.
+we call the $\mowritefunc$ function (\Cref{sec:memory-modeling}) to update the contents of $\mo$ accordingly.
 
 %\textbf{\textit{Store.}}
 %% TODO: what happens if p/v is undef/poison?
