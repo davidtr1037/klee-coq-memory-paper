@@ -77,11 +77,11 @@ The concrete heap $\memory \in \Heaps$ is replaced with a symbolic one $\symmemo
 The path constraint $\pc$ is a formula of sort $\Bool$ that accumulates assumptions along the execution path.
 \end{definition}
 
-\Cref{figure:symbolic-semantics} defines the symbolic operational small-step semantics of \llvm IR based on the syntax in~\Cref{figure:llvm-syntax}.
 The symbolic evaluation semantics of expressions, denoted by $\evalexprty{e}{\symlocalstore}{\tau}$, mirrors the concrete evaluation semantics (\Cref{figure:expr-semantics}).
 Here, however, $\sem{\toper^\tau}$ and $\sem{\tcast^{\tau\to\tau'}}$ are \emph{function symbols} that construct SMT expressions.
-In the following, we discuss the derivation rules in more detail.
-In some of the rules, we use the following definitions (where $\symmo \triangleq \mobj{\bvval{\addr}{\pointerwidth}}{\bvval{\size}{\indexwidth}}{\smtarray}$):
+
+\Cref{figure:symbolic-semantics} defines the symbolic operational small-step semantics of \llvm IR based on the syntax in~\Cref{figure:llvm-syntax}.
+In some of the derivation rules, we use the following definitions (where $\symmo \triangleq \mobj{\bvval{\addr}{\pointerwidth}}{\bvval{\size}{\indexwidth}}{\smtarray}$):
 \[
 \begin{array}{ll}
 \baseaddrcond(p, \symmo) & \triangleq p = \bvconst{\pointerwidth}{\addr} \\
@@ -91,6 +91,7 @@ In some of the rules, we use the following definitions (where $\symmo \triangleq
 Informally,
 $\baseaddrcond$ denotes that $p$ points to the base address of $\symmo$,
 and $\rangecond$ denotes that the interval $[p, p + n)$ is fully contained within the address interval of $\symmo$.
+In the following, we discuss the derivation rules in more detail.
 %The rules \rulenameref{Assign}, \rulenameref{Branch-True}, \rulenameref{Branch-False}, \rulenameref{Make-Symbolic}, and \rulenameref{Assume} were discussed in detail in~\cite{klee-rocq},
 %so here we extend the discussion to memory-related instructions.
 
@@ -169,7 +170,7 @@ and $\rangecond$ denotes that the interval $[p, p + n)$ is fully contained withi
 \textbf{\textit{Malloc.}}
 The symbolic semantics of \textit{malloc} mirror the concrete semantics,
 differing only in the handling of content initialization.
-The SMT array of the newly allocated memory object is set to a constant array $\arrayconst{\arrayinitvalue}$.
+As mentioned before, the SMT array of the newly allocated symbolic memory object is set to the constant array $\arrayconst{\arrayinitvalue}$.
 
 \textbf{\textit{Free.}}
 % TODO: assume that the type of p is iptr?
