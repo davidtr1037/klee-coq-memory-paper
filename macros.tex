@@ -198,12 +198,11 @@
 \newcommand{\symallocate}{\widetilde{\mathit{alloc}}}
 \newcommand{\symdeallocate}{\widetilde{\mathit{dealloc}}}
 \newcommand{\symevalgep}{\mathit{eval\textit{-}gep}}
-\newcommand{\symmoreadfunc}{\widetilde{\mathit{read}}}
-\newcommand{\symmoread}[3]{\symmoreadfunc(#1,#2,#3)}
-\newcommand{\symmowritefunc}{\widetilde{\mathit{write}}}
-\newcommand{\symmowrite}[3]{\symmowritefunc(#1,#2,#3)}
+\newcommand{\symmoreadfunc}[1]{\widetilde{\mathit{read}}_{#1}}
+\newcommand{\symmoread}[3]{\symmoreadfunc{#1}(#2,#3)}
+\newcommand{\symmowritefunc}[1]{\widetilde{\mathit{write}}_{#1}}
+\newcommand{\symmowrite}[4]{\symmowritefunc{#1}(#2,#3,#4)}
 \newcommand{\symheapreplace}[3]{#1[#3/#2]}
-\newcommand{\symheapwrite}[4]{\symheapreplace{#1}{#2}{\symmowrite{#2}{#3}{#4}}}
 
 % execution tree
 \newcommand{\equivstate}{\equiv}

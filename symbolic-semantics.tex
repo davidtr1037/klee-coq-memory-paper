@@ -43,16 +43,18 @@ The function $\symdeallocate$ receives a heap $\symmemory$ and a memory object $
 and returns $\symmemory \setminus \{\symmo\}$.
 
 \paragraph{Read}
-The \emph{read} operation is defined using the following function:
-\[ \symmoreadfunc : \SymMemoryObjects \times \smtsort{\pointerwidth} \times \Types \to ??? \]
-The $\symmoreadfunc$ function receives a memory object $\symmo$, a pointer $p$, and a type $\tau$.
+The \emph{read} operation is defined using the following function:\footnote{
+As in~\Cref{sec:memory-modeling}, we assume that $\tau$ is one of the built-in integer types (\bvsort{8}, \bvsort{16}, \bvsort{32}, \bvsort{64}), and $w$ is the bit-width of $\tau$.
+}
+\[ \symmoreadfunc{\tau} : \SymMemoryObjects \times \smtsort{\pointerwidth} \to \smtsort{w} \]
+The $\symmoreadfunc{\tau}$ function receives a memory object $\symmo$ and a pointer $p$.
 First, it reads the consecutive $|\tau|$ cells starting from $p$ into a sequence of symbolic bytes (SMT expressions of sort $\smtsort{8}$).
 Then, it translates them into a \textit{concat} expression of the appropriate sort.
 
 \paragraph{Write}
 The \emph{write} operation is defined using the following function:
-\[ \symmowritefunc : \SymMemoryObjects \times \pointertype \times ??? \to \SymMemoryObjects \]
-The $\symmowritefunc$ function receives a memory object $\symmo$ (\ie $\mobj{\addr}{\size}{\smtarray}$), a pointer $p$, and an SMT expression $e$.
+\[ \symmowritefunc{\tau} : \SymMemoryObjects \times \pointertype \times ??? \to \SymMemoryObjects \]
+The $\symmowritefunc{\tau}$ function receives a memory object $\symmo$ (\ie $\mobj{\addr}{\size}{\smtarray}$), a pointer $p$, and an SMT expression $e$.
 First, it serializes $e$ into a sequence of symbolic bytes.
 Then, it uses these symbolic bytes to create a new symbolic memory object $\mobj{\addr}{\size}{\smtarray'}$,
 where $\smtarray'$ is obtained by extending $\smtarray$ with additional store expressions at the corresponding offsets.
@@ -127,7 +129,7 @@ and $\rangecond$ denotes that the interval $[p, p + n)$ is fully contained withi
 {
   \symstate{\location}{\symlocalstore}{\symstack}{\symmemory}{\pc}
   \symstep
-  \symstate{\nextinstr{\location}}{\symlocalstore[x \mapsto \symmoread{\symmo}{p}{\tau}]}{\symstack}{\symmemory}{\pc \land \rangecond(p, |\tau|, \symmo)}
+  \symstate{\nextinstr{\location}}{\symlocalstore[x \mapsto \symmoread{\tau}{\symmo}{p}]}{\symstack}{\symmemory}{\pc \land \rangecond(p, |\tau|, \symmo)}
 }
 \\[1em]
 \ruledefsmall{Store}{
@@ -141,7 +143,7 @@ and $\rangecond$ denotes that the interval $[p, p + n)$ is fully contained withi
 {
   \symstate{\location}{\symlocalstore}{\symstack}{\symmemory}{\pc}
   \symstep
-  \symstate{\nextinstr{\location}}{\symlocalstore}{\symstack}{\symheapwrite{\symmemory}{\symmo}{p}{v}}{\pc \land \rangecond(p, |\tau|, \symmo)}
+  \symstate{\nextinstr{\location}}{\symlocalstore}{\symstack}{\symheapreplace{\symmemory}{\symmo}{\symmowrite}{\tau}{\symmo}{p}{v}}{\pc \land \rangecond(p, |\tau|, \symmo)}
 }
 \\[1em]
 \ruledefsmall{GEP}{
