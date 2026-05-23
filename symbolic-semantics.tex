@@ -89,11 +89,9 @@ In some of the derivation rules, we use the following definitions (where $\symmo
 \end{array}
 \]
 Informally,
-$\baseaddrcond$ denotes that $p$ points to the base address of $\symmo$,
-and $\rangecond$ denotes that the interval $[p, p + n)$ is fully contained within the address interval of $\symmo$.
+$\baseaddrcond$ defines an SMT formula asserting that $p$ points to the base address of $\symmo$,
+and $\rangecond$ defines an SMT formula asserting that the interval $[p, p + n)$ is fully contained within the address interval of $\symmo$.
 In the following, we discuss the derivation rules in more detail.
-%The rules \rulenameref{Assign}, \rulenameref{Branch-True}, \rulenameref{Branch-False}, \rulenameref{Make-Symbolic}, and \rulenameref{Assume} were discussed in detail in~\cite{klee-rocq},
-%so here we extend the discussion to memory-related instructions.
 
 \begin{figure}[t]
 \[
