@@ -48,7 +48,7 @@ As in~\Cref{sec:memory-modeling}, we assume that $\tau$ is one of the built-in i
 }
 \[ \symmoreadfunc{\tau} : \SymMemoryObjects \times \smtsort{\pointerwidth} \to \smtsort{w} \]
 The $\symmoreadfunc{\tau}$ function receives a memory object $\symmo$ and a pointer $p$.
-First, it reads the consecutive $|\tau|$ cells starting from $p$ into a sequence of symbolic bytes (SMT expressions of sort $\smtsort{8}$).
+First, it reads the consecutive $|\tau|$ cells starting from $p$ into a sequence of symbolic bytes.
 Then, it translates them into a \textit{concat} expression of the appropriate sort.
 
 \paragraph{Write}
