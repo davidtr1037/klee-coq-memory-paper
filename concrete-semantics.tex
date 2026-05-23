@@ -51,7 +51,7 @@ The mapping $\arrayvalue$ of the newly allocated memory object is set to a funct
 The \emph{deallocation} operation is defined using the following function:
 \[ \deallocate : \Heaps \times \MemoryObjects \to \Heaps \]
 The function $\deallocate$ receives a heap $\memory$ and a memory object $\mo$,
-and returns $\memory \setminus \mo$.
+and returns $\memory \setminus \{\mo\}$.
 
 \paragraph{Read}
 The \emph{read} operation is defined using the following function:

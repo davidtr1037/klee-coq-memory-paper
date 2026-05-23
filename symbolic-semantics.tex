@@ -31,7 +31,8 @@ and attempts to provide a symbolic memory object $\mobj{\addr}{\size}{\smtarray}
     \item $[\addr, \addr + \size)$ does not overlap with address intervals of existing memory objects
     \item $s \geq 0$ and does not exceed the largest signed integer representable by the index type
 \end{enumerate}
-If such a symbolic memory object can be provided, then the result is the tuple $\langle \memory \cup \mobj{\addr}{\size}{\smtarray}, \addr \rangle$.
+If such a symbolic memory object can be provided,
+then the result is the tuple $\langle \symmemory \cup \mobj{\addr}{\size}{\smtarray}, \addr \rangle$.
 Otherwise, the result is $\none$.
 The SMT array $\smtarray$ is set to the constant array $\arrayconst{\arrayinitvalue}$.
 
@@ -39,7 +40,7 @@ The SMT array $\smtarray$ is set to the constant array $\arrayconst{\arrayinitva
 The \emph{deallocation} operation is defined using the following function:
 \[ \symdeallocate : \SymHeaps \times \SymMemoryObjects \to \SymHeaps \]
 The function $\symdeallocate$ receives a heap $\symmemory$ and a memory object $\symmo$,
-and returns $\symmemory \setminus \symmo$.
+and returns $\symmemory \setminus \{\symmo\}$.
 
 \paragraph{Read}
 The \emph{read} operation is defined using the following function:
@@ -67,7 +68,6 @@ The symbolic memory allocator is defined similarly to its concrete counterpart (
 A symbolic state is a tuple $\symstate{\location}{\symlocalstore}{\symstack}{\symmemory}{\pc}$.
 The location $\location \in \Locs$ is defined as before.
 The concrete store $\localstore \in \Stores$ is replaced with a symbolic store $\symlocalstore \in \SymStores$ that maps variables to SMT expressions.
-The symbolic stack $\symstack$ is modified accordingly to hold symbolic stores instead of concrete ones.
 The concrete heap $\memory \in \Heaps$ is replaced with a symbolic one $\symmemory \in \SymHeaps$.
 The path constraint $\pc$ is a formula of sort $\Bool$ that accumulates assumptions along the execution path.
 \end{definition}
