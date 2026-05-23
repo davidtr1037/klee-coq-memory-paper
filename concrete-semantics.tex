@@ -255,15 +255,15 @@ Otherwise, the result is undefined behavior.
 
 \textbf{\textit{Free.}}
 % TODO: assume that the type of p is iptr?
-When deallocating a pointer value $p$,
+When deallocating a pointer $p$,
 we first check if there exists a memory object $\mobj{\addr}{\size}{\arrayvalue}$ in the heap $\memory$ such that $p = \addr$.
 %If that is the case, then we update the heap using the $\deallocate$ function.
-If that is the case, we remove that memory object from $\memory$ using the $\deallocate$ function.
+If that is the case, we remove that memory object from $\memory$ using the $\deallocate$ function (\Cref{sec:memory-modeling}).
 Otherwise, the result is undefined behavior.
 
 \textbf{\textit{Load and Store.}}
 % TODO: what happens if p is undef/poison?
-When accessing $n$ bytes from a pointer value $p$,
+When accessing $n$ bytes from a pointer $p$,
 we need to make sure that there exists a memory object $\mobj{\addr}{\size}{\arrayvalue}$ in the heap $\memory$ such that
 (1) $p < p + n$ (\ie there is no overflow) and (2) $p \geq \addr \ \land \ p + n < \addr + \size$.
 If that is not the case, then the result is undefined behavior.
