@@ -43,8 +43,8 @@ The function $\symdeallocate$ receives a heap $\symmemory$ and a memory object $
 and returns $\symmemory \setminus \{\symmo\}$.
 
 \paragraph{Read}
-The \emph{read} operation is defined using the following function:\footnote{
-As in~\Cref{sec:memory-modeling}, we assume that $\tau$ is one of the built-in integer types (\bvsort{8}, \bvsort{16}, \bvsort{32}, \bvsort{64}), and $w$ is the bit-width of $\tau$.
+The \emph{read} operation is defined using the following function ($w$ is the bit-width of $\tau$):\footnote{
+As in~\Cref{sec:memory-modeling}, we assume that $\tau$ is one of the built-in integer types (\bvsort{8}, \bvsort{16}, \bvsort{32}, \bvsort{64}).
 }
 \[ \symmoreadfunc{\tau} : \SymMemoryObjects \times \smtsort{\pointerwidth} \to \smtsort{w} \]
 The $\symmoreadfunc{\tau}$ function receives a memory object $\symmo$ and a pointer $p$.
@@ -53,7 +53,7 @@ Then, it translates them into a \textit{concat} expression of the appropriate so
 
 \paragraph{Write}
 The \emph{write} operation is defined using the following function:
-\[ \symmowritefunc{\tau} : \SymMemoryObjects \times \pointertype \times ??? \to \SymMemoryObjects \]
+\[ \symmowritefunc{\tau} : \SymMemoryObjects \times \pointertype \times \smtsort{w} \to \SymMemoryObjects \]
 The $\symmowritefunc{\tau}$ function receives a memory object $\symmo$ (\ie $\mobj{\addr}{\size}{\smtarray}$), a pointer $p$, and an SMT expression $e$.
 First, it serializes $e$ into a sequence of symbolic bytes.
 Then, it uses these symbolic bytes to create a new symbolic memory object $\mobj{\addr}{\size}{\smtarray'}$,

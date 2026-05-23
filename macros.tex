@@ -135,9 +135,9 @@
 \newcommand{\none}{\bot}
 
 % general purpose
-\newcommand\moreadfunc{\mathit{read}}
+\newcommand\moreadfunc{\mathit{rd}}
 \newcommand\moread[3]{\moreadfunc(#1,#2,#3)}
-\newcommand\mowritefunc{\mathit{write}}
+\newcommand\mowritefunc{\mathit{wr}}
 \newcommand\mowrite[3]{\mowritefunc(#1,#2,#3)}
 \newcommand\heapreplace[3]{#1[#3/#2]}
 \newcommand\heapwrite[4]{\heapreplace{#1}{#2}{\mowrite{#2}{#3}{#4}}}
@@ -198,9 +198,9 @@
 \newcommand{\symallocate}{\widetilde{\mathit{alloc}}}
 \newcommand{\symdeallocate}{\widetilde{\mathit{dealloc}}}
 \newcommand{\symevalgep}{\mathit{eval\textit{-}gep}}
-\newcommand{\symmoreadfunc}[1]{\widetilde{\mathit{read}}_{#1}}
+\newcommand{\symmoreadfunc}[1]{\widetilde{\mathit{rd}}_{#1}}
 \newcommand{\symmoread}[3]{\symmoreadfunc{#1}(#2,#3)}
-\newcommand{\symmowritefunc}[1]{\widetilde{\mathit{write}}_{#1}}
+\newcommand{\symmowritefunc}[1]{\widetilde{\mathit{wr}}_{#1}}
 \newcommand{\symmowrite}[4]{\symmowritefunc{#1}(#2,#3,#4)}
 \newcommand{\symheapreplace}[3]{#1[#3/#2]}
 
