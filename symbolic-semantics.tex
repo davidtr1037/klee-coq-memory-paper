@@ -18,7 +18,7 @@ The core difference is that the symbolic memory model uses SMT expressions inste
 
 \begin{definition}
 A symbolic memory object is defined as a tuple:
-\[ (\addr, \size, \smtarray) \in \SymMemoryObjects \quad \quad \SymMemoryObjects \triangleq \Vals^{\pointertype} \times \Vals^{\indextype} \times \arraysort{\smtsort{\indexwidth}}{\smtsort{8}} \]
+\[ (\addr, \size, \smtarray) \in \SymMemoryObjects \quad \quad \SymMemoryObjects \triangleq \pointertype \times \indextype \times \arraysort{\smtsort{\indexwidth}}{\smtsort{8}} \]
 % TODO: remove 'similar'
 which is similar to the definition of a concrete memory object,
 but now the contents are encoded using an SMT array whose values are \emph{symbolic bytes}, \ie SMT expressions of sort $\smtsort{8}$.
@@ -57,7 +57,7 @@ Then, it translates them into a \textit{concat} expression of the appropriate so
 
 \paragraph{Write}
 The \emph{write} operation is defined using the following function:
-\[ \moSymWriteFunc : \SymMemoryObjects \times \Vals^{\pointertype} \times ??? \to \SymMemoryObjects \]
+\[ \moSymWriteFunc : \SymMemoryObjects \times \pointertype \times ??? \to \SymMemoryObjects \]
 The $\moSymWriteFunc$ function receives a memory object $\symmo$ (\ie $\mobj{\addr}{\size}{\smtarray}$), a pointer $p$, and an SMT expression $e$.
 First, it serializes $e$ into a sequence of symbolic bytes.
 Then, it uses these symbolic bytes to create a new symbolic memory object $\mobj{\addr}{\size}{\arrayvalue'}$,
