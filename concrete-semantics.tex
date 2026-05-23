@@ -24,7 +24,7 @@ We first define the major components of the memory model: memory objects, the he
 \begin{definition}
 \label{def:memory}
 A memory object is defined as a tuple:
-\[ \mobj{\addr}{\size}{\arrayvalue} \in \MemoryObjects \quad \quad \MemoryObjects \triangleq \Vals^{\pointertype} \times \Vals^{\indextype} \times (\Z \rightarrow \Vals^{\bvsort{8}}) \]
+\[ \mobj{\addr}{\size}{\arrayvalue} \in \MemoryObjects \quad \quad \MemoryObjects \triangleq \pointertype \times \indextype \times (\Z \rightarrow \Vals^{\bvsort{8}}) \]
 where $\addr$ is its base address, $\size$ is its size, and $\arrayvalue$ is a mapping that tracks the stored values,
 which can be either bit-vectors of type $\bvsort{8}$ (\ie a \emph{byte}) or one of the special values $\tundef$ or $\tpoison$.
 A heap $\memory \in \Heaps$ is defined as a set of memory objects.
@@ -35,7 +35,7 @@ allocation, deallocation, read, and write.
 
 \paragraph{Allocation}
 The \emph{allocation} operation is defined using the following function:
-\[ \allocate : \Heaps \times \Vals^{\indextype} \to \Heaps \times \Vals^{\pointertype} \]
+\[ \allocate : \Heaps \times \indextype \to \Heaps \times \pointertype \]
 The function $\allocate$ receives a heap $\memory$ and an allocation size $\size$,
 and attempts to provide a memory object $\mobj{\addr}{\size}{\arrayvalue}$ that satisfies the following:
 \begin{enumerate}
@@ -55,7 +55,7 @@ and returns $\memory \setminus \mo$.
 
 \paragraph{Read}
 The \emph{read} operation is defined using the following function:
-\[ \moReadFunc : \MemoryObjects \times \Vals^{\pointertype} \times \Types \to \Vals \]
+\[ \moReadFunc : \MemoryObjects \times \pointertype \times \Types \to \Vals \]
 The $\moReadFunc$ function receives a memory object $\mo$, a pointer $p$, and a type $\tau$.\footnote{
 Here, we assume that $\tau$ is one of the following types: $\bvsort{8}$, $\bvsort{16}$, $\bvsort{32}$, $\bvsort{64}$.
 }
@@ -66,7 +66,7 @@ Otherwise, we deserialize this sequence of values (bytes) into an integer of typ
 
 \paragraph{Write}
 The \emph{write} operation is defined using the following function:
-\[ \moWriteFunc : \MemoryObjects \times \Vals^{\pointertype} \times \Vals \to \MemoryObjects \]
+\[ \moWriteFunc : \MemoryObjects \times \pointertype \times \Vals \to \MemoryObjects \]
 The $\moWriteFunc$ function receives a memory object $\mo$ (\ie $\mobj{\addr}{\size}{\arrayvalue}$), a pointer $p$, and a value $v$.
 First, it serializes the value $v$ into a sequence of bytes.
 %Then, it uses these bytes to update the corresponding cells of the array $\arrayvalue$ starting from $p$.

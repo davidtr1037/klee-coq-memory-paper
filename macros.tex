@@ -129,8 +129,8 @@
 \newcommand{\sizeof}[1]{|#1|}
 \newcommand{\isbaseaddr}[2]{#1 \overset{\raisebox{-2pt}{\scalebox{0.7}{!}}}{\rightsquigarrow} #2}
 \newcommand{\isinbounds}[3]{#1 \overset{#2}{\rightsquigarrow} #3}
-\newcommand{\allocate}{\mathit{allocate}}
-\newcommand{\deallocate}{\mathit{deallocate}}
+\newcommand{\allocate}{\mathit{alloc}}
+\newcommand{\deallocate}{\mathit{dealloc}}
 \newcommand{\evalgep}{\mathit{eval\textit{-}gep}}
 \newcommand{\none}{\bot}
 
@@ -195,8 +195,8 @@
 \newcommand{\syminvalidpointer}{\mathit{invalid\_pointer}}
 \newcommand{\syminvalidbaseaddress}{\mathit{invalid\_base\_address}}
 \newcommand{\overflowcond}{\mathit{overflow}}
-\newcommand{\symallocate}{\mathit{allocate}}
-\newcommand{\symdeallocate}{\mathit{deallocate}}
+\newcommand{\symallocate}{\widetilde{\mathit{alloc}}}
+\newcommand{\symdeallocate}{\widetilde{\mathit{dealloc}}}
 \newcommand{\symevalgep}{\mathit{eval\textit{-}gep}}
 \newcommand{\moSymReadFunc}{\mathit{read}}
 \newcommand{\moSymRead}[3]{\moSymReadFunc(#1,#2,#3)}
