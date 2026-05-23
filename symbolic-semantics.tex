@@ -53,15 +53,15 @@ The \emph{read} operation is defined using the following function:
 \[ \moSymReadFunc : \SymMemoryObjects \times \smtsort{\pointerwidth} \times \Types \to ??? \]
 The $\moSymReadFunc$ function receives a memory object $\symmo$, a pointer $p$, and a type $\tau$.
 First, it reads the consecutive $|\tau|$ cells starting from $p$ into a sequence of symbolic bytes (SMT expressions of sort $\smtsort{8}$).
-Then, it translates them to a \textit{concat} expression of the appropriate sort.
+Then, it translates them into a \textit{concat} expression of the appropriate sort.
 
 \paragraph{Write}
 The \emph{write} operation is defined using the following function:
 \[ \moSymWriteFunc : \SymMemoryObjects \times \Vals^{\pointertype} \times ??? \to \SymMemoryObjects \]
 The $\moSymWriteFunc$ function receives a memory object $\symmo$ (\ie $\mobj{\addr}{\size}{\smtarray}$), a pointer $p$, and an SMT expression $e$.
-First, it serializes the $e$ into a sequence of symbolic bytes.
-Then, it uses these symbolic bytes to return a new symbolic memory object $\mobj{\addr}{\size}{\arrayvalue'}$,
-where $\smtarray'$ is derived from $\smyarray$ using store expressions at the corresponding offsets.
+First, it serializes $e$ into a sequence of symbolic bytes.
+Then, it uses these symbolic bytes to create a new symbolic memory object $\mobj{\addr}{\size}{\arrayvalue'}$,
+where $\smtarray'$ is obtained by extending $\smtarray$ with additional store expressions at the corresponding offsets.
 
 % TODO: extend
 \paragraph{Memory Allocation Scheme}
