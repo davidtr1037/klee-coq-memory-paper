@@ -222,13 +222,6 @@ While the concrete version may return $\tundef$ or $\tpoison$,
 the symbolic version always returns an SMT expression,
 since the symbolic domain does not model $\tundef$ and $\tpoison$.
 
-% TODO: improve / define s and c
-% TODO: the main usage is not for error states
-Informally,
-we say that a symbolic state \emph{represents} a concrete state if the latter can be obtained from the former via concretization using a model that satisfies the path constraints.
-This relation will be used to define symbolic error states (\Cref{def:sym-error-state}).
-In the following, we extend the definition given in~\cite{klee-rocq} (Definition 3.4) to account for memory.
-
 \begin{algorithm}[t]
 \caption{The symbolic semantics of $\tgep$ (without attributes).}
 \label{alg:symbolic-gep}
@@ -254,36 +247,6 @@ In the following, we extend the definition given in~\cite{klee-rocq} (Definition
 
 \end{algorithmic}
 \end{algorithm}
-
-% TODO: remove from this section
-% TODO: same number of memory objects
-\begin{definition}
-\label{def:over-approx-state}
-Let $m$ be a model.
-An SMT expression $e$ \emph{represents} a value $v \in \Vals$ via $m$,
-denoted by $e \overapproxvia{m} v$, if $\evalmodel{m}{e} = v$.
-%A symbolic store $\symlocalstore$ \emph{represents} a concrete store $\localstore$ via $m$,
-%denoted by $\symlocalstore \overapproxvia{m} \localstore$,
-%if both stores are defined over the same variables and for each such variable $x$, $\mapaccess{\symlocalstore}{x} \overapproxvia{m} \mapaccess{\localstore}{x}$.
-%A symbolic frame $\symstackframe{\location}{\symlocalstore}{x}$ \emph{represents} a concrete frame $\stackframe{\location}{\localstore}{x}$ via $m$
-%if $\symlocalstore \overapproxvia{m} \localstore$.
-%A symbolic stack $\symstack$ \emph{represents} a concrete stack $\stack$ via a model $m$,
-%denoted by $\symstack \overapproxvia{m} \stack$,
-%if they are of equal size,
-%and the frames of $\symstack$ represent the frames of $\stack$ via $m$, pointwise.
-A symbolic memory object $(\addr, \size, \smtarray)$ represents a memory object $(\addr, \size, \arrayvalue)$ via $m$ if
-$\arrayselect{\smtarray}{\bvconst{\indexwidth}{k}}$ represents $\arrayvalue(\valoftype{k}{\indextype})$ via $m$ for every $k$ in the range of the index type.
-A symbolic heap $\symmemory$ represents a heap $\memory$ via $m$, denoted by $\symmemory \overapproxvia{m} \memory$,
-if the symbolic memory objects of $\symmemory$ represent the memory objects of $\memory$ via $m$.
-A symbolic state $s \triangleq \symstate{\location}{\symlocalstore}{\symstack}{\symmemory}{\pc}$ \emph{represents} a concrete state $c \triangleq \progstate{\location}{\localstore}{\stack}{\memory}$ via $m$,
-denoted by $s \overapproxvia{m} c$,
-if $\symlocalstore \overapproxvia{m} \localstore$,
-$\symstack \overapproxvia{m} \stack$,
-$\symmemory \overapproxvia{m} \memory$,
-and $\evalmodel{m}{\pc} = \true$.
-Furthermore, $s$ \emph{represents} $c$, denoted by $s \overapprox c$,
-if $s \overapproxvia{m} c$ for some model $m$.
-\end{definition}
 
 \begin{definition}
 \label{def:sym-error-state}

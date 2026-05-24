@@ -1,6 +1,33 @@
 \section{Program Safety via Execution Trees}
 \label{sec:program-safety}
 
+% TODO: improve / define s and c
+% TODO: the main usage is not for error states
+Informally,
+we say that a symbolic state \emph{represents} a concrete state if the latter can be obtained from the former via concretization using a model that satisfies the path constraints.
+This relation will be used to define symbolic error states (\Cref{def:sym-error-state}).
+In the following, we extend the definition given in~\cite{klee-rocq} (Definition 3.4) to account for memory.
+
+% TODO: same number of memory objects
+\begin{definition}
+\label{def:over-approx-state}
+Let $m$ be a model.
+An SMT expression $e$ \emph{represents} a value $v \in \Vals$ via $m$,
+denoted by $e \overapproxvia{m} v$, if $\evalmodel{m}{e} = v$.
+A symbolic memory object $(\addr, \size, \smtarray)$ represents a memory object $(\addr, \size, \arrayvalue)$ via $m$ if
+$\arrayselect{\smtarray}{\bvconst{\indexwidth}{k}}$ represents $\arrayvalue(\valoftype{k}{\indextype})$ via $m$ for every $k$ in the range of the index type.
+A symbolic heap $\symmemory$ represents a heap $\memory$ via $m$, denoted by $\symmemory \overapproxvia{m} \memory$,
+if the symbolic memory objects of $\symmemory$ represent the memory objects of $\memory$ via $m$.
+A symbolic state $s \triangleq \symstate{\location}{\symlocalstore}{\symstack}{\symmemory}{\pc}$ \emph{represents} a concrete state $c \triangleq \progstate{\location}{\localstore}{\stack}{\memory}$ via $m$,
+denoted by $s \overapproxvia{m} c$,
+if $\symlocalstore \overapproxvia{m} \localstore$,
+$\symstack \overapproxvia{m} \stack$,
+$\symmemory \overapproxvia{m} \memory$,
+and $\evalmodel{m}{\pc} = \true$.
+Furthermore, $s$ \emph{represents} $c$, denoted by $s \overapprox c$,
+if $s \overapproxvia{m} c$ for some model $m$.
+\end{definition}
+
 % TODO: what does "supported" mean intuitiviely?
 \subsection{Module Assumptions}
 The approach presented in~\cite{klee-rocq} assumes that the module is \emph{supported},
