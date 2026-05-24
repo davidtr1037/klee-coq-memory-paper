@@ -120,6 +120,8 @@ such that $\true$ and $\false$ correspond to $1$ and $0$, respectively.
 \begin{paragraph}{\textbf{Notations.}}
 We denote by $m[t]$ the interpretation of the term $t$ in a model $m$.
 We denote by $t_1\equiv t_2$ the assertion that $m[t_1] = m[t_2]$ for any model $m$.
+A formula $\varphi$ is satisfiable, denoted by $\sat{\varphi}$, if there is a model $m$ such that $m[\varphi] = \true$.
+A formula $\varphi$ is unsatisfiable, denoted by $\unsat{\varphi}$, if $m[\varphi] = \false$ for any model $m$.
 We use $\arrayselect{a}{i}$ and $\arraystore{a}{i}{v}$ as shorthands for $\mathit{select}(a, i)$ and $\mathit{store}(a, i, v)$.
 We denote by $\bvconst{w}{n}$ a constant bit-vector of sort $\smtsort{w}$ whose numerical value is $n$.
 \end{paragraph}
