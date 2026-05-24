@@ -199,8 +199,7 @@ The symbolic semantics of $\tgep$ mirrors the concrete semantics,
 while using SMT expressions for offset and address calculations.
 The function $\symevalgep$ in~\Cref{alg:symbolic-gep} defines a simplified symbolic semantics of the $\tgep$ instruction.
 While the concrete version may return $\tundef$ or $\tpoison$,
-the symbolic version always returns an SMT expression,
-since the symbolic semantics does not model $\tundef$ and $\tpoison$.
+the symbolic version always returns an SMT expression.
 
 \begin{algorithm}[t]
 \caption{Simplified symbolic semantics of $\tgep$ (without attributes).}
@@ -227,6 +226,14 @@ since the symbolic semantics does not model $\tundef$ and $\tpoison$.
 
 \end{algorithmic}
 \end{algorithm}
+
+Note that our symbolic semantics does not model the values $\tundef$ and $\tpoison$.
+While this might initially appear to be a limitation,
+modeling these values in the symbolic semantics is not mandatory.
+The design of the symbolic semantics is a choice of abstraction level,
+and we intentionally omit these values to simplify SMT reasoning.
+Indeed, as will be seen in~\Cref{sec:program-safety},
+our design choice allows to establish the desired properties with respect to the concrete semantics.
 
 In the following, we define when a symbolic state is considered to be an error state.
 To do so, we use the following definitions:
