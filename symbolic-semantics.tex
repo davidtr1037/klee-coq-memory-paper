@@ -260,27 +260,26 @@ Intuitively,
 $\syminvalidpointer$ states that there is an SMT model $m$ satisfying $\varphi$ under which $p$ does not belong to any address interval,
 and $\syminvalidbaseaddress$ states that under such a model, $p$ does not point to any base address.
 
-% TODO: use bvconst?
 \begin{definition}
 \label{def:sym-error-state}
 A symbolic state $s \triangleq \symstate{\location}{\symlocalstore}{\symstack}{\symmemory}{\pc}$ is an error state, denoted by $\errorsymstate(s)$,
 if one of the following holds:
 \begin{enumerate}[left=0pt]
     \item $\instrat{\location} = \textup{$\codequote{\tunreachable}$}$
-    \item $\instrat{\location} = \textup{$\codequote{x \ \texttt{=} \ op \ \bvsort{w} \ e_1 \ e_2}$}$ and one of the following holds ($t_j \triangleq \evalexprty{e_j}{\symlocalstore}{\bvsort{w}}$):
+    \item $\instrat{\location} = \textup{$\codequote{x \ \texttt{=} \ op \ \bvsort{w} \ e_1 \ e_2}$}$ and one of the following holds (where $t_j \triangleq \evalexprty{e_j}{\symlocalstore}{\bvsort{w}}$):
     \begin{enumerate}[left=-3pt]
-        \item \textup{$op \in \{\opcode{udiv}, \opcode{sdiv}, \opcode{urem}, \opcode{srem}\}$} and $\sat{\pc \land (t_2 = 0)}$
-        \item \textup{$op = \opcode{sdiv}$} and $\sat{\pc \land (t_1 = -2^{w - 1}) \land (t_2 = -1)}$
+        \item \textup{$op \in \{\opcode{udiv}, \opcode{sdiv}, \opcode{urem}, \opcode{srem}\}$} and $\sat{\pc \land (t_2 = \bvconst{w}{0})}$
+        \item \textup{$op = \opcode{sdiv}$} and $\sat{\pc \land (t_1 = \bvconst{w}{(-2^{w - 1})}) \land (t_2 = \bvconst{w}{(-1)})}$
         \item \textup{$op \in \{\opcode{shl}, \opcode{lshr}, \opcode{ashr}\}$} and $\sat{\pc \land (t_2 \geq w)}$
     \end{enumerate}
     \item $\instrat{\location} = \textup{$\codequote{x \ \texttt{=} \ \tcall^{\pointertypeof{\bvsort{8}}} \ \intrinsicfunc{malloc}(\bvsort{64} \ e)}$}$ and
-        \textup{$\sat{\pc \land (t > \bvconst{64}{(2^{\indexwidth - 1} - 1)}}$} ($t \triangleq \evalexprty{e}{\symlocalstore}{\tau}$).
+        \textup{$\sat{\pc \land (t > \bvconst{64}{(2^{\indexwidth - 1} - 1)}}$} (where $t \triangleq \evalexprty{e}{\symlocalstore}{\tau}$).
     \item $\instrat{\location} = \textup{$\codequote{\tcall~\intrinsicfunc{free}(\pointertypeof{\bvsort{8}} e)}$}$, \textup{$\evalexprty{e}{\symlocalstore}{\pointertypeof{\bvsort{8}}} = p$}, and $\syminvalidbaseaddress(\symmemory, \pc, p)$.
     \item $\instrat{\location} = \textup{$\codequote{x \ \texttt{=} \ \tload^{\tau} \ e}$}$, \textup{$\evalexprty{e}{\symlocalstore}{\pointertypeof{\tau}} = p$}, and $\syminvalidpointer(\symmemory, \pc, p, |\tau|)$.
     \item $\instrat{\location} = \textup{$\codequote{\tstore^{\tau} \ e_1 \ e_2}$}$, \textup{$\evalexprty{e_2}{\symlocalstore}{\pointertypeof{\tau}} = p$}, and $\syminvalidpointer(\symmemory, \pc, p, |\tau|)$.
     % TODO: \item $|\overline{(\tau_i, e_i)}| > 0$
     \item $\instrat{\location} = \textup{$\codequote{x \ \texttt{=} \ \tgep~\pointertypeof{\tau} \ e \ \overline{(\tau_i, e_i)}}$}$ and $\sat{\varphi \land \overflowcond(\tau, \overline{k_i})}$
-          ($k_i \triangleq \evalexprty{e_i}{\localstore}{\tau_i}$).
+          (where $k_i \triangleq \evalexprty{e_i}{\localstore}{\tau_i}$).
 \end{enumerate}
 %where $\overflowcond(\tau, \overline{k_i})$ constructs a condition that encodes the fact that there are no overlfows when evaluating the $\tgep$ instruction,
 \end{definition}
