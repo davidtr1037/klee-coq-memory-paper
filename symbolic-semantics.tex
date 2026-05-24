@@ -195,17 +195,15 @@ For a write operation,
 we call the $\symmowritefunc{\tau}$ function (\Cref{sec:symbolic-memory-modeling}) to update the contents of $\symmo$ accordingly.
 
 \textbf{\textit{GetElementPtr.}}
-% TODO: remove "similar"
-The symbolic semantics of $\tgep$ is similar to the concrete semantics,
-but uses SMT expressions for offset and address calculations.\footnote{
-A pseudo-code of the symbolic semantics of $\tgep$ is given in~\Cref{appendix:symbolic-semantics}.
-}
+The symbolic semantics of $\tgep$ mirrors the concrete semantics,
+while using SMT expressions for offset and address calculations.
+The function $\symevalgep$ in~\Cref{alg:symbolic-gep} defines a simplified symbolic semantics of the $\tgep$ instruction.
 While the concrete version may return $\tundef$ or $\tpoison$,
 the symbolic version always returns an SMT expression,
-since the symbolic domain does not model $\tundef$ and $\tpoison$.
+since the symbolic semantics does not model $\tundef$ and $\tpoison$.
 
 \begin{algorithm}[t]
-\caption{The symbolic semantics of $\tgep$ (without attributes).}
+\caption{Simplified symbolic semantics of $\tgep$ (without attributes).}
 \label{alg:symbolic-gep}
 \begin{algorithmic}[1]
 
@@ -215,14 +213,14 @@ since the symbolic domain does not model $\tundef$ and $\tpoison$.
     \EndIf
     \State $j_1 :: \overline{j'} \gets \overline{j}$
     \If {$\tau = \arraytype{\tau'}{n}$}
-        \State $o \gets \bvadd{\bvsort{32}}{o}{\bvmul{\bvsort{32}}{\bvsext_{32}(j_1)}{\bvconst{32}{|\tau'|}}}$ \label{line:array-index}
+        \State $o \gets \bvadd{\bvsort{\indexwidth}}{o}{\bvmul{\bvsort{\indexwidth}}{\bvsext_{\indexwidth}(j_1)}{\bvconst{\indexwidth}{|\tau'|}}}$ \label{line:array-index}
         \State \Return \Call{compute-offset}{$\tau', o, \overline{j'}$}
     \EndIf
 \EndFunction
 
 \Function{eval-gep}{$\tau, p, \overline{j}$}
     \State $j_1 :: \overline{j'} \gets \overline{j}$
-    \State $o \gets \bvmul{\bvsort{32}}{\bvsext_{32}(j_1)}{\bvconst{32}{|\tau|}}$ \label{line:first-index}
+    \State $o \gets \bvmul{\bvsort{\indexwidth}}{\bvsext_{\indexwidth}(j_1)}{\bvconst{\indexwidth}{|\tau|}}$ \label{line:first-index}
     \State $r \gets \Call{compute-offset}{\tau, o, \overline{j'}}$
     \State \Return $\bvadd{\bvsort{64}}{p}{\bvzext_{64}(r)}$
 \EndFunction
