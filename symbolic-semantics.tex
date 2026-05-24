@@ -197,7 +197,7 @@ we call the $\symmowritefunc{\tau}$ function (\Cref{sec:symbolic-memory-modeling
 \textbf{\textit{GetElementPtr.}}
 The symbolic semantics of $\tgep$ mirrors the concrete semantics,
 while using SMT expressions for offset and address calculations.
-The function $\symevalgep$ in~\Cref{alg:symbolic-gep} defines a simplified symbolic semantics of the $\tgep$ instruction.
+The function $\symevalgep$ defines the symbolic semantics of the $\tgep$ instruction based on~\Cref{alg:symbolic-gep} (function \textsc{symbolic-gep}).
 While the concrete version may return $\tundef$ or $\tpoison$,
 the symbolic version always returns an SMT expression.
 
@@ -206,21 +206,21 @@ the symbolic version always returns an SMT expression.
 \label{alg:symbolic-gep}
 \begin{algorithmic}[1]
 
-\Function{compute-offset}{$\tau, o, \overline{j}$}
+\Function{compute-symbolic-offset}{$\tau, o, \overline{j}$}
     \If {$|\overline{j}| = 0$}
         \State \Return $o$
     \EndIf
     \State $j_1 :: \overline{j'} \gets \overline{j}$
     \If {$\tau = \arraytype{\tau'}{n}$}
         \State $o \gets \bvadd{\bvsort{\indexwidth}}{o}{\bvmul{\bvsort{\indexwidth}}{\bvsext{\indexwidth}{j_1}}{\bvconst{\indexwidth}{|\tau'|}}}$ \label{line:array-index}
-        \State \Return \Call{compute-offset}{$\tau', o, \overline{j'}$}
+        \State \Return \Call{compute-symbolic-offset}{$\tau', o, \overline{j'}$}
     \EndIf
 \EndFunction
 
-\Function{compute-gep}{$\tau, p, \overline{j}$}
+\Function{symbolic-gep}{$\tau, p, \overline{j}$}
     \State $j_1 :: \overline{j'} \gets \overline{j}$
     \State $o \gets \bvmul{\bvsort{\indexwidth}}{\bvsext{\indexwidth}{j_1}}{\bvconst{\indexwidth}{|\tau|}}$ \label{line:first-index}
-    \State $r \gets \Call{compute-offset}{\tau, o, \overline{j'}}$
+    \State $r \gets \Call{compute-symbolic-offset}{\tau, o, \overline{j'}}$
     \State \Return $\bvadd{\bvsort{\pointerwidth}}{p}{\bvzext{\pointerwidth}{r}}$
 \EndFunction
 

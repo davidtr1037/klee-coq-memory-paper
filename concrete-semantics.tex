@@ -290,7 +290,7 @@ we call the $\mowritefunc{\tau}$ function (\Cref{sec:memory-modeling}) to update
 
 \textbf{\textit{GetElementPtr.}}
 In general, the $\tgep$ instruction computes the address of a subelement of an aggregate data structure (array, struct, \etc).
-The function $\evalgep$ in~\Cref{alg:gep} defines a simplified semantics of the $\tgep$ instruction.\footnote{
+The function $\evalgep$ defines the semantics of the $\tgep$ instruction based on~\Cref{alg:gep} (function \textsc{gep}).\footnote{
 The semantics presented here consider only arrays, however, our formalization and implementation support also structs.
 }
 The algorithm uses the functions $\signextfunc{\indexwidth}$ and $\zeroextfunc{\indexwidth}$ defined in~\Cref{sec:llvm-ir}.
@@ -331,7 +331,7 @@ If any of these conditions is violated, the result is $\tpoison$.
     \EndIf
 \EndFunction
 
-\Function{compute-gep}{$\tau, p, \overline{j}$}
+\Function{gep}{$\tau, p, \overline{j}$}
     \If {$\tpoison \in \overline{j}$}
         \State \Return $\tpoison$
     \EndIf
