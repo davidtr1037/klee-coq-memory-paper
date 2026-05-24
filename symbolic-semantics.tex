@@ -277,9 +277,13 @@ if one of the following holds:
     \item $\instrat{\location} = \textup{$\codequote{\tcall~\intrinsicfunc{free}(\pointertypeof{\bvsort{8}} e)}$}$, \textup{$\evalexprty{e}{\symlocalstore}{\pointertypeof{\bvsort{8}}} = p$}, and $\syminvalidbaseaddress(\symmemory, \pc, p)$.
     \item $\instrat{\location} = \textup{$\codequote{x \ \texttt{=} \ \tload^{\tau} \ e}$}$, \textup{$\evalexprty{e}{\symlocalstore}{\pointertypeof{\tau}} = p$}, and $\syminvalidpointer(\symmemory, \pc, p, |\tau|)$.
     \item $\instrat{\location} = \textup{$\codequote{\tstore^{\tau} \ e_1 \ e_2}$}$, \textup{$\evalexprty{e_2}{\symlocalstore}{\pointertypeof{\tau}} = p$}, and $\syminvalidpointer(\symmemory, \pc, p, |\tau|)$.
-    % TODO: \item $|\overline{(\tau_i, e_i)}| > 0$
-    \item $\instrat{\location} = \textup{$\codequote{x \ \texttt{=} \ \tgep~\pointertypeof{\tau} \ e \ \overline{(\tau_i, e_i)}}$}$ and $\sat{\varphi \land \overflowcond(\tau, \overline{k_i})}$
-          (where $k_i \triangleq \evalexprty{e_i}{\localstore}{\tau_i}$).
+    %\item $\instrat{\location} = \textup{$\codequote{x \ \texttt{=} \ \tgep~\pointertypeof{\tau} \ e \ \overline{(\tau_i, e_i)}}$}$ and $\sat{\varphi \land \overflowcond(\tau, \overline{k_i})}$
+    %      (where $k_i \triangleq \evalexprty{e_i}{\localstore}{\tau_i}$).
+    \item $\instrat{\location} = \textup{$\codequote{x \ \texttt{=} \ \tgep~\pointertypeof{\tau} \ e \ \overline{(\tau_i, e_i)}}$}$ and there exists an SMT model $m$ such that:
+    \begin{enumerate}
+        \item $m \models \varphi$
+        \item $\evalgep(\tau, p, \overline{v_i}) = \tpoison$ (where $p \triangleq m[\evalexprty{e}{\localstore}{\pointertypeof{\tau}}]$ and $v_i \triangleq m[\evalexprty{e_i}{\localstore}{\tau_i}]$)
+    \end{enumerate}
 \end{enumerate}
 %where $\overflowcond(\tau, \overline{k_i})$ constructs a condition that encodes the fact that there are no overlfows when evaluating the $\tgep$ instruction,
 \end{definition}
