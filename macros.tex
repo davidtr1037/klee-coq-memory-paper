@@ -154,9 +154,12 @@
 \newcommand{\bvadd}[3]{#2 + #3}
 \newcommand{\bvsub}[3]{#2 - #3}
 \newcommand{\bvmul}[3]{#2 \cdot #3}
-\newcommand{\bvzext}[2]{\textsf{bvzext}_{#1}(#2)}
-\newcommand{\bvsext}[2]{\textsf{bvsext}_{#1}(#2)}
-\newcommand{\bvextract}[2]{\textsf{bvextract}_{#1}(#2)}
+\newcommand{\bvzextfunc}[1]{\textsf{bvzext}_{#1}}
+\newcommand{\bvzext}[2]{\bvzextfunc{#1}(#2)}
+\newcommand{\bvsextfunc}[1]{\textsf{bvsext}_{#1}}
+\newcommand{\bvsext}[2]{\bvsextfunc{#1}(#2)}
+\newcommand{\bvextractfunc}[1]{\textsf{bvextract}_{#1}}
+\newcommand{\bvextract}[2]{\bvextractfunc{#1}(#2)}
 \newcommand{\arraysort}[2]{Array\langle#1,~#2\rangle}
 \newcommand{\arrayconst}[1]{K(#1)}
 \newcommand{\arrayselect}[2]{#1[#2]}
