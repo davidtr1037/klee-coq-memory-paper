@@ -167,12 +167,11 @@ In the following, we discuss the derivation rules in more detail.
 % TODO: mention the defined operation functions
 
 \textbf{\textit{Malloc.}}
-% n is a symbolic expression
-% check if there is an SMT model that satisfies PC
-% concretize n using that SMT model
-% say that there might be mulriple derivations
-The symbolic semantics of \textit{malloc} mirror the concrete semantics,
-differing only in the handling of content initialization.
+According to the symbolic memory model (\Cref{sec:symbolic-memory-modeling}),
+the size of a symbolic memory object must be concrete.
+However, as the allocation size $e$ can be evaluated into a symbolic expression,
+we concretize it using an SMT model that satisfies the path constraints $\pc$.
+Consequently, this rule may produce multiple derivations.
 As mentioned before, the SMT array of the newly allocated symbolic memory object is set to the constant array $\arrayconst{\arrayinitvalue}$.
 
 \textbf{\textit{Free.}}
