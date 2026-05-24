@@ -211,7 +211,7 @@ Therefore, although the \rulenameref{Store} rule may have multiple derivations i
 there is a single derivation in this case.
 % TODO: why?
 In particular, it also implies that:
-\[ \symmowrite{\symmo'}{\bvconst{64}{\addr}}{\bvconst{8}{7}} = (\bvval{\addr}{64}, \bvval{2}{32}, \arraystore{\smtarray}{(\bvextract_{32}(\bvsub{\bvsort{64}}{\bvconst{64}{\addr}}{\bvconst{64}{\addr}}))}{\bvconst{8}{7}}) \]
+\[ \symmowrite{\symmo'}{\bvconst{64}{\addr}}{\bvconst{8}{7}} = (\bvval{\addr}{64}, \bvval{2}{32}, \arraystore{\smtarray}{(\bvextract{32}{\bvsub{\bvsort{64}}{\bvconst{64}{\addr}}{\bvconst{64}{\addr}}})}{\bvconst{8}{7}}) \]
 
 On the other side, the symbolic state computed by the \SE engine is:
 \[
@@ -230,7 +230,7 @@ Note that $s$ is not an error state,
 since $\evalexprty{\nameid{gep1}}{\symlocalstore}{\bvsort{64}} = \bvconst{64}{\addr}$ for every model $m$.
 To prove that $s' \equiv s'_{opt}$, it suffices to prove the equivalence of their memory and path constraints.
 As for the memory, it suffices to prove that:
-\[ \arraystore{\smtarray}{(\bvextract_{32}(\bvconst{64}{\addr} - \bvconst{64}{\addr}))}{\bvconst{8}{7}} \equiv \smtarray'_{opt} \]
+\[ \arraystore{\smtarray}{(\bvextract{32}{\bvconst{64}{\addr} - \bvconst{64}{\addr}})}{\bvconst{8}{7}} \equiv \smtarray'_{opt} \]
 For this, we define a lemma that can be applied in general when storing a single byte (\ie \bvsort{8}):
 % TODO: introduce all variables
 \begin{lemma}
@@ -241,7 +241,7 @@ and assume that $k \equiv \bvconst{32}{i}$ and $v' \equiv v'_{opt}$, then:
 \end{lemma}
 % TODO: explain what this lemma says...
 This lemma can be applied in our case,
-since $\bvextract_{32}(\bvsub{\bvsort{64}}{\bvconst{64}{\addr}}{\bvconst{64}{\addr}}) \equiv \bvconst{32}{0}$ and $\bvconst{8}{7} \equiv \bvconst{8}{7}$.
+since $\bvextract{32}{\bvsub{\bvsort{64}}{\bvconst{64}{\addr}}{\bvconst{64}{\addr}}} \equiv \bvconst{32}{0}$ and $\bvconst{8}{7} \equiv \bvconst{8}{7}$.
 We define similar lemmas to handle stores of other types (\bvsort{16}, \bvsort{32}, and \bvsort{64}).
 % TODO: unfold rc
 As for the path constraints,
@@ -253,7 +253,7 @@ The symbolic state at~\cref{line:llvm-gep} is:
 \[
 s \triangleq \symstate
     {\location_8}
-    {\{ ..., \nameid{idx} \mapsto \bvzext_{64}(n) \}}
+    {\{ ..., \nameid{idx} \mapsto \bvzext{64}{n} \}}
     {[]}
     {...}
     {n < \bvconst{32}{2}}
@@ -263,24 +263,24 @@ According to the symbolic semantics, the derived symbolic state is:
 \[
 s' \triangleq \symstate
     {\location_9}
-    {\{ ..., \nameid{idx} \mapsto \bvzext_{64}(n), \nameid{gep2} \mapsto e \}}
+    {\{ ..., \nameid{idx} \mapsto \bvzext{64}{n}, \nameid{gep2} \mapsto e \}}
     {[]}
     {...}
     {n < \bvconst{32}{2}}
 \]
 where:
-\[ e \triangleq \bvadd{\bvsort{64}}{\bvconst{64}{\addr}}{\bvzext_{64}(\bvmul{\bvsort{32}}{\bvextract_{32}(\bvzext_{64}(n))}{\bvconst{32}{1}})} ) \]
+\[ e \triangleq \bvadd{\bvsort{64}}{\bvconst{64}{\addr}}{\bvzext{64}{\bvmul{\bvsort{32}}{\bvextract{32}{\bvzext{64}{n}}}{\bvconst{32}{1}}}} \]
 The symbolic state computed by the \SE engine is:
 \[
 s'_{opt} \triangleq \symstate
     {\location_9}
-    {\{ ..., \nameid{idx} \mapsto \bvzext_{64}(n), \nameid{gep2} \mapsto e_{opt} \}}
+    {\{ ..., \nameid{idx} \mapsto \bvzext{64}{n}, \nameid{gep2} \mapsto e_{opt} \}}
     {[]}
     {...}
     {n < \bvconst{32}{2}}
 \]
 where:
-\[ e_{opt} \triangleq \bvadd{\bvsort{64}}{\bvconst{64}{\addr}}{\bvzext_{64}(\bvextract_{32}(\bvzext_{64}(n)))} \]
+\[ e_{opt} \triangleq \bvadd{\bvsort{64}}{\bvconst{64}{\addr}}{\bvzext{64}{\bvextract{32}{\bvzext{64}{n}}}} \]
 Now, we need to prove that the subtree of $s$ is safe.
 To prove that $s$ is not an error state, we will use the following lemma:\footnote{
 Informally, $\overflowcond$ computes an SMT formula that encodes the fact that an overflow occured.
@@ -293,13 +293,13 @@ If $\evalgep(\tau, p, \overline{m[t_i]}) = \tpoison$,
 then $m \models \overflowcond(\tau, \overline{t_i})$.
 \end{lemma}
 Then, based on~\Cref{def:sym-error-state},
-it suffices to prove that $n < \bvconst{32}{2} \land \overflowcond(\bvsort{64}, [\bvzext_{64}(n)])$ is unsatisfiable.
+it suffices to prove that $n < \bvconst{32}{2} \land \overflowcond(\bvsort{64}, [\bvzext{64}{n}])$ is unsatisfiable.
 % TODO: why?
 In our case, it unfolds to the following constraint:
 \[
 \begin{array}{ll}
-n < \bvconst{32}{2} \land \big( & (\bvzext_{64}(n) > \bvconst{64}{4294967295}) \lor \\
-& (\bvmul{\bvsort{64}}{\bvzext_{64}(\bvextract_{32}(\bvzext_{64}(n)))}{\bvconst{64}{1}}) > \bvconst{64}{4294967295}\big)
+n < \bvconst{32}{2} \land \big( & (\bvzext{64}{n} > \bvconst{64}{4294967295}) \lor \\
+& (\bvmul{\bvsort{64}}{\bvzext{64}{\bvextract{32}{\bvzext{64}{n}}}}{\bvconst{64}{1}}) > \bvconst{64}{4294967295}\big)
 \end{array}
 \]
 which is indeed unsatisfiable.
@@ -319,7 +319,7 @@ s \triangleq \symstate
     {n < \bvconst{32}{2}}
 \]
 where:
-\[ e \triangleq \bvadd{\bvsort{64}}{\bvconst{64}{\addr}}{\bvzext_{64}(\bvextract_{32}(\bvzext_{64}(n)))} \]
+\[ e \triangleq \bvadd{\bvsort{64}}{\bvconst{64}{\addr}}{\bvzext{64}{\bvextract{32}{\bvzext{64}{n}}}} \]
 \[ \symmo \triangleq (\bvval{\addr}{64}, \bvval{2}{32}, \smtarray), \ \smtarray \triangleq \arraystore{\arraystore{\arrayconst{\arrayinitvalue}}{\bvconst{32}{0}}{\bvconst{8}{7}}}{\bvconst{32}{1}}{\arrayinitvalue} \]
 
 On one side, according to the symbolic semantics,
@@ -329,7 +329,7 @@ $m \models \pc$, $\symmo' \in \symmemory$, and $\symisinbounds{e}{\bvsort{8}}{\s
 \[
 s' \triangleq \symstate
     {\location_{10}}
-    {\{ ..., \nameid{gep2} \mapsto e, \nameid{v} \mapsto \arrayselect{\smtarray'}{\bvextract_{32}(\bvsub{\bvsort{64}}{e}{\bvconst{64}{\addr}})} \}}
+    {\{ ..., \nameid{gep2} \mapsto e, \nameid{v} \mapsto \arrayselect{\smtarray'}{\bvextract{32}{\bvsub{\bvsort{64}}{e}{\bvconst{64}{\addr}}}} \}}
     {[]}
     {[\symmo]}
     {n < \bvconst{32}{2} \land \rangecond(e, 1, \symmo')}
@@ -344,7 +344,7 @@ One the other side, the symbolic state computed by the \SE engine is:
 \[
 s'_{opt} \triangleq \symstate
     {\location_{10}}
-    {\{ ..., \nameid{gep2} \mapsto e, \nameid{v} \mapsto \arrayselect{\smtarray}{\bvextract_{32}(\bvsub{\bvsort{64}}{e}{\bvconst{64}{\addr}})} \}}
+    {\{ ..., \nameid{gep2} \mapsto e, \nameid{v} \mapsto \arrayselect{\smtarray}{\bvextract{32}{\bvsub{\bvsort{64}}{e}{\bvconst{64}{\addr}}}} \}}
     {[]}
     {[\symmo]}
     {n < \bvconst{32}{2}}

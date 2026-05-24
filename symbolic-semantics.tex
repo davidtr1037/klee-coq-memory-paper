@@ -99,7 +99,7 @@ In the following, we discuss the derivation rules in more detail.
   \instrat{\location} = \codequote{x~\texttt{=}~\tcall^{\pointertypeof{\bvsort{8}}}~\intrinsicfunc{malloc}(\bvsort{64} ~ e)} \quad
   \evalexprty{e}{\symlocalstore}{\bvsort{64}} = n \quad
   m \models \pc \quad
-  \symallocate(\symmemory, \bvextract_{\indexwidth}(m[n])) = (\symmemory', p) \quad
+  \symallocate(\symmemory, \bvextract{\indexwidth}{m[n]}) = (\symmemory', p) \quad
 }
 {
   \symstate{\location}{\symlocalstore}{\symstack}{\symmemory}{\pc}
@@ -213,16 +213,16 @@ since the symbolic semantics does not model $\tundef$ and $\tpoison$.
     \EndIf
     \State $j_1 :: \overline{j'} \gets \overline{j}$
     \If {$\tau = \arraytype{\tau'}{n}$}
-        \State $o \gets \bvadd{\bvsort{\indexwidth}}{o}{\bvmul{\bvsort{\indexwidth}}{\bvsext_{\indexwidth}(j_1)}{\bvconst{\indexwidth}{|\tau'|}}}$ \label{line:array-index}
+        \State $o \gets \bvadd{\bvsort{\indexwidth}}{o}{\bvmul{\bvsort{\indexwidth}}{\bvsext{\indexwidth}{j_1}}{\bvconst{\indexwidth}{|\tau'|}}}$ \label{line:array-index}
         \State \Return \Call{compute-offset}{$\tau', o, \overline{j'}$}
     \EndIf
 \EndFunction
 
 \Function{eval-gep}{$\tau, p, \overline{j}$}
     \State $j_1 :: \overline{j'} \gets \overline{j}$
-    \State $o \gets \bvmul{\bvsort{\indexwidth}}{\bvsext_{\indexwidth}(j_1)}{\bvconst{\indexwidth}{|\tau|}}$ \label{line:first-index}
+    \State $o \gets \bvmul{\bvsort{\indexwidth}}{\bvsext{\indexwidth}{j_1}}{\bvconst{\indexwidth}{|\tau|}}$ \label{line:first-index}
     \State $r \gets \Call{compute-offset}{\tau, o, \overline{j'}}$
-    \State \Return $\bvadd{\bvsort{64}}{p}{\bvzext_{64}(r)}$
+    \State \Return $\bvadd{\bvsort{64}}{p}{\bvzext{64}{r}}$
 \EndFunction
 
 \end{algorithmic}
