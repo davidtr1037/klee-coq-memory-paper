@@ -8,13 +8,13 @@ we define our symbolic operational small-step semantics of \llvm IR based on the
 \label{sec:symbolic-memory-modeling}
 
 First, we define the major components of our symbolic memory model.
-At a high level, this model differs from its concrete counterpart (\Cref{sec:memory-modeling}) by using SMT expressions instead of concrete values (\ie bit-vectors).
+At a high level, this model mirrors its concrete counterpart (\Cref{sec:memory-modeling}), while using SMT expressions instead of concrete values (\ie bit-vectors).
 
 \begin{definition}
 A symbolic memory object is defined as a tuple:
 \[ (\addr, \size, \smtarray) \in \SymMemoryObjects \quad \quad \SymMemoryObjects \triangleq \pointertype \times \indextype \times \arraysort{\smtsort{\indexwidth}}{\smtsort{8}} \]
-which resembles the definition of a concrete memory object,
-but now the contents are encoded using an SMT array whose values are \emph{symbolic bytes} (\ie SMT expressions of sort $\smtsort{8}$).
+where $\addr$ is its base address, $\size$ is its size,
+and $\smtarray$ is an SMT array that tracks the stored \emph{symbolic bytes} (\ie SMT expressions of sort $\smtsort{8}$).
 A symbolic heap $\symmemory \in \SymHeaps$ is defined as a set of symbolic memory objects.
 \end{definition}
 
@@ -49,7 +49,7 @@ As in~\Cref{sec:memory-modeling}, we assume that $\tau$ is one of the built-in i
 \[ \symmoreadfunc{\tau} : \SymMemoryObjects \times \smtsort{\pointerwidth} \to \smtsort{w} \]
 The $\symmoreadfunc{\tau}$ function receives a memory object $\symmo$ and a pointer $p$.
 First, it reads the consecutive $|\tau|$ cells starting from $p$ into a sequence of symbolic bytes.
-Then, it translates them into a \textit{concat} expression of the appropriate sort.
+Then, it deserializes them into a \textit{concat} expression of the appropriate sort.
 
 \paragraph{Write}
 The \emph{write} operation is defined using the following function:
