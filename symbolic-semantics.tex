@@ -186,11 +186,11 @@ This rule might have multiple derivations, since $p$ may point to different memo
 \textbf{\textit{Load and Store.}}
 % TODO: mentions the assumptions about n?
 When accessing $n$ bytes from a pointer $p$,
-we check if there exists an SMT model $m$ satisfying $\pc$ and a memory object $\symmo$ in $\symmemory$ such that the first $n$ addresses starting from $m[p]$ are within the address interval of $\symmo$.
+we check if there exists an SMT model $m$ satisfying $\pc$ and a memory object $\symmo$ in the heap $\symmemory$ such that the first $n$ addresses starting from $m[p]$ are within the address interval of $\symmo$.
 If that is not the case, the result is undefined behavior.
 Otherwise, we perform a read or write operation.
 For a read operation,
-we call the $\symmoreadfunc{\tau}$ function (\Cref{sec:symbolic-memory-modeling}) to read the value from $\symmo$ and update the local store accordingly.
+we first call the $\symmoreadfunc{\tau}$ function (\Cref{sec:symbolic-memory-modeling}) to read the corresponding value from $\symmo$, and then update the local store accordingly.
 For a write operation,
 we call the $\symmowritefunc{\tau}$ function (\Cref{sec:symbolic-memory-modeling}) to update the contents of $\symmo$ accordingly.
 
@@ -272,5 +272,5 @@ While this might initially appear to be a limitation,
 modeling these values in the symbolic semantics is not mandatory.
 The design of the symbolic semantics is a choice of abstraction level,
 and we intentionally omit these values to simplify SMT reasoning.
-Indeed, as will be seen in~\Cref{sec:program-safety},
+As will be seen in~\Cref{sec:program-safety},
 our design choice allows to establish the desired properties with respect to the concrete semantics.
