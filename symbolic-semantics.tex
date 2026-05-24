@@ -227,14 +227,6 @@ the symbolic version always returns an SMT expression.
 \end{algorithmic}
 \end{algorithm}
 
-Note that our symbolic semantics does not model the values $\tundef$ and $\tpoison$.
-While this might initially appear to be a limitation,
-modeling these values in the symbolic semantics is not mandatory.
-The design of the symbolic semantics is a choice of abstraction level,
-and we intentionally omit these values to simplify SMT reasoning.
-Indeed, as will be seen in~\Cref{sec:program-safety},
-our design choice allows to establish the desired properties with respect to the concrete semantics.
-
 In the following, we define when a symbolic state is considered to be an error state.
 To do so, we use the following definitions:
 \[
@@ -274,3 +266,11 @@ if one of the following holds:
 \end{enumerate}
 %where $\overflowcond(\tau, \overline{k_i})$ constructs a condition that encodes the fact that there are no overlfows when evaluating the $\tgep$ instruction,
 \end{definition}
+
+Note that our symbolic semantics does not model the values $\tundef$ and $\tpoison$.
+While this might initially appear to be a limitation,
+modeling these values in the symbolic semantics is not mandatory.
+The design of the symbolic semantics is a choice of abstraction level,
+and we intentionally omit these values to simplify SMT reasoning.
+Indeed, as will be seen in~\Cref{sec:program-safety},
+our design choice allows to establish the desired properties with respect to the concrete semantics.
