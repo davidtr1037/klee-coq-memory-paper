@@ -202,7 +202,7 @@ While the concrete version may return $\tundef$ or $\tpoison$,
 the symbolic version always returns an SMT expression.
 
 \begin{algorithm}[t]
-\caption{Simplified symbolic semantics of $\tgep$ (without attributes).}
+\caption{Simplified symbolic semantics of $\tgep$ ($\symevalgep$).}
 \label{alg:symbolic-gep}
 \begin{algorithmic}[1]
 
@@ -217,7 +217,7 @@ the symbolic version always returns an SMT expression.
     \EndIf
 \EndFunction
 
-\Function{eval-gep}{$\tau, p, \overline{j}$}
+\Function{compute-gep}{$\tau, p, \overline{j}$}
     \State $j_1 :: \overline{j'} \gets \overline{j}$
     \State $o \gets \bvmul{\bvsort{\indexwidth}}{\bvsext{\indexwidth}{j_1}}{\bvconst{\indexwidth}{|\tau|}}$ \label{line:first-index}
     \State $r \gets \Call{compute-offset}{\tau, o, \overline{j'}}$

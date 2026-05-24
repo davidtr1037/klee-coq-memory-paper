@@ -316,7 +316,7 @@ For example, when the \opcode{nuw} attribute is enabled, the following condition
 If any of these conditions is violated, the result is $\tpoison$.
 
 \begin{algorithm}[t]
-\caption{Simplified semantics of $\tgep$ (without attributes).}
+\caption{Simplified semantics of $\tgep$ ($\evalgep$).}
 \label{alg:gep}
 \begin{algorithmic}[1]
 
@@ -331,7 +331,7 @@ If any of these conditions is violated, the result is $\tpoison$.
     \EndIf
 \EndFunction
 
-\Function{eval-gep}{$\tau, p, \overline{j}$}
+\Function{compute-gep}{$\tau, p, \overline{j}$}
     \If {$\tpoison \in \overline{j}$}
         \State \Return $\tpoison$
     \EndIf

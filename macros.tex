@@ -131,7 +131,7 @@
 \newcommand{\isinbounds}[3]{#1 \overset{#2}{\rightsquigarrow} #3}
 \newcommand{\allocate}{\mathit{alloc}}
 \newcommand{\deallocate}{\mathit{dealloc}}
-\newcommand{\evalgep}{\mathit{eval\textit{-}gep}}
+\newcommand{\evalgep}{\mathit{gep}}
 \newcommand{\none}{\bot}
 
 % general purpose
@@ -199,7 +199,7 @@
 \newcommand{\overflowcond}{\mathit{overflow}}
 \newcommand{\symallocate}{\widetilde{\mathit{alloc}}}
 \newcommand{\symdeallocate}{\widetilde{\mathit{dealloc}}}
-\newcommand{\symevalgep}{\mathit{eval\textit{-}gep}}
+\newcommand{\symevalgep}{\widetilde{\mathit{gep}}}
 \newcommand{\symmoreadfunc}[1]{\widetilde{\mathit{rd}}_{#1}}
 \newcommand{\symmoread}[3]{\symmoreadfunc{#1}(#2,#3)}
 \newcommand{\symmowritefunc}[1]{\widetilde{\mathit{wr}}_{#1}}
