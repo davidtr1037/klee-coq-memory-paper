@@ -108,7 +108,7 @@ In this section, we will focus on memory-related instructions.
 We denote by $\location_n$ the program location that corresponds to line $n$ in~\Cref{figure:example-llvm}.
 
 % TODO: say that there is not overflow in the interval
-\subsection{\textit{Example: Malloc.}}
+\subsubsection{Example: Malloc}
 The initial symbolic state at~\cref{line:llvm-malloc} is $s \triangleq \symstate{\location_1}{\{ \}}{[]}{[]}{\true}$.
 %\[
 %s \triangleq \symstate
@@ -177,7 +177,7 @@ then $\safeet(\tree(s, [t]))$.
 
 Due to space limitations,
 the interface lemmas for the rest of the examples are defined in the appendix (\Cref{lemma:interface-store,lemma:interface-gep,lemma:interface-load}).
-\subsection{\textit{Example: Store.}}
+\subsubsection{Example: Store}
 % TODO: explain how to prove that this is not an error state
 % TODO: the type is i8, so we add a single store expression
 % TODO: fix the index expression
@@ -248,7 +248,7 @@ We define similar lemmas to handle stores of other types (\bvsort{16}, \bvsort{3
 As for the path constraints,
 note that $\rangecond(\bvconst{64}{\addr}, 1, \symmo) \equiv \true$, so the equivalence follows easily.
 
-\subsection{\textit{Example: GetElementPtr.}}
+\subsubsection{Example: GetElementPtr}
 % TODO: explain how to prove that this is not an error state
 The symbolic state at~\cref{line:llvm-gep} is:
 \[
@@ -308,7 +308,7 @@ which is indeed unsatisfiable.
 To prove that $s' \equiv s'_{opt}$,
 it suffices to prove that their stores are equivalent, which holds since $e \equiv e_{opt}$.
 
-\subsection{\textit{Example: Load.}}
+\subsubsection{Example: Load}
 % TODO: remind that the repr is non-opt now
 The symbolic state at~\cref{line:llvm-load} is:
 \[
