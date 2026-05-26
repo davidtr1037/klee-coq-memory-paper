@@ -29,7 +29,7 @@ To encode the contents of a memory object,
 If all the stores to a memory object were performed with a concrete offset,
 then \klee uses the optimized representation:
 it encodes the contents of that memory object as a mapping between constant offsets and symbolic values.
-Otherwise, when there is at least one store with a symbolic offset,
+Otherwise, if there is at least one store with a symbolic offset,
 \klee uses to the non-optimized representation:
 it translates the optimized representation into an SMT array, \ie a sequence of store expressions.
 Once the representation of a memory object is switched to the non-optimized one, it cannot be switched back to the optimized one.
