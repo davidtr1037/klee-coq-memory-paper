@@ -26,12 +26,13 @@ In \klee, the memory of a symbolic state is represented as a linear address spac
 each associated with a concrete base address and a concrete size.
 To encode the contents of a memory object,
 \klee uses two representations: \emph{optimized} and \emph{non-optimized}.
-If all the stores to a given memory object were performed with a concrete offset,
-then \klee uses the optimized representation where the contents are encoded as a mapping between constant offsets and symbolic values.
-When there is at least one store with a symbolic offset,
-\klee switches to the non-optimized representation,
-by translating the optimized representation into an SMT array, \ie a sequence of store expressions.
-Once this happens, the representation cannot be switched back to the optimized one.
+If all the stores to a memory object were performed with a concrete offset,
+then \klee uses the optimized representation:
+it encodes the contents of that memory object as a mapping between constant offsets and symbolic values.
+Otherwise, when there is at least one store with a symbolic offset,
+\klee uses to the non-optimized representation:
+it translates the optimized representation into an SMT array, \ie a sequence of store expressions.
+Once the representation of a memory object is switched to the non-optimized one, it cannot be switched back to the optimized one.
 
 % TODO: needed here?
 %The SMT arrays that are used to encode the contents of a memory object has the sort: ...
@@ -39,10 +40,11 @@ Once this happens, the representation cannot be switched back to the optimized o
 %the SMT expression corresponding to the offset is truncated to an SMT expression of sort $\smtsort{32}$.
 
 For example, after executing~\cref{line:example-store} of the C program in~\Cref{figure:example-llvm},
-the contents of the memory object allocated at~\cref{line:example-malloc} are encoded using the optimized representation as $\{ 0 \mapsto \bvconst{8}{7}, 1 \mapsto \bvconst{8}{0} \}$.
+the contents of the memory object allocated at~\cref{line:example-malloc} are encoded using the optimized representation as:
+\[ \{ 0 \mapsto \bvconst{8}{7}, 1 \mapsto \bvconst{8}{0} \} \]
 If afterwards, we were to execute the instruction \code{p[n] = 1},
 then we would switch to the non-optimized representation, resulting in the following encoding:
-$\arraystore{\arraystore{\arraystore{\arrayconst{\arrayinitvalue}}{\bvconst{32}{0}}{\bvconst{8}{7}}}{\bvconst{32}{1}}{\bvconst{8}{0}}}{n}{\bvconst{8}{1}}$.
+\[ \arraystore{\arraystore{\arraystore{\arrayconst{\arrayinitvalue}}{\bvconst{32}{0}}{\bvconst{8}{7}}}{\bvconst{32}{1}}{\bvconst{8}{0}}}{n}{\bvconst{8}{1}} \]
 
 \begin{figure}
 \begin{minipage}[t]{0.60\columnwidth}
