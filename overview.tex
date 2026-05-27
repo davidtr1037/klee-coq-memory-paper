@@ -46,7 +46,7 @@ Overall, it will explore all the feasible paths without reporting any errors.
 
 % why is it not enoguh?
 However, a standard \SE engine is a complex software system.
-A single bug in its implementation may compromise the integrity of the analysis, leading to undetected errors.
+Even a single bug in its implementation can compromise the integrity of the analysis, leading to undetected errors.
 To reduce the reliance on a massive trusted computing base,
 our goal is to generate an independent and machine-checked proof ensuring that an exhaustive exploration of the input program indeed guarantees its safety.
 
@@ -65,7 +65,17 @@ More specifically, the required safety properties are \emph{error-freeness} and 
 The former requires that the execution tree must not contain error symbolic states.
 The latter requires that the execution tree over-approximates all the feasible symbolic states derivable according to the symbolic \llvm semantics.
 This theorem bridges the concrete and symbolic domains,
-providing a foundation for automating safety proof generation.
+providing a foundation for automating proof generation.
 
 % proof generation
 \subsection{Proof Generation}
+
+To apply the \emph{program safety} theorem,
+we must to provide an execution tree that satisfies the safety properties mentioned above.
+To do so, we instrument the \SE engine to generate an execution tree along with a proof showing that it satisfies the safety properties.
+More specifically,
+for every instruction executed by the \SE engine,
+we generate a lemma that proves the safety properties of the corresponding subtree.
+This way, we decompose the global proof obligation of the entire program into instruction-level proof obligations.
+
+% Example for such lemmas
