@@ -1,4 +1,4 @@
 /*@\textcolor{commentcolor}{; assume that: n < 10}@*/
-%a = call i8* @malloc(i64 10)
-%p = getelementptr i8, i8* %a, i64 %n
-store i8 7, i8* %p
+%a = call i8* @malloc(i64 10) /*@ \label{line:overview-llvm-malloc} @*/
+%p = getelementptr i8, i8* %a, i64 %n /*@ \label{line:overview-llvm-gep} @*/
+store i8 7, i8* %p /*@ \label{line:overview-llvm-store} @*/

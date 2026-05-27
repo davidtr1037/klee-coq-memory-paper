@@ -9,8 +9,49 @@
 % - symbolic execution is used for automation
 % - proof checking is used for trust
 
+In this section,
+we give an informal overview of our approach before moving on to the formal development (\Cref{sec:program-safety}).
+
 \begin{figure}
 \lstinputlisting[basicstyle=\scriptsize\ttfamily,language=llvm,mathescape=true,breaklines=false]{code/overview.simple.ll}
 \caption{...}
 \label{figure:overview-llvm}
 \end{figure}
+
+\subsection{Running Example}
+
+Consider the \llvm IR program in~\Cref{figure:overview-llvm},
+and suppose that we want to prove that this program is \emph{safe},
+\ie it does not trigger any errors for valid inputs.
+The program allocates a heap object using \code{malloc} (\cref{line:overview-llvm-malloc}), and then acesses it at offset \code{n} (\cref{line:overview-llvm-store}).
+Here, we assume that the input is \code{n}, and is a symbolic value constrained by the precondition \code{n < 10}.
+
+% what happens with a standard SE engine?
+A standard \SE engine will analyze this program by executing it with symbolic values rather than concrete ones.
+The analysis is carried by tracking symbolic states that abstractly represent the program environment.
+Each symbolic state consists of a program counter, a symbolic store for registers, a symbolic memory, and path constraints accumulated along the execution path.
+In this example,
+it will model the input \code{n} as a symbolic value $n$, while adding the precondition $n < 10$ to the path constraints.
+At~\cref{line:overview-llvm-malloc},
+it will allocate a heap object of size 10.
+At~\cref{line:overview-llvm-gep},
+it will compute the pointer \code{p} to be accessed.
+At~\cref{line:overview-llvm-store},
+it will store the value \code{7} into \code{p}.
+To do so,
+it will first check whether this access may be out-of-bounds,
+by checking using the SMT solver the satisfiability of the condition $n \geq 10 \lor n < 0$ with respect to the path constraints.
+In this case, this condition is unsatisfiable, so this access is guaranteed to be error-free.
+Overall, it will explore all the feasible paths without reporting any errors.
+
+% why is it not enoguh?
+However, a standard \SE engine is a complex software system.
+A single bug in its implementation may compromise the integrity of the analysis, leading to undetected errors.
+To reduce the reliance on a massive trusted computing base,
+our goal is to generate an independent and machine-checkable proof ensuring that an exhaustive exploration of the input program indeed guarantees its safety.
+
+% theory
+\subsection{Theoretical Framework}
+
+% proof generation
+\subsection{Proof Generation}
