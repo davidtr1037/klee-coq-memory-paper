@@ -14,7 +14,7 @@ we give an informal overview of our approach before moving on to the formal deve
 
 \begin{figure}
 \lstinputlisting[basicstyle=\scriptsize\ttfamily,language=llvm,mathescape=true,breaklines=false]{code/overview.simple.ll}
-\caption{...}
+\caption{A simple \llvm IR program with a potential safety violation.}
 \label{figure:overview-llvm}
 \end{figure}
 
@@ -24,7 +24,7 @@ Consider the \llvm IR program in~\Cref{figure:overview-llvm},
 and suppose that we want to prove that this program is \emph{safe},
 \ie it does not trigger any errors for valid inputs.
 The program allocates a heap object using \code{malloc} (\cref{line:overview-llvm-malloc}), and then acesses it at offset \code{n} (\cref{line:overview-llvm-store}).
-Here, we assume that the input is \code{n}, and is a symbolic value constrained by the precondition \code{n < 10}.
+Here, we assume that the input \code{n} satisfies the precondition $0 \leq \code{n} < 10$.
 
 % what happens with a standard SE engine?
 A standard \SE engine will analyze this program by executing it with symbolic values rather than concrete ones.
