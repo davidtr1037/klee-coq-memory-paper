@@ -1,4 +1,5 @@
 #include <klee/klee.h>
+#include <stdint.h>
 #include <stdlib.h>
 
 int main() {
