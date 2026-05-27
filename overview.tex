@@ -72,10 +72,10 @@ providing a foundation for automating proof generation.
 
 To apply the \emph{program safety} theorem,
 we must to provide an execution tree that satisfies the safety properties mentioned above.
-To do so, we instrument the \SE engine to generate an execution tree along with a proof showing that it satisfies the safety properties.
+To do so, we instrument the \SE engine to generate an execution tree along with a proof showing that it satisfies the desired properties.
 More specifically,
 for every instruction executed by the \SE engine,
-we generate a lemma that proves the safety properties of the corresponding subtree.
+we generate a lemma that proves the safety properties of that transition.
 This way, we decompose the global proof obligation of the entire program into instruction-level proof obligations.
 
 % Example for such lemmas
