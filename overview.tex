@@ -13,8 +13,15 @@ In this section,
 we give an informal overview of our approach before moving on to the formal development (\Cref{sec:program-safety}).
 
 \begin{figure}
+\begin{minipage}[t]{0.45\textwidth}
+\vspace*{0pt}
 \lstinputlisting[basicstyle=\scriptsize\ttfamily,language=llvm,mathescape=true,breaklines=false]{code/overview.simple.ll}
-\caption{A simple \llvm IR program with a potential safety violation.}
+\end{minipage}
+\begin{minipage}[t]{0.45\textwidth}
+\vspace*{0pt}
+\includegraphics[width=\textwidth]{images/tree.pdf}
+\end{minipage}
+\caption{A simple \llvm IR program with a potential safety violation and its execution tree.}
 \label{figure:overview-llvm}
 \end{figure}
 
@@ -71,11 +78,18 @@ providing a foundation for automating proof generation.
 \subsection{Proof Generation}
 
 To apply the \emph{program safety} theorem,
-we must to provide an execution tree that satisfies the safety properties mentioned above.
+we must provide an execution tree that satisfies the safety properties mentioned above.
 To do so, we instrument the \SE engine to generate an execution tree along with a proof showing that it satisfies the desired properties.
 More specifically,
 for every instruction executed by the \SE engine,
 we generate a lemma that proves the safety properties of the corresponding subtree.
 This way, we decompose the global proof obligation of the entire program into instruction-level proof obligations.
 
-% Example for such lemmas
+% example (informal)
+% what we will do given C/S semantis and a SE engine
+% figure with ET
+% bottom-up proof construction with lemmas
+% example for one lemma (store)
+% explain the proof:
+% - why not an error state
+% - why complete (first derive with S semantics, then derive with SE engine, need to prove the equivalence)
