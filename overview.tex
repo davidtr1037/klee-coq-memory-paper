@@ -110,8 +110,8 @@ When we execute the instruction of $s_i$,
 we generate a lemma stating that the subtree of $s_i$ satisfies the safety properties.
 Once the analysis of the whole program is complete,
 we compose those lemmas in a bottom-up manner to obtain a lemma stating that the whole execution tree satisfies the safety properties.
-In this example,
-the lemma of X and Y are generated first, and the lemma of Z is generated only at the end.
+Here, for example,
+the lemmas corresponding to $s_3$ and $s_7$ are generated first, and the lemma corresponding to $s_0$ is generated only at the end.
 
 To give intuition about how those lemmas are proven, consider the subtree of X.\footnote{
 An extended and formal example will be given in~\Cref{sec:proof-generation}.
