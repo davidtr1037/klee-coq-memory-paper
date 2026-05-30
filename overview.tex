@@ -115,3 +115,27 @@ To give intuition about how those lemmas are proven, consider the subtree of X.\
 An extended and formal example will be given in~\Cref{sec:proof-generation}.
 }
 The current instruction at X is the \code{store} instruction at~\cref{line:overview-llvm-store}.
+
+First, we need to prove that this subtree is \emph{error-free}.
+To do so,
+we need to show that X cannot point to an out-of-bounds address.
+In this case,
+X may point only to one object,
+\ie the one allocated at~\cref{line:overview-llvm-malloc},
+so it will suffice to prove that the constraint X is unsatisfiable.
+
+Second, we need to prove that this subtree is \emph{complete}.
+Here, we assume of a standard mechanized symbolic semantics.
+More specifically,
+we need to prove that if X can be derived from X according to the formal symbolic semantics,
+then either X is infeasible or there exist a successor of X in the subtree that is equivalent to X.
+Here, X may point only to one object (...),
+so there is a single derived state.
+This state is not infeasible,
+so we need to prove that these two symbolic state are equivalent (SMT level).
+In general, the formal semantics may differ from the symbolic semantics of the \SE engine,
+so the equivalence proof might not be immediate.
+
+% TODO: improve
+Lastly, will need to prove that the subtree of X (the successor of X) is safe.
+This can be done immediately due to the bottom-up construction of the proof.
