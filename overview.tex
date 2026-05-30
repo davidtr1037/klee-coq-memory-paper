@@ -21,7 +21,7 @@ we give an informal overview of our approach before moving on to the formal deve
 \vspace*{0pt}
 \includegraphics[width=\textwidth]{images/tree.pdf}
 \end{minipage}
-\caption{A simple \llvm IR program with a potential safety violation and its execution tree.}
+\caption{A simple \llvm IR program and its execution tree.}
 \label{figure:overview-llvm}
 \end{figure}
 
@@ -93,3 +93,25 @@ This way, we decompose the global proof obligation of the entire program into in
 % explain the proof:
 % - why not an error state
 % - why complete (first derive with S semantics, then derive with SE engine, need to prove the equivalence)
+
+To illustrate the proof generation process, consider again the \llvm IR program in~\Cref{figure:overview-llvm}.
+For the purpose of this example,
+we assume a standard implementation of symbolic execution rather than relying on a specific \SE engine (\eg \klee).
+The execution tree of this program is shown on the right side of~\Cref{figure:overview-llvm}.
+Each node $s_i$ corresponds to a symbolic state,
+and its successors are the symbolic states computed by the \SE engine while executing the current instruction of $s_i$.
+For example,
+$s_0$ is the initial symbolic state,
+and $s_1$ is the symbolic state resulting from the symbolic execution of the \code{alloca} instruction at~\cref{line:overview-llvm-malloc}.
+
+When we execute the instruction of $s_i$,
+we generate a lemma stating that the subtree of $s_i$ satisfies the safety properties.
+Once the analysis of the whole program is complete,
+we compose those lemmas in a bottom-up manner to obtain a lemma stating that the whole execution tree satisfies the safety properties.
+More specifically,
+the lemma of X and Y are generated first, and the lemma of Z is generated only at the end.
+
+To give intuition about how those lemmas are proven, consider the subtree of X.\footnote{
+An extended and formal example will be given in~\Cref{sec:proof-generation}.
+}
+The current instruction at X is the \code{store} instruction at~\cref{line:overview-llvm-store}.
