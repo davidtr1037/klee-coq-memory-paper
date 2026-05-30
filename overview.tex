@@ -93,15 +93,6 @@ for every instruction executed by the \SE engine,
 we generate a lemma that proves the safety properties of the corresponding subtree.
 This way, we decompose the global proof obligation of the entire program into instruction-level proof obligations.
 
-% example (informal)
-% what we will do given C/S semantis and a SE engine
-% figure with ET
-% bottom-up proof construction with lemmas
-% example for one lemma (store)
-% explain the proof:
-% - why not an error state
-% - why complete (first derive with S semantics, then derive with SE engine, need to prove the equivalence)
-
 To illustrate the proof generation process, consider again the \llvm IR program in~\Cref{figure:overview-llvm}.
 The execution tree of this program is shown on the right side of~\Cref{figure:overview-llvm}.
 Each node $s_i$ corresponds to a symbolic state,
