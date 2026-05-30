@@ -97,10 +97,12 @@ This way, we decompose the global proof obligation of the entire program into in
 To illustrate the proof generation process, consider again the \llvm IR program in~\Cref{figure:overview-llvm}.
 For the purpose of this example,
 we assume a standard implementation of symbolic execution rather than relying on a specific \SE engine (\eg \klee).
+% TODO: mechanized?
+In addition, we assume of a standard formal symbolic semantics.
 The execution tree of this program is shown on the right side of~\Cref{figure:overview-llvm}.
 Each node $s_i$ corresponds to a symbolic state,
 and its successors are the symbolic states computed by the \SE engine while executing the current instruction of $s_i$.
-For example,
+In this case,
 $s_0$ is the initial symbolic state,
 and $s_1$ is the symbolic state resulting from the symbolic execution of the \code{alloca} instruction at~\cref{line:overview-llvm-malloc}.
 
@@ -108,7 +110,7 @@ When we execute the instruction of $s_i$,
 we generate a lemma stating that the subtree of $s_i$ satisfies the safety properties.
 Once the analysis of the whole program is complete,
 we compose those lemmas in a bottom-up manner to obtain a lemma stating that the whole execution tree satisfies the safety properties.
-More specifically,
+In this example,
 the lemma of X and Y are generated first, and the lemma of Z is generated only at the end.
 
 To give intuition about how those lemmas are proven, consider the subtree of X.\footnote{
@@ -117,22 +119,24 @@ An extended and formal example will be given in~\Cref{sec:proof-generation}.
 The current instruction at X is the \code{store} instruction at~\cref{line:overview-llvm-store}.
 
 First, we need to prove that this subtree is \emph{error-free}.
-To do so,
+More specifically,
+we need to prove that X is not an error symbolic state.
+In the case of a \code{store} instruction,
 we need to show that X cannot point to an out-of-bounds address.
-In this case,
-X may point only to one object,
-\ie the one allocated at~\cref{line:overview-llvm-malloc},
+Here, X points to a single object,
+the one allocated at~\cref{line:overview-llvm-malloc},
 so it will suffice to prove that the constraint X is unsatisfiable.
 
 Second, we need to prove that this subtree is \emph{complete}.
-Here, we assume of a standard mechanized symbolic semantics.
 More specifically,
 we need to prove that if X can be derived from X according to the formal symbolic semantics,
 then either X is infeasible or there exist a successor of X in the subtree that is equivalent to X.
-Here, X may point only to one object (...),
-so there is a single derived state.
+In the case of a \code{store} instruction,
+the formal symbolic semantics may derive multiple symbolic states,
+depending on the number of objects that may be pointed by X.
+Here, X points to a single object, so there is only one derived symbolic state.
 This state is not infeasible,
-so we need to prove that these two symbolic state are equivalent (SMT level).
+so we need to prove that these two symbolic states are equivalent (SMT level).
 In general, the formal semantics may differ from the symbolic semantics of the \SE engine,
 so the equivalence proof might not be immediate.
 
