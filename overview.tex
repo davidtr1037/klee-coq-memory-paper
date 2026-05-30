@@ -20,14 +20,16 @@ since \SE engines employs various encoding optimizations which may not be fully 
 
 \begin{figure}
 \begin{minipage}[t]{0.45\textwidth}
-\vspace*{0pt}
+\vspace{3pt}
 \lstinputlisting[basicstyle=\scriptsize\ttfamily,language=llvm,mathescape=true,breaklines=false]{code/overview.simple.ll}
+\vspace{20pt}
+\lstinputlisting[basicstyle=\scriptsize\ttfamily,language=c,mathescape=true,breaklines=false]{code/overview.simple.c}
 \end{minipage}
 \begin{minipage}[t]{0.45\textwidth}
 \vspace*{0pt}
 \includegraphics[width=\textwidth]{images/tree.pdf}
 \end{minipage}
-\caption{A simple \llvm IR program and its execution tree.}
+\caption{A simple \llvm IR program (top left), its C source code (bottom left), and its execution tree (right).}
 \label{figure:overview-llvm}
 \end{figure}
 
