@@ -11,8 +11,8 @@
 In this section,
 we give an informal overview of our approach before moving on to the formal development (\Cref{sec:program-safety}).
 For the purpose of this overview,
-we assume a standard \emph{formal} and \emph{executable} symbolic semantics, without relying on specific implementations.
-The \emph{formal} symbolic semantics are those explicitly mechanized inside the proof assistant (\eg \coq).
+we assume a standard \emph{mechanized} and \emph{executable} symbolic semantics, without relying on specific implementations.
+The \emph{mechanized} symbolic semantics are those explicitly encoded inside the proof assistant (\eg \coq).
 The \emph{executable} symbolic semantics are those implicitly induced by the implementation of the \SE engine (\eg \klee).
 In general,
 those semantics are not necessarily identical,
@@ -137,15 +137,15 @@ so it will suffice to prove that the constraint X is unsatisfiable.
 
 Second, we need to prove that this subtree is \emph{complete}.
 More specifically,
-we need to prove that if X can be derived from X by the formal symbolic semantics,
+we need to prove that if X can be derived from X by the mechanized symbolic semantics,
 then either X is infeasible or there exist a successor of X in the subtree that is equivalent to X.
 In the case of a \code{store} instruction,
-the formal symbolic semantics may derive multiple symbolic states,
+the mechanized symbolic semantics may derive multiple symbolic states,
 depending on the number of objects that may be pointed by X.
 Here, X points to a single object, so there is only one derived symbolic state.
 This state is not infeasible,
 so we need to prove that these two symbolic states are equivalent (SMT level).
-In general, the formal semantics may differ from the symbolic semantics of the \SE engine,
+In general, the mechanized semantics may differ from the symbolic semantics of the \SE engine,
 so the equivalence proof might not be immediate.
 
 % TODO: improve
