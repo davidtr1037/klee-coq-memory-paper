@@ -87,7 +87,7 @@ Our theoretical framework defines the concrete (\Cref{sec:concrete-semantics}) a
 %the explored paths form an \emph{execution tree},
 %where each node represents a symbolic state computed by the \SE engine.
 The main result of our theoretical framework is the \emph{program safety} theorem (\Cref{theorem:safety-via-et}).
-Intuitively, this theorem states that if the execution tree of the program satisfies certain \emph{safety properties},
+Intuitively, this theorem states that if the execution tree of the program satisfies certain inductive \emph{safety properties},
 then the program is safe with respect to the concrete \llvm semantics.
 More specifically, the required safety properties are \emph{error-freeness} and \emph{completeness} (\Cref{def:safe-et}).
 The former requires that the execution tree must not contain error symbolic states.
