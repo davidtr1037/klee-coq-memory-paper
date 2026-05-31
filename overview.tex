@@ -35,11 +35,11 @@ since \SE engines employs various encoding optimizations which may not be fully 
 
 \subsection{Running Example}
 
-Consider the \llvm IR program in~\Cref{figure:overview-llvm},
-and suppose that we want to prove that this program is \emph{safe},
-\ie it does not trigger any errors for valid inputs.
-The program allocates a heap object using \code{malloc} (\cref{line:overview-llvm-malloc}), and then acesses it at offset \code{n} (\cref{line:overview-llvm-store}).
-Here, we assume that the input \code{n} satisfies the precondition $0 \leq \code{n} < 10$.
+Consider the \llvm IR program shwon on the left side of~\Cref{figure:overview-llvm}.
+Suppose that we want to prove that this program is \emph{safe},
+\ie it does not trigger errors for any valid inputs.
+The program first allocates a heap object (\cref{line:overview-llvm-malloc}) and then,
+if a certain condition over \code{n} is satisfied (\cref{line:overview-llvm-br}), it accesses the allocated object at offset \code{n} (\cref{line:overview-llvm-store}).
 
 % what happens with a standard SE engine?
 A standard \SE engine will analyze this program by executing it with symbolic values rather than concrete ones.
