@@ -65,7 +65,7 @@ so it forks the state $s_2$ into two states: $s_3$ and $s_4$.
 At~\cref{line:overview-llvm-store},
 it stores the value \code{7} into the address given by \code{p}, resulting in the symbolic state $s_6$.
 To do so,
-it validates that this access may not be out-of-bounds by querying the SMT solver to check the satisfiability of the condition $n / 2 = 4 \land n \geq 10 \lor n < 0$.
+it validates that this access may not be out-of-bounds by querying the SMT solver to check the satisfiability of the condition $n / 2 = 4 \land \neg (0 \leq n < 10)$.
 In this case, this condition is unsatisfiable, so this access is guaranteed to be error-free.
 Overall, it explores all the feasible paths without reporting any errors.
 
@@ -114,40 +114,39 @@ $s_1$ is the symbolic state derived from $s_0$ by the executable symbolic semant
 \ie $s_1$ is computed by the \SE engine when executing the instruction at~\cref{line:overview-llvm-malloc},
 and $\bar{s}_1$ is the symbolic state derived from $s_0$ by the mechanized symbolic semantics.
 
-When we execute the instruction of $s_i$,
+When the \SE engine executes the current instruction of $s_i$,
 we generate a lemma stating that the subtree of $s_i$ satisfies the safety properties.
 Once the analysis of the whole program is complete,
 we compose those lemmas in a bottom-up manner to obtain a lemma stating that the whole execution tree satisfies the safety properties.
 Here, for example,
 the lemmas corresponding to $s_3$ and $s_7$ are generated first, and the lemma corresponding to $s_0$ is generated only at the end.
 
-To give intuition about how those lemmas are proven, consider the subtree of X.\footnote{
+To give intuition about how those lemmas are proven, consider the subtree of $s_5$.\footnote{
 An extended and formal example will be given in~\Cref{sec:proof-generation}.
 }
-The current instruction at X is the \code{store} instruction at~\cref{line:overview-llvm-store}.
+The current instruction of $s_5$ is the \code{store} instruction at~\cref{line:overview-llvm-store}.
 
 First, we need to prove that this subtree is \emph{error-free}.
 More specifically,
-we need to prove that X is not an error symbolic state.
-In the case of a \code{store} instruction,
-we need to show that X cannot point to an out-of-bounds address.
-Here, X points to a single object,
+we need to prove that $s_5$ is not an error symbolic state.
+In this case,
+we need to show that the address given by \code{p} cannot point to an out-of-bounds address.
+Here, this address points to a single object,
 the one allocated at~\cref{line:overview-llvm-malloc},
-so it will suffice to prove that the constraint X is unsatisfiable.
+so it will suffice to prove that the constraint $n / 2 = 4 \land \neg (0 \leq n < 10)$ is unsatisfiable.
 
 Second, we need to prove that this subtree is \emph{complete}.
 More specifically,
-we need to prove that if X can be derived from X by the mechanized symbolic semantics,
-then either X is infeasible or there exist a successor of X in the subtree that is equivalent to X.
+we need to prove that if $\bar{s}$ can be derived from $s_5$ by the mechanized symbolic semantics,
+then either $\bar{s}$ is infeasible, \ie its path constraints are unsatisfiable, or there exists a successor of $s_5$ in the subtree that is equivalent to $\bar{s}$.
 In the case of a \code{store} instruction,
 the mechanized symbolic semantics may derive multiple symbolic states,
-depending on the number of objects that may be pointed by X.
-Here, X points to a single object, so there is only one derived symbolic state.
+depending on the number of objects that may be pointed by the accessed address.
+Here, the address given by \code{p} points to a single object, so there is only one derived symbolic state, namely $\bar{s}_6$.
 This state is not infeasible,
-so we need to prove that these two symbolic states are equivalent (SMT level).
-In general, the mechanized semantics may differ from the symbolic semantics of the \SE engine,
-so the equivalence proof might not be immediate.
+so we need to prove that $s_6$ and $\bar{s}_6$ are equivalent.
+%In general, the mechanized semantics may differ from the symbolic semantics of the \SE engine,
+%so the equivalence proof might not be immediate.
 
-% TODO: improve
-Lastly, will need to prove that the subtree of X (the successor of X) is safe.
-This can be done immediately due to the bottom-up construction of the proof.
+Lastly, will need to prove that the subtree of $s_6$, \ie the successor of $s_5$, is safe as well.
+This follows immediately since the proof is constructed in a bottom-up fashion.
