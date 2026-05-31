@@ -46,7 +46,8 @@ A standard \SE engine analyzes this program by executing it with symbolic values
 It performs the analysis by tracking symbolic states that abstractly represent the program environment.
 Each symbolic state consists of a program counter, a symbolic store for registers, a symbolic memory, and path constraints accumulated along the execution path.
 
-An \emph{execution tree} is a data structure that describes the paths explored during the analysis.
+%An \emph{execution tree} is a data structure that describes the paths explored during the analysis.
+The paths explored during the analysis of the program are described by the \emph{execution tree} of the program.
 In this example,
 the execution tree of the program is shown on the right side of~\Cref{figure:overview-llvm}.
 More specifically,
@@ -70,8 +71,10 @@ In this case, this condition is unsatisfiable, so this access is guaranteed to b
 Overall, it explores all the feasible paths without reporting any errors.
 
 % why is it not enoguh?
-However, a standard \SE engine is a complex software system.
-A single bug in its implementation can compromise the integrity of the analysis, leading to undetected errors.
+However, if the \SE engine itself is not verified,
+the absence of reported errors during the analysis of the program does not guarantee the safety of that program.
+\SE engines are complex software systems,
+and a single bug in their implementation can compromise the integrity of their analysis, leading to undetected errors.
 To reduce the reliance on a massive trusted computing base,
 our goal is to generate an independent and machine-checked proof ensuring that an exhaustive exploration of the input program indeed guarantees the safety of that program.
 
