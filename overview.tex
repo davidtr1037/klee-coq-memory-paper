@@ -105,13 +105,11 @@ This way, we decompose the global proof obligation of the entire program into in
 
 To illustrate the proof generation process, consider again the \llvm IR program in~\Cref{figure:overview-llvm}.
 On the right side of~\Cref{figure:overview-llvm},
-the yellow nodes correspond to the symbolic states derived by the executable symbolic semantics, \ie those computed by the \SE engine,
-and the blue nodes correspond to the symbolic states derived by the mechanized symbolic semantics.
-Hence, the execution tree of this program is described by the yellow section of that figure.
+the blue nodes correspond to the symbolic states derived by the mechanized symbolic semantics.
+Recall that the yellow nodes correspond to the symbolic states derived by the executable symbolic semantics.
 %Each node $s_i$ corresponds to a symbolic state,
 %and its successors are the symbolic states computed by the \SE engine while executing the current instruction of $s_i$.
 Here, for example,
-$s_0$ is the initial symbolic state,
 $s_1$ is the symbolic state derived from $s_0$ by the executable symbolic semantics,
 \ie $s_1$ is computed by the \SE engine when executing the instruction at~\cref{line:overview-llvm-malloc},
 and $\bar{s}_1$ is the symbolic state derived from $s_0$ by the mechanized symbolic semantics.
