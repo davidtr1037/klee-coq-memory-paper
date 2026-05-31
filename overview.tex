@@ -33,7 +33,7 @@ since \SE engines employs various encoding optimizations which may not be fully 
 \label{figure:overview-llvm}
 \end{figure}
 
-\subsection{Running Example}
+\subsection{Motivating Example}
 
 Consider the \llvm IR program shwon on the left side of~\Cref{figure:overview-llvm}.
 Suppose that we want to prove that this program is \emph{safe},
@@ -42,28 +42,36 @@ The program first allocates a heap object (\cref{line:overview-llvm-malloc}) and
 if a certain condition over \code{n} is satisfied (\cref{line:overview-llvm-br}), it accesses the allocated object at offset \code{n} (\cref{line:overview-llvm-store}).
 
 % what happens with a standard SE engine?
-A standard \SE engine will analyze this program by executing it with symbolic values rather than concrete ones.
-The analysis is carried by tracking symbolic states that abstractly represent the program environment.
+A standard \SE engine analyzes this program by executing it with symbolic values rather than concrete ones.
+It performs the analysis by tracking symbolic states that abstractly represent the program environment.
 Each symbolic state consists of a program counter, a symbolic store for registers, a symbolic memory, and path constraints accumulated along the execution path.
+
+The execution tree of the program is shown on the right side of~\Cref{figure:overview-llvm}.
+More specifically,
+it consists of the yellow nodes which correspond to the symbolic states derived by the executable symbolic semantics, \ie those computed by the \SE engine.\footnote{
+For now, ignore the blue nodes.
+}
+
 In this example,
-it will model the input \code{n} as a symbolic value $n$, while adding the precondition $n < 10$ to the path constraints.
+the \SE engine models the input \code{n} as a symbolic value $n$.
+It starts the symbolic execution of the program from the initial state $s_0$.
 At~\cref{line:overview-llvm-malloc},
-it will allocate a heap object of size 10.
-At~\cref{line:overview-llvm-gep},
-it will compute the pointer \code{p} to be accessed.
+it allocates a heap object of size 10, resulting in the symbolic state $s_1$.
+At~\cref{line:overview-llvm-br},
+both sides of the branch are feasible,
+so it forks the state $s_2$ into two states: $s_3$ and $s_4$.
 At~\cref{line:overview-llvm-store},
-it will store the value \code{7} into \code{p}.
+it stores the value \code{7} into the address given by \code{p}, resulting in the symbolic state $s_6$.
 To do so,
-it will first check whether this access may be out-of-bounds,
-by checking using the SMT solver the satisfiability of the condition $n \geq 10 \lor n < 0$ with respect to the path constraints.
+it validates that this access may not be out-of-bounds by querying the SMT solver to check the satisfiability of the condition $n / 2 = 4 \land n \geq 10 \lor n < 0$ with respect to the path constraints.
 In this case, this condition is unsatisfiable, so this access is guaranteed to be error-free.
-Overall, it will explore all the feasible paths without reporting any errors.
+Overall, it explores all the feasible paths without reporting any errors.
 
 % why is it not enoguh?
 However, a standard \SE engine is a complex software system.
-Even a single bug in its implementation can compromise the integrity of the analysis, leading to undetected errors.
+A single bug in its implementation can compromise the integrity of the analysis, leading to undetected errors.
 To reduce the reliance on a massive trusted computing base,
-our goal is to generate an independent and machine-checked proof ensuring that an exhaustive exploration of the input program indeed guarantees its safety.
+our goal is to generate an independent and machine-checked proof ensuring that an exhaustive exploration of the input program indeed guarantees the safety of that program.
 
 % theory
 \subsection{Theoretical Framework}
