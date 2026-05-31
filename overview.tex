@@ -80,9 +80,9 @@ our goal is to generate an independent and machine-checked proof ensuring that a
 
 To generate machine-checked safety proofs, we develop a formal framework in \coq.
 Our theoretical framework defines the concrete (\Cref{sec:concrete-semantics}) and symbolic (\Cref{sec:symbolic-semantics}) semantics of \llvm.
-When the symbolic execution of a given program is \emph{exhaustive},
-the explored paths form an \emph{execution tree},
-where each node represents a symbolic state computed by the \SE engine.
+%When the symbolic execution of a given program is \emph{exhaustive},
+%the explored paths form an \emph{execution tree},
+%where each node represents a symbolic state computed by the \SE engine.
 The main result of our theoretical framework is the \emph{program safety} theorem (\Cref{theorem:safety-via-et}).
 Intuitively, this theorem states that if the execution tree of the program satisfies certain \emph{safety properties},
 then the program is safe with respect to the concrete \llvm semantics.
@@ -97,7 +97,7 @@ providing a foundation for automating proof generation.
 
 To apply the \emph{program safety} theorem,
 we must provide an execution tree that satisfies the safety properties mentioned above.
-To do so, we instrument the \SE engine to generate an execution tree along with a proof showing that it satisfies the desired properties.
+To do so, we instrument the \SE engine to generate an execution tree along with a proof showing that it satisfies the desired safety properties.
 More specifically,
 for every instruction executed by the \SE engine,
 we generate a lemma that proves the safety properties of the corresponding subtree.
