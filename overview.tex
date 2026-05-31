@@ -46,12 +46,13 @@ A standard \SE engine analyzes this program by executing it with symbolic values
 It performs the analysis by tracking symbolic states that abstractly represent the program environment.
 Each symbolic state consists of a program counter, a symbolic store for registers, a symbolic memory, and path constraints accumulated along the execution path.
 
-The execution tree of the program is shown on the right side of~\Cref{figure:overview-llvm}.
+An \emph{execution tree} is a data structure that describes the paths explored during the analysis.
+In this example,
+the execution tree of the program is shown on the right side of~\Cref{figure:overview-llvm}.
 More specifically,
 it consists of the yellow nodes which correspond to the symbolic states derived by the executable symbolic semantics, \ie those computed by the \SE engine.\footnote{
 For now, ignore the blue nodes.
 }
-Intuitively, the execution tree describes the paths explored during the analysis.
 
 In this example,
 the \SE engine models the input \code{n} as a symbolic value $n$.
@@ -64,7 +65,7 @@ so it forks the state $s_2$ into two states: $s_3$ and $s_4$.
 At~\cref{line:overview-llvm-store},
 it stores the value \code{7} into the address given by \code{p}, resulting in the symbolic state $s_6$.
 To do so,
-it validates that this access may not be out-of-bounds by querying the SMT solver to check the satisfiability of the condition $n / 2 = 4 \land n \geq 10 \lor n < 0$ with respect to the path constraints.
+it validates that this access may not be out-of-bounds by querying the SMT solver to check the satisfiability of the condition $n / 2 = 4 \land n \geq 10 \lor n < 0$.
 In this case, this condition is unsatisfiable, so this access is guaranteed to be error-free.
 Overall, it explores all the feasible paths without reporting any errors.
 
