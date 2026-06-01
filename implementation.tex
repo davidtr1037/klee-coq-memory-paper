@@ -14,7 +14,7 @@ but we plan to support them in future versions.
 In the $\tgep$ instruction, our implementation currently supports only the \opcode{nuw} attribute.
 We found several implementation issues in \klee that relate to memory modeling, which we discuss next.
 
-\textbf{\textit{Inconsistent modeling of the index type.}}
+\paragraph{Issue 1: Inconsistent modeling of the index type}
 On one side,
 \klee uses SMT arrays of sort $\arraysort{\smtsort{32}}{\smtsort{8}}$ to represent the contents of memory objects,
 which suggests that the modeled index type is $\bvsort{32}$.
@@ -22,7 +22,14 @@ On the other side,
 \klee computes the offsets in the interpretation of $\tgep$ using SMT expressions of sort $\smtsort{64}$,
 which suggests that the modeled index type is $\bvsort{64}$.
 
-\textbf{\textit{Memory Allocation.}}
+\paragraph{Issue 2: Incorrect Interpretation of \textup{$\tgep$}}
+\klee does not account for overflows in the offset computation, thus not fully compliant with the \llvm reference.
+To fix this,
+we modified the offset computation to conform to the index type $\bvsort{32}$,
+ensuring consistency with the index sort $\smtsort{32}$ used in the SMT arrays,
+and we report an error when such overflows occur.
+
+\paragraph{Issue 3: Incorrect Interpretation of Memory Allocations}
 According to the \llvm semantics,
 if the allocation size exceeds the largest \emph{signed integer} representable by the index type,
 then the result is undefined behavior.
@@ -31,13 +38,6 @@ Moreover, \klee silently truncates the allocation size to the \code{uint32\_t} t
 For example, if we allocate an object of size $2^{32} + 10$,
 then the allocation size is internally cast to $10$,
 and if later we access that object at offset $10$, then we will get an out-of-bounds error, which is a false positive.
-
-\textbf{\textit{Incorrect Interpretation of \textup{$\tgep$}.}}
-\klee does not account for overflows in the offset computation, thus not fully compliant with the \llvm reference.
-To fix this,
-we modified the offset computation to conform to the index type $\bvsort{32}$,
-ensuring consistency with the index sort $\smtsort{32}$ used in the SMT arrays,
-and we report an error when such overflows occur.
 
 %To fix this, we modified the interpretation of $\tgep$ as follows:
 %First, we modified the offset computation to conform to the index type $\bvsort{32}$,
