@@ -80,10 +80,10 @@ For example, \klee~\cite{klee} uses multiple representations for memory objects,
 In this paper,
 we apply proof logging to memory-manipulating programs in \llvm.
 To the best of our knowledge,
-this is the first tool that generates machine-checked safety proofs for this subset of \llvm.
+this is the first tool that generates machine-checked safety proofs for this subset of \llvm IR.
 Our approach builds on~\cite{klee-rocq} and introduces several substantial extensions, requiring a significant theoretical and engineering effort.
 First, we extend the concrete and symbolic semantics to support memory-related instructions.
-Then, we extend the theoretical foundation which allows to prove program safety based on properties of execution trees.
+Then, we extend the theoretical framework which allows to prove program safety based on properties of execution trees.
 Lastly, we extend \klee to generate safety proofs based on our formalization.
 To address the gap between the formalized symbolic semantics and the heavily-optimized behavior in \klee,
 we develop an additional theory that helps to interact with various parts of our formalization.
@@ -95,9 +95,8 @@ The entire development of this paper comes with proofs in \coq~\cite{rocq}.
 % TODO: implemented ...
 \begin{paragraph}{\textbf{Main Contributions:}}
 \begin{itemize}
-\item A formalization in \coq consisting of a concrete and symbolic semantics for a subset of \llvm with memory operations
-      and a theoretical foundation for constructing safety proofs.
-\item An extension of \klee that generates safety proofs based on our formalization.
+\item We developed a \coq framework consisting of a concrete and symbolic semantics for a subset of \llvm with memory operations and a theoretical foundation for constructing safety proofs.
+\item We implemented an extension of \klee that generates safety proofs based on our framework.
 \item We evaluated our approach on APIs from real-world benchmarks, and found previously unknown issues in the memory modeling in \klee.\footnote{
       These issues were confirmed by the maintainers of \klee. The link is omitted due to double-blind reviewing.
       }
@@ -107,9 +106,9 @@ The entire development of this paper comes with proofs in \coq~\cite{rocq}.
 
 % TODO: mention the size of the Rocq formalization?
 This paper is organized as follows.
-In~\Cref{sec:background}, we provide background on LLVM IR and SMT.
-In~\Cref{sec:concrete-semantics} and \Cref{sec:symbolic-semantics}, we present our concrete and symbolic semantics of a subset of LLVM IR with memory operations, respectively.
+In~\Cref{sec:background}, we provide background on \llvm IR and SMT.
 In~\Cref{sec:overview}, we provide an overview of our approach.
+In~\Cref{sec:concrete-semantics} and \Cref{sec:symbolic-semantics}, we present our concrete and symbolic semantics of a subset of \llvm IR with memory operations, respectively.
 In~\Cref{sec:program-safety}, we present our theoretical foundation, which enables proving safety of prorgrams based on properties related to the symbolic semantics.
 In~\Cref{sec:proof-generation}, we show how to instrument the \SE engine to generate safety proofs based on the theoretical foundation presented in~\Cref{sec:program-safety}.
 In~\Cref{sec:implementation}, we provide details about our formalization (in \coq) and our implementation (on top of \klee).
