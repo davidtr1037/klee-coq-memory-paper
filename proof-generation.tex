@@ -1,10 +1,12 @@
 \section{Proof Generation}
 \label{sec:proof-generation}
 
-\Cref{theorem:safety-via-et} implies that the existence of a safe execution tree guarantees program safety with respect to the concrete semantics.
-This result is crucial, as it provides the foundation for constructing safety proofs.
-In this section, we show how to compute such execution trees and how to prove their desired properties.
-Our approach works as an instrumentation of the \SE engine, and we extend it to support memory operations.
+Ultimately, our goal is to prove that the analyzed program is safe.
+%\Cref{theorem:safety-via-et} implies that the existence of a safe execution tree guarantees program safety with respect to the concrete semantics.
+%This result is crucial, as it provides the foundation for constructing safety proofs.
+\Cref{theorem:safety-via-et} guarantees that the program is safe with respect to the concrete semantics if one proves that the execution tree of that program is safe.
+In this section, we show how to compute such an execution tree and how to prove its safety properties.
+%Our approach works as an instrumentation of the \SE engine, and we extend it to support memory operations.
 
 The final outcome of our approach is a \coq proof consisting of a \emph{static} and \emph{dynamic} sections.
 The static section is written manually and it contains the various definitions that were given in~\Cref{sec:concrete-semantics,sec:symbolic-semantics,sec:program-safety}:
