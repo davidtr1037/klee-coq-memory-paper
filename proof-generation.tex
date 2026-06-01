@@ -103,14 +103,14 @@ We generate this proof in a bottom-up manner as well, showing that each subtree 
 The proof of each subtree corresponds to a single instruction that was executed during the analysis.
 Generating an explicit proof from scratch for each subtree is expensive in terms of proof generation,
 and it also makes the proof checking inefficient,
-as such a proof requires expensive \coq tactics such as: \textit{inversion}, \textit{subst}, \etc
+as such a proof requires expensive \coq tactics (\eg \textit{inversion} and \textit{subst}).
 Instead, we adapt the approach proposed in~\cite{klee-rocq},
 and create for each instruction type a generic lemma that can be used to infer execution tree safety.
 We call these lemmas \emph{interface} lemmas,
 as they facilitate an effective interaction between the static and dynamic sections of the proof.
 By using such interface lemmas,
 we accelerate both proof generation and proof checking,
-since we create smaller proofs which mainly rely on simple tactics such as \textit{apply} and \textit{reflexivity}.
+since we create smaller proofs which mainly rely on simple \coq tactics (\eg \textit{apply} and \textit{reflexivity}).
 
 Now, we will show how to define such interface lemmas,
 and how to apply them in the context of the \llvm IR program on the left of~\Cref{figure:example-llvm}.
