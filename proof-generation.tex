@@ -50,7 +50,7 @@ Once the representation of a memory object is switched to the non-optimized one,
 For example, after executing~\cref{line:example-store} of the C program in~\Cref{figure:example-llvm},
 the contents of the memory object allocated at~\cref{line:example-malloc} are encoded using the optimized representation as:
 \[ \{ 0 \mapsto \bvconst{8}{7}, 1 \mapsto \bvconst{8}{0} \} \]
-If afterwards, we were to execute the instruction \code{p[n] = 1},
+If afterwards, we were to execute an instruction that writes the value \code{1} to the address \code{p + n},
 then we would switch to the non-optimized representation, resulting in the following encoding:
 \[ \arraystore{\arraystore{\arraystore{\arrayconst{\arrayinitvalue}}{\bvconst{32}{0}}{\bvconst{8}{7}}}{\bvconst{32}{1}}{\bvconst{8}{0}}}{n}{\bvconst{8}{1}} \]
 
