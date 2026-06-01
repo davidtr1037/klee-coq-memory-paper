@@ -72,21 +72,16 @@ Accordingly, we translate the internal heap into a list of memory objects in \co
 \subsection{Proving Execution Tree Safety using Interface Lemmas}
 \label{sec:proof-et}
 
-% TODO: explain how we prove the the ET is safe
-% TODO: explain the concept of interface lemmas (why needed? ...)
 % TODO: use \bvconst instead of regular constants?
 % TODO: in this section: iptr = i64 / iidx = i32
 % TODO: an example of ET def?
 
-% proving safety of steps: load, store, malloc/alloca, free
-% handling different encodings of SMT arrays (KLEE/Coq)
+% TODO: explain the UNSAT query in gep
+% TODO: explain the UNSAT query in symbolic load/store
 
-% example for gep (concrete / symbolic)
-% example for load (concrete / symbolic)
-% example for store (concrete / symbolic)
-% use an example with load/store of i8?
-% explain the UNSAT query in gep
-% explain the UNSAT query in symbolic load/store
+The most challenge part in the proof generation process is proving that the execution tree of the program is safe.
+This eventually enables us to prove program safety using~\Cref{theorem:safety-via-et}.
+In this section, we describe in detail how to generate this part of the proof.
 
 First, we generate the definition of the execution tree in a bottom-up manner.
 Then, we have to prove that the resulting execution tree satisfies the $\safeet$ relation (\Cref{def:safe-et}).
