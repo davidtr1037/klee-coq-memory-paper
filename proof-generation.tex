@@ -56,17 +56,6 @@ If afterwards, we were to execute an instruction that writes the value \code{1} 
 then we would switch to the non-optimized representation, resulting in the following encoding:
 \[ \arraystore{\arraystore{\arraystore{\arrayconst{\arrayinitvalue}}{\bvconst{32}{0}}{\bvconst{8}{7}}}{\bvconst{32}{1}}{\bvconst{8}{0}}}{n}{\bvconst{8}{1}} \]
 
-\begin{figure}
-\begin{minipage}[t]{0.60\columnwidth}
-\lstinputlisting[basicstyle=\scriptsize\ttfamily,language=llvm,mathescape=true,breaklines=false]{code/example.simple.ll}
-\end{minipage}
-\begin{minipage}[t]{0.38\columnwidth}
-\lstinputlisting[basicstyle=\scriptsize\ttfamily,language=c,mathescape=true,breaklines=false]{code/example.simple.c}
-\end{minipage}
-\caption{A simple C program (right) and a snippet from its \llvm IR (left).}
-\label{figure:example-llvm}
-\end{figure}
-
 \subsection{Translating Modules and Symbolic States}
 \label{sec:proof-translation}
 We translate the \llvm module into its corresponding representation in \coq,
@@ -113,6 +102,17 @@ as they facilitate an effective interaction between the static and dynamic secti
 By using such interface lemmas,
 we accelerate both proof generation and proof checking,
 since we create smaller proofs which mainly rely on simple \coq tactics (\eg \textit{apply} and \textit{reflexivity}).
+
+\begin{figure}
+\begin{minipage}[t]{0.60\columnwidth}
+\lstinputlisting[basicstyle=\scriptsize\ttfamily,language=llvm,mathescape=true,breaklines=false]{code/example.simple.ll}
+\end{minipage}
+\begin{minipage}[t]{0.38\columnwidth}
+\lstinputlisting[basicstyle=\scriptsize\ttfamily,language=c,mathescape=true,breaklines=false]{code/example.simple.c}
+\end{minipage}
+\caption{A simple C program (right) and a snippet from its \llvm IR (left).}
+\label{figure:example-llvm}
+\end{figure}
 
 Now, we will show how to define such interface lemmas,
 and how to apply them in the context of the \llvm IR program on the left of~\Cref{figure:example-llvm}.
