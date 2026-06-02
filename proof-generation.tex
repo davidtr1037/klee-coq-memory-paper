@@ -115,7 +115,8 @@ We denote by $\location_n$ the program location that corresponds to line $n$ in~
 
 % TODO: say that there is not overflow in the interval
 \subsubsection{Example: Malloc}
-The initial symbolic state at~\cref{line:llvm-malloc} is $s \triangleq \symstate{\location_1}{\{ \}}{[]}{[]}{\true}$.
+Let $s \triangleq \symstate{\location_1}{\{ \}}{[]}{[]}{\true}$ by the initial symbolic state at~\cref{line:llvm-malloc},
+and suppose that we want to prove that the subtree of $s$ is safe.
 %\[
 %s \triangleq \symstate
 %    {\location_1}
@@ -124,9 +125,10 @@ The initial symbolic state at~\cref{line:llvm-malloc} is $s \triangleq \symstate
 %    {[]}
 %    {\true}
 %\]
-In general, the \rulenameref{Malloc} rule may result in multiple derivations,
-but in this case, the size argument of \textit{malloc} is evaluated to a constant SMT expression,
-so the only derived symbolic state is $s' \triangleq \symstate{\location_2}{\{ \nameid{p} \mapsto \bvconst{64}{\addr} \}}{[]}{[(\bvval{\addr}{64}, \bvval{2}{32}, \arrayconst{\arrayinitvalue})]}{\true}$,
+In general, the \rulenameref{Malloc} rule (\Cref{sec:symbolic-semantics}) may derive multiple symbolic states.
+Here, however, the size argument of \textit{malloc} is evaluated to a constant SMT expression,
+so the only derived symbolic state is:
+\[ \mechstate{s} \triangleq \symstate{\location_2}{\{ \nameid{p} \mapsto \bvconst{64}{\addr} \}}{[]}{[(\bvval{\addr}{64}, \bvval{2}{32}, \arrayconst{\arrayinitvalue})]}{\true} \]
 %\[
 %s' \triangleq \symstate
 %    {\location_2}
@@ -139,7 +141,7 @@ where $\bvval{\addr}{64}$ is the allocated base address.
 At this point, the \SE engine uses an optimized representation for the allocated memory object, as no stores have been performed yet,
 so the symbolic state computed by the \SE engine is:
 \[
-s'_{opt} \triangleq \symstate
+s_{opt} \triangleq \symstate
     {\location_2}
     {\{ \nameid{p} \mapsto \bvconst{64}{\addr} \}}
     {[]}
@@ -149,13 +151,13 @@ s'_{opt} \triangleq \symstate
 Now, we have to prove that the subtree of $s$ is safe.
 Note that $\evalexprty{2}{\symlocalstore}{\bvsort{64}} = \bvconst{64}{2}$,
 so $s$ is not an error state.
-To prove that $s' \equiv s'_{opt}$,
+To prove that $\mechstate{s} \equiv s_{opt}$,
 it suffices to prove that their memory is equivalent.
 The SMT arrays in those two symbolic states are encoded differently,
 but they are actually equivalent, since the additional store expressions contain the same value $\arrayinitvalue$ as in $\arrayconst{\arrayinitvalue}$.
 
 To handle such cases in general, we define an interface lemma for \textit{malloc}, which is stated as~\Cref{lemma:interface-malloc}.
-In this case, we can apply~\Cref{lemma:interface-malloc} with $n$ as 2, $\symmo$ as the memory object from $s'_{opt}$, and $t$ as the subtree of $s'_{opt}$.
+In this case, we can apply~\Cref{lemma:interface-malloc} with $n$ as 2, $\symmo$ as the memory object from $s_{opt}$, and $t$ as the subtree of $s_{opt}$.
 % TODO: show why the preconditions hold?
 
 Note that this lemma assumes that the size argument of \textit{malloc} is evaluated to a concrete SMT expression.
@@ -175,14 +177,12 @@ If there exist $n$, $\symmo$, and $t$ such that:
 \begin{enumerate}
     \item \textup{$\evalexprty{e}{\symlocalstore}{\bvsort{64}} \equiv \bvconst{64}{n}$} and \textup{$\bvval{n}{64} < \bvval{(2^{\indexwidth - 1} - 1)}{64}$}
     \item \textup{$\symmo \equiv (\bvval{\addr}{64}, \bvval{n}{32}, \arrayconst{\arrayinitvalue})$}
-    \item \textup{$t.\attrstate = \symstate{\nextinstr{\location}}{\symlocalstore[x \mapsto \bvconst{64}{\addr}]}{\symstack}{\symmo :: \symmemory}{\pc}$}
+    \item \textup{$t.\attrstate = \symstate{\nextinstr{\location}}{\symlocalstore[x \mapsto \bvconst{64}{\addr}]}{\symstack}{\symmemory \cup \{\symmo\}}{\pc}$}
     \item $\safeet(t)$
 \end{enumerate}
 then $\safeet(\tree(s, [t]))$.
 \end{lemma}
 
-Due to space limitations,
-the interface lemmas for the rest of the examples are defined in the appendix (\Cref{lemma:interface-store,lemma:interface-gep,lemma:interface-load}).
 \subsubsection{Example: Store}
 % TODO: explain how to prove that this is not an error state
 % TODO: the type is i8, so we add a single store expression
