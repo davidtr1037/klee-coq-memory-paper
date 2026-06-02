@@ -85,13 +85,12 @@ In this section, we describe in detail how to generate this part of the proof.
 
 First, we generate the definition of the execution tree in a bottom-up manner.
 Then, we have to prove that the resulting execution tree satisfies the $\safeet$ relation (\Cref{def:safe-et}).
-We generate this proof in a bottom-up manner as well, showing that each subtree satisfies the required properties.
-The proof of each subtree corresponds to a single instruction that was executed during the analysis.
-Generating an explicit proof from scratch for each subtree is expensive in terms of proof generation,
+We generate this proof in a bottom-up manner as well, showing that each subtree satisfies the required relation.
+The proof of each subtree corresponds to a single instruction executed during the analysis.
+Generating explicit proofs from scratch for each subtree is expensive in terms of proof generation,
 and it also makes the proof checking inefficient,
-as such a proof requires expensive \coq tactics (\eg \textit{inversion} and \textit{subst}).
-Instead, we adapt the approach proposed in~\cite{klee-rocq},
-and create for each instruction type a generic lemma that can be used to infer execution tree safety.
+as such proofs require expensive \coq tactics (\eg \textit{inversion} and \textit{subst}).
+Instead, we create for each instruction type a generic lemma that can be used to infer execution tree safety.
 We call these lemmas \emph{interface} lemmas,
 as they facilitate an effective interaction between the static and dynamic sections of the proof.
 By using such interface lemmas,
