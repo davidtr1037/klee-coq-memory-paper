@@ -111,15 +111,14 @@ since we create smaller proofs which mainly rely on simple \coq tactics (\eg \te
 Now, we will show how to define such interface lemmas,
 and how to apply them in the context of the \llvm IR program on the left of~\Cref{figure:example-llvm}.
 In this example,
-assume that $\location_n$ is the program location corresponding to line $n$ in~\Cref{figure:example-llvm}.
+assume that $\location_n$ is the program location corresponding to line $n$.
 In addition,
-assume that $s_n$ is the symbolic state after the execution line $n$ in~\Cref{figure:example-llvm},
-and $s_0$ is the initial symbolic state.
+assume that $s_n$ is the symbolic state after the execution of line $n$ and $s_0$ is the initial symbolic state.
 
 % TODO: say that there is not overflow in the interval
 \subsubsection{Example: Malloc}
-Let $s \triangleq \symstate{\location_1}{\{ \}}{[]}{[]}{\true}$ by the initial symbolic state at~\cref{line:llvm-malloc},
-and suppose that we want to prove that the subtree of $s$ is safe.
+Let $s_0 \triangleq \symstate{\location_1}{\{ \}}{[]}{[]}{\true}$ by the initial symbolic state at~\cref{line:llvm-malloc},
+and suppose that we want to prove that the subtree of $s_0$ is safe.
 %\[
 %s \triangleq \symstate
 %    {\location_1}
@@ -131,7 +130,7 @@ and suppose that we want to prove that the subtree of $s$ is safe.
 In general, the \rulenameref{Malloc} rule (\Cref{sec:symbolic-semantics}) may derive multiple symbolic states.
 Here, however, the size argument of \textit{malloc} is evaluated to a constant SMT expression,
 so the only derived symbolic state is:
-\[ \mechstate{s} \triangleq \symstate{\location_2}{\{ \nameid{p} \mapsto \bvconst{64}{\addr} \}}{[]}{[(\bvval{\addr}{64}, \bvval{2}{32}, \arrayconst{\arrayinitvalue})]}{\true} \]
+\[ \mechstate{s}_1 \triangleq \symstate{\location_2}{\{ \nameid{p} \mapsto \bvconst{64}{\addr} \}}{[]}{[(\bvval{\addr}{64}, \bvval{2}{32}, \arrayconst{\arrayinitvalue})]}{\true} \]
 %\[
 %s' \triangleq \symstate
 %    {\location_2}
@@ -144,23 +143,23 @@ where $\bvval{\addr}{64}$ is the allocated base address.
 At this point, the \SE engine uses an optimized representation for the allocated memory object, as no stores have been performed yet,
 so the symbolic state computed by the \SE engine is:
 \[
-s_{opt} \triangleq \symstate
+s_1 \triangleq \symstate
     {\location_2}
     {\{ \nameid{p} \mapsto \bvconst{64}{\addr} \}}
     {[]}
     {[(\bvval{\addr}{64}, \bvval{2}{32}, \arraystore{\arraystore{\arrayconst{\arrayinitvalue}}{\bvconst{32}{0}}{\arrayinitvalue}}{\bvconst{32}{1}}{\arrayinitvalue})]}
     {\true}
 \]
-Now, we have to prove that the subtree of $s$ is safe.
-Note that $\evalexprty{2}{\symlocalstore}{\bvsort{64}} = \bvconst{64}{2}$,
-so based on~\Cref{def:sym-error-state}, $s$ is not an error state.
-To prove that $\mechstate{s} \equiv s_{opt}$,
+Now, we have to prove that the subtree of $s_0$ is safe.
+Based on~\Cref{def:sym-error-state},
+$s_0$ is not an error state since $\evalexprty{2}{\symlocalstore}{\bvsort{64}} = \bvconst{64}{2}$.
+To prove that $\mechstate{s}_1 \equiv s_1$,
 it suffices to prove that their memory is equivalent.
 The SMT arrays in those two symbolic states are encoded differently,
 but they are actually equivalent, since the additional store expressions contain the same value $\arrayinitvalue$ as in $\arrayconst{\arrayinitvalue}$.
 
 To handle such cases in general, we define an interface lemma for \textit{malloc}, which is stated as~\Cref{lemma:interface-malloc}.
-In this case, we can apply~\Cref{lemma:interface-malloc} with $n$ as 2, $\symmo$ as the memory object from $s_{opt}$, and $t$ as the subtree of $s_{opt}$.
+In this case, we can apply~\Cref{lemma:interface-malloc} with $n$ as 2, $\symmo$ as the memory object from $s_1$, and $t$ as the subtree of $s_1$.
 % TODO: show why the preconditions hold?
 
 Note that this lemma assumes that the size argument of \textit{malloc} is evaluated to a concrete SMT expression.
