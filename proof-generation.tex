@@ -255,19 +255,18 @@ note that $\rangecond(\bvconst{64}{\addr}, 1, \mo) \equiv \true$, so the equival
 
 To handle such cases in general, we define an interface lemma for \textit{store}, which is stated as~\Cref{lemma:interface-store}.
 
+% TODO: exists p
 \begin{lemma}
 \label{lemma:interface-store}
 Let $s \triangleq \symstate{\location}{\symlocalstore}{\symstack}{\symmemory}{\pc}$,
 where \textup{$\instrat{\location} = \codequote{\tstore^{\tau}~e_1~e_2}$}.
-If there exist $\mo$, $\mo'_{opt}$, and $t$ such that:
+If there exist $\mo$, $\mo_{new}$, and $t$ such that:
 \begin{enumerate}
     \item $\symmemory$ is well-formed
-    \item $\mo \in \symmemory$
-    \item $\evalexprty{e_1}{\symlocalstore}{\tau} = v$
-    \item $\evalexprty{e_2}{\symlocalstore}{\bvsort{64}} = \bvconst{64}{p}$
-    \item $\isinbounds{\bvval{p}{64}}{|\tau|}{\mo}$
-    \item $\mo'_{opt} \equiv \mowrite{\tau}{\mo}{\bvconst{64}{p}}{v}$
-    \item $t.\attrstate = \symstate{\nextinstr{\location}}{\symlocalstore}{\symstack}{\heapreplace{\symmemory}{\mo}{\mo'_{opt}}}{\pc}$
+    \item $\evalexprty{e_1}{\symlocalstore}{\tau} = v$ and $\evalexprty{e_2}{\symlocalstore}{\bvsort{64}} = \bvconst{64}{p}$
+    \item $\mo \in \symmemory$ and $\isinbounds{\bvval{p}{64}}{|\tau|}{\mo}$
+    \item $\mo_{new} \equiv \mowrite{\tau}{\mo}{\bvconst{64}{p}}{v}$
+    \item $t.\attrstate = \symstate{\nextinstr{\location}}{\symlocalstore}{\symstack}{\heapreplace{\symmemory}{\mo}{\mo_{new}}}{\pc}$
     \item $\safeet(t)$
 \end{enumerate}
 then $\safeet(\tree(s, [t]))$.
