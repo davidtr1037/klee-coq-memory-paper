@@ -162,13 +162,6 @@ To handle such cases in general, we define an interface lemma for \textit{malloc
 In this case, we can apply~\Cref{lemma:interface-malloc} with $n$ as 2, $\symmo$ as the memory object from $s_1$, and $t$ as the subtree of $s_1$.
 % TODO: show why the preconditions hold?
 
-Note that this lemma assumes that the size argument of \textit{malloc} is evaluated to a concrete SMT expression.
-If that is not the case,
-then the \SE engine typically concretizes the symbolic expression,
-and then the analysis may be incomplete and a safety proof may not be derivable.
-There exist \SE engines that support symbolic-size allocations (\eg \cite{symsize-model}),
-however, it is not the focus of this work.
-
 \begin{lemma}
 \label{lemma:interface-malloc}
 Let $s \triangleq \symstate{\location}{\symlocalstore}{\symstack}{\symmemory}{\pc}$,
@@ -183,6 +176,13 @@ If there exist $n$, $\symmo$, and $t$ such that:
 \end{enumerate}
 then $\safeet(\tree(s, [t]))$.
 \end{lemma}
+
+Note that this lemma assumes that the size argument of \textit{malloc} is evaluated to a concrete SMT expression.
+If that is not the case,
+then the \SE engine typically concretizes the symbolic expression,
+and then the analysis may be incomplete and a safety proof may not be derivable.
+There exist \SE engines that support symbolic-size allocations (\eg \cite{symsize-model}),
+however, it is not the focus of this work.
 
 \subsubsection{Example: Store}
 % TODO: explain how to prove that this is not an error state
