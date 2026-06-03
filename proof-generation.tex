@@ -169,7 +169,6 @@ and then the analysis may be incomplete and a safety proof may not be derivable.
 There exist \SE engines that support symbolic-size allocations (\eg \cite{symsize-model}),
 however, it is not the focus of this work.
 
-% TODO: b_{i64} is the base address of MO
 \begin{lemma}
 \label{lemma:interface-malloc}
 Let $s \triangleq \symstate{\location}{\symlocalstore}{\symstack}{\symmemory}{\pc}$,
@@ -189,9 +188,9 @@ then $\safeet(\tree(s, [t]))$.
 % TODO: explain how to prove that this is not an error state
 % TODO: the type is i8, so we add a single store expression
 % TODO: fix the index expression
-The symbolic state at~\cref{line:llvm-store} is:
+Consider the symbolic state before the execution of~\cref{line:llvm-store}:
 \[
-s \triangleq \symstate
+s_5 \triangleq \symstate
     {\location_6}
     {\{ ..., \nameid{gep1} \mapsto \bvconst{64}{\addr} \}}
     {[]}
@@ -201,30 +200,29 @@ s \triangleq \symstate
 where:
 \[ \symmo \triangleq (\bvval{\addr}{64}, \bvval{2}{32}, \smtarray), \ \smtarray \triangleq \arraystore{\arraystore{\arrayconst{\arrayinitvalue}}{\bvconst{32}{0}}{\arrayinitvalue}}{\bvconst{32}{1}}{\arrayinitvalue} \]
 
-On one side, according to the symbolic semantics,
-if $s'$ is derived from $s$ then there exist a model $m$ and a memory object $\symmo'$ such that
+According to the symbolic semantics,
+if $\mechstate{s}$ is derived from $s_5$ then there exist a model $m$ and a memory object $\symmo'$ such that
 $m \models \pc$, $\symmo' \in \symmemory$, and $\symisinbounds{\bvconst{64}{\addr}}{\bvsort{8}}{\symmo'}{m}$, and then:
 \[
-s' \triangleq \symstate
+\mechstate{s}_6 \triangleq \symstate
     {\location_7}
     {\{ ..., \nameid{gep1} \mapsto \bvconst{64}{\addr} \}}
     {[]}
-    {[\symmowrite{\symmo'}{\bvconst{64}{\addr}}{\bvconst{8}{7}}]}
+    {[\symmowrite{\bvsort{8}}{\symmo'}{\bvconst{64}{\addr}}{\bvconst{8}{7}}]}
     {n < \bvconst{32}{2} \land \rangecond(\bvconst{64}{\addr}, 1, \symmo'))}
 \]
 Recall that we assume that address intervals of memory objects do not overlap.
-% TODO: improve the explaination
-Since $\symmo' \in \symmemory$ and $\symisinbounds{\bvconst{64}{\addr}}{\bvsort{8}}{\symmo'}{m}$,
+Since $\symisinbounds{\bvconst{64}{\addr}}{\bvsort{8}}{\symmo}{m}$ and $\symisinbounds{\bvconst{64}{\addr}}{\bvsort{8}}{\symmo'}{m}$,
 then it must hold that $\symmo' = \symmo$, since $\bvconst{64}{\addr}$ is a constant SMT expression.
-Therefore, although the \rulenameref{Store} rule may have multiple derivations in general,
+Therefore, although the \rulenameref{Store} rule (\Cref{sec:symbolic-semantics}) may have multiple derivations in general,
 there is a single derivation in this case.
 % TODO: why?
 In particular, it also implies that:
-\[ \symmowrite{\symmo'}{\bvconst{64}{\addr}}{\bvconst{8}{7}} = (\bvval{\addr}{64}, \bvval{2}{32}, \arraystore{\smtarray}{(\bvextract{32}{\bvsub{\bvsort{64}}{\bvconst{64}{\addr}}{\bvconst{64}{\addr}}})}{\bvconst{8}{7}}) \]
+\[ \symmowrite{\smtsort{8}}{\symmo'}{\bvconst{64}{\addr}}{\bvconst{8}{7}} = (\bvval{\addr}{64}, \bvval{2}{32}, \arraystore{\smtarray}{(\bvextract{32}{\bvsub{\bvsort{64}}{\bvconst{64}{\addr}}{\bvconst{64}{\addr}}})}{\bvconst{8}{7}}) \]
 
-On the other side, the symbolic state computed by the \SE engine is:
+The symbolic state computed by the \SE engine is:
 \[
-s'_{opt} \triangleq \symstate
+s_6 \triangleq \symstate
     {\location_7}
     {\{ ..., \nameid{gep1} \mapsto \bvconst{64}{\addr} \}}
     {[]}
@@ -233,11 +231,11 @@ s'_{opt} \triangleq \symstate
 \]
 where:
 \[ \symmo'_{opt} \triangleq (\bvval{\addr}{64}, \bvval{2}{32}, \smtarray'_{opt}), \ \smtarray'_{opt} \triangleq \arraystore{\arraystore{\arrayconst{\arrayinitvalue}}{\bvconst{32}{0}}{\bvconst{8}{7}}}{\bvconst{32}{1}}{\arrayinitvalue} \]
-Now, we have to prove that the subtree of $s$ is safe.
+Now, we have to prove that the subtree of $s_5$ is safe.
 % TODO: improve
-Note that $s$ is not an error state,
+Note that $s_5$ is not an error state,
 since $\evalexprty{\nameid{gep1}}{\symlocalstore}{\bvsort{64}} = \bvconst{64}{\addr}$ for every model $m$.
-To prove that $s' \equiv s'_{opt}$, it suffices to prove the equivalence of their memory and path constraints.
+To prove that $\mechstate{s}_6 \equiv s_6$, it suffices to prove the equivalence of their memory and path constraints.
 As for the memory, it suffices to prove that:
 \[ \arraystore{\smtarray}{(\bvextract{32}{\bvconst{64}{\addr} - \bvconst{64}{\addr}})}{\bvconst{8}{7}} \equiv \smtarray'_{opt} \]
 For this, we define a lemma that can be applied in general when storing a single byte (\ie \bvsort{8}):
