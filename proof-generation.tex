@@ -110,8 +110,11 @@ since we create smaller proofs which mainly rely on simple \coq tactics (\eg \te
 
 Now, we will show how to define such interface lemmas,
 and how to apply them in the context of the \llvm IR program on the left of~\Cref{figure:example-llvm}.
-In this section, we will focus on memory-related instructions.
-We denote by $\location_n$ the program location that corresponds to line $n$ in~\Cref{figure:example-llvm}.
+In this example,
+assume that $\location_n$ is the program location corresponding to line $n$ in~\Cref{figure:example-llvm}.
+In addition,
+assume that $s_n$ is the symbolic state after the execution line $n$ in~\Cref{figure:example-llvm},
+and $s_0$ is the initial symbolic state.
 
 % TODO: say that there is not overflow in the interval
 \subsubsection{Example: Malloc}
