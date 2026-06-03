@@ -130,7 +130,7 @@ and suppose that we want to prove that the subtree of $s_0$ is safe.
 In general, the \rulenameref{Malloc} rule (\Cref{sec:symbolic-semantics}) may derive multiple symbolic states.
 Here, however, the size argument of \textit{malloc} is evaluated to a constant SMT expression,
 so the only derived symbolic state is:
-\[ \mechstate{s}_1 \triangleq \symstate{\location_2}{\{ \nameid{p} \mapsto \bvconst{64}{\addr} \}}{[]}{[(\bvval{\addr}{64}, \bvval{2}{32}, \arrayconst{\arrayinitvalue})]}{\true} \]
+\[ \mech{s}_1 \triangleq \symstate{\location_2}{\{ \nameid{p} \mapsto \bvconst{64}{\addr} \}}{[]}{[(\bvval{\addr}{64}, \bvval{2}{32}, \arrayconst{\arrayinitvalue})]}{\true} \]
 %\[
 %s' \triangleq \symstate
 %    {\location_2}
@@ -153,7 +153,7 @@ s_1 \triangleq \symstate
 Now, we have to prove that the subtree of $s_0$ is safe.
 Based on~\Cref{def:sym-error-state},
 $s_0$ is not an error state since $\evalexprty{2}{\symlocalstore}{\bvsort{64}} = \bvconst{64}{2}$.
-To prove that $\mechstate{s}_1 \equiv s_1$,
+To prove that $\mech{s}_1 \equiv s_1$,
 it suffices to prove that their memory is equivalent.
 The SMT arrays in those two symbolic states are encoded differently,
 but they are actually equivalent, since the additional store expressions contain the same value $\arrayinitvalue$ as in $\arrayconst{\arrayinitvalue}$.
@@ -201,10 +201,10 @@ where:
 \[ \symmo \triangleq (\bvval{\addr}{64}, \bvval{2}{32}, \smtarray), \ \smtarray \triangleq \arraystore{\arraystore{\arrayconst{\arrayinitvalue}}{\bvconst{32}{0}}{\arrayinitvalue}}{\bvconst{32}{1}}{\arrayinitvalue} \]
 
 According to the symbolic semantics,
-if $\mechstate{s}$ is derived from $s_5$ then there exist a model $m$ and a memory object $\symmo'$ such that
+if $\mech{s}$ is derived from $s_5$ then there exist a model $m$ and a memory object $\symmo'$ such that
 $m \models \pc$, $\symmo' \in \symmemory$, and $\symisinbounds{\bvconst{64}{\addr}}{\bvsort{8}}{\symmo'}{m}$, and then:
 \[
-\mechstate{s}_6 \triangleq \symstate
+\mech{s}_6 \triangleq \symstate
     {\location_7}
     {\{ ..., \nameid{gep1} \mapsto \bvconst{64}{\addr} \}}
     {[]}
@@ -235,7 +235,7 @@ Now, we have to prove that the subtree of $s_5$ is safe.
 % TODO: improve
 Note that $s_5$ is not an error state,
 since $\evalexprty{\nameid{gep1}}{\symlocalstore}{\bvsort{64}} = \bvconst{64}{\addr}$ for every model $m$.
-To prove that $\mechstate{s}_6 \equiv s_6$, it suffices to prove the equivalence of their memory and path constraints.
+To prove that $\mech{s}_6 \equiv s_6$, it suffices to prove the equivalence of their memory and path constraints.
 As for the memory, it suffices to prove that:
 \[ \arraystore{\smtarray}{(\bvextract{32}{\bvconst{64}{\addr} - \bvconst{64}{\addr}})}{\bvconst{8}{7}} \equiv \smtarray'_{opt} \]
 For this, we define a lemma that can be applied in general when storing a single byte (\ie \bvsort{8}):

@@ -113,7 +113,7 @@ Recall that the yellow nodes correspond to the symbolic states derived by the ex
 Here, for example,
 $s_1$ is the symbolic state derived from $s_0$ by the executable symbolic semantics,
 \ie $s_1$ is computed by the \SE engine when executing the instruction at~\cref{line:overview-llvm-malloc},
-and $\mechstate{s}_1$ is the symbolic state derived from $s_0$ by the mechanized symbolic semantics.
+and $\mech{s}_1$ is the symbolic state derived from $s_0$ by the mechanized symbolic semantics.
 
 When the \SE engine executes the current instruction of $s_i$,
 we generate a lemma stating that the subtree of $s_i$ satisfies the safety properties.
@@ -138,14 +138,14 @@ so it will suffice to prove that the constraint $n / 2 = 4 \land \neg (0 \leq n 
 
 Second, we need to prove that this subtree is \emph{complete}.
 More specifically,
-we need to prove that if $\mechstate{s}$ can be derived from $s_5$ by the mechanized symbolic semantics,
-then either $\mechstate{s}$ is infeasible, \ie its path constraints are unsatisfiable, or there exists a successor of $s_5$ in the subtree that is equivalent to $\mechstate{s}$.
+we need to prove that if $\mech{s}$ can be derived from $s_5$ by the mechanized symbolic semantics,
+then either $\mech{s}$ is infeasible, \ie its path constraints are unsatisfiable, or there exists a successor of $s_5$ in the subtree that is equivalent to $\mech{s}$.
 In the case of a \code{store} instruction,
 the mechanized symbolic semantics may derive multiple symbolic states,
 depending on the number of objects that may be pointed by the accessed address.
-Here, the address given by \code{p} points to a single object, so there is only one derived symbolic state, namely $\mechstate{s}_6$.
+Here, the address given by \code{p} points to a single object, so there is only one derived symbolic state, namely $\mech{s}_6$.
 This state is not infeasible,
-so we need to prove that $s_6$ and $\mechstate{s}_6$ are equivalent.
+so we need to prove that $s_6$ and $\mech{s}_6$ are equivalent.
 %In general, the mechanized semantics may differ from the symbolic semantics of the \SE engine,
 %so the equivalence proof might not be immediate.
 
