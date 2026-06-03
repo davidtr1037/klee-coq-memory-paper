@@ -241,7 +241,6 @@ As for the memory, it suffices to prove that:
 For this, we define a lemma that can be applied in general when storing a single byte (\ie \bvsort{8}):
 % TODO: introduce all variables
 \begin{lemma}
-\label{lemma:smtarray-equiv}
 Let $\bvconst{32}{i}$, ..., $\bvconst{32}{(i + n)}$ be subsequent constant SMT expressions,
 and assume that $k \equiv \bvconst{32}{i}$ and $v' \equiv v'_{opt}$, then:
 \[ \arraystore{\arraystore{\arraystore{a}{\bvconst{32}{i}}{v}[...]}{\bvconst{32}{(i + n)}}{t_n}}{k}{v'} \equiv \arraystore{\arraystore{a}{\bvconst{32}{i}}{v'_{opt}}[...]}{\bvconst{32}{(i + n)}}{t_n} \]
