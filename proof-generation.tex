@@ -150,7 +150,7 @@ s_{opt} \triangleq \symstate
 \]
 Now, we have to prove that the subtree of $s$ is safe.
 Note that $\evalexprty{2}{\symlocalstore}{\bvsort{64}} = \bvconst{64}{2}$,
-so $s$ is not an error state.
+so based on~\Cref{def:sym-error-state}, $s$ is not an error state.
 To prove that $\mechstate{s} \equiv s_{opt}$,
 it suffices to prove that their memory is equivalent.
 The SMT arrays in those two symbolic states are encoded differently,
@@ -162,7 +162,7 @@ In this case, we can apply~\Cref{lemma:interface-malloc} with $n$ as 2, $\symmo$
 
 Note that this lemma assumes that the size argument of \textit{malloc} is evaluated to a concrete SMT expression.
 If that is not the case,
-then the \SE engine concretizes the symbolic expression,
+then the \SE engine typically concretizes the symbolic expression,
 and then the analysis may be incomplete and a safety proof may not be derivable.
 There exist \SE engines that support symbolic-size allocations (\eg \cite{symsize-model}),
 however, it is not the focus of this work.
