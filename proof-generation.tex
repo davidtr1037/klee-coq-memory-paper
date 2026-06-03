@@ -159,7 +159,7 @@ The SMT arrays in those two symbolic states are encoded differently,
 but they are actually equivalent, since the additional store expressions contain the same value $\arrayinitvalue$ as in $\arrayconst{\arrayinitvalue}$.
 
 To handle such cases in general, we define an interface lemma for \textit{malloc}, which is stated as~\Cref{lemma:interface-malloc}.
-In this case, we can apply~\Cref{lemma:interface-malloc} with $n$ as 2, $\symmo$ as the memory object from $s_1$, and $t$ as the subtree of $s_1$.
+In this case, we can apply~\Cref{lemma:interface-malloc} with $n$ as 2, $\mo$ as the memory object from $s_1$, and $t$ as the subtree of $s_1$.
 % TODO: show why the preconditions hold?
 
 \begin{lemma}
@@ -167,11 +167,11 @@ In this case, we can apply~\Cref{lemma:interface-malloc} with $n$ as 2, $\symmo$
 Let $s \triangleq \symstate{\location}{\symlocalstore}{\symstack}{\symmemory}{\pc}$,
 where \textup{$\instrat{\location} = \codequote{x~\texttt{=}~\tcall^{\pointertypeof{\bvsort{8}}}~\intrinsicfunc{malloc}(\bvsort{64} ~ e)}$},
 and let $\bvval{\addr}{64}$ be the allocated base address.
-If there exist $n$, $\symmo$, and $t$ such that:
+If there exist $n$, $\mo$, and $t$ such that:
 \begin{enumerate}
     \item \textup{$\evalexprty{e}{\symlocalstore}{\bvsort{64}} \equiv \bvconst{64}{n}$} and \textup{$\bvval{n}{64} < \bvval{(2^{\indexwidth - 1} - 1)}{64}$}
-    \item \textup{$\symmo \equiv (\bvval{\addr}{64}, \bvval{n}{32}, \arrayconst{\arrayinitvalue})$}
-    \item \textup{$t.\attrstate = \symstate{\nextinstr{\location}}{\symlocalstore[x \mapsto \bvconst{64}{\addr}]}{\symstack}{\symmemory \cup \{\symmo\}}{\pc}$}
+    \item \textup{$\mo \equiv (\bvval{\addr}{64}, \bvval{n}{32}, \arrayconst{\arrayinitvalue})$}
+    \item \textup{$t.\attrstate = \symstate{\nextinstr{\location}}{\symlocalstore[x \mapsto \bvconst{64}{\addr}]}{\symstack}{\symmemory \cup \{\mo\}}{\pc}$}
     \item $\safeet(t)$
 \end{enumerate}
 then $\safeet(\tree(s, [t]))$.
@@ -194,31 +194,31 @@ s_5 \triangleq \symstate
     {\location_6}
     {\{ ..., \nameid{gep1} \mapsto \bvconst{64}{\addr} \}}
     {[]}
-    {[\symmo]}
+    {[\mo]}
     {n < \bvconst{32}{2}}
 \]
 where:
-\[ \symmo \triangleq (\bvval{\addr}{64}, \bvval{2}{32}, \smtarray), \ \smtarray \triangleq \arraystore{\arraystore{\arrayconst{\arrayinitvalue}}{\bvconst{32}{0}}{\arrayinitvalue}}{\bvconst{32}{1}}{\arrayinitvalue} \]
+\[ \mo \triangleq (\bvval{\addr}{64}, \bvval{2}{32}, \arrayvalue), \ \arrayvalue \triangleq \arraystore{\arraystore{\arrayconst{\arrayinitvalue}}{\bvconst{32}{0}}{\arrayinitvalue}}{\bvconst{32}{1}}{\arrayinitvalue} \]
 
 According to the symbolic semantics,
-if $\mech{s}$ is derived from $s_5$ then there exist a model $m$ and a memory object $\symmo'$ such that
-$m \models \pc$, $\symmo' \in \symmemory$, and $\symisinbounds{\bvconst{64}{\addr}}{\bvsort{8}}{\symmo'}{m}$, and then:
+if $\mech{s}$ is derived from $s_5$ then there exist a model $m$ and a memory object $\mo'$ such that
+$m \models \pc$, $\mo' \in \symmemory$, and $\symisinbounds{\bvconst{64}{\addr}}{\bvsort{8}}{\mo'}{m}$, and then:
 \[
 \mech{s}_6 \triangleq \symstate
     {\location_7}
     {\{ ..., \nameid{gep1} \mapsto \bvconst{64}{\addr} \}}
     {[]}
-    {[\symmowrite{\bvsort{8}}{\symmo'}{\bvconst{64}{\addr}}{\bvconst{8}{7}}]}
-    {n < \bvconst{32}{2} \land \rangecond(\bvconst{64}{\addr}, 1, \symmo'))}
+    {[\mowrite{\bvsort{8}}{\mo'}{\bvconst{64}{\addr}}{\bvconst{8}{7}}]}
+    {n < \bvconst{32}{2} \land \rangecond(\bvconst{64}{\addr}, 1, \mo'))}
 \]
 Recall that we assume that address intervals of memory objects do not overlap.
-Since $\symisinbounds{\bvconst{64}{\addr}}{\bvsort{8}}{\symmo}{m}$ and $\symisinbounds{\bvconst{64}{\addr}}{\bvsort{8}}{\symmo'}{m}$,
-then it must hold that $\symmo' = \symmo$, since $\bvconst{64}{\addr}$ is a constant SMT expression.
+Since $\symisinbounds{\bvconst{64}{\addr}}{\bvsort{8}}{\mo}{m}$ and $\symisinbounds{\bvconst{64}{\addr}}{\bvsort{8}}{\mo'}{m}$,
+then it must hold that $\mo' = \mo$, since $\bvconst{64}{\addr}$ is a constant SMT expression.
 Therefore, although the \rulenameref{Store} rule (\Cref{sec:symbolic-semantics}) may have multiple derivations in general,
 there is a single derivation in this case.
 % TODO: why?
 In particular, it also implies that:
-\[ \symmowrite{\smtsort{8}}{\symmo'}{\bvconst{64}{\addr}}{\bvconst{8}{7}} = (\bvval{\addr}{64}, \bvval{2}{32}, \arraystore{\smtarray}{(\bvextract{32}{\bvsub{\bvsort{64}}{\bvconst{64}{\addr}}{\bvconst{64}{\addr}}})}{\bvconst{8}{7}}) \]
+\[ \mowrite{\smtsort{8}}{\mo'}{\bvconst{64}{\addr}}{\bvconst{8}{7}} = (\bvval{\addr}{64}, \bvval{2}{32}, \arraystore{\arrayvalue}{(\bvextract{32}{\bvsub{\bvsort{64}}{\bvconst{64}{\addr}}{\bvconst{64}{\addr}}})}{\bvconst{8}{7}}) \]
 
 The symbolic state computed by the \SE engine is:
 \[
@@ -226,18 +226,18 @@ s_6 \triangleq \symstate
     {\location_7}
     {\{ ..., \nameid{gep1} \mapsto \bvconst{64}{\addr} \}}
     {[]}
-    {[\symmo'_{opt}]}
+    {[\mo'_{opt}]}
     {n < \bvconst{32}{2}}
 \]
 where:
-\[ \symmo'_{opt} \triangleq (\bvval{\addr}{64}, \bvval{2}{32}, \smtarray'_{opt}), \ \smtarray'_{opt} \triangleq \arraystore{\arraystore{\arrayconst{\arrayinitvalue}}{\bvconst{32}{0}}{\bvconst{8}{7}}}{\bvconst{32}{1}}{\arrayinitvalue} \]
+\[ \mo'_{opt} \triangleq (\bvval{\addr}{64}, \bvval{2}{32}, \arrayvalue'_{opt}), \ \arrayvalue'_{opt} \triangleq \arraystore{\arraystore{\arrayconst{\arrayinitvalue}}{\bvconst{32}{0}}{\bvconst{8}{7}}}{\bvconst{32}{1}}{\arrayinitvalue} \]
 Now, we have to prove that the subtree of $s_5$ is safe.
 % TODO: improve
 Note that $s_5$ is not an error state,
 since $\evalexprty{\nameid{gep1}}{\symlocalstore}{\bvsort{64}} = \bvconst{64}{\addr}$ for every model $m$.
 To prove that $\mech{s}_6 \equiv s_6$, it suffices to prove the equivalence of their memory and path constraints.
 As for the memory, it suffices to prove that:
-\[ \arraystore{\smtarray}{(\bvextract{32}{\bvconst{64}{\addr} - \bvconst{64}{\addr}})}{\bvconst{8}{7}} \equiv \smtarray'_{opt} \]
+\[ \arraystore{\arrayvalue}{(\bvextract{32}{\bvconst{64}{\addr} - \bvconst{64}{\addr}})}{\bvconst{8}{7}} \equiv \arrayvalue'_{opt} \]
 For this, we define a lemma that can be applied in general when storing a single byte (\ie \bvsort{8}):
 % TODO: introduce all variables
 \begin{lemma}
@@ -252,7 +252,7 @@ since $\bvextract{32}{\bvsub{\bvsort{64}}{\bvconst{64}{\addr}}{\bvconst{64}{\add
 We define similar lemmas to handle stores of other types (\bvsort{16}, \bvsort{32}, and \bvsort{64}).
 % TODO: unfold rc
 As for the path constraints,
-note that $\rangecond(\bvconst{64}{\addr}, 1, \symmo) \equiv \true$, so the equivalence follows easily.
+note that $\rangecond(\bvconst{64}{\addr}, 1, \mo) \equiv \true$, so the equivalence follows easily.
 
 To handle such cases in general, we define an interface lemma for \textit{store}, which is stated as~\Cref{lemma:interface-store}.
 
@@ -260,15 +260,15 @@ To handle such cases in general, we define an interface lemma for \textit{store}
 \label{lemma:interface-store}
 Let $s \triangleq \symstate{\location}{\symlocalstore}{\symstack}{\symmemory}{\pc}$,
 where \textup{$\instrat{\location} = \codequote{\tstore^{\tau}~e_1~e_2}$}.
-If there exist $\symmo$, $\symmo'_{opt}$, and $t$ such that:
+If there exist $\mo$, $\mo'_{opt}$, and $t$ such that:
 \begin{enumerate}
     \item $\symmemory$ is well-formed
-    \item $\symmo \in \symmemory$
+    \item $\mo \in \symmemory$
     \item $\evalexprty{e_1}{\symlocalstore}{\tau} = v$
     \item $\evalexprty{e_2}{\symlocalstore}{\bvsort{64}} = \bvconst{64}{p}$
-    \item $\isinbounds{\bvval{p}{64}}{|\tau|}{\symmo}$
-    \item $\symmo'_{opt} \equiv \symmowrite{\tau}{\symmo}{\bvconst{64}{p}}{v}$
-    \item $t.\attrstate = \symstate{\nextinstr{\location}}{\symlocalstore}{\symstack}{\heapreplace{\symmemory}{\symmo}{\symmo'_{opt}}}{\pc}$
+    \item $\isinbounds{\bvval{p}{64}}{|\tau|}{\mo}$
+    \item $\mo'_{opt} \equiv \mowrite{\tau}{\mo}{\bvconst{64}{p}}{v}$
+    \item $t.\attrstate = \symstate{\nextinstr{\location}}{\symlocalstore}{\symstack}{\heapreplace{\symmemory}{\mo}{\mo'_{opt}}}{\pc}$
     \item $\safeet(t)$
 \end{enumerate}
 then $\safeet(\tree(s, [t]))$.
@@ -342,43 +342,43 @@ s \triangleq \symstate
     {\location_9}
     {\{ ..., \nameid{gep2} \mapsto e \}}
     {[]}
-    {[\symmo]}
+    {[\mo]}
     {n < \bvconst{32}{2}}
 \]
 where:
 \[ e \triangleq \bvadd{\bvsort{64}}{\bvconst{64}{\addr}}{\bvzext{64}{\bvextract{32}{\bvzext{64}{n}}}} \]
-\[ \symmo \triangleq (\bvval{\addr}{64}, \bvval{2}{32}, \smtarray), \ \smtarray \triangleq \arraystore{\arraystore{\arrayconst{\arrayinitvalue}}{\bvconst{32}{0}}{\bvconst{8}{7}}}{\bvconst{32}{1}}{\arrayinitvalue} \]
+\[ \mo \triangleq (\bvval{\addr}{64}, \bvval{2}{32}, \arrayvalue), \ \arrayvalue \triangleq \arraystore{\arraystore{\arrayconst{\arrayinitvalue}}{\bvconst{32}{0}}{\bvconst{8}{7}}}{\bvconst{32}{1}}{\arrayinitvalue} \]
 
 On one side, according to the symbolic semantics,
-if $s'$ is derived from $s$ then there exist a model $m$ and a memory object $\symmo' \triangleq (\addr', \size', \smtarray')$ such that
-$m \models \pc$, $\symmo' \in \symmemory$, and $\symisinbounds{e}{\bvsort{8}}{\symmo'}{m}$, and then:
+if $s'$ is derived from $s$ then there exist a model $m$ and a memory object $\mo' \triangleq (\addr', \size', \arrayvalue')$ such that
+$m \models \pc$, $\mo' \in \symmemory$, and $\symisinbounds{e}{\bvsort{8}}{\mo'}{m}$, and then:
 % TODO: should add 0_{32}?
 \[
 s' \triangleq \symstate
     {\location_{10}}
-    {\{ ..., \nameid{gep2} \mapsto e, \nameid{v} \mapsto \arrayselect{\smtarray'}{\bvextract{32}{\bvsub{\bvsort{64}}{e}{\bvconst{64}{\addr}}}} \}}
+    {\{ ..., \nameid{gep2} \mapsto e, \nameid{v} \mapsto \arrayselect{\arrayvalue'}{\bvextract{32}{\bvsub{\bvsort{64}}{e}{\bvconst{64}{\addr}}}} \}}
     {[]}
-    {[\symmo]}
-    {n < \bvconst{32}{2} \land \rangecond(e, 1, \symmo')}
+    {[\mo]}
+    {n < \bvconst{32}{2} \land \rangecond(e, 1, \mo')}
 \]
 Before dereferencing $e$, the \SE engine checks if $e$ may point to other memory objects,
-by checking the satisfiability of $n < \bvconst{32}{2} \land \neg \rangecond(e, 1, \symmo)$.
+by checking the satisfiability of $n < \bvconst{32}{2} \land \neg \rangecond(e, 1, \mo)$.
 Here, this constraint is unsatisfiable,
-which means that $e$ points only to $\symmo$.
-In particular, it must hold that $\symmo' = \symmo$ (and $\smtarray' = \smtarray$).
+which means that $e$ points only to $\mo$.
+In particular, it must hold that $\mo' = \mo$ (and $\arrayvalue' = \arrayvalue$).
 
 One the other side, the symbolic state computed by the \SE engine is:
 \[
 s'_{opt} \triangleq \symstate
     {\location_{10}}
-    {\{ ..., \nameid{gep2} \mapsto e, \nameid{v} \mapsto \arrayselect{\smtarray}{\bvextract{32}{\bvsub{\bvsort{64}}{e}{\bvconst{64}{\addr}}}} \}}
+    {\{ ..., \nameid{gep2} \mapsto e, \nameid{v} \mapsto \arrayselect{\arrayvalue}{\bvextract{32}{\bvsub{\bvsort{64}}{e}{\bvconst{64}{\addr}}}} \}}
     {[]}
-    {[\symmo]}
+    {[\mo]}
     {n < \bvconst{32}{2}}
 \]
 Now, we have to prove that the subtree of $s$ is safe.
-We already know that $n < \bvconst{32}{2} \land \neg \rangecond(e, 1, \symmo)$ is unsatisfiable,
+We already know that $n < \bvconst{32}{2} \land \neg \rangecond(e, 1, \mo)$ is unsatisfiable,
 so by~\Cref{def:sym-error-state}, $s$ is not an error state.
 To prove that $s' \equiv s'_{opt}$, it suffices to prove the equivalence of their path constraints.
-Since $n < \bvconst{32}{2} \land \neg \rangecond(e, 1, \symmo)$ is unsatisfiable,
-this implies that $n < \bvconst{32}{2} \land \rangecond(e, 1, \symmo) \equiv n < \bvconst{32}{2}$.
+Since $n < \bvconst{32}{2} \land \neg \rangecond(e, 1, \mo)$ is unsatisfiable,
+this implies that $n < \bvconst{32}{2} \land \rangecond(e, 1, \mo) \equiv n < \bvconst{32}{2}$.
