@@ -202,7 +202,7 @@ where:
 
 According to the symbolic semantics,
 if $\mech{s}$ is derived from $s_5$ then there exist a model $m$ and a memory object $\mo'$ such that
-$m \models \pc$, $\mo' \in \symmemory$, and $\symisinbounds{\bvconst{64}{\addr}}{\bvsort{8}}{\mo'}{m}$, and then:
+$m \models (n < \bvconst{32}{2})$, $\mo' \in \symmemory$, and $\symisinbounds{\bvconst{64}{\addr}}{\bvsort{8}}{\mo'}{m}$, and then:
 \[
 \mech{s}_6 \triangleq \symstate
     {\location_7}
@@ -212,8 +212,8 @@ $m \models \pc$, $\mo' \in \symmemory$, and $\symisinbounds{\bvconst{64}{\addr}}
     {n < \bvconst{32}{2} \land \rangecond(\bvconst{64}{\addr}, 1, \mo'))}
 \]
 Recall that we assume that address intervals of memory objects do not overlap.
-Since $\symisinbounds{\bvconst{64}{\addr}}{\bvsort{8}}{\mo}{m}$ and $\symisinbounds{\bvconst{64}{\addr}}{\bvsort{8}}{\mo'}{m}$,
-then it must hold that $\mo' = \mo$, since $\bvconst{64}{\addr}$ is a constant SMT expression.
+Since $m[\bvconst{64}{\addr}]$ is the base address of both $\mo$ and $\mo'$, and $\bvconst{64}{\addr}$ is a constant SMT expression,
+then it must hold that $\mo = \mo'$.
 Therefore, although the \rulenameref{Store} rule (\Cref{sec:symbolic-semantics}) may have multiple derivations in general,
 there is a single derivation in this case.
 % TODO: why?
@@ -226,24 +226,24 @@ s_6 \triangleq \symstate
     {\location_7}
     {\{ ..., \nameid{gep1} \mapsto \bvconst{64}{\addr} \}}
     {[]}
-    {[\mo'_{opt}]}
+    {[\mo_{new}]}
     {n < \bvconst{32}{2}}
 \]
 where:
-\[ \mo'_{opt} \triangleq (\bvval{\addr}{64}, \bvval{2}{32}, \arrayvalue'_{opt}), \ \arrayvalue'_{opt} \triangleq \arraystore{\arraystore{\arrayconst{\arrayinitvalue}}{\bvconst{32}{0}}{\bvconst{8}{7}}}{\bvconst{32}{1}}{\arrayinitvalue} \]
+\[ \mo_{new} \triangleq (\bvval{\addr}{64}, \bvval{2}{32}, \arrayvalue_{new}), \ \arrayvalue_{new} \triangleq \arraystore{\arraystore{\arrayconst{\arrayinitvalue}}{\bvconst{32}{0}}{\bvconst{8}{7}}}{\bvconst{32}{1}}{\arrayinitvalue} \]
 Now, we have to prove that the subtree of $s_5$ is safe.
 % TODO: improve
 Note that $s_5$ is not an error state,
 since $\evalexprty{\nameid{gep1}}{\symlocalstore}{\bvsort{64}} = \bvconst{64}{\addr}$ for every model $m$.
 To prove that $\mech{s}_6 \equiv s_6$, it suffices to prove the equivalence of their memory and path constraints.
 As for the memory, it suffices to prove that:
-\[ \arraystore{\arrayvalue}{(\bvextract{32}{\bvconst{64}{\addr} - \bvconst{64}{\addr}})}{\bvconst{8}{7}} \equiv \arrayvalue'_{opt} \]
+\[ \arraystore{\arrayvalue}{(\bvextract{32}{\bvconst{64}{\addr} - \bvconst{64}{\addr}})}{\bvconst{8}{7}} \equiv \arrayvalue_{new} \]
 For this, we define a lemma that can be applied in general when storing a single byte (\ie \bvsort{8}):
 % TODO: introduce all variables
 \begin{lemma}
 Let $\bvconst{32}{i}$, ..., $\bvconst{32}{(i + n)}$ be subsequent constant SMT expressions,
-and assume that $k \equiv \bvconst{32}{i}$ and $v' \equiv v'_{opt}$, then:
-\[ \arraystore{\arraystore{\arraystore{a}{\bvconst{32}{i}}{v}[...]}{\bvconst{32}{(i + n)}}{t_n}}{k}{v'} \equiv \arraystore{\arraystore{a}{\bvconst{32}{i}}{v'_{opt}}[...]}{\bvconst{32}{(i + n)}}{t_n} \]
+and assume that $k \equiv \bvconst{32}{i}$ and $v' \equiv v_{new}$, then:
+\[ \arraystore{\arraystore{\arraystore{a}{\bvconst{32}{i}}{v}[...]}{\bvconst{32}{(i + n)}}{t_n}}{k}{v'} \equiv \arraystore{\arraystore{a}{\bvconst{32}{i}}{v_{new}}[...]}{\bvconst{32}{(i + n)}}{t_n} \]
 \end{lemma}
 % TODO: explain what this lemma says...
 This lemma can be applied in our case,
