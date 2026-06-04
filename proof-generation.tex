@@ -264,9 +264,10 @@ where \textup{$\instrat{\location} = \codequote{\tstore^{\tau}~e_1~e_2}$}.
 If there exist $p$, $\mo$, $\mo_{new}$, and $t$ such that:
 \begin{enumerate}
     \item $\symmemory$ is well-formed
-    \item $\evalexprty{e_1}{\symlocalstore}{\tau} = v$ and $\evalexprty{e_2}{\symlocalstore}{\bvsort{64}} = \bvconst{64}{p}$
-    \item $\mo \in \symmemory$ and $\isinbounds{\bvval{p}{64}}{|\tau|}{\mo}$
-    \item $\mo_{new} \equiv \mowrite{\tau}{\mo}{\bvconst{64}{p}}{v}$
+    \item $\mo \in \symmemory$
+    \item \textup{$\evalexprty{e_1}{\symlocalstore}{\tau} = v$} and \textup{$\evalexprty{e_2}{\symlocalstore}{\bvsort{64}} = \bvconst{64}{p}$}
+    \item \textup{$\isinbounds{\bvval{p}{64}}{|\tau|}{\mo}$}
+    \item \textup{$\mo_{new} \equiv \mowrite{\tau}{\mo}{\bvconst{64}{p}}{v}$}
     \item $t.\attrstate = \symstate{\nextinstr{\location}}{\symlocalstore}{\symstack}{\heapreplace{\symmemory}{\mo}{\mo_{new}}}{\pc}$
     \item $\safeet(t)$
 \end{enumerate}
@@ -332,6 +333,24 @@ which is indeed unsatisfiable.
 % TODO: why?
 To prove that $\mech{s}_8 \equiv s_8$,
 it suffices to prove that their stores are equivalent, which holds since $\mech{e} \equiv e$.
+
+To handle such cases in general,
+we define an interface lemma for \textit{getelementptr}, which is stated as~\Cref{lemma:interface-gep}.
+
+\begin{lemma}
+\label{lemma:interface-gep}
+Let $s \triangleq \symstate{\location}{\symlocalstore}{\symstack}{\symmemory}{\pc}$,
+where \textup{$\instrat{\location} = \codequote{x~\texttt{=}~\tgep~\pointertypeof{\tau}~e~\overline{(\tau_i, e_i)}}$}.
+If there exist $\widebar{k_i}$, $\symlocalstore'$, and $t$ such that:
+\begin{enumerate}
+    \item $\evalexprty{e_i}{\symlocalstore}{\tau_i} = k_i$
+    \item $\unsat{\pc \land \overflowcond(\tau, \overline{k_i})}$
+    \item \textup{$\symlocalstore[x \mapsto \evalexprty{\tgep~\pointertypeof{\tau}~e~\overline{(\tau_i, e_i)}}{\symlocalstore}{\tau^{*}}] \equiv \symlocalstore'$}
+    \item $t.\attrstate = \symstate{\nextinstr{\location}}{\symlocalstore'_{opt}}{\symstack}{\symmemory}{\pc}$
+    \item $\safeet(t)$
+\end{enumerate}
+then $\safeet(\tree(s, [t]))$.
+\end{lemma}
 
 \subsubsection{Example: Load}
 % TODO: remind that the repr is non-opt now
