@@ -255,12 +255,11 @@ note that $\rangecond(\bvconst{64}{\addr}, 1, \mo) \equiv \true$, so the equival
 
 To handle such cases in general, we define an interface lemma for \textit{store}, which is stated as~\Cref{lemma:interface-store}.
 
-% TODO: exists p
 \begin{lemma}
 \label{lemma:interface-store}
 Let $s \triangleq \symstate{\location}{\symlocalstore}{\symstack}{\symmemory}{\pc}$,
 where \textup{$\instrat{\location} = \codequote{\tstore^{\tau}~e_1~e_2}$}.
-If there exist $\mo$, $\mo_{new}$, and $t$ such that:
+If there exist $p$, $\mo$, $\mo_{new}$, and $t$ such that:
 \begin{enumerate}
     \item $\symmemory$ is well-formed
     \item $\evalexprty{e_1}{\symlocalstore}{\tau} = v$ and $\evalexprty{e_2}{\symlocalstore}{\bvsort{64}} = \bvconst{64}{p}$
@@ -274,9 +273,9 @@ then $\safeet(\tree(s, [t]))$.
 
 \subsubsection{Example: GetElementPtr}
 % TODO: explain how to prove that this is not an error state
-The symbolic state at~\cref{line:llvm-gep} is:
+Consider the symbolic state before the execution of~\cref{line:llvm-gep}:
 \[
-s \triangleq \symstate
+s_7 \triangleq \symstate
     {\location_8}
     {\{ ..., \nameid{idx} \mapsto \bvzext{64}{n} \}}
     {[]}
@@ -286,7 +285,18 @@ s \triangleq \symstate
 % TODO: explain the computations
 According to the symbolic semantics, the derived symbolic state is:
 \[
-s' \triangleq \symstate
+\mech{s}_8 \triangleq \symstate
+    {\location_9}
+    {\{ ..., \nameid{idx} \mapsto \bvzext{64}{n}, \nameid{gep2} \mapsto \mech{e} \}}
+    {[]}
+    {...}
+    {n < \bvconst{32}{2}}
+\]
+where:
+\[ \mech{e} \triangleq \bvadd{\bvsort{64}}{\bvconst{64}{\addr}}{\bvzext{64}{\bvmul{\bvsort{32}}{\bvextract{32}{\bvzext{64}{n}}}{\bvconst{32}{1}}}} \]
+The symbolic state computed by the \SE engine is:
+\[
+s_8 \triangleq \symstate
     {\location_9}
     {\{ ..., \nameid{idx} \mapsto \bvzext{64}{n}, \nameid{gep2} \mapsto e \}}
     {[]}
@@ -294,20 +304,9 @@ s' \triangleq \symstate
     {n < \bvconst{32}{2}}
 \]
 where:
-\[ e \triangleq \bvadd{\bvsort{64}}{\bvconst{64}{\addr}}{\bvzext{64}{\bvmul{\bvsort{32}}{\bvextract{32}{\bvzext{64}{n}}}{\bvconst{32}{1}}}} \]
-The symbolic state computed by the \SE engine is:
-\[
-s'_{opt} \triangleq \symstate
-    {\location_9}
-    {\{ ..., \nameid{idx} \mapsto \bvzext{64}{n}, \nameid{gep2} \mapsto e_{opt} \}}
-    {[]}
-    {...}
-    {n < \bvconst{32}{2}}
-\]
-where:
-\[ e_{opt} \triangleq \bvadd{\bvsort{64}}{\bvconst{64}{\addr}}{\bvzext{64}{\bvextract{32}{\bvzext{64}{n}}}} \]
-Now, we need to prove that the subtree of $s$ is safe.
-To prove that $s$ is not an error state, we will use the following lemma:\footnote{
+\[ e \triangleq \bvadd{\bvsort{64}}{\bvconst{64}{\addr}}{\bvzext{64}{\bvextract{32}{\bvzext{64}{n}}}} \]
+Now, we need to prove that the subtree of $s_7$ is safe.
+To prove that $s_7$ is not an error state, we will use the following lemma:\footnote{
 Informally, $\overflowcond$ computes an SMT formula that encodes the fact that an overflow occured.
 Its formal definition is omitted due to space limitations.
 }
@@ -329,8 +328,8 @@ n < \bvconst{32}{2} \land \big( & (\bvzext{64}{n} > \bvconst{64}{4294967295}) \l
 \]
 which is indeed unsatisfiable.
 % TODO: why?
-To prove that $s' \equiv s'_{opt}$,
-it suffices to prove that their stores are equivalent, which holds since $e \equiv e_{opt}$.
+To prove that $\mech{s}_8 \equiv s_8$,
+it suffices to prove that their stores are equivalent, which holds since $\mech{e} \equiv e$.
 
 \subsubsection{Example: Load}
 % TODO: remind that the repr is non-opt now
