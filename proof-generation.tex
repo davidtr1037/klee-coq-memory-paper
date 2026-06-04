@@ -381,3 +381,23 @@ so by~\Cref{def:sym-error-state}, $s_8$ is not an error state.
 To prove that $\mech{s}_9 \equiv s_9$, it suffices to prove the equivalence of their path constraints.
 Since $n < \bvconst{32}{2} \land \neg \rangecond(e, 1, \mo)$ is unsatisfiable,
 this implies that $n < \bvconst{32}{2} \land \rangecond(e, 1, \mo) \equiv n < \bvconst{32}{2}$.
+
+To handle such cases in general,
+we define an interface lemma for \textit{load}, which is stated as~\Cref{lemma:interface-load}.
+
+\begin{lemma}
+\label{lemma:interface-load}
+Let $s \triangleq \symstate{\location}{\symlocalstore}{\symstack}{\symmemory}{\pc}$,
+where \textup{$\instrat{\location} = \codequote{x~\texttt{=}~\tload^{\tau}~e}$}.
+If there exist $\mo$, $\symlocalstore'$, and $t$ such that:
+\begin{enumerate}
+    \item $\symmemory$ is well-formed
+    \item $\mo \in \symmemory$
+    \item $\evalexprty{e}{\symlocalstore}{\bvsort{64}} = p$
+    \item $\unsat{\pc \land \neg \rangecond(p, |\tau|, \mo)}$
+    \item $\symlocalstore[x \mapsto \symmoread{\tau}{\mo}{p}{\tau}] \equiv \symlocalstore'$
+    \item $t.\attrstate = \symstate{\nextinstr{\location}}{\symlocalstore'}{\symstack}{\symmemory}{\pc}$
+    \item $\safeet(t)$
+\end{enumerate}
+then $\safeet(\tree(s, [t]))$.
+\end{lemma}
