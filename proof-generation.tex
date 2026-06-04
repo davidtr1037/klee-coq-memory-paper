@@ -201,7 +201,7 @@ where:
 \[ \mo \triangleq (\bvval{\addr}{64}, \bvval{2}{32}, \arrayvalue), \ \arrayvalue \triangleq \arraystore{\arraystore{\arrayconst{\arrayinitvalue}}{\bvconst{32}{0}}{\arrayinitvalue}}{\bvconst{32}{1}}{\arrayinitvalue} \]
 
 According to the symbolic semantics,
-if $\mech{s}$ is derived from $s_5$ then there exist a model $m$ and a memory object $\mo'$ such that
+if $\mech{s}_6$ is derived from $s_5$ then there exist a model $m$ and a memory object $\mo'$ such that
 $m \models (n < \bvconst{32}{2})$, $\mo' \in \symmemory$, and $\symisinbounds{\bvconst{64}{\addr}}{\bvsort{8}}{\mo'}{m}$, and then:
 \[
 \mech{s}_6 \triangleq \symstate
@@ -333,9 +333,9 @@ it suffices to prove that their stores are equivalent, which holds since $\mech{
 
 \subsubsection{Example: Load}
 % TODO: remind that the repr is non-opt now
-The symbolic state at~\cref{line:llvm-load} is:
+Consider the symbolic state before the execution of~\cref{line:llvm-load}:
 \[
-s \triangleq \symstate
+s_8 \triangleq \symstate
     {\location_9}
     {\{ ..., \nameid{gep2} \mapsto e \}}
     {[]}
@@ -346,12 +346,12 @@ where:
 \[ e \triangleq \bvadd{\bvsort{64}}{\bvconst{64}{\addr}}{\bvzext{64}{\bvextract{32}{\bvzext{64}{n}}}} \]
 \[ \mo \triangleq (\bvval{\addr}{64}, \bvval{2}{32}, \arrayvalue), \ \arrayvalue \triangleq \arraystore{\arraystore{\arrayconst{\arrayinitvalue}}{\bvconst{32}{0}}{\bvconst{8}{7}}}{\bvconst{32}{1}}{\arrayinitvalue} \]
 
-On one side, according to the symbolic semantics,
-if $s'$ is derived from $s$ then there exist a model $m$ and a memory object $\mo' \triangleq (\addr', \size', \arrayvalue')$ such that
-$m \models \pc$, $\mo' \in \symmemory$, and $\symisinbounds{e}{\bvsort{8}}{\mo'}{m}$, and then:
+According to the symbolic semantics,
+if $\mech{s}_9$ is derived from $s_8$ then there exist a model $m$ and a memory object $\mo' \triangleq (\addr', \size', \arrayvalue')$ such that
+$m \models n < \bvconst{32}{2}$, $\mo' \in \symmemory$, and $\symisinbounds{e}{\bvsort{8}}{\mo'}{m}$, and then:
 % TODO: should add 0_{32}?
 \[
-s' \triangleq \symstate
+\mech{s}_9 \triangleq \symstate
     {\location_{10}}
     {\{ ..., \nameid{gep2} \mapsto e, \nameid{v} \mapsto \arrayselect{\arrayvalue'}{\bvextract{32}{\bvsub{\bvsort{64}}{e}{\bvconst{64}{\addr}}}} \}}
     {[]}
@@ -364,18 +364,18 @@ Here, this constraint is unsatisfiable,
 which means that $e$ points only to $\mo$.
 In particular, it must hold that $\mo' = \mo$ (and $\arrayvalue' = \arrayvalue$).
 
-One the other side, the symbolic state computed by the \SE engine is:
+The symbolic state computed by the \SE engine is:
 \[
-s'_{opt} \triangleq \symstate
+s_9 \triangleq \symstate
     {\location_{10}}
     {\{ ..., \nameid{gep2} \mapsto e, \nameid{v} \mapsto \arrayselect{\arrayvalue}{\bvextract{32}{\bvsub{\bvsort{64}}{e}{\bvconst{64}{\addr}}}} \}}
     {[]}
     {[\mo]}
     {n < \bvconst{32}{2}}
 \]
-Now, we have to prove that the subtree of $s$ is safe.
+Now, we have to prove that the subtree of $s_8$ is safe.
 We already know that $n < \bvconst{32}{2} \land \neg \rangecond(e, 1, \mo)$ is unsatisfiable,
-so by~\Cref{def:sym-error-state}, $s$ is not an error state.
-To prove that $s' \equiv s'_{opt}$, it suffices to prove the equivalence of their path constraints.
+so by~\Cref{def:sym-error-state}, $s_8$ is not an error state.
+To prove that $\mech{s}_9 \equiv s_9$, it suffices to prove the equivalence of their path constraints.
 Since $n < \bvconst{32}{2} \land \neg \rangecond(e, 1, \mo)$ is unsatisfiable,
 this implies that $n < \bvconst{32}{2} \land \rangecond(e, 1, \mo) \equiv n < \bvconst{32}{2}$.
