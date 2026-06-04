@@ -412,7 +412,7 @@ If there exist $\mo$, $\symlocalstore'$, and $t$ such that:
 \begin{enumerate}
     \item $\symmemory$ is well-formed
     \item $\mo \in \symmemory$
-    \item $\evalexprty{e}{\symlocalstore}{\bvsort{64}} = p$
+    \item \textup{$\evalexprty{e}{\symlocalstore}{\bvsort{64}} = p$}
     \item $\unsat{\pc \land \neg \rangecond(p, |\tau|, \mo)}$
     \item $\symlocalstore[x \mapsto \symmoread{\tau}{\mo}{p}{\tau}] \equiv \symlocalstore'$
     \item $t.\attrstate = \symstate{\nextinstr{\location}}{\symlocalstore'}{\symstack}{\symmemory}{\pc}$
