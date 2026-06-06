@@ -246,12 +246,13 @@ and more specifically:
   \arraystore{\arraystore{\arraystore{\arrayconst{\arrayinitvalue}}{\bvconst{32}{0}}{\arrayinitvalue}}{\bvconst{32}{1}}{\arrayinitvalue}}{\bvextract{32}{\bvconst{64}{\addr} - \bvconst{64}{\addr}}}{\bvconst{8}{7}} \equiv
   \arraystore{\arraystore{\arrayconst{\arrayinitvalue}}{\bvconst{32}{0}}{\bvconst{8}{7}}}{\bvconst{32}{1}}{\arrayinitvalue}
 \]
-For this, we define a generic lemma that can be applied when storing an expression of sort $\smtsort{8}$:
-% TODO: introduce all variables
+To prove such cases automatically, we define the following lemma, which can be applied when storing an expression of sort $\smtsort{8}$:
 \begin{lemma}
-Let $\bvconst{32}{i}$, ..., $\bvconst{32}{(i + n)}$ be subsequent constant SMT expressions,
-and assume that $k \equiv \bvconst{32}{i}$ and $v' \equiv v_{new}$, then:
-\[ \arraystore{\arraystore{\arraystore{a}{\bvconst{32}{i}}{v}[...]}{\bvconst{32}{(i + n)}}{t_n}}{k}{v'} \equiv \arraystore{\arraystore{a}{\bvconst{32}{i}}{v_{new}}[...]}{\bvconst{32}{(i + n)}}{t_n} \]
+Let $v$, $v_{new}$, and $v'_{new}$ be SMT expressions of sort $\smtsort{8}$,
+let $k$ be an SMT expression of sort $\smtsort{32}$,
+and let $\bvconst{32}{i}$, ..., $\bvconst{32}{(i + n)}$ be subsequent constant SMT expressions.
+If $k \equiv \bvconst{32}{i}$ and $v_{new} \equiv v'_{new}$, then:
+\[ \arraystore{\arraystore{\arraystore{a}{\bvconst{32}{i}}{v}[...]}{\bvconst{32}{(i + n)}}{t_n}}{k}{v_{new}} \equiv \arraystore{\arraystore{a}{\bvconst{32}{i}}{v'_{new}}[...]}{\bvconst{32}{(i + n)}}{t_n} \]
 \end{lemma}
 % TODO: explain what this lemma says...
 This lemma can be applied in our case,
