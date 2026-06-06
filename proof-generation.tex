@@ -233,15 +233,20 @@ s_6 \triangleq \symstate
     {n < \bvconst{32}{2}}
 \]
 where:
-\[ \mo_{new} \triangleq (\bvval{\addr}{64}, \bvval{2}{32}, \arraystore{\arraystore{\arrayconst{\arrayinitvalue}}{\bvconst{32}{0}}{\bvconst{8}{7}}}{\bvconst{32}{1}}{\arrayinitvalue}) \]
+\[ \mo_{new} \triangleq (\bvval{\addr}{64}, \bvval{2}{32}, \arrayvalue_{new}), \ \arrayvalue_{new} \triangleq \arraystore{\arraystore{\arrayconst{\arrayinitvalue}}{\bvconst{32}{0}}{\bvconst{8}{7}}}{\bvconst{32}{1}}{\arrayinitvalue} \]
 Now, we have to prove that the subtree of $s_5$ is safe.
 % TODO: improve
 Note that $s_5$ is not an error state,
 since $\evalexprty{\nameid{gep1}}{\symlocalstore}{\bvsort{64}} = \bvconst{64}{\addr}$ for every model $m$.
 To prove that $\mech{s}_6 \equiv s_6$, it suffices to prove the equivalence of their memory and path constraints.
 As for the memory, it suffices to prove that:
-\[ \arraystore{\arrayvalue}{\bvextract{32}{\bvconst{64}{\addr} - \bvconst{64}{\addr}}}{\bvconst{8}{7}} \equiv \arraystore{\arraystore{\arrayconst{\arrayinitvalue}}{\bvconst{32}{0}}{\bvconst{8}{7}}}{\bvconst{32}{1}}{\arrayinitvalue}) \]
-For this, we define a lemma that can be applied in general when storing a single byte (\ie \bvsort{8}):
+\[ \arraystore{\arrayvalue}{\bvextract{32}{\bvconst{64}{\addr} - \bvconst{64}{\addr}}}{\bvconst{8}{7}} \equiv \arrayvalue_{new} \]
+and more specifically:
+\[
+  \arraystore{\arraystore{\arraystore{\arrayconst{\arrayinitvalue}}{\bvconst{32}{0}}{\arrayinitvalue}}{\bvconst{32}{1}}{\arrayinitvalue}}{\bvextract{32}{\bvconst{64}{\addr} - \bvconst{64}{\addr}}}{\bvconst{8}{7}} \equiv
+  \arraystore{\arraystore{\arrayconst{\arrayinitvalue}}{\bvconst{32}{0}}{\bvconst{8}{7}}}{\bvconst{32}{1}}{\arrayinitvalue}
+\]
+For this, we define a generic lemma that can be applied when storing an expression of sort $\smtsort{8}$:
 % TODO: introduce all variables
 \begin{lemma}
 Let $\bvconst{32}{i}$, ..., $\bvconst{32}{(i + n)}$ be subsequent constant SMT expressions,
