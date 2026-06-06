@@ -352,17 +352,20 @@ it suffices to prove that their stores are equivalent, which holds since $\mech{
     \EndIf
     \State $j_1 :: \overline{j'} \gets \overline{j}$
     \If {$\tau = \arraytype{\tau'}{n}$}
+        \State $c_1 \gets \mathit{trunc\_overflow}(j_1)$
+        \State $c_2 \gets \mathit{mul\_overflow}(\bvsext{\indexwidth}{j_1}, \bvconst{\indexwidth}{|\tau'|})$
+        \State $c_3 \gets \mathit{add\_overflow}(o, \bvmul{\bvsort{\indexwidth}}{\bvsext{\indexwidth}{j_1}}{\bvconst{\indexwidth}{|\tau'|}})$
         \State $o \gets \bvadd{\bvsort{\indexwidth}}{o}{\bvmul{\bvsort{\indexwidth}}{\bvsext{\indexwidth}{j_1}}{\bvconst{\indexwidth}{|\tau'|}}}$ \label{line:array-index}
-        \State $c \gets c \lor \mathit{trunc-overflow} \lor \mathit{mul-overflow} \lor \mathit{add-overflow}$
-        \State \Return \Call{compute-overflow-internal}{$\tau', o, c, \overline{j'}$}
+        \State \Return \Call{compute-overflow-internal}{$\tau', o, c \lor c_1 \lor c_2 \lor c_3, \overline{j'}$}
     \EndIf
 \EndFunction
 
 \Function{compute-overflow}{$\tau, \overline{j}$}
     \State $j_1 :: \overline{j'} \gets \overline{j}$
+    \State $c_1 \gets \mathit{trunc\_overflow}(j_1)$
+    \State $c_2 \gets \mathit{mul\_overflow}(\bvsext{\indexwidth}{j_1}, \bvconst{\indexwidth}{|\tau|})$
     \State $o \gets \bvmul{\bvsort{\indexwidth}}{\bvsext{\indexwidth}{j_1}}{\bvconst{\indexwidth}{|\tau|}}$
-    \State $c \gets \mathit{trunc-overflow} \lor \mathit{mul-overflow}$
-    \State \Return \Call{compute-overflow-internal}{$\tau, o, c, \overline{j'}$}
+    \State \Return \Call{compute-overflow-internal}{$\tau, o, c_1 \lor c_2, \overline{j'}$}
 \EndFunction
 
 \end{algorithmic}
