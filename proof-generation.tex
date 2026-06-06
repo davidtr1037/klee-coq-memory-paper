@@ -302,7 +302,7 @@ According to the symbolic semantics, the derived symbolic state is:
     {n < \bvconst{32}{2}}
 \]
 where:
-\[ \mech{e} \triangleq \bvadd{\bvsort{64}}{\bvconst{64}{\addr}}{\bvzext{64}{\bvmul{\bvsort{32}}{\bvextract{32}{\bvzext{64}{n}}}{\bvconst{32}{1}}}} \]
+\[ \mech{e} \triangleq \bvadd{\bvsort{64}}{\bvconst{64}{\addr}}{\bvzext{64}{\bvmul{\bvsort{32}}{\bvsext{32}{\bvzext{64}{n}}}{\bvconst{32}{1}}}} \]
 The symbolic state computed by the \SE engine is:
 \[
 s_8 \triangleq \symstate
@@ -313,7 +313,7 @@ s_8 \triangleq \symstate
     {n < \bvconst{32}{2}}
 \]
 where:
-\[ e \triangleq \bvadd{\bvsort{64}}{\bvconst{64}{\addr}}{\bvzext{64}{\bvextract{32}{\bvzext{64}{n}}}} \]
+\[ e \triangleq \bvadd{\bvsort{64}}{\bvconst{64}{\addr}}{\bvzext{64}{\bvsext{32}{\bvzext{64}{n}}}} \]
 Now, we need to prove that the subtree of $s_7$ is safe.
 To prove that $s_7$ is not an error state, we will use the following lemma:\footnote{
 Informally, $\overflowcond$ computes an SMT formula that encodes the fact that an overflow occured.
@@ -330,10 +330,11 @@ it suffices to prove that $n < \bvconst{32}{2} \land \overflowcond(\bvsort{64}, 
 % TODO: why?
 In our case, it unfolds to the following constraint:
 \[
-\begin{array}{ll}
-n < \bvconst{32}{2} \land \big( & (\bvzext{64}{n} > \bvconst{64}{4294967295}) \lor \\
-& (\bvmul{\bvsort{64}}{\bvzext{64}{\bvextract{32}{\bvzext{64}{n}}}}{\bvconst{64}{1}}) > \bvconst{64}{4294967295}\big)
-\end{array}
+n < \bvconst{32}{2} \land \big((\bvzext{64}{n} > \bvconst{64}{4294967295}) \lor (\bvmul{\bvsort{64}}{\bvzext{64}{\bvsext{32}{\bvzext{64}{n}}}}{\bvconst{64}{1}}) > \bvconst{64}{4294967295}\big)
+%\begin{array}{ll}
+%n < \bvconst{32}{2} \land \big( & (\bvzext{64}{n} > \bvconst{64}{4294967295}) \lor \\
+%& (\bvmul{\bvsort{64}}{\bvzext{64}{\bvsext{32}{\bvzext{64}{n}}}}{\bvconst{64}{1}}) > \bvconst{64}{4294967295}\big)
+%\end{array}
 \]
 which is indeed unsatisfiable.
 % TODO: why?
