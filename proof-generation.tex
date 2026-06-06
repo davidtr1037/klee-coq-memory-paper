@@ -341,6 +341,33 @@ which is indeed unsatisfiable.
 To prove that $\mech{s}_8 \equiv s_8$,
 it suffices to prove that their stores are equivalent, which holds since $\mech{e} \equiv e$.
 
+\begin{algorithm}[t]
+\caption{TODO}
+\label{alg:gep-overflow}
+\begin{algorithmic}[1]
+
+\Function{compute-overflow-internal}{$\tau, o, c, \overline{j}$}
+    \If {$|\overline{j}| = 0$}
+        \State \Return $c$
+    \EndIf
+    \State $j_1 :: \overline{j'} \gets \overline{j}$
+    \If {$\tau = \arraytype{\tau'}{n}$}
+        \State $o \gets \bvadd{\bvsort{\indexwidth}}{o}{\bvmul{\bvsort{\indexwidth}}{\bvsext{\indexwidth}{j_1}}{\bvconst{\indexwidth}{|\tau'|}}}$ \label{line:array-index}
+        \State $c \gets c \lor \mathit{trunc-overflow} \lor \mathit{mul-overflow} \lor \mathit{add-overflow}$
+        \State \Return \Call{compute-overflow-internal}{$\tau', o, c, \overline{j'}$}
+    \EndIf
+\EndFunction
+
+\Function{compute-overflow}{$\tau, \overline{j}$}
+    \State $j_1 :: \overline{j'} \gets \overline{j}$
+    \State $o \gets \bvmul{\bvsort{\indexwidth}}{\bvsext{\indexwidth}{j_1}}{\bvconst{\indexwidth}{|\tau|}}$
+    \State $c \gets \mathit{trunc-overflow} \lor \mathit{mul-overflow}$
+    \State \Return \Call{compute-overflow-internal}{$\tau, o, c, \overline{j'}$}
+\EndFunction
+
+\end{algorithmic}
+\end{algorithm}
+
 To handle such cases in general,
 we define an interface lemma for \textit{getelementptr}, which is stated as~\Cref{lemma:interface-gep}.
 
