@@ -258,7 +258,6 @@ If $k \equiv \bvconst{32}{i}$ and $v_{new} \equiv v'_{new}$, then:
 This lemma can be applied in our case,
 since $\bvextract{32}{\bvsub{\bvsort{64}}{\bvconst{64}{\addr}}{\bvconst{64}{\addr}}} \equiv \bvconst{32}{0}$ and $\bvconst{8}{7} \equiv \bvconst{8}{7}$.
 We define similar lemmas to handle stores of other types (\bvsort{16}, \bvsort{32}, and \bvsort{64}).
-% TODO: unfold rc
 As for the path constraints,
 note that $\rangecond(\bvconst{64}{\addr}, 1, \mo) \equiv \true$, so the equivalence follows easily.
 
