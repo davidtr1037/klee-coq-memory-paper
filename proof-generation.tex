@@ -235,9 +235,9 @@ s_6 \triangleq \symstate
 where:
 \[ \mo_{new} \triangleq (\bvval{\addr}{64}, \bvval{2}{32}, \arrayvalue_{new}), \ \arrayvalue_{new} \triangleq \arraystore{\arraystore{\arrayconst{\arrayinitvalue}}{\bvconst{32}{0}}{\bvconst{8}{7}}}{\bvconst{32}{1}}{\arrayinitvalue} \]
 Now, we have to prove that the subtree of $s_5$ is safe.
-% TODO: improve
-Note that $s_5$ is not an error state,
-since $\evalexprty{\nameid{gep1}}{\symlocalstore}{\bvsort{64}} = \bvconst{64}{\addr}$ for every model $m$.
+Based on~\Cref{def:sym-error-state},
+$s_5$ is not an error state,
+since $\evalexprty{\nameid{gep1}}{\symlocalstore}{\bvsort{64}} = \bvconst{64}{\addr}$ and $m[\bvconst{64}{\addr}] = \bvval{\addr}{64}$ for every model $m$.
 To prove that $\mech{s}_6 \equiv s_6$, it suffices to prove the equivalence of their memory and path constraints.
 As for the memory, it suffices to prove that:
 \[ \arraystore{\arrayvalue}{\bvextract{32}{\bvconst{64}{\addr} - \bvconst{64}{\addr}}}{\bvconst{8}{7}} \equiv \arrayvalue_{new} \]
