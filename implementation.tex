@@ -12,6 +12,33 @@ a \emph{state-of-the-art} \SE engine operating on \llvm IR~\cite{llvm}.
 Currently, some of the SMT transformations used in \klee are not supported by our implementation,
 but we plan to support them in future versions.
 In the $\tgep$ instruction, our implementation currently supports only the \opcode{nuw} attribute.
+
+\subsection{\coq Formalization}
+Our \coq formalization consists of approximately 40,000 lines of code (LOC), excluding third-party dependencis (\eg CompCert integers).
+% Iris
+% MetaCoq
+% CH2O
+% Software Foundations
+% Cerise
+To the best of our knowledge,
+this is one of the largest \coq mechanizations in programming language (...).
+% main theorem: 3.5K
+% completeness: 6.2K
+% simplification theory: 8.1K
+% automation: 6.7K
+% non-spec: 1.9K
+% module assumptions: 0.5K
+% well-formedness: 0.9K
+To provide a detailed insight into the core components of our formalization,
+we report the size (LOC) of those components:
+\begin{itemize}
+    \item Main theorem (\Cref{theorem:safety-via-et}): $\approx$3,500 LOC
+    \item Completeness theorem (\dt{TODO}): $\approx$6,200 LOC
+    \item Simplification theory: (\Cref{theorem:safety-via-et}): $\approx$8,100 LOC
+    \item Interface lemmas: (\Cref{sec:proof-et}): $\approx$6,700 LOC
+\end{itemize}
+
+\subsection{Implementation Issues in \klee}
 We found several implementation issues in \klee that relate to memory modeling, which we discuss next.
 
 \paragraph{Issue 1: Inconsistent modeling of the index type}
