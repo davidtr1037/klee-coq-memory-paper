@@ -431,7 +431,7 @@ Before dereferencing $e$, the \SE engine checks if $e$ may point to other memory
 by checking the satisfiability of $n < \bvconst{32}{2} \land \neg \rangecond(e, 1, \mo)$.
 Here, this constraint is unsatisfiable,
 which means that $e$ points only to $\mo$.
-In particular, it must hold that $\mo' = \mo$ (and $\arrayvalue' = \arrayvalue$).
+In particular, this implies that $\mo' = \mo$, and $\arrayvalue' = \arrayvalue$.
 
 The symbolic state computed by the \SE engine is:
 \[
