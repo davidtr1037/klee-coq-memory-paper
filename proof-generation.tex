@@ -261,7 +261,7 @@ We define similar lemmas to handle stores of other types (\bvsort{16}, \bvsort{3
 As for the path constraints,
 note that $\rangecond(\bvconst{64}{\addr}, 1, \mo) \equiv \true$, so the equivalence follows easily.
 
-To handle such cases in general, we define an interface lemma for \textit{store}, which is stated as~\Cref{lemma:interface-store}.
+To handle such cases in general, we define an interface lemma for \textit{store}, which is stated as follows:
 
 \begin{lemma}
 \label{lemma:interface-store}
@@ -383,7 +383,7 @@ To prove that $\mech{s}_8 \equiv s_8$,
 it suffices to prove that their stores are equivalent, which holds since $\mech{e} \equiv e$.
 
 To handle such cases in general,
-we define an interface lemma for \textit{getelementptr}, which is stated as~\Cref{lemma:interface-gep}.
+we define an interface lemma for \textit{getelementptr}, which is stated as follows:
 
 \begin{lemma}
 \label{lemma:interface-gep}
@@ -450,7 +450,7 @@ Since $n < \bvconst{32}{2} \land \neg \rangecond(e, 1, \mo)$ is unsatisfiable,
 this implies that $n < \bvconst{32}{2} \land \rangecond(e, 1, \mo) \equiv n < \bvconst{32}{2}$.
 
 To handle such cases in general,
-we define an interface lemma for \textit{load}, which is stated as~\Cref{lemma:interface-load}.
+we define an interface lemma for \textit{load}, which is stated as follows:
 
 \begin{lemma}
 \label{lemma:interface-load}
