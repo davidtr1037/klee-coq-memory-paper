@@ -4,9 +4,9 @@
 % TODO: we added a new allocator to be aligned with...
 
 Our implementation consists of two main components:
-A formalization in \coq (9.0.1) and an extension of the \SE engine.
-Our formalization is based on~\cite{klee-rocq}, and it includes the definition of the semantics and the theory discussed before (\Cref{sec:background,sec:core}).
-Our \coq formalization consists of roughly 40K lines of code, excluding third-party dependencis.
+a formalization in \coq (9.0.1) and an extension of the \SE engine.
+Our formalization is based on~\cite{klee-rocq},
+and it includes the definitions of the semantics (\Cref{sec:concrete-semantics,sec:symbolic-semantics}) and the theoretical foundation (\Cref{sec:program-safety,sec:proof-generation}).
 Our proof generation approach (\Cref{sec:proof-generation}) is implemented on top of \klee~\cite{klee},
 a \emph{state-of-the-art} \SE engine operating on \llvm IR~\cite{llvm}.
 Currently, some of the SMT transformations used in \klee are not supported by our implementation,
@@ -15,6 +15,9 @@ In the $\tgep$ instruction, our implementation currently supports only the \opco
 
 \subsection{\coq Formalization}
 Our \coq formalization consists of approximately 40,000 lines of code (LOC), excluding third-party dependencis (\eg CompCert integers).
+For comparison,
+this is more than twice the size of the formalization of~\cite{klee-rocq}, which consists of approximately 18,000 LOC.
+This substantial difference reflects the additional complexity of our formalization.
 % Iris
 % MetaCoq
 % CH2O
