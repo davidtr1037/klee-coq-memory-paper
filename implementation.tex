@@ -14,7 +14,7 @@ but we plan to support them in future versions.
 In the $\tgep$ instruction, our implementation currently supports only the \opcode{nuw} attribute.
 
 \subsection{\coq Formalization}
-Our \coq formalization consists of approximately 40,000 lines of code (LOC), excluding third-party dependencis (\eg CompCert integers).
+Our \coq formalization consists of approximately 40,000 lines of code (LOC), excluding third-party dependencis (\eg CompCert~\cite{CompCert} integers).
 For comparison,
 this is more than twice the size of the formalization of~\cite{klee-rocq}, which consists of approximately 18,000 LOC.
 This substantial difference reflects the additional complexity of our formalization.
@@ -24,7 +24,7 @@ This substantial difference reflects the additional complexity of our formalizat
 % Software Foundations
 % Cerise
 To the best of our knowledge,
-this is one of the largest \coq mechanizations in programming language (...).
+this is one of the largest \coq mechanizations in programming language~\cite{CompCert,irisproject}.
 % main theorem: 3.5K
 % completeness: 6.2K
 % simplification theory: 8.1K
@@ -37,7 +37,7 @@ we report the size (LOC) of those components:
 \begin{itemize}
     \item Main theorem (\Cref{theorem:safety-via-et}): $\approx$3,500 LOC
     \item Completeness theorem (\dt{TODO}): $\approx$6,200 LOC
-    \item Simplification theory: (\Cref{theorem:safety-via-et}): $\approx$8,100 LOC
+    \item SMT simplification theory: $\approx$8,100 LOC
     \item Interface lemmas: (\Cref{sec:proof-et}): $\approx$6,700 LOC
 \end{itemize}
 
