@@ -5,6 +5,21 @@ In this section, ...
 
 % TODO: improve / define s and c
 % TODO: the main usage is not for error states
+% TODO: what does "supported" mean intuitiviely?
+\subsection{Module Assumptions}
+\label{sec:module-assumptions}
+The approach presented in~\cite{klee-rocq} assumes that the module is \emph{supported},
+\ie all the instruction operands are neither $\tpoison$ nor involved in potentially erroneous operations (\eg shift).
+We further extend these assumptions to operands of memory-related instructions.
+Additional requirements for the $\tgep$ instruction are discussed in~\Cref{appendix:module-assumptions}.
+%In addition,
+%if the indexed type of a given index in a $\tgep$ instruction is a struct type,
+%then that index must be a constant and lie within the range of $\bvsort{64}$.
+%As a matter of notation, we say that a module is \emph{supported} if it satisfies all these assumptions.
+
+\subsection{Reachability Completeness}
+\label{sec:completeness}
+
 Informally,
 we say that a symbolic state \emph{represents} a concrete state if the latter can be obtained from the former via concretization using a model that satisfies the path constraints.
 This relation will be used to define symbolic error states (\Cref{def:sym-error-state}).
@@ -29,21 +44,6 @@ and $\evalmodel{m}{\pc} = \true$.
 Furthermore, $s$ \emph{represents} $c$, denoted by $s \overapprox c$,
 if $s \overapproxvia{m} c$ for some model $m$.
 \end{definition}
-
-% TODO: what does "supported" mean intuitiviely?
-\subsection{Module Assumptions}
-\label{sec:module-assumptions}
-The approach presented in~\cite{klee-rocq} assumes that the module is \emph{supported},
-\ie all the instruction operands are neither $\tpoison$ nor involved in potentially erroneous operations (\eg shift).
-We further extend these assumptions to operands of memory-related instructions.
-Additional requirements for the $\tgep$ instruction are discussed in~\Cref{appendix:module-assumptions}.
-%In addition,
-%if the indexed type of a given index in a $\tgep$ instruction is a struct type,
-%then that index must be a constant and lie within the range of $\bvsort{64}$.
-%As a matter of notation, we say that a module is \emph{supported} if it satisfies all these assumptions.
-
-\subsection{Reachability Completeness}
-\label{sec:completeness}
 
 \si{Replace this with a presentation of what reachability completeness}
 Recall from~\Cref{def:over-approx-state} that a concrete state containing a $\tpoison$ value cannot be represented by a symbolic state.
