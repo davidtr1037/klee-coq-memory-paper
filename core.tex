@@ -3,8 +3,6 @@
 
 In this section, ...
 
-% TODO: improve / define s and c
-% TODO: the main usage is not for error states
 % TODO: what does "supported" mean intuitiviely?
 \subsection{Module Assumptions}
 \label{sec:module-assumptions}
@@ -20,10 +18,13 @@ Additional requirements for the $\tgep$ instruction are discussed in~\Cref{appen
 \subsection{Reachability Completeness}
 \label{sec:completeness}
 
+% TODO:
+% In this section,
+% we show the relation between the concrete and symbolic semantics
+
 Informally,
-we say that a symbolic state \emph{represents} a concrete state if the latter can be obtained from the former via concretization using a model that satisfies the path constraints.
-This relation will be used to define symbolic error states (\Cref{def:sym-error-state}).
-In the following, we extend the definition given in~\cite{klee-rocq} (Definition 3.4) to account for memory.
+we say that a symbolic state $s$ \emph{represents} a concrete state $c$ if $c$ can be obtained from $s$ via concretization using a model that satisfies the path constraints of $s$.
+This relation is formally defined below.
 
 % TODO: same number of memory objects
 \begin{definition}
@@ -38,7 +39,6 @@ if the symbolic memory objects of $\symmemory$ represent the memory objects of $
 A symbolic state $s \triangleq \symstate{\location}{\symlocalstore}{\symstack}{\symmemory}{\pc}$ \emph{represents} a concrete state $c \triangleq \progstate{\location}{\localstore}{\stack}{\memory}$ via $m$,
 denoted by $s \overapproxvia{m} c$,
 if $\symlocalstore \overapproxvia{m} \localstore$,
-$\symstack \overapproxvia{m} \stack$,
 $\symmemory \overapproxvia{m} \memory$,
 and $\evalmodel{m}{\pc} = \true$.
 Furthermore, $s$ \emph{represents} $c$, denoted by $s \overapprox c$,
