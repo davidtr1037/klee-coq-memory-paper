@@ -1,6 +1,8 @@
 \section{Program Safety via Execution Trees}
 \label{sec:program-safety}
 
+In this section, ...
+
 % TODO: improve / define s and c
 % TODO: the main usage is not for error states
 Informally,
@@ -40,6 +42,51 @@ Additional requirements for the $\tgep$ instruction are discussed in~\Cref{appen
 %then that index must be a constant and lie within the range of $\bvsort{64}$.
 %As a matter of notation, we say that a module is \emph{supported} if it satisfies all these assumptions.
 
+\subsection{Reachability Completeness}
+\label{sec:completeness}
+
+\si{Replace this with a presentation of what reachability completeness}
+Recall from~\Cref{def:over-approx-state} that a concrete state containing a $\tpoison$ value cannot be represented by a symbolic state.
+As a result, we cannot prove the reachability completeness of the symbolic semantics w.r.t. the concrete semantics,
+since a sequence of steps in the concrete semantics involving $\tpoison$ values cannot be simulated by a sequence of steps in the symbolic semantics.
+Instead, we follow the approach from~\cite{klee-rocq},
+and prove reachability completeness w.r.t. the non-speculative semantics (Section 3.3 from~\cite{klee-rocq}),
+a subset of the concrete semantics restricted to concrete states that do not contain $\tpoison$ values.
+Formally, it is defined as follows:
+\begin{definition}
+A concrete state $c \triangleq \progstate{\location}{\localstore}{\stack}{\memory}$ is \emph{poison-free}
+if $\localstore$, $\stack$, and $\memory$ do not contain $\tpoison$ values.
+Let $c$ and $c'$ be two concrete states.
+We say that there is a \emph{non-speculative} step between $c$ and $c'$, denoted by $c \nsstep c'$,
+if $c \step c'$ and both $c$ and $c'$ are poison-free.
+\end{definition}
+%The non-speculative concrete semantics allows us to relate between symbolic and concrete states,
+%which then allows us to prove reachability completeness.
+Establishing reachability completeness in this restrictive way is an important step toward proving program safety w.r.t. the concrete semantics.
+
+\begin{definition}
+\label{def:issafe-ns-step}
+Let $c_0 \triangleq \initstate(\module)$,
+then $\module$ is \emph{safe} w.r.t. the non-speculative concrete semantics, denoted by $\issafens(\module)$, if:
+\[ \forall c. \ c_{0} \multinsstep c \implies \neg \errorstate(c) \]
+(The relation $\multinsstep$ is the reflexive-transitive closure of the relation $\nsstep$.)
+\end{definition}
+
+\begin{lemma}
+\label{lemma:multi-ns-step-relative-completeness}
+Let $c$ and $c'$ be concrete states.
+If $\module$ is supported, $c$ is poison-free, no error states can be derived from $c$ using the $\multinsstep$ relation, and $c \multistep c'$,
+then $c \multinsstep c'$.
+\end{lemma}
+
+\begin{theorem}
+\label{theorem:completeness}
+Let $c_{0} \triangleq \initstate(\module)$, and let $s_{0} \triangleq \initsymstate(\module)$.
+If $\module$ is supported and $c_{0} \multinsstep c$,
+then there exists a symbolic state $s$ such that $s_{0} \symmultistep s$ and $s \overapprox c$.
+\end{theorem}
+
+\subsection{...}
 An execution tree is a data structure that records the paths explored during the analysis of a given program.
 We denote by $\tree(s, l)$ the execution tree $t$ in which $s$ is the root symbolic state ($t.\attrstate$) and $l$ is a list of successor subtrees ($t.\attrchildren$).
 Following the approach of~\cite{klee-rocq},
@@ -107,48 +154,4 @@ Let $s_0 \triangleq \initsymstate(\module)$, and $l$ be a list of execution tree
 If $\module$ is supported and $\safeet(\tree(s_0, l))$, then $\issafe(\module)$.
 \end{theorem}
 
-\ignore{
-\subsection{Reachability Completeness}
-\label{sec:completeness}
 
-\si{Replace this with a presentation of what reachability completeness}
-Recall from~\Cref{def:over-approx-state} that a concrete state containing a $\tpoison$ value cannot be represented by a symbolic state.
-As a result, we cannot prove the reachability completeness of the symbolic semantics w.r.t. the concrete semantics,
-since a sequence of steps in the concrete semantics involving $\tpoison$ values cannot be simulated by a sequence of steps in the symbolic semantics.
-Instead, we follow the approach from~\cite{klee-rocq},
-and prove reachability completeness w.r.t. the non-speculative semantics (Section 3.3 from~\cite{klee-rocq}),
-a subset of the concrete semantics restricted to concrete states that do not contain $\tpoison$ values.
-Formally, it is defined as follows:
-\begin{definition}
-A concrete state $c \triangleq \progstate{\location}{\localstore}{\stack}{\memory}$ is \emph{poison-free}
-if $\localstore$, $\stack$, and $\memory$ do not contain $\tpoison$ values.
-Let $c$ and $c'$ be two concrete states.
-We say that there is a \emph{non-speculative} step between $c$ and $c'$, denoted by $c \nsstep c'$,
-if $c \step c'$ and both $c$ and $c'$ are poison-free.
-\end{definition}
-%The non-speculative concrete semantics allows us to relate between symbolic and concrete states,
-%which then allows us to prove reachability completeness.
-Establishing reachability completeness in this restrictive way is an important step toward proving program safety w.r.t. the concrete semantics.
-
-\begin{definition}
-\label{def:issafe-ns-step}
-Let $c_0 \triangleq \initstate(\module)$,
-then $\module$ is \emph{safe} w.r.t. the non-speculative concrete semantics, denoted by $\issafens(\module)$, if:
-\[ \forall c. \ c_{0} \multinsstep c \implies \neg \errorstate(c) \]
-(The relation $\multinsstep$ is the reflexive-transitive closure of the relation $\nsstep$.)
-\end{definition}
-
-\begin{lemma}
-\label{lemma:multi-ns-step-relative-completeness}
-Let $c$ and $c'$ be concrete states.
-If $\module$ is supported, $c$ is poison-free, no error states can be derived from $c$ using the $\multinsstep$ relation, and $c \multistep c'$,
-then $c \multinsstep c'$.
-\end{lemma}
-
-\begin{theorem}
-\label{theorem:completeness}
-Let $c_{0} \triangleq \initstate(\module)$, and let $s_{0} \triangleq \initsymstate(\module)$.
-If $\module$ is supported and $c_{0} \multinsstep c$,
-then there exists a symbolic state $s$ such that $s_{0} \symmultistep s$ and $s \overapprox c$.
-\end{theorem}
-}
