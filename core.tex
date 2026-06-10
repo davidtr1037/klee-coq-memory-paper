@@ -1,7 +1,10 @@
 \section{Program Safety via Execution Trees}
 \label{sec:program-safety}
 
-In this section, ...
+In this section,
+we present a theoretical foundation that enables us to prove safety of programs based on properties of the symbolic semantics.
+The main result of this section is~\Cref{theorem:safety-via-et},
+which states that a program is safe with respect to the concrete semantics if the execution tree of the program satisfies certian safety properties.
 
 % TODO: what does "supported" mean intuitiviely?
 \subsection{Module Assumptions}
@@ -153,5 +156,3 @@ then the program is safe w.r.t. the concrete semantics.
 Let $s_0 \triangleq \initsymstate(\module)$, and $l$ be a list of execution trees.
 If $\module$ is supported and $\safeet(\tree(s_0, l))$, then $\issafe(\module)$.
 \end{theorem}
-
-
