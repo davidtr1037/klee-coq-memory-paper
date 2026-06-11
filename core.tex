@@ -6,9 +6,12 @@ we present a theoretical foundation that enables us to prove safety of programs 
 The main result of this section is~\Cref{theorem:safety-via-et},
 which states that a program is safe with respect to the concrete semantics if the execution tree of the program satisfies certian safety properties.
 
-% TODO: what does "supported" mean intuitiviely?
 \subsection{Module Assumptions}
 \label{sec:module-assumptions}
+
+% TODO: what does "supported" mean intuitiviely?
+% TODO: explain properly
+
 The approach presented in~\cite{klee-rocq} assumes that the module is \emph{supported},
 \ie all the instruction operands are neither $\tpoison$ nor involved in potentially erroneous operations (\eg shift).
 We further extend these assumptions to operands of memory-related instructions.
@@ -18,16 +21,24 @@ Additional requirements for the $\tgep$ instruction are discussed in~\Cref{appen
 %then that index must be a constant and lie within the range of $\bvsort{64}$.
 %As a matter of notation, we say that a module is \emph{supported} if it satisfies all these assumptions.
 
+%If the indexed type of a given index in a $\tgep$ instruction is a struct type,
+%then that index must be a constant and lie within the range of $\bvsort{64}$.
+%At a high level, this assumption is required in order to handle the case of $\tgep$ in the proof of the reachability completeness theorem.
+
 \subsection{Reachability Completeness}
 \label{sec:completeness}
 
 % TODO:
-% In this section,
-% we show the relation between the concrete and symbolic semantics
+In this section,
+we establish the connection between the concrete and symbolic semantics.
+More specifically, our main result is~\Cref{theorem:completeness},
+which states that any sequence of derivations in the concrete semantics that does not introduce $\tpoison$ values can be simulated by a corresponding sequence of derivations in the symbolic semantics.
+Ultimately, this correspondence helps proving the main theorem of~\Cref{sec:program-safety} (\Cref{theorem:safety-via-et}).
 
-Informally,
-we say that a symbolic state $s$ \emph{represents} a concrete state $c$ if $c$ can be obtained from $s$ via concretization using a model that satisfies the path constraints of $s$.
-This relation is formally defined below.
+To establish this connection,
+we first define the relation between concrete and symbolic states.
+Informally, we say that a symbolic state $s$ \emph{represents} a concrete state $c$ if $c$ can be obtained from $s$ via concretization using a model that satisfies the path constraints of $s$.
+The formal definition is given below.
 
 % TODO: same number of memory objects
 \begin{definition}
