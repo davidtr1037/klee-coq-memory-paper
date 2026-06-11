@@ -28,14 +28,13 @@ Additional requirements for the $\tgep$ instruction are discussed in~\Cref{appen
 \subsection{Reachability Completeness}
 \label{sec:completeness}
 
-% TODO:
 In this section,
-we establish a connection between the concrete and symbolic semantics.
+we establish the \emph{reachability completeness} of the symbolic semantics with respect to the concrete semantics.
 More specifically, our main result is~\Cref{theorem:completeness},
 which states that any sequence of derivations in the concrete semantics that does not introduce $\tpoison$ values can be simulated by a corresponding sequence of derivations in the symbolic semantics.
 Ultimately, this correspondence will help us proving the main theorem of~\Cref{sec:program-safety} (\Cref{theorem:safety-via-et}).
 
-To establish this connection,
+To establish reachability completeness,
 we first define a relation between concrete and symbolic states.
 Informally, we say that a symbolic state $s$ \emph{represents} a concrete state $c$ if $c$ can be obtained from $s$ via concretization using a model that satisfies the path constraints of $s$.
 The formal definition is given below.
@@ -59,39 +58,46 @@ Furthermore, $s$ \emph{represents} $c$, denoted by $s \overapprox c$,
 if $s \overapproxvia{m} c$ for some model $m$.
 \end{definition}
 
-\si{Replace this with a presentation of what reachability completeness}
-Recall from~\Cref{def:over-approx-state} that a concrete state containing a $\tpoison$ value cannot be represented by a symbolic state.
-As a result, we cannot prove the reachability completeness of the symbolic semantics w.r.t. the concrete semantics,
-since a sequence of steps in the concrete semantics involving $\tpoison$ values cannot be simulated by a sequence of steps in the symbolic semantics.
-Instead, we follow the approach from~\cite{klee-rocq},
-and prove reachability completeness w.r.t. the non-speculative semantics (Section 3.3 from~\cite{klee-rocq}),
-a subset of the concrete semantics restricted to concrete states that do not contain $\tpoison$ values.
-Formally, it is defined as follows:
+Based on~\Cref{def:over-approx-state},
+one can see that a concrete state containing a $\tpoison$ value cannot be represented by a symbolic state.
+This implies that we cannot establish the reachability completeness of the symbolic semantics with respect to the concrete semantics.
+%Therefore, a sequence of derivations in the concrete semantics involving $\tpoison$ values cannot be simulated by a sequence of derivations in the symbolic semantics.
+Instead, we establish the reachability completeness with respect to a subset of the concrete semantics restricted to concrete states that do not contain $\tpoison$ values.
+%Formally, it is defined as follows:
+
+In the following,
+we formally define the restricted concrete semantics.
+We first define \emph{poison-free} states, and then define the corresponding step relation.
+
 \begin{definition}
 A concrete state $c \triangleq \progstate{\location}{\localstore}{\stack}{\memory}$ is \emph{poison-free}
-if $\localstore$, $\stack$, and $\memory$ do not contain $\tpoison$ values.
+if $\localstore$ and $\memory$ do not contain $\tpoison$ values.
+\end{definition}
+
+\begin{definition}
 Let $c$ and $c'$ be two concrete states.
-We say that there is a \emph{non-speculative} step between $c$ and $c'$, denoted by $c \nsstep c'$,
+We say that there is a \emph{poison-free} step between $c$ and $c'$, denoted by $c \nsstep c'$,
 if $c \step c'$ and both $c$ and $c'$ are poison-free.
 \end{definition}
-%The non-speculative concrete semantics allows us to relate between symbolic and concrete states,
-%which then allows us to prove reachability completeness.
-Establishing reachability completeness in this restrictive way is an important step toward proving program safety w.r.t. the concrete semantics.
+
+Similarly to~\Cref{def:safety},
+we define when a program, \ie an \llvm module, is considered safe with respect to the restricted concrete semantics.
+The formal definition is given below.
 
 \begin{definition}
 \label{def:issafe-ns-step}
 Let $c_0 \triangleq \initstate(\module)$,
-then $\module$ is \emph{safe} w.r.t. the non-speculative concrete semantics, denoted by $\issafens(\module)$, if:
+then $\module$ is \emph{safe} with respect to the restricted concrete semantics, denoted by $\issafens(\module)$, if:
 \[ \forall c. \ c_{0} \multinsstep c \implies \neg \errorstate(c) \]
 (The relation $\multinsstep$ is the reflexive-transitive closure of the relation $\nsstep$.)
 \end{definition}
 
-\begin{lemma}
-\label{lemma:multi-ns-step-relative-completeness}
-Let $c$ and $c'$ be concrete states.
-If $\module$ is supported, $c$ is poison-free, no error states can be derived from $c$ using the $\multinsstep$ relation, and $c \multistep c'$,
-then $c \multinsstep c'$.
-\end{lemma}
+%\begin{lemma}
+%\label{lemma:multi-ns-step-relative-completeness}
+%Let $c$ and $c'$ be concrete states.
+%If $\module$ is supported, $c$ is poison-free, no error states can be derived from $c$ using the $\multinsstep$ relation, and $c \multistep c'$,
+%then $c \multinsstep c'$.
+%\end{lemma}
 
 \begin{theorem}
 \label{theorem:completeness}
