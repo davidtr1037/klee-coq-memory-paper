@@ -30,13 +30,13 @@ Additional requirements for the $\tgep$ instruction are discussed in~\Cref{appen
 
 % TODO:
 In this section,
-we establish the connection between the concrete and symbolic semantics.
+we establish a connection between the concrete and symbolic semantics.
 More specifically, our main result is~\Cref{theorem:completeness},
 which states that any sequence of derivations in the concrete semantics that does not introduce $\tpoison$ values can be simulated by a corresponding sequence of derivations in the symbolic semantics.
-Ultimately, this correspondence helps proving the main theorem of~\Cref{sec:program-safety} (\Cref{theorem:safety-via-et}).
+Ultimately, this correspondence will help us proving the main theorem of~\Cref{sec:program-safety} (\Cref{theorem:safety-via-et}).
 
 To establish this connection,
-we first define the relation between concrete and symbolic states.
+we first define a relation between concrete and symbolic states.
 Informally, we say that a symbolic state $s$ \emph{represents} a concrete state $c$ if $c$ can be obtained from $s$ via concretization using a model that satisfies the path constraints of $s$.
 The formal definition is given below.
 
