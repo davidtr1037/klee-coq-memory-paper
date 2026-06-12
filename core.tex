@@ -101,6 +101,13 @@ then $\module$ is \emph{safe} with respect to the restricted concrete semantics,
 % TODO: add the completeness lemma for one step
 % TODO: define well-formed
 
+\begin{lemma}
+\label{lemma:completeness-step}
+Let $c$ be a concrete state and $s$ be a symbolic state.
+If $s \overapprox c$ and $c \nsstep c'$,
+then there exists a symbolic state $s'$ such that $s \symstep s'$ and $s' \overapprox c'$.
+\end{lemma}
+
 Now, the reachability completeness theorem is given below.
 
 \begin{theorem}
