@@ -101,10 +101,18 @@ then $\module$ is \emph{safe} with respect to the restricted concrete semantics,
 % TODO: add the completeness lemma for one step
 % TODO: define well-formed
 
+\begin{definition}
+\label{def:well-formed}
+A memory object $(\addr, \size, \arrayvalue)$ is \emph{well-formed} if its address interval does not wrap around the address space,
+\ie $\addr + \zeroext{\bvsort{64}}{\size}$ does not overflow.
+A heap $\memory$ is \emph{well-formed} if all its memory objects are well-formed and there are no memory objects with overlapping address intervals.
+A state $\progstate{\location}{\localstore}{\stack}{\memory}$ is well-formed if $\memory$ is well-formed.
+\end{definition}
+
 \begin{lemma}
 \label{lemma:completeness-step}
 Let $c$ be a concrete state and $s$ be a symbolic state.
-If $s \overapprox c$ and $c \nsstep c'$,
+If $c$ is well-formed, $s \overapprox c$ and $c \nsstep c'$,
 then there exists a symbolic state $s'$ such that $s \symstep s'$ and $s' \overapprox c'$.
 \end{lemma}
 
