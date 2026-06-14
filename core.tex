@@ -152,6 +152,53 @@ An execution tree $t$ with a root symbolic state $t.\attrstate$ and a list of su
 where $s$ and $l$ correspond to the respective attributes.
 \end{definition}
 
+Our initial definition of the safety properties for execution trees is given below.
+As we will see later, this definition is too restrictive for practical use,
+and we will refine it in~\Cref{def:safe-et}.
+
+\begin{definition}
+\label{def:safe-et-strict}
+Let $s$ be a symbolic state and $l$ a list of execution trees.
+We say that $tree(s, l)$ is \emph{safe}, denoted by $\safeetstrict(\tree(s, l))$ if:
+\begin{enumerate}
+    \item $s$ is not an error state
+    \item if $s \symstep s'$ then either the path constraints of $s'$ are unsatisfiable or there exists a subtree $t \in l$ such that $\safeet(t)$ and $s' = t.\attrstate$.
+\end{enumerate}
+\end{definition}
+
+Based on this definition,
+we establish a weaker version of the \emph{program safety} theorem,
+which guarantees safety with respect to the restricted concrete semantics.
+The formal definition is given below.
+
+\begin{lemma}
+\label{lemma:safety-via-et-strict-ns}
+Let $s_0 \triangleq \initsymstate(\module)$, and $l$ be a list of execution trees.
+If $\module$ is supported and $\safeetstrict(\tree(s_0, l))$, then $\issafens(\module)$.
+\end{lemma}
+
+To see intuitivily why this lemma holds, consider the single-step case.
+Let $s$ be a symbolic state and $c$ be a concrete state such that $s \overapprox c$,
+and suppose that the subtree $\tree(s, l)$ is safe.
+If $c \nsstep c'$, then from~\Cref{theorem:completeness},
+it follows that there exists $s'$ such that $s \symstep s'$ and $s' \overapprox c'$.
+From~\Cref{def:safe-et-strict}, it follows that $s'$ is not an error state,
+and since $s' \overapprox c'$, then $c'$ is not an error state.
+
+Now, let $c_0 \triangleq \initstate(\module)$ be the initial concrete state.
+If $\issafens(\module)$, then no error states can be derived from $c_0$.
+Next, if $c_0 \step c$,
+then based on~\Cref{lemma:multi-ns-step-relative-completeness}, it follows that $c_0 \nsstep c$.
+Finally, we know that $c$ is not an error state, so, $\issafe(\module)$.
+This argument allows us to establish a stronger version of~\Cref{lemma:safety-via-et-strict-ns},
+which is given below.
+
+\begin{lemma}
+\label{lemma:safety-via-et-strict}
+Let $s_0 \triangleq \initsymstate(\module)$, and $l$ be a list of execution trees.
+If $\module$ is supported and $\safeetstrict(\tree(s_0, l))$, then $\issafe(\module)$.
+\end{lemma}
+
 %Following the approach of~\cite{klee-rocq},
 %we show that program safety can be proved based on certain safety properties of execution trees.
 %To accommodate memory-related instructions,
@@ -179,37 +226,19 @@ Now, the safety property of execution trees is defined inductively below.
 \begin{definition}
 \label{def:safe-et}
 Let $s$ be a symbolic state and $l$ a list of execution trees.
-We say that $tree(s, l)$ is safe, denoted by $\safeet(\tree(s, l))$,
-if (1) $s$ is not an error state,
-and (2) if $s \symstep s'$ then either the path constraints of $s'$ are unsatisfiable or there exists a subtree $t \in l$ such that $\safeet(t)$ and $s' \equivstate t.\attrstate$.
-%\begin{enumerate}
-%    \item $s$ is not an error state.
-%    \item if $s \symstep s'$, then either the path constraints of $s'$ are unsatisfiable, or there exists $t \in l$ such that $\safeet(t)$ and $s' \equivstate t.\attrstate$.
-%\end{enumerate}
-%\[
-%\begin{array}{c}
-%\ruledef{Step}
-%{
-%    \neg \errorsymstate(s), \ \forall s'. \ (s \symstep s') \rightarrow \big(\infeasible(s') \lor (\exists t \in l. \ \safeet(t) \land s' \equivstate t.\attrstate) \big)
-%}
-%{
-%    \safeet(\tree(s, l))
-%}
-%\end{array}
-%\]
+We say that $tree(s, l)$ is \emph{safe}, denoted by $\safeet(\tree(s, l))$ if:
+\begin{enumerate}
+    \item $s$ is not an error state
+    \item if $s \symstep s'$ then either the path constraints of $s'$ are unsatisfiable or there exists a subtree $t \in l$ such that $\safeet(t)$ and $s' \equivstate t.\attrstate$.
+\end{enumerate}
 \end{definition}
+
 This property ensures that there are no error states in the tree, and furthermore,
 that every feasible successor $s'$ of any state $s$ occurring in the tree is also represented in the tree as a successor of $s$.
 Infeasible states can be ignored, as they do not represent any concrete states.
 
 The following theorem states that if the execution tree of the program satisfies the safety property described above,
 then the program is safe w.r.t. the concrete semantics.
-
-%\begin{lemma}
-%\label{lemma:safety-via-et-ns-step}
-%Let $s_0 \triangleq \initsymstate(\module)$, and $l$ be a list of execution trees.
-%If $\module$ is supported and $\safeet(\tree(s_0, l))$, then $\issafens(\module)$.
-%\end{lemma}
 
 \begin{theorem}
 \label{theorem:safety-via-et}
