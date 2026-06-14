@@ -75,6 +75,7 @@ if $\localstore$ and $\memory$ do not contain $\tpoison$ values.
 \end{definition}
 
 \begin{definition}
+\label{def:ns-step}
 We say that there is a \emph{poison-free} step between two concrete states $c$ and $c'$, denoted by $c \nsstep c'$,
 if $c \step c'$ and both $c$ and $c'$ are poison-free.
 \end{definition}
@@ -91,12 +92,16 @@ then $\module$ is \emph{safe} with respect to the restricted concrete semantics,
 (The relation $\multinsstep$ is the reflexive-transitive closure of the relation $\nsstep$.)
 \end{definition}
 
-%\begin{lemma}
-%\label{lemma:multi-ns-step-relative-completeness}
-%Let $c$ and $c'$ be concrete states.
-%If $\module$ is supported, $c$ is poison-free, no error states can be derived from $c$ using the $\multinsstep$ relation, and $c \multistep c'$,
-%then $c \multinsstep c'$.
-%\end{lemma}
+In general, some derivations are disallowed by the restricted concrete semantics but allowed by the full concrete semantics.
+However, under certain conditions, the restricted and full concrete semantics align.
+This is formulated in the following lemma.
+
+\begin{lemma}
+\label{lemma:multi-ns-step-relative-completeness}
+Let $c$ and $c'$ be concrete states.
+If $\module$ is supported, $c$ is poison-free, no error states can be derived from $c$ using the $\multinsstep$ relation, and $c \multistep c'$,
+then $c \multinsstep c'$.
+\end{lemma}
 
 We first establish single-step reachability completeness.
 To do so, we must assume that the concrete states are \emph{well-formed}.
