@@ -199,22 +199,16 @@ Let $s_0 \triangleq \initsymstate(\module)$, and $l$ be a list of execution tree
 If $\module$ is supported and $\safeetstrict(\tree(s_0, l))$, then $\issafe(\module)$.
 \end{lemma}
 
-%Following the approach of~\cite{klee-rocq},
-%we show that program safety can be proved based on certain safety properties of execution trees.
-%To accommodate memory-related instructions,
-%we extend the relevant definitions, lemmas, and theorems.
-
-In general, the symbolic states derived by the symbolic semantics may differ from those computed by the \SE engine.
-To relate between them,
-we extend the definition of \emph{equivalence} for symbolic states that was given in~\cite{klee-rocq} (Definition 3.12) to account for memory.
+However, the formulation of~\Cref{lemma:safety-via-et-strict} is not practical enough.
+In general, the symbolic states computed by the \SE engine may differ from those derived by the mechanized symbolic semantics,
+and in that case, the precondition of~\Cref{lemma:safety-via-et-strict} will not hold.
+The address this,
+we refine~\Cref{def:safe-et-strict} by requiring \emph{equivalnece} instead of \emph{equality}.
+First, we formally define equivalence between symbolic states.
 
 \begin{definition}
-%The symbolic stores $\symlocalstore_1$ and $\symlocalstore_2$ are \emph{equivalent}, denoted by $\symlocalstore_1\equiv \symlocalstore_2$, if they are defined over the same variables,
-%and for each such variable $x$, $\mapaccess{\symlocalstore_1}{x} \equiv \mapaccess{\symlocalstore_2}{x}$.
-%The symbolic frames $\symstackframe{\location_1}{\symlocalstore_1}{x_1}$ and $\symstackframe{\location_2}{\symlocalstore_2}{x_2}$ are \emph{equivalent} if
-%$\location_1 = \location_2$, $\symlocalstore_1 \equiv \symlocalstore_2$, and $x_1 = x_2$.
-%The symbolic stacks $\symstack_1$ and $\symstack_2$ are \emph{equivalent}, denoted by $\symstack_1 \equiv \symstack_2$,
-%if their elements are pointwise equivalent.
+The symbolic stores $\symlocalstore_1$ and $\symlocalstore_2$ are \emph{equivalent}, denoted by $\symlocalstore_1\equiv \symlocalstore_2$, if they are defined over the same variables,
+and for each such variable $x$, $\mapaccess{\symlocalstore_1}{x} \equiv \mapaccess{\symlocalstore_2}{x}$.
 The memory objects $(\addr, \size, \smtarray_1)$ and $(\addr, \size, \smtarray_2)$ are equivalent if $\smtarray_1 \equiv \smtarray_2$.
 The heaps $\symmemory_1$ and $\symmemory_2$ are equivalent, denoted by $\symmemory_1 \equiv \symmemory_2$,
 if their memory objects are equivalent.
@@ -222,7 +216,7 @@ The states $s_1 \triangleq \symstate{\location_1}{\symlocalstore_1}{\symstack_1}
 denoted by $s_1 \equiv s_2$, if $\location_1 = \location_2$, $\symlocalstore_1 \equiv \symlocalstore_2$, $\symstack_1 \equiv \symstack_2$, $\symmemory_1 \equiv \symmemory_2$, and $\pc_1 \equiv \pc_2$.
 \end{definition}
 
-Now, the safety property of execution trees is defined inductively below.
+Now, the refined version of the safety property of execution trees is defined below.
 \begin{definition}
 \label{def:safe-et}
 Let $s$ be a symbolic state and $l$ a list of execution trees.
