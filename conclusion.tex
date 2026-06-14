@@ -1,7 +1,19 @@
 \section{Conclusion and Future Work}
 \label{sec:conclusion}
 
-% Scaling proof compilation
+\paragraph{Future Work}
 % Modeling the environment
+Currently, our formalization does not support external calls.
+Incorporating environment modeling into our approach would further broaden its applicability.
+% Scaling proof compilation
+Larger programs generally yield larger proofs, which take more time to check.
+Accelerating proof checking would significantly enhance the scalability of our approach.
 % Implementing verified SE engines
-% Concrete semantics can be used for other program analysis techniques
+While our formalization is currently used for proof logging,
+it can be leveraged to implement a verified SE engine via code extraction from the proof assistant.
+% Concrete semantics
+The concrete semantics can be used to generate program safety proof using other techniques,
+such as deductive verification and abstract interpretation.
+% Symbolic semantics
+The symbolic semantics can be used to formalize advanced extensions of symbolic execution,
+including state merging and diversse memory models.
