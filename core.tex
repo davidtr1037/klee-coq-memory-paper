@@ -204,7 +204,8 @@ In general, the symbolic states computed by the \SE engine may differ from those
 and in that case, the precondition of~\Cref{lemma:safety-via-et-strict} will not hold.
 The address this,
 we refine~\Cref{def:safe-et-strict} by requiring \emph{equivalnece} instead of \emph{equality}.
-First, we formally define equivalence between symbolic states.
+
+In the following, we formally define equivalence between symbolic states.
 
 \begin{definition}
 The symbolic stores $\symlocalstore_1$ and $\symlocalstore_2$ are \emph{equivalent}, denoted by $\symlocalstore_1\equiv \symlocalstore_2$, if they are defined over the same variables,
@@ -217,6 +218,7 @@ denoted by $s_1 \equiv s_2$, if $\location_1 = \location_2$, $\symlocalstore_1 \
 \end{definition}
 
 Now, the refined version of the safety property of execution trees is defined below.
+
 \begin{definition}
 \label{def:safe-et}
 Let $s$ be a symbolic state and $l$ a list of execution trees.
@@ -227,12 +229,15 @@ We say that $tree(s, l)$ is \emph{safe}, denoted by $\safeet(\tree(s, l))$ if:
 \end{enumerate}
 \end{definition}
 
-This property ensures that there are no error states in the tree, and furthermore,
-that every feasible successor $s'$ of any state $s$ occurring in the tree is also represented in the tree as a successor of $s$.
-Infeasible states can be ignored, as they do not represent any concrete states.
+%This property ensures that there are no error states in the tree, and furthermore,
+%that every feasible successor $s'$ of any state $s$ occurring in the tree is also represented in the tree as a successor of $s$.
+%Infeasible states can be ignored, as they do not represent any concrete states.
 
-The following theorem states that if the execution tree of the program satisfies the safety property described above,
-then the program is safe w.r.t. the concrete semantics.
+%The following theorem states that if the execution tree of the program satisfies the safety property described above,
+%then the program is safe w.r.t. the concrete semantics.
+
+Based on this refined definition,
+we can apply the reasoning from~\Cref{lemma:safety-via-et-strict} to establish the \emph{program safety} theorem.
 
 \begin{theorem}
 \label{theorem:safety-via-et}
