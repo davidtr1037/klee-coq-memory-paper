@@ -3,7 +3,7 @@
 
 In this section,
 we present a theoretical foundation that enables us to prove safety of programs based on properties of the symbolic semantics.
-The main result of this section is~\Cref{theorem:safety-via-et},
+The main result of this section is the \emph{program safety} theorem (\Cref{theorem:safety-via-et}),
 which states that a program is safe with respect to the concrete semantics if the execution tree of the program satisfies certian safety properties.
 
 \subsection{Module Assumptions}
@@ -25,7 +25,7 @@ Additional requirements for the $\tgep$ instruction are discussed in~\Cref{appen
 %then that index must be a constant and lie within the range of $\bvsort{64}$.
 %At a high level, this assumption is required in order to handle the case of $\tgep$ in the proof of the reachability completeness theorem.
 
-\subsection{Reachability Completeness}
+\subsection{Reachability Completeness Theorem}
 \label{sec:completeness}
 
 In this section,
@@ -131,13 +131,23 @@ If $\module$ is supported and $c_{0} \multinsstep c$,
 then there exists a symbolic state $s$ such that $s_{0} \symmultistep s$ and $s \overapprox c$.
 \end{theorem}
 
-\subsection{...}
-An execution tree is a data structure that records the paths explored during the analysis of a given program.
-We denote by $\tree(s, l)$ the execution tree $t$ in which $s$ is the root symbolic state ($t.\attrstate$) and $l$ is a list of successor subtrees ($t.\attrchildren$).
-Following the approach of~\cite{klee-rocq},
-we show that program safety can be proved based on certain safety properties of execution trees.
-To accommodate memory-related instructions,
-we extend the relevant definitions, lemmas, and theorems.
+\subsection{Program Safety Theorem}
+In this section,
+we establish the \emph{program safety} theorem,
+which states that a program is safe with respect to the concrete semantics if the execution tree of the program satisfies certian safety properties.
+
+The formal definition of \emph{execution trees} is given below.
+\begin{definition}
+The \emph{execution tree} of a program records the paths explored by the \SE engine during the analysis of that program,
+where each node corresponds to a symbolic state computed by the \SE engine.
+An execution tree $t$ with a root symbolic state $t.\attrstate$ and a list of successor subtrees $t.\attrchildren$ is denoted by $\tree(s, l)$,
+where $s$ and $l$ correspond to the respective attributes.
+\end{definition}
+
+%Following the approach of~\cite{klee-rocq},
+%we show that program safety can be proved based on certain safety properties of execution trees.
+%To accommodate memory-related instructions,
+%we extend the relevant definitions, lemmas, and theorems.
 
 In general, the symbolic states derived by the symbolic semantics may differ from those computed by the \SE engine.
 To relate between them,
