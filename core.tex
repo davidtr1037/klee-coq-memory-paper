@@ -153,7 +153,7 @@ where $s$ and $l$ correspond to the respective attributes.
 \end{definition}
 
 Our initial definition of the safety properties for execution trees is given below.
-As we will see later, this definition is too restrictive for practical use,
+As we will see later, this definition will turn out to be too restrictive for practical use,
 and we will refine it in~\Cref{def:safe-et}.
 
 \begin{definition}
@@ -214,10 +214,10 @@ The memory objects $(\addr, \size, \smtarray_1)$ and $(\addr, \size, \smtarray_2
 The heaps $\symmemory_1$ and $\symmemory_2$ are equivalent, denoted by $\symmemory_1 \equiv \symmemory_2$,
 if their memory objects are equivalent.
 The states $s_1 \triangleq \symstate{\location_1}{\symlocalstore_1}{\symstack_1}{\symmemory_1}{\pc_1}$ and $s_2 \triangleq \symstate{\location_2}{\symlocalstore_2}{\symstack_2}{\symmemory_2}{\pc_2}$ are equivalent,
-denoted by $s_1 \equiv s_2$, if $\location_1 = \location_2$, $\symlocalstore_1 \equiv \symlocalstore_2$, $\symstack_1 \equiv \symstack_2$, $\symmemory_1 \equiv \symmemory_2$, and $\pc_1 \equiv \pc_2$.
+denoted by $s_1 \equiv s_2$, if $\location_1 = \location_2$, $\symlocalstore_1 \equiv \symlocalstore_2$, $\symmemory_1 \equiv \symmemory_2$, and $\pc_1 \equiv \pc_2$.
 \end{definition}
 
-Now, the refined version of the safety property of execution trees is defined below.
+Now, the refined version of the safety properties of execution trees is defined below.
 
 \begin{definition}
 \label{def:safe-et}
