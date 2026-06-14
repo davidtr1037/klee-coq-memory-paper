@@ -173,8 +173,8 @@ The formal definition is given below.
 
 \begin{lemma}
 \label{lemma:safety-via-et-strict-ns}
-Let $s_0 \triangleq \initsymstate(\module)$, and $l$ be a list of execution trees.
-If $\module$ is supported and $\safeetstrict(\tree(s_0, l))$, then $\issafens(\module)$.
+Let $\module$ be a supported module, let $s_0 \triangleq \initsymstate(\module)$, and let $l$ be a list of execution trees.
+If $\safeetstrict(\tree(s_0, l))$, then $\issafens(\module)$.
 \end{lemma}
 
 To see intuitivily why this lemma holds, consider the single-step case.
@@ -195,8 +195,8 @@ which is given below.
 
 \begin{lemma}
 \label{lemma:safety-via-et-strict}
-Let $s_0 \triangleq \initsymstate(\module)$, and $l$ be a list of execution trees.
-If $\module$ is supported and $\safeetstrict(\tree(s_0, l))$, then $\issafe(\module)$.
+Let $\module$ be a supported module, let $s_0 \triangleq \initsymstate(\module)$, and let $l$ be a list of execution trees.
+If $\safeetstrict(\tree(s_0, l))$, then $\issafe(\module)$.
 \end{lemma}
 
 However, the formulation of~\Cref{lemma:safety-via-et-strict} is not practical enough.
@@ -241,6 +241,6 @@ we can apply the reasoning from~\Cref{lemma:safety-via-et-strict} to establish t
 
 \begin{theorem}
 \label{theorem:safety-via-et}
-Let $s_0 \triangleq \initsymstate(\module)$, and $l$ be a list of execution trees.
-If $\module$ is supported and $\safeet(\tree(s_0, l))$, then $\issafe(\module)$.
+Let $\module$ be a supported module, let $s_0 \triangleq \initsymstate(\module)$, and let $l$ be a list of execution trees.
+If $\safeet(\tree(s_0, l))$, then $\issafe(\module)$.
 \end{theorem}
