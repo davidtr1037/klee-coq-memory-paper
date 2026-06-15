@@ -83,12 +83,16 @@ In this paper,
 we apply proof logging to memory-manipulating programs in \llvm.
 To the best of our knowledge,
 this is the first tool that generates machine-checked safety proofs for this subset of \llvm IR.
-Our approach builds on~\cite{klee-rocq} and introduces several substantial extensions, requiring a significant theoretical and engineering effort.
+Our approach builds on~\cite{klee-rocq} and introduces several substantial extensions,
+requiring a significant theoretical and engineering effort.
 First, we extend the concrete and symbolic semantics to support memory-related instructions.
-Then, we extend the theoretical framework which allows to prove program safety based on properties of execution trees.
+Second, we extend the theoretical framework which allows to prove program safety based on properties of execution trees.
 Lastly, we extend \klee to generate safety proofs based on our formalization.
-To address the gap between the formalized symbolic semantics and the heavily-optimized behavior in \klee,
+To bridge the gap between the mechanized symbolic semantics and the heavily-optimized behavior in \klee,
 we develop an additional theory that helps to interact with various parts of our formalization.
+Our \coq formalization comprises approximately 40,000 lines of code (LOC),
+which more than doubles the 18,000 LOC formalization of~\cite{klee-rocq}.
+This substantial difference reflects the additional complexity of our formalization.
 
 The entire development of this paper comes with proofs in \coq~\cite{rocq}.
 
