@@ -5,7 +5,7 @@
 %Modern symbolic execution (\SE) engines are mainly designed for identifying bugs in programs, focusing on applicability and performance.
 Symbolic execution (\SE) is a program analysis technique with many applications.
 Beyond its widespread use for bug finding,
-\SE can also be used for program verification if the analysis is \emph{exhaustive}, \ie when all execution paths are explored.
+\SE can also be used for program verification if the analysis is \emph{exhaustive}, \ie when all the execution paths are explored.
 However, modern \SE engines provide no formal guarantees about the correctness of their analysis results,
 so relying on such unverified tools is insufficient for verification tasks.
 %In particular,
@@ -21,7 +21,7 @@ and to the best of our knowledge, it has not yet been extended to real-world pro
 In this paper,
 we present an approach for applying proof logging to memory-manipulating programs,
 extending \SE with the ability to generate safety proofs for this class of programs.
-We developed a \coq formalization of a subset of \llvm with memory operations,
+We developed a \coq formalization of a subset of \llvm IR with memory operations,
 and extended \klee to generate safety proofs based in this formalization.
 % TODO: approach?
 We evaluated our approach on APIs from real-world benchmarks,

@@ -13,19 +13,20 @@
 Symbolic execution (\SE) is a program analysis technique with applications in many areas,
 including test generation, bug finding, and verification~\cite{CadarSen13,klee,exe,spf,bugredux,se-java-2004,se-numerical-2006,syminfer}.
 Although \SE has been used for verification tasks,
-one cannot trust unverified \SE engines to infer that a program is indeed safe,
-as was recently demonstrated in~\cite{klee-rocq}.
-Obtaining a \SE engine that is both practical and verified is hard.
+%one cannot trust unverified \SE engines to infer that a program is indeed safe,
+unverified \SE engines cannot be trusted to guarantee program safety,
+as recently demonstrated by~\cite{klee-rocq}.
+However, obtaining a verified \SE engine that remains practical is highly challenging.
 On the one hand,
-verifying existing implementations requires a huge effort,
+verifying existing implementations requires immense effort,
 as they typically consist of large codebases with complex third-party dependencies.
 On the other hand,
-verified implementations extracted from proof assistants~\cite{fse23wise,icfp22:keuchel} were applied only for simple programming languages,
+verified implementations extracted from proof assistants~\cite{fse23wise,icfp22:keuchel} are restricted to simple programming languages,
 and they lack advanced features such as search heuristics, constraint solving optimizations, and other performance optimizations.
-Proof logging~\cite{lundberg2024proof,klee-rocq,de2008proofs,marx2013proof,flippo2024multi,mcilree2024proof,van2025efficient} is an alternative approach,
-inspired by \emph{translation validation}~\cite{samet,pnueli1998translation}.
-Rather than aiming for a verified implementation,
-the \SE engine emits, during the analysis, a safety proof that is specific to the analyzed program.
+Proof logging~\cite{lundberg2024proof,klee-rocq,de2008proofs,marx2013proof,flippo2024multi,mcilree2024proof,van2025efficient}
+offers an alternative inspired by \emph{translation validation}~\cite{samet,pnueli1998translation}.
+Rather than requiring a verified implementation,
+the \SE engine generates a machine-checked safety proof tailored to each analyzed program.
 
 %Proof logging~\cite{lundberg2024proof,klee-rocq} is an alternative approach,
 %inspired by \emph{translation validation}~\cite{samet,pnueli1998translation}. Rather than aiming for a verified implementation,
