@@ -42,14 +42,15 @@ the \SE engine generates a machine-checked safety proof tailored to each analyze
 % TODO: extending the theory for the extended semantics is also a gap
 Proof logging has been recently applied in the context of P4~\cite{lundberg2024proof} and a subset of \llvm with integers~\cite{klee-rocq},
 however, it has not yet been demonstrated on memory-manipulating programs.
-Memory modeling is one of the most complex components in \SE engines,
+Memory modeling is one of the most intricate components of \SE engines,
 %as well as in program analysis in general.
-and applying proof logging in this context is a challenge as well.
-For example, to extend the approach in~\cite{klee-rocq} for memory operations,
+and integrating proof logging in this context is challenging.
+To extend the approach in~\cite{klee-rocq} for memory operations,
 one needs to formalize the memory model of \llvm and extend the \SE engine to generate safety proofs accordingly.
-Formalizing the memory model of \llvm is complex due to the detailed specifications related to various definitions such as:
-data layout, address spaces, dynamic allocations, pointers, and semantics of memory-related instructions.
-Moreover, \SE engines use various optimizations for memory modeling, which complicate the proof generation process.
+%Formalizing the memory model of \llvm is complex due to the detailed specifications related to
+Such a formalization must capture the detailed specifications related to
+data layouts, address spaces, dynamic allocations, pointers, and semantics of memory-related instructions.
+Furthermore, \SE engines use various optimizations for memory modeling, which complicate proof generation.
 For example, \klee~\cite{klee} uses multiple representations for memory objects and applies SMT encoding optimizations.
 
 % The latest realistic implementation of symex (CPP26) supports only a limited subset.
