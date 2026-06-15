@@ -13,9 +13,9 @@
 Symbolic execution (\SE) is a program analysis technique with applications in many areas,
 including test generation, bug finding, and verification~\cite{CadarSen13,klee,exe,spf,bugredux,se-java-2004,se-numerical-2006,syminfer}.
 Although \SE has been used for verification tasks,
-one cannot trust unverified \SE tools to infer that a program is indeed safe,
+one cannot trust unverified \SE engines to infer that a program is indeed safe,
 as was recently demonstrated in~\cite{klee-rocq}.
-Obtaining a \SE tool that is both practical and verified is hard.
+Obtaining a \SE engine that is both practical and verified is hard.
 On the one hand,
 verifying existing implementations requires a huge effort,
 as they typically consist of large codebases with complex third-party dependencies.
@@ -25,7 +25,7 @@ and they lack advanced features such as search heuristics, constraint solving op
 Proof logging~\cite{lundberg2024proof,klee-rocq,de2008proofs,marx2013proof,flippo2024multi,mcilree2024proof,van2025efficient} is an alternative approach,
 inspired by \emph{translation validation}~\cite{samet,pnueli1998translation}.
 Rather than aiming for a verified implementation,
-the \SE tool emits, during the analysis, a safety proof that is specific to the analyzed program.
+the \SE engine emits, during the analysis, a safety proof that is specific to the analyzed program.
 
 %Proof logging~\cite{lundberg2024proof,klee-rocq} is an alternative approach,
 %inspired by \emph{translation validation}~\cite{samet,pnueli1998translation}. Rather than aiming for a verified implementation,
@@ -41,14 +41,14 @@ the \SE tool emits, during the analysis, a safety proof that is specific to the 
 % TODO: extending the theory for the extended semantics is also a gap
 Proof logging has been recently applied in the context of P4~\cite{lundberg2024proof} and a subset of \llvm with integers~\cite{klee-rocq},
 however, it has not yet been demonstrated on memory-manipulating programs.
-Memory modeling is one of the most complex components in \SE tools,
+Memory modeling is one of the most complex components in \SE engines,
 %as well as in program analysis in general.
 and applying proof logging in this context is a challenge as well.
 For example, to extend the approach in~\cite{klee-rocq} for memory operations,
 one needs to formalize the memory model of \llvm and extend the \SE engine to generate safety proofs accordingly.
 Formalizing the memory model of \llvm is complex due to the detailed specifications related to various definitions such as:
 data layout, address spaces, dynamic allocations, pointers, and semantics of memory-related instructions.
-Moreover, \SE tools use various optimizations for memory modeling, which complicate the proof generation process.
+Moreover, \SE engines use various optimizations for memory modeling, which complicate the proof generation process.
 For example, \klee~\cite{klee} uses multiple representations for memory objects and applies SMT encoding optimizations.
 
 % The latest realistic implementation of symex (CPP26) supports only a limited subset.

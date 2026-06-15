@@ -14,7 +14,7 @@ The \llvm reference~\cite{llvmref} leaves some aspects of the memory model unspe
 such as the representation of allocated objects and address spaces.
 This flexibility allows different semantic interpretations,
 and in this work,
-we adopt the \emph{memory-object model} which is widely used in \SE tools~\cite{klee,mossberg2019manticore}.
+we adopt the \emph{memory-object model} which is widely used in \SE engines~\cite{klee,mossberg2019manticore}.
 
 \subsection{Memory Modeling}
 \label{sec:memory-modeling}
@@ -79,7 +79,7 @@ we assume a linear memory allocator that allocates memory objects consecutively 
 commonly referred to as a \emph{red-zone}.
 Modeling a generic memory allocator that allows arbitrary locations for memory objects would be far more challenging.
 First, modeling such memory allocators requires developing a more complex theory of memory (\Cref{sec:symbolic-semantics,sec:overview,sec:program-safety,sec:proof-generation}).
-Second, existing \SE tools do not support such memory allocators,
+Second, existing \SE engines do not support such memory allocators,
 so generating safety proofs using these tools would require significant modifications to their implementations (\Cref{sec:proof-generation}).
 Therefore, we leave the modeling of such memory allocators to future work.
 

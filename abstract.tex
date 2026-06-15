@@ -2,18 +2,18 @@
 % TODO: first?
 
 %Symbolic execution (\SE) is a program analysis technique that executes the program with symbolic inputs.
-%Modern symbolic execution (\SE) tools are mainly designed for identifying bugs in programs, focusing on applicability and performance.
+%Modern symbolic execution (\SE) engines are mainly designed for identifying bugs in programs, focusing on applicability and performance.
 Symbolic execution (\SE) is a program analysis technique with many applications.
 Beyond its widespread use for bug finding,
 \SE can also be used for program verification if the analysis is \emph{exhaustive}, \ie when all execution paths are explored.
-However, modern \SE tools provide no formal guarantees about the correctness of their analysis results,
+However, modern \SE engines provide no formal guarantees about the correctness of their analysis results,
 so relying on such unverified tools is insufficient for verification tasks.
 %In particular,
-%for tasks such as program verification, relying on such unverified \SE tools is insufficient.
-%One approach is to derive a verified \SE tool using extraction from proof assistants,
+%for tasks such as program verification, relying on such unverified \SE engines is insufficient.
+%One approach is to derive a verified \SE engine using extraction from proof assistants,
 %but this was applied only in rather simplistic settings.
 One approach to address this challenge is \emph{proof logging},
-which works by instrumenting the \SE tool to generate a safety proof that is specific to the analyzed program.
+which works by instrumenting the \SE engine to generate a safety proof that is specific to the analyzed program.
 %\ie they generate during the analysis proofs that are specific to the program under test,
 However, proof logging has been applied so far only in relatively simplistic settings,
 and to the best of our knowledge, it has not yet been extended to real-world programs involving memory operations.
