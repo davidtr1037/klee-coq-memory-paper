@@ -9,7 +9,8 @@
 % - proof checking is used for trust
 
 In this section,
-we give an informal overview of our approach before moving on to the formal development (\Cref{sec:program-safety}).
+we give an informal overview of our approach before moving on to the formal development
+(\Cref{sec:concrete-semantics,sec:symbolic-semantics,sec:program-safety,sec:proof-generation}).
 For the purpose of this overview,
 we assume a standard \emph{mechanized} and \emph{executable} symbolic semantics, without relying on specific implementations.
 The \emph{mechanized} symbolic semantics are those explicitly encoded inside the proof assistant (\eg \coq).
@@ -80,7 +81,7 @@ our goal is to generate an independent and machine-checked proof ensuring that a
 \subsection{Theoretical Framework}
 
 To generate machine-checked safety proofs, we develop a formal framework in \coq.
-Our theoretical framework defines the concrete (\Cref{sec:concrete-semantics}) and symbolic (\Cref{sec:symbolic-semantics}) semantics of \llvm.
+Our theoretical framework defines the concrete (\Cref{sec:concrete-semantics}) and symbolic (\Cref{sec:symbolic-semantics}) semantics of \llvm IR.
 %When the symbolic execution of a given program is \emph{exhaustive},
 %the explored paths form an \emph{execution tree},
 %where each node represents a symbolic state computed by the \SE engine.
@@ -150,4 +151,4 @@ so we need to prove that $s_6$ and $\mech{s}_6$ are equivalent.
 %so the equivalence proof might not be immediate.
 
 Lastly, we need to prove that the subtree of $s_6$, \ie the successor of $s_5$, satisfies the safety properties as well.
-This follows immediately since the proof is constructed in a bottom-up fashion.
+This follows immediately since the proof is constructed bottom-up.
