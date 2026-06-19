@@ -135,25 +135,23 @@ Therefore, we leave the modeling of such memory allocators to future work.
 \ruledefsmall{Branch-True}
 {
   \instrat{\location} = \codequote{\tbr ~ e ~ b_1 ~ b_2} \quad
-  \evalexprty{e}{\localstore}{\bvsort{1}} = \bvval{1}{1} \quad
-  \location\triangleright b_i \neq \bot
+  \evalexprty{e}{\localstore}{\bvsort{1}} = \bvval{1}{1}
 }
 {
   \progstate{\location}{\localstore}{\stack}{\memory}
   \step
-  \progstate{\location\triangleright b_1}{\localstore}{\stack}{\memory}
+  \progstate{\instratlabel{\location}{b_1}}{\localstore}{\stack}{\memory}
 }
 \\[1em]
 \ruledefsmall{Branch-False}
 {
   \instrat{\location} = \codequote{\tbr ~ e ~ b_1 ~ b_2} \quad
-  \evalexprty{e}{\localstore}{\bvsort{1}} = \bvval{0}{1} \quad
-  \location\triangleright b_i \neq \bot
+  \evalexprty{e}{\localstore}{\bvsort{1}} = \bvval{0}{1}
 }
 {
   \progstate{\location}{\localstore}{\stack}{\memory}
   \step
-  \progstate{\location\triangleright b_2}{\localstore}{\stack}{\memory}
+  \progstate{\instratlabel{\location}{b_2}}{\localstore}{\stack}{\memory}
 }
 \\[1em]
 \ruledefsmall{Make-Symbolic}{
@@ -235,6 +233,7 @@ Therefore, we leave the modeling of such memory allocators to future work.
 \module & \mbox{module} \\
 \instrat{\location} & \mbox{instruction at location $\location$ in $\module$} \\
 \nextinstr{\location} & \mbox{next program location} \\
+\instratlabel{\location}{b} & \mbox{program location at label $b$} \\
 \isbaseaddr{p}{\mo} & \mbox{$p$ is equal to the base address of $\mo$} \\
 \isinbounds{p}{\tau}{\mo} & \mbox{interval $[p, p + \sizeof{\tau})$ is contained within the address interval of $\mo$} \\
 \moread{\tau}{\mo}{p} & \mbox{read a value of type $\tau$ from memory object $\mo$ starting from address $p$} \\
