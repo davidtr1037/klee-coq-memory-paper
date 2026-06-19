@@ -232,8 +232,8 @@ Therefore, we leave the modeling of such memory allocators to future work.
 \begin{array}{l@{\quad}l}
 \module & \mbox{module} \\
 \instrat{\location} & \mbox{instruction at location $\location$ in $\module$} \\
-\nextinstr{\location} & \mbox{next program location} \\
-\instratlabel{\location}{b} & \mbox{program location at label $b$} \\
+\nextinstr{\location} & \mbox{next location} \\
+\instratlabel{\location}{b} & \mbox{location at label $b$} \\
 \isbaseaddr{p}{\mo} & \mbox{$p$ is equal to the base address of $\mo$} \\
 \isinbounds{p}{\tau}{\mo} & \mbox{interval $[p, p + \sizeof{\tau})$ is contained within the address interval of $\mo$} \\
 \moread{\tau}{\mo}{p} & \mbox{read a value of type $\tau$ from memory object $\mo$ starting from address $p$} \\
