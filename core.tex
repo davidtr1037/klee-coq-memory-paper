@@ -16,7 +16,9 @@ as formally defined below.
 \begin{definition}
 \label{def:supported}
 An \llvm expression is \emph{supported} if it is not a $\tpoison$ value and does not contain potentially erroneous operations ($\opcode{udiv}$, $\opcode{shl}$, $\tgep$, \etc).
-A module $\module$ is \emph{supported} if $\module$ does not contain $\tundef$ values and every instruction operand in $\module$ is a supported \llvm expression.
+A module $\module$ is \emph{supported} if $\module$ does not contain $\tundef$ values and every instruction operand in $\module$ is a supported \llvm expression.\footnote{
+For example, $\codequote{r ~ = ~ \opcode{udiv} ~ x, ~ y}$ is allowed, but $\codequote{r ~ = ~\opcode{add} ~ (\opcode{udiv} ~ x, ~ y), ~ z}$ is disallowed.
+}
 %\begin{enumerate}
 %    \item Every operand of an instruction in $\module$ is a \emph{supported} \llvm expression.
 %    \item There are no $\tundef$ values in $\module$.
