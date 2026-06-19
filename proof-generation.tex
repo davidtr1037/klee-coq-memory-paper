@@ -165,7 +165,7 @@ To handle such cases in general, we define an interface lemma for \textit{malloc
 In this case, we can apply~\Cref{lemma:interface-malloc} with $n$ as 2, $\mo$ as the memory object from $s_1$, and $t$ as the subtree of $s_1$.
 % TODO: show why the preconditions hold?
 
-\begin{lemma}
+\begin{interfacelemma}
 \label{lemma:interface-malloc}
 Let $s \triangleq \symstate{\location}{\symlocalstore}{\symstack}{\symmemory}{\pc}$,
 where \textup{$\instrat{\location} = \codequote{x~\texttt{=}~\tcall^{\pointertypeof{\bvsort{8}}}~\intrinsicfunc{malloc}(\bvsort{64} ~ e)}$},
@@ -178,7 +178,7 @@ If there exist $n$, $\mo$, and $t$ such that:
     \item $\safeet(t)$
 \end{enumerate}
 then $\safeet(\tree(s, [t]))$.
-\end{lemma}
+\end{interfacelemma}
 
 Note that this lemma assumes that the size argument of \textit{malloc} is evaluated to a concrete SMT expression.
 If that is not the case,
@@ -264,7 +264,7 @@ note that $\rangecond(\bvconst{64}{\addr}, 1, \mo) \equiv \true$, so the equival
 
 To handle such cases in general, we define an interface lemma for \textit{store}, which is stated as follows:
 
-\begin{lemma}
+\begin{interfacelemma}
 \label{lemma:interface-store}
 Let $s \triangleq \symstate{\location}{\symlocalstore}{\symstack}{\symmemory}{\pc}$,
 where \textup{$\instrat{\location} = \codequote{\tstore^{\tau}~e_1~e_2}$}.
@@ -279,7 +279,7 @@ If there exist $p$, $\mo$, $\mo_{new}$, and $t$ such that:
     \item $\safeet(t)$
 \end{enumerate}
 then $\safeet(\tree(s, [t]))$.
-\end{lemma}
+\end{interfacelemma}
 
 \subsubsection{Example: GetElementPtr}
 % TODO: explain how to prove that this is not an error state
@@ -386,7 +386,7 @@ it suffices to prove that their stores are equivalent, which holds since $\mech{
 To handle such cases in general,
 we define an interface lemma for \textit{getelementptr}, which is stated as follows:
 
-\begin{lemma}
+\begin{interfacelemma}
 \label{lemma:interface-gep}
 Let $s \triangleq \symstate{\location}{\symlocalstore}{\symstack}{\symmemory}{\pc}$,
 where \textup{$\instrat{\location} = \codequote{x~\texttt{=}~\tgep~\pointertypeof{\tau}~e~\overline{(\tau_i, e_i)}}$}.
@@ -399,7 +399,7 @@ If there exist $\widebar{k_i}$, $\symlocalstore'$, and $t$ such that:
     \item $\safeet(t)$
 \end{enumerate}
 then $\safeet(\tree(s, [t]))$.
-\end{lemma}
+\end{interfacelemma}
 
 \subsubsection{Example: Load}
 % TODO: remind that the repr is non-opt now
@@ -453,7 +453,7 @@ this implies that $n < \bvconst{32}{2} \land \rangecond(e, 1, \mo) \equiv n < \b
 To handle such cases in general,
 we define an interface lemma for \textit{load}, which is stated as follows:
 
-\begin{lemma}
+\begin{interfacelemma}
 \label{lemma:interface-load}
 Let $s \triangleq \symstate{\location}{\symlocalstore}{\symstack}{\symmemory}{\pc}$,
 where \textup{$\instrat{\location} = \codequote{x~\texttt{=}~\tload^{\tau}~e}$}.
@@ -468,4 +468,4 @@ If there exist $\mo$, $\symlocalstore'$, and $t$ such that:
     \item $\safeet(t)$
 \end{enumerate}
 then $\safeet(\tree(s, [t]))$.
-\end{lemma}
+\end{interfacelemma}
