@@ -103,7 +103,7 @@ In the following, we discuss the derivation rules in more detail.
 {
   \symstate{\location}{\symlocalstore}{\symstack}{\pc}{\symmemory}
   \symstep
-  \symstate{\instratlabel{\location}{b_1}}{\symlocalstore}{\symstack}{\pc \land \evalexprty{e}{\symlocalstore}{\bvsort1}}{\symmemory}
+  \symstate{\instratlabel{\location}{b_1}}{\symlocalstore}{\symstack}{\pc \land \evalexprty{e}{\symlocalstore}{\bvsort{1}}}{\symmemory}
 }
 \\[1em]
 \ruledefsmall{Branch-False}{
@@ -114,7 +114,7 @@ In the following, we discuss the derivation rules in more detail.
 {
   \symstate{\location}{\symlocalstore}{\symstack}{\pc}{\symmemory}
   \symstep
-  \symstate{\instratlabel{\location}{b_2}}{\symlocalstore}{\symstack}{\pc \land \lnot\evalexprty{e}{\symlocalstore}{\bvsort1}}{\symmemory}
+  \symstate{\instratlabel{\location}{b_2}}{\symlocalstore}{\symstack}{\pc \land \lnot\evalexprty{e}{\symlocalstore}{\bvsort{1}}}{\symmemory}
 }
 \\[1em]
 \ruledefsmall{Make-Symbolic}{
