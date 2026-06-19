@@ -270,8 +270,19 @@ defines the value of $e$ given a local store $\localstore \in \Stores$ in a cont
 Operators are parameterized by bit-vector types,
 and their semantics are functions whose domains and ranges depend on those types (\eg $\sem{\textsf{add}^\tau} : \Vals^\tau\times\Vals^\tau\to\Vals^\tau$).
 
+% TODO: we show only some of the rules
 \Cref{figure:llvm-semantics} defines the operational small-step semantics of \llvm IR based on the syntax in~\Cref{figure:llvm-syntax}.
 In the following, we discuss the derivation rules in more detail.
+
+\textbf{\textit{Branch.}}
+The instruction $\tbr$ follows standard operational semantics.
+We first evaluate the branch condition $e$
+and then jump to the corresponding location based on the resulting value.
+
+\textbf{\textit{Make-Symbolic.}}
+The \intrinsicfunc{make\_symbolic} function is an intrinsic function provided by the symbolic execution environment to introduce fresh symbolic values.
+In the concrete semantics,
+we model this behavior by non-deterministically assigning the variable $x$ to an arbitrary concrere value $\bvval{n}{32}$.
 
 \textbf{\textit{Malloc.}}
 When allocating a memory object,
