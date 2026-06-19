@@ -119,8 +119,6 @@ In the following, we discuss the derivation rules in more detail.
 \\[1em]
 \ruledefsmall{Make-Symbolic}{
   \instrat{\location} = \codequote{x ~\texttt{=}~ \tcall^{\bvsort{32}} ~ \intrinsicfunc{make\_symbolic}()}
-  \quad
-  \alpha \not \in \freevars(\symlocalstore) \cup \freevars(\symstack)
 }
 {
   \symstate{\location}{\symlocalstore}{\symstack}{\pc}{\symmemory}
@@ -198,6 +196,16 @@ In the following, we discuss the derivation rules in more detail.
 \end{figure}
 
 % TODO: mention the defined operation functions
+
+\textbf{\textit{Branch.}}
+The rules \rulenameref{Branch-True} and \rulenameref{Branch-False} express the state-forking semantics of symbolic execution.
+We derive two symbolic states,
+where the path constraints in each state are updated with the appropriate branch condition.
+
+\textbf{\textit{Make-Symbolic.}}
+We introduce a fresh symbolic value $\alpha$ and assign it to the variable $x$.
+Note that we need to make sure that $\alpha$ does not appear in the original symbolic state,
+otherwise, it might be constrained by the path constraints, which is undesired.
 
 \textbf{\textit{Malloc.}}
 According to the symbolic memory model (\Cref{sec:symbolic-memory-modeling}),
