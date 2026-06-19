@@ -79,7 +79,7 @@ The path constraint $\pc$ is a formula of sort $\Bool$ that accumulates assumpti
 The symbolic evaluation semantics of expressions, denoted by $\evalexprty{e}{\symlocalstore}{\tau}$, mirrors the concrete evaluation semantics (\Cref{figure:expr-semantics}).
 Here, however, $\sem{\toper^\tau}$ and $\sem{\tcast^{\tau\to\tau'}}$ are \emph{function symbols} that construct SMT expressions.
 
-\Cref{figure:symbolic-semantics} defines the symbolic operational small-step semantics of \llvm IR based on the syntax in~\Cref{figure:llvm-syntax}.
+\Cref{figure:symbolic-semantics} defines the symbolic operational small-step semantics for a subset of the instructions introduced in~\Cref{figure:llvm-syntax}.
 In some of the derivation rules, we use the following definitions (where $\symmo \triangleq \mobj{\bvval{\addr}{\pointerwidth}}{\bvval{\size}{\indexwidth}}{\smtarray}$):
 \[
 \begin{array}{ll}
