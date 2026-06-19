@@ -95,6 +95,43 @@ In the following, we discuss the derivation rules in more detail.
 \begin{figure}[t]
 \[
 \begin{array}{c}
+\ruledefsmall{Branch-True}{
+  \instrat{\location} = \codequote{\tbr ~ e ~ b_1 ~ b_2}
+  \quad
+  \location\triangleright b_i \neq \bot
+  \quad
+  \evalexprty{e}{\symlocalstore}{\bvsort1} \neq \bot
+}
+{
+  \symstate{\location}{\symlocalstore}{\symstack}{\pc}{\symmemory}
+  \symstep
+  \symstate{\location\triangleright b_1}{\symlocalstore}{\symstack}{\pc \land \evalexprty{e}{\symlocalstore}{\bvsort1}}{\symmemory}
+}
+\\[1em]
+\ruledefsmall{Branch-False}{
+  \instrat{\location} = \codequote{\tbr ~ e ~ b_1 ~ b_2}
+  \quad
+  \location\triangleright b_i \neq \bot
+  \quad
+  \evalexprty{e}{\symlocalstore}{\bvsort1} \neq \bot
+}
+{
+  \symstate{\location}{\symlocalstore}{\symstack}{\pc}{\symmemory}
+  \symstep
+  \symstate{\location\triangleright b_2}{\symlocalstore}{\symstack}{\pc \land \lnot\evalexprty{e}{\symlocalstore}{\bvsort1}}{\symmemory}
+}
+\\[1em]
+\ruledefsmall{Make-Symbolic}{
+  \instrat{\location} = \codequote{x ~\texttt{=}~ \tcall^{\bvsort{32}} ~ \intrinsicfunc{make\_symbolic}()}
+  \quad
+  \alpha \not \in \freevars(\symlocalstore) \cup \freevars(\symstack)
+}
+{
+  \symstate{\location}{\symlocalstore}{\symstack}{\pc}{\symmemory}
+  \symstep
+  \symstate{\nextinstr{\location}}{\symlocalstore[x \mapsto \alpha]}{\symstack}{\pc}{\symmemory}
+}
+\\[1em]
 \ruledefsmall{Malloc}{
   \instrat{\location} = \codequote{x~\texttt{=}~\tcall^{\pointertypeof{\bvsort{8}}}~\intrinsicfunc{malloc}(\bvsort{64} ~ e)} \quad
   \evalexprty{e}{\symlocalstore}{\bvsort{64}} = n \quad
