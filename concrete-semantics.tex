@@ -270,9 +270,10 @@ defines the value of $e$ given a local store $\localstore \in \Stores$ in a cont
 Operators are parameterized by bit-vector types,
 and their semantics are functions whose domains and ranges depend on those types (\eg $\sem{\textsf{add}^\tau} : \Vals^\tau\times\Vals^\tau\to\Vals^\tau$).
 
-% TODO: we show only some of the rules
-\Cref{figure:llvm-semantics} defines the operational small-step semantics of \llvm IR based on the syntax in~\Cref{figure:llvm-syntax}.
-In the following, we discuss the derivation rules in more detail.
+\Cref{figure:llvm-semantics} defines the operational small-step semantics for a subset of the instructions introduced in~\Cref{figure:llvm-syntax}.
+In the following, we discuss the derivation rules in more detail.\footnote{
+The full definition can be found in our \coq formalization.
+}
 
 \textbf{\textit{Branch.}}
 The instruction $\tbr$ follows standard operational semantics.
