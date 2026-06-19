@@ -98,7 +98,7 @@ In the following, we discuss the derivation rules in more detail.
 \ruledefsmall{Branch-True}{
   \instrat{\location} = \codequote{\tbr ~ e ~ b_1 ~ b_2}
   \quad
-  \evalexprty{e}{\symlocalstore}{\bvsort1} \neq \bot
+  \evalexprty{e}{\symlocalstore}{\bvsort{1}} \neq \bot
 }
 {
   \symstate{\location}{\symlocalstore}{\symstack}{\pc}{\symmemory}
@@ -109,7 +109,7 @@ In the following, we discuss the derivation rules in more detail.
 \ruledefsmall{Branch-False}{
   \instrat{\location} = \codequote{\tbr ~ e ~ b_1 ~ b_2}
   \quad
-  \evalexprty{e}{\symlocalstore}{\bvsort1} \neq \bot
+  \evalexprty{e}{\symlocalstore}{\bvsort{1}} \neq \bot
 }
 {
   \symstate{\location}{\symlocalstore}{\symstack}{\pc}{\symmemory}
