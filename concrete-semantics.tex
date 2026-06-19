@@ -161,7 +161,7 @@ Therefore, we leave the modeling of such memory allocators to future work.
 {
   \progstate{\location}{\localstore}{\stack}{\memory}
   \step
-  \progstate{\nextinstr{\location}}{\localstore[x \mapsto n@\bvsort{32}]}{\stack}{\memory}
+  \progstate{\nextinstr{\location}}{\localstore[x \mapsto \bvval{n}{32}]}{\stack}{\memory}
 }
 \\[1em]
 \ruledefsmall{Malloc}{
