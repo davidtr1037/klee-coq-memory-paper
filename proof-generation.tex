@@ -247,7 +247,8 @@ and more specifically:
   \arraystore{\arraystore{\arraystore{\arrayconst{\arrayinitvalue}}{\bvconst{32}{0}}{\arrayinitvalue}}{\bvconst{32}{1}}{\arrayinitvalue}}{\bvextract{32}{\bvconst{64}{\addr} - \bvconst{64}{\addr}}}{\bvconst{8}{7}} \equiv
   \arraystore{\arraystore{\arrayconst{\arrayinitvalue}}{\bvconst{32}{0}}{\bvconst{8}{7}}}{\bvconst{32}{1}}{\arrayinitvalue}
 \]
-To prove such cases automatically, we define the following lemma, which can be applied when storing an expression of sort $\smtsort{8}$:
+To prove such cases automatically, we define the lemma below, which can be applied when storing an expression of sort $\bvsort{8}$.
+In our case, we can apply this lemma since $\bvextract{32}{\bvsub{\bvsort{64}}{\bvconst{64}{\addr}}{\bvconst{64}{\addr}}} \equiv \bvconst{32}{0}$ and $\bvconst{8}{7} \equiv \bvconst{8}{7}$.
 \begin{lemma}
 \label{lemma:store-i8}
 Let $v$, $v_{new}$, and $v'_{new}$ be SMT expressions of sort $\smtsort{8}$,
@@ -256,8 +257,6 @@ and let $\bvconst{32}{i}$, ..., $\bvconst{32}{(i + n)}$ be subsequent constant S
 If $k \equiv \bvconst{32}{i}$ and $v_{new} \equiv v'_{new}$, then:
 \[ \arraystore{\arraystore{\arraystore{a}{\bvconst{32}{i}}{v}[...]}{\bvconst{32}{(i + n)}}{t_n}}{k}{v_{new}} \equiv \arraystore{\arraystore{a}{\bvconst{32}{i}}{v'_{new}}[...]}{\bvconst{32}{(i + n)}}{t_n} \]
 \end{lemma}
-This lemma can be applied in our case,
-since $\bvextract{32}{\bvsub{\bvsort{64}}{\bvconst{64}{\addr}}{\bvconst{64}{\addr}}} \equiv \bvconst{32}{0}$ and $\bvconst{8}{7} \equiv \bvconst{8}{7}$.
 
 The SMT simplifications employed by the \SE engine yield SMT encodings that diverge from those derived from the symbolic semantics.
 To prove SMT equivalences automatically,
