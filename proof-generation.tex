@@ -161,7 +161,7 @@ it suffices to prove that their memory is equivalent.
 The SMT arrays in those two symbolic states are encoded differently,
 but they are actually equivalent, since the additional store expressions contain the same value $\arrayinitvalue$ as in $\arrayconst{\arrayinitvalue}$.
 
-To handle such cases in general, we define an interface lemma for \textit{malloc}, which is stated as~\Cref{lemma:interface-malloc}.
+To handle the case of \textit{malloc} in general, we define the interface lemma below.
 In this case, we can apply~\Cref{lemma:interface-malloc} with $n$ as 2, $\mo$ as the memory object from $s_1$, and $t$ as the subtree of $s_1$.
 % TODO: show why the preconditions hold?
 
@@ -268,7 +268,7 @@ as well as analogous lemmas that support stores of other types (\bvsort{16}, \bv
 As for the path constraints,
 note that $\rangecond(\bvconst{64}{\addr}, 1, \mo) \equiv \true$, so the equivalence follows easily.
 
-To handle such cases in general, we define an interface lemma for \textit{store}, which is stated as follows:
+To handle the case of \textit{store} in general, we define the following interface lemma:
 
 \begin{interfacelemma}
 \label{lemma:interface-store}
@@ -389,8 +389,7 @@ which is indeed unsatisfiable.
 To prove that $\mech{s}_8 \equiv s_8$,
 it suffices to prove that their stores are equivalent, which holds since $\mech{e} \equiv e$.
 
-To handle such cases in general,
-we define an interface lemma for \textit{getelementptr}, which is stated as follows:
+To handle the case of \textit{getelementptr} in general, we define the following interface lemma:
 
 \begin{interfacelemma}
 \label{lemma:interface-gep}
@@ -456,8 +455,7 @@ To prove that $\mech{s}_9 \equiv s_9$, it suffices to prove the equivalence of t
 Since $n < \bvconst{32}{2} \land \neg \rangecond(e, 1, \mo)$ is unsatisfiable,
 this implies that $n < \bvconst{32}{2} \land \rangecond(e, 1, \mo) \equiv n < \bvconst{32}{2}$.
 
-To handle such cases in general,
-we define an interface lemma for \textit{load}, which is stated as follows:
+To handle the case of \textit{load} in general, we define the following interface lemma:
 
 \begin{interfacelemma}
 \label{lemma:interface-load}
