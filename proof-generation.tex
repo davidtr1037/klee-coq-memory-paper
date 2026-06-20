@@ -258,14 +258,14 @@ If $k \equiv \bvconst{32}{i}$ and $v_{new} \equiv v'_{new}$, then:
 \[ \arraystore{\arraystore{\arraystore{a}{\bvconst{32}{i}}{v}[...]}{\bvconst{32}{(i + n)}}{t_n}}{k}{v_{new}} \equiv \arraystore{\arraystore{a}{\bvconst{32}{i}}{v'_{new}}[...]}{\bvconst{32}{(i + n)}}{t_n} \]
 \end{lemma}
 
+As for the path constraints,
+note that $\rangecond(\bvconst{64}{\addr}, 1, \mo) \equiv \true$, so the equivalence follows easily.
+
 The SMT simplifications employed by the \SE engine yield SMT encodings that diverge from those derived from the symbolic semantics.
 To prove SMT equivalences automatically,
 we develop a \emph{simplification theory} that proves that the SMT simplifications employed by the \SE engine are equivalence-preserving.
 In particular, this theory includes~\Cref{lemma:store-i8},
 as well as analogous lemmas that support stores of other types (\bvsort{16}, \bvsort{32}, and \bvsort{64}).
-
-As for the path constraints,
-note that $\rangecond(\bvconst{64}{\addr}, 1, \mo) \equiv \true$, so the equivalence follows easily.
 
 To handle the case of \textit{store} in general, we define the following interface lemma:
 
