@@ -249,6 +249,7 @@ and more specifically:
 \]
 To prove such cases automatically, we define the following lemma, which can be applied when storing an expression of sort $\smtsort{8}$:
 \begin{lemma}
+\label{lemma:store-i8}
 Let $v$, $v_{new}$, and $v'_{new}$ be SMT expressions of sort $\smtsort{8}$,
 let $k$ be an SMT expression of sort $\smtsort{32}$,
 and let $\bvconst{32}{i}$, ..., $\bvconst{32}{(i + n)}$ be subsequent constant SMT expressions.
@@ -258,7 +259,13 @@ If $k \equiv \bvconst{32}{i}$ and $v_{new} \equiv v'_{new}$, then:
 % TODO: explain what this lemma says...
 This lemma can be applied in our case,
 since $\bvextract{32}{\bvsub{\bvsort{64}}{\bvconst{64}{\addr}}{\bvconst{64}{\addr}}} \equiv \bvconst{32}{0}$ and $\bvconst{8}{7} \equiv \bvconst{8}{7}$.
-We define similar lemmas to handle stores of other types (\bvsort{16}, \bvsort{32}, and \bvsort{64}).
+
+The SMT simplifications employed by the \SE engine yield SMT encodings that diverge from those derived from the symbolic semantics.
+As a result, we must automatically prove SMT equivalences, as described above.
+To do so, we develop a \emph{simplification theory} that proves that the SMT simplifications employed by the \SE engine are equivalence-preserving.
+In particular, this theory includes~\Cref{store-i8},
+as well as analogous lemmas that support stores of other types (\bvsort{16}, \bvsort{32}, and \bvsort{64}).
+
 As for the path constraints,
 note that $\rangecond(\bvconst{64}{\addr}, 1, \mo) \equiv \true$, so the equivalence follows easily.
 
