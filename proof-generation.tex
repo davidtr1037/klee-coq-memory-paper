@@ -383,7 +383,6 @@ More specifically, we need to prove the unsatisfiability of the following constr
 n < \bvconst{32}{2} \land \big((\bvzext{64}{n} > \bvconst{64}{(2^{32} - 1)}) \lor (\bvmul{\bvsort{64}}{\bvzext{64}{\bvsext{32}{\bvzext{64}{n}}}}{\bvconst{64}{1}}) > \bvconst{64}{(2^{32} - 1)}\big)
 \]
 which is indeed unsatisfiable.
-
 We do not generate an explicit proof of unsatisfiability for this query.
 Instead, we assume the correctness of the underlying SMT solver, and axiomatize the unsatisfiability of this query.
 Proof logging for SMT queries~\cite{armand2011modular,ekici2017smtcoq} is an orthogonal challenge that remains outside the scope of this work.
