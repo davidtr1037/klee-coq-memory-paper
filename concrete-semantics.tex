@@ -251,7 +251,7 @@ In the following,
 we define the concrete state and the derivation rules of the operational small-step semantics.
 In this paper,
 we consider a concrete state with a local store and a heap.
-However, our formalization (in \coq) and implementation (on top of \klee) support also stack frames, stack allocations (\ie $\talloca$), and global variables.
+However, our framework (in \coq) and implementation (on top of \klee) support also stack frames, stack allocations (\ie $\talloca$), and global variables.
 
 % TODO: define a frame
 \begin{definition}
@@ -272,7 +272,7 @@ and their semantics are functions whose domains and ranges depend on those types
 
 \Cref{figure:llvm-semantics} defines the operational small-step semantics for a subset of the instructions introduced in~\Cref{figure:llvm-syntax}.
 In the following, we discuss the derivation rules in more detail.\footnote{
-The full definition can be found in our \coq formalization.
+The full definition can be found in our \coq framework.
 }
 
 \textbf{\textit{Branch.}}
@@ -336,7 +336,7 @@ we call the $\mowritefunc{\tau}$ function (\Cref{sec:memory-modeling}) to update
 \textbf{\textit{GetElementPtr.}}
 In general, the $\tgep$ instruction computes the address of a subelement of an aggregate data structure (array, struct, \etc).
 The function $\evalgep$ defines the semantics of the $\tgep$ instruction based on~\Cref{alg:gep} (function \textsc{gep}).\footnote{
-The semantics presented here consider only arrays, however, our formalization and implementation support also structs.
+The semantics presented here consider only arrays, however, our framework and implementation support also structs.
 }
 The algorithm uses the functions $\signextfunc{\indexwidth}$ and $\zeroextfunc{\indexwidth}$ defined in~\Cref{sec:llvm-ir}.
 The first argument of $\evalgep$ is the type of the base pointer,
