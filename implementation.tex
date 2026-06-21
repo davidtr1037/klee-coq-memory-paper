@@ -38,13 +38,14 @@ we report the size (LOC) of those components:
 \end{itemize}
 
 \subsection{Implementation Issues in \klee}
-We found several implementation issues in \klee that relate to memory modeling, which we discuss next.
+Thanks to our formalization efforts,
+we found several implementation issues in \klee that relate to memory modeling, which we discuss next.
 
-\paragraph{Issue 1: Inconsistent modeling of the index type}
-On one side,
+\paragraph{Issue 1: Inconsistent Modeling of the Index Type}
+On one hand,
 \klee uses SMT arrays of sort $\arraysort{\smtsort{32}}{\smtsort{8}}$ to represent the contents of memory objects,
 which suggests that the modeled index type is $\bvsort{32}$.
-On the other side,
+On the other hand,
 \klee computes the offsets in the interpretation of $\tgep$ using SMT expressions of sort $\smtsort{64}$,
 which suggests that the modeled index type is $\bvsort{64}$.
 
