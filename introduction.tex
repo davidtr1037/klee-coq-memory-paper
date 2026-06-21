@@ -114,10 +114,9 @@ The entire development of this paper comes with proofs in \coq~\cite{rocq}.
 \end{itemize}
 \end{paragraph}
 
-% TODO: mention the size of the Rocq formalization?
 This paper is organized as follows.
-In~\Cref{sec:background}, we provide background on \llvm IR and SMT.
 In~\Cref{sec:overview}, we provide an overview of our approach.
+In~\Cref{sec:background}, we provide background on \llvm IR and SMT.
 In~\Cref{sec:concrete-semantics} and \Cref{sec:symbolic-semantics}, we present our concrete and symbolic semantics of a subset of \llvm IR with memory operations, respectively.
 In~\Cref{sec:program-safety}, we present our theoretical foundation, which enables proving safety of prorgrams based on properties related to the symbolic semantics.
 In~\Cref{sec:proof-generation}, we show how to instrument the \SE engine to generate safety proofs based on the theoretical foundation presented in~\Cref{sec:program-safety}.
