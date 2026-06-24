@@ -141,7 +141,7 @@ Therefore, we leave the modeling of such memory allocators to future work.
   \step
   \progstate{\instratlabel{\location}{b_1}}{\localstore}{\stack}{\memory}
 }
-\\[1em]
+\\[5pt]
 \ruledefsmall{Branch-False}
 {
   \instrat{\location} = \codequote{\tbr ~ e ~ b_1 ~ b_2} \quad
@@ -152,7 +152,7 @@ Therefore, we leave the modeling of such memory allocators to future work.
   \step
   \progstate{\instratlabel{\location}{b_2}}{\localstore}{\stack}{\memory}
 }
-\\[1em]
+\\[5pt]
 \ruledefsmall{Make-Symbolic}{
   \instrat{\location} = \codequote{x ~\texttt{=}~ \tcall^{\bvsort{32}} ~ \intrinsicfunc{make\_symbolic}()} \quad
   n \in \Nat
@@ -162,7 +162,7 @@ Therefore, we leave the modeling of such memory allocators to future work.
   \step
   \progstate{\nextinstr{\location}}{\localstore[x \mapsto \bvval{n}{32}]}{\stack}{\memory}
 }
-\\[1em]
+\\[5pt]
 \ruledefsmall{Malloc}{
   \instrat{\location} = \codequote{x~\texttt{=}~\tcall^{\pointertypeof{\bvsort{8}}}~\intrinsicfunc{malloc}(\bvsort{64} ~ e)} \quad
   \evalexprty{e}{\localstore}{\bvsort{64}} = \bvval{n}{64} \quad
@@ -173,7 +173,7 @@ Therefore, we leave the modeling of such memory allocators to future work.
   \step
   \progstate{\nextinstr{\location}}{\localstore[x \mapsto p]}{\stack}{\memory'}
 }
-\\[1em]
+\\[5pt]
 \ruledefsmall{Free}{
   \instrat{\location} = \codequote{\tcall~\intrinsicfunc{free}(\pointertypeof{\bvsort{8}} ~ e)} \quad
   \evalexprty{e}{\localstore}{\pointertypeof{\bvsort{8}}} = p \quad
@@ -186,7 +186,7 @@ Therefore, we leave the modeling of such memory allocators to future work.
   \step
   \progstate{\nextinstr{\location}}{\localstore}{\stack}{\memory'}
 }
-\\[1em]
+\\[5pt]
 \ruledefsmall{Load}{
   \instrat{\location} = \codequote{x~\texttt{=}~\tload^{\tau}~e} \quad
   \evalexprty{e}{\localstore}{\pointertypeof{\tau}} = p \quad
@@ -200,7 +200,7 @@ Therefore, we leave the modeling of such memory allocators to future work.
     {\localstore[x \mapsto \moread{\tau}{\mo}{p}]}
     {\stack}{\memory}
 }
-\\[1em]
+\\[5pt]
 \ruledefsmall{Store}{
   \instrat{\location} = \codequote{\tstore^{\tau}~e_1~e_2} \quad
   \evalexprty{e_1}{\localstore}{\tau} = v \quad
@@ -213,7 +213,7 @@ Therefore, we leave the modeling of such memory allocators to future work.
   \step
   \progstate{\nextinstr{\location}}{\localstore}{\stack}{\heapreplace{\memory}{\mo}{\mowrite{\tau}{\mo}{p}{v}}}
 }
-\\[1em]
+\\[5pt]
 \ruledefsmall{GEP}{
   \instrat{\location} = \codequote{x~\texttt{=}~\tgep~\pointertypeof{\tau}~e~\overline{(\tau_i, e_i)}} \quad
   \evalexprty{e}{\localstore}{\pointertypeof{\tau}} = p \quad

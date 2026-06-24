@@ -108,7 +108,7 @@ In the following, we discuss the derivation rules in more detail.
   \symstep
   \symstate{\instratlabel{\location}{b_1}}{\symlocalstore}{\symstack}{\pc \land \evalexprty{e}{\symlocalstore}{\bvsort{1}}}{\symmemory}
 }
-\\[1em]
+\\[5pt]
 \ruledefsmall{Branch-False}{
   \instrat{\location} = \codequote{\tbr ~ e ~ b_1 ~ b_2}
   \quad
@@ -119,7 +119,7 @@ In the following, we discuss the derivation rules in more detail.
   \symstep
   \symstate{\instratlabel{\location}{b_2}}{\symlocalstore}{\symstack}{\pc \land \lnot\evalexprty{e}{\symlocalstore}{\bvsort{1}}}{\symmemory}
 }
-\\[1em]
+\\[5pt]
 \ruledefsmall{Make-Symbolic}{
   \instrat{\location} = \codequote{x ~\texttt{=}~ \tcall^{\bvsort{32}} ~ \intrinsicfunc{make\_symbolic}()}
 }
@@ -128,7 +128,7 @@ In the following, we discuss the derivation rules in more detail.
   \symstep
   \symstate{\nextinstr{\location}}{\symlocalstore[x \mapsto \alpha]}{\symstack}{\pc}{\symmemory}
 }
-\\[1em]
+\\[5pt]
 \ruledefsmall{Malloc}{
   \instrat{\location} = \codequote{x~\texttt{=}~\tcall^{\pointertypeof{\bvsort{8}}}~\intrinsicfunc{malloc}(\bvsort{64} ~ e)} \quad
   \evalexprty{e}{\symlocalstore}{\bvsort{64}} = n \quad
@@ -140,7 +140,7 @@ In the following, we discuss the derivation rules in more detail.
   \symstep
   \symstate{\nextinstr{\location}}{\symlocalstore[x \mapsto p]}{\symstack}{\symmemory'}{\pc}
 }
-\\[1em]
+\\[5pt]
 \ruledefsmall{Free}{
   \instrat{\location} = \codequote{\tcall~\intrinsicfunc{free}(\pointertypeof{\bvsort{8}} ~ e)} \quad
   \evalexprty{e}{\symlocalstore}{\pointertypeof{\bvsort{8}}} = p \quad
@@ -154,7 +154,7 @@ In the following, we discuss the derivation rules in more detail.
   \symstep
   \symstate{\nextinstr{\location}}{\symlocalstore}{\symstack}{\symmemory'}{\pc \land \baseaddrcond(p, \symmo)}
 }
-\\[1em]
+\\[5pt]
 \ruledefsmall{Load}{
   \instrat{\location} = \codequote{x~\texttt{=}~\tload^{\tau}~e} \quad
   \evalexprty{e}{\symlocalstore}{\pointertypeof{\tau}} = p \quad
@@ -167,7 +167,7 @@ In the following, we discuss the derivation rules in more detail.
   \symstep
   \symstate{\nextinstr{\location}}{\symlocalstore[x \mapsto \symmoread{\tau}{\symmo}{p}]}{\symstack}{\symmemory}{\pc \land \rangecond(p, |\tau|, \symmo)}
 }
-\\[1em]
+\\[5pt]
 \ruledefsmall{Store}{
   \instrat{\location} = \codequote{\tstore^{\tau}~e_1~e_2} \quad
   \evalexprty{e_1}{\symlocalstore}{\tau} = v \quad
@@ -181,7 +181,7 @@ In the following, we discuss the derivation rules in more detail.
   \symstep
   \symstate{\nextinstr{\location}}{\symlocalstore}{\symstack}{\symheapreplace{\symmemory}{\symmo}{\symmowrite{\tau}{\symmo}{p}{v}}}{\pc \land \rangecond(p, |\tau|, \symmo)}
 }
-\\[1em]
+\\[5pt]
 \ruledefsmall{GEP}{
   \instrat{\location} = \codequote{x~\texttt{=}~\tgep~\pointertypeof{\tau}~e~\overline{(\tau_i, e_i)}} \quad
   \evalexprty{e}{\symlocalstore}{\pointertypeof{\tau}} = p \quad
