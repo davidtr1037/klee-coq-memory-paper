@@ -45,7 +45,7 @@ and the interface lemmas (\Cref{sec:proof-et}) approximately consist of 3,500 LO
 Thanks to our formalization efforts,
 we found several implementation issues in \klee that relate to memory modeling, which we discuss next.
 
-\paragraph{Issue 1: Inconsistent Modeling of the Index Type}
+\textit{Issue 1: Inconsistent Modeling of the Index Type.}
 On one hand,
 \klee uses SMT arrays of sort $\arraysort{\smtsort{32}}{\smtsort{8}}$ to represent the contents of memory objects,
 which suggests that the modeled index type is $\bvsort{32}$.
@@ -53,20 +53,20 @@ On the other hand,
 \klee computes the offsets in the interpretation of $\tgep$ using SMT expressions of sort $\smtsort{64}$,
 which suggests that the modeled index type is $\bvsort{64}$.
 
-\paragraph{Issue 2: Incorrect Interpretation of \textup{$\tgep$}}
+\textit{Issue 2: Incorrect Interpretation of \textup{$\tgep$}}
 \klee does not account for overflows in the offset computation, thus not fully compliant with the \llvm reference.
 To fix this,
 we modified the offset computation to conform to the index type $\bvsort{32}$,
 ensuring consistency with the index sort $\smtsort{32}$ used in the SMT arrays,
 and we report an error when such overflows occur.
 
-\paragraph{Issue 3: Incorrect Interpretation of Memory Allocations}
+\textit{Issue 3: Incorrect Interpretation of Memory Allocations}
 According to the \llvm semantics,
 if the allocation size exceeds the largest \emph{signed integer} representable by the index type,
 then the result is undefined behavior.
 However, \klee currently does not check this condition.
 
-\paragraph{Issue 4: Silent Truncation in Memory Allocations}
+\textit{Issue 4: Silent Truncation in Memory Allocations}
 \klee silently truncates the allocation size to the \code{uint32\_t} type,
 without reporting any error to the user, which may lead to unexpected behavior.
 For example, if we allocate an object of size $2^{32} + 10$,

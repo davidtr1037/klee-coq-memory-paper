@@ -82,10 +82,13 @@ Here, however, $\sem{\toper^\tau}$ and $\sem{\tcast^{\tau\to\tau'}}$ are \emph{f
 \Cref{figure:symbolic-semantics} defines the symbolic operational small-step semantics for a subset of the instructions introduced in~\Cref{figure:llvm-syntax}.
 In some of the derivation rules, we use the following definitions (where $\symmo \triangleq \mobj{\bvval{\addr}{\pointerwidth}}{\bvval{\size}{\indexwidth}}{\smtarray}$):
 \[
-\begin{array}{ll}
-\baseaddrcond(p, \symmo) & \triangleq p = \bvconst{\pointerwidth}{\addr} \\
-\rangecond(p, n, \symmo) & \triangleq p < \bvadd{\pointerwidth}{p}{n} \land p \geq \bvconst{\pointerwidth}{\addr} \land \bvadd{\pointerwidth}{p}{n} < \bvadd{\pointerwidth}{\bvconst{\pointerwidth}{\addr}}{\bvconst{\pointerwidth}{\size}}
-\end{array}
+\baseaddrcond(p, \symmo) \triangleq p = \bvconst{\pointerwidth}{\addr}
+\quad \quad
+\rangecond(p, n, \symmo) \triangleq p < \bvadd{\pointerwidth}{p}{n} \land p \geq \bvconst{\pointerwidth}{\addr} \land \bvadd{\pointerwidth}{p}{n} < \bvadd{\pointerwidth}{\bvconst{\pointerwidth}{\addr}}{\bvconst{\pointerwidth}{\size}}
+%\begin{array}{ll}
+%\baseaddrcond(p, \symmo) & \triangleq p = \bvconst{\pointerwidth}{\addr} \\
+%\rangecond(p, n, \symmo) & \triangleq p < \bvadd{\pointerwidth}{p}{n} \land p \geq \bvconst{\pointerwidth}{\addr} \land \bvadd{\pointerwidth}{p}{n} < \bvadd{\pointerwidth}{\bvconst{\pointerwidth}{\addr}}{\bvconst{\pointerwidth}{\size}}
+%\end{array}
 \]
 Intuitively,
 $\baseaddrcond$ defines an SMT formula asserting that $p$ points to the base address of $\symmo$,
