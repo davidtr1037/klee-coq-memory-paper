@@ -199,7 +199,7 @@ s_5 \triangleq \symstate
     {[\mo]}
     {n < \bvconst{32}{2}}
 \]
-where:
+%where:
 \[ \mo \triangleq (\bvval{\addr}{64}, \bvval{2}{32}, \arrayvalue), \ \arrayvalue \triangleq \arraystore{\arraystore{\arrayconst{\arrayinitvalue}}{\bvconst{32}{0}}{\arrayinitvalue}}{\bvconst{32}{1}}{\arrayinitvalue} \]
 
 According to the symbolic semantics,
@@ -232,7 +232,7 @@ s_6 \triangleq \symstate
     {[\mo_{new}]}
     {n < \bvconst{32}{2}}
 \]
-where:
+%where:
 \[ \mo_{new} \triangleq (\bvval{\addr}{64}, \bvval{2}{32}, \arrayvalue_{new}), \ \arrayvalue_{new} \triangleq \arraystore{\arraystore{\arrayconst{\arrayinitvalue}}{\bvconst{32}{0}}{\bvconst{8}{7}}}{\bvconst{32}{1}}{\arrayinitvalue} \]
 Now, we have to prove that the subtree of $s_5$ is safe.
 Based on~\Cref{def:sym-error-state},
@@ -305,7 +305,7 @@ According to the symbolic semantics, the derived symbolic state is:
     {...}
     {n < \bvconst{32}{2}}
 \]
-where:
+%where:
 \[ \mech{e} \triangleq \bvadd{\bvsort{64}}{\bvconst{64}{\addr}}{\bvzext{64}{\bvmul{\bvsort{32}}{\bvsext{32}{\bvzext{64}{n}}}{\bvconst{32}{1}}}} \]
 The symbolic state computed by the \SE engine is:
 \[
@@ -316,7 +316,7 @@ s_8 \triangleq \symstate
     {...}
     {n < \bvconst{32}{2}}
 \]
-where:
+%where:
 \[ e \triangleq \bvadd{\bvsort{64}}{\bvconst{64}{\addr}}{\bvzext{64}{\bvsext{32}{\bvzext{64}{n}}}} \]
 
 \begin{algorithm}[t]
@@ -417,7 +417,7 @@ s_8 \triangleq \symstate
     {[\mo]}
     {n < \bvconst{32}{2}}
 \]
-where:
+%where:
 \[ e \triangleq \bvadd{\bvsort{64}}{\bvconst{64}{\addr}}{\bvzext{64}{\bvextract{32}{\bvzext{64}{n}}}} \]
 \[ \mo \triangleq (\bvval{\addr}{64}, \bvval{2}{32}, \arrayvalue), \ \arrayvalue \triangleq \arraystore{\arraystore{\arrayconst{\arrayinitvalue}}{\bvconst{32}{0}}{\bvconst{8}{7}}}{\bvconst{32}{1}}{\arrayinitvalue} \]
 
