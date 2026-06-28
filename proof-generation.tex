@@ -170,14 +170,13 @@ In this case, we can apply~\Cref{lemma:interface-malloc} with $n$ as 2, $\mo$ as
 Let $s \triangleq \symstate{\location}{\symlocalstore}{\symstack}{\symmemory}{\pc}$,
 where \textup{$\instrat{\location} = \codequote{x~\texttt{=}~\tcall^{\pointertypeof{\bvsort{8}}}~\intrinsicfunc{malloc}(\bvsort{64} ~ e)}$},
 and let $\bvval{\addr}{64}$ be the allocated base address.
-If there exist $n$, $\mo$, and $t$ such that:
+Then $\safeet(\tree(s, [t]))$ if there exist $n$, $\mo$, and $t$ such that:
 \begin{enumerate}
     \item \textup{$\evalexprty{e}{\symlocalstore}{\bvsort{64}} \equiv \bvconst{64}{n}$} and \textup{$\bvval{n}{64} < \bvval{(2^{\indexwidth - 1} - 1)}{64}$}
     \item \textup{$\mo \equiv (\bvval{\addr}{64}, \bvval{n}{32}, \arrayconst{\arrayinitvalue})$}
     \item \textup{$t.\attrstate = \symstate{\nextinstr{\location}}{\symlocalstore[x \mapsto \bvconst{64}{\addr}]}{\symstack}{\symmemory \cup \{\mo\}}{\pc}$}
     \item $\safeet(t)$
 \end{enumerate}
-then $\safeet(\tree(s, [t]))$.
 \end{interfacelemma}
 
 Note that this lemma assumes that the size argument of \textit{malloc} is evaluated to a concrete SMT expression.
@@ -273,7 +272,7 @@ To handle the case of \textit{store} in general, we define the following interfa
 \label{lemma:interface-store}
 Let $s \triangleq \symstate{\location}{\symlocalstore}{\symstack}{\symmemory}{\pc}$,
 where \textup{$\instrat{\location} = \codequote{\tstore^{\tau}~e_1~e_2}$}.
-If there exist $p$, $\mo$, $\mo_{new}$, and $t$ such that:
+Then $\safeet(\tree(s, [t]))$ if there exist $p$, $\mo$, $\mo_{new}$, and $t$ such that:
 \begin{enumerate}
     \item $\symmemory$ is well-formed
     \item $\mo \in \symmemory$
@@ -283,7 +282,6 @@ If there exist $p$, $\mo$, $\mo_{new}$, and $t$ such that:
     \item $t.\attrstate = \symstate{\nextinstr{\location}}{\symlocalstore}{\symstack}{\heapreplace{\symmemory}{\mo}{\mo_{new}}}{\pc}$
     \item $\safeet(t)$
 \end{enumerate}
-then $\safeet(\tree(s, [t]))$.
 \end{interfacelemma}
 
 \subsubsection{Example: GetElementPtr}
@@ -398,7 +396,7 @@ To handle the case of \textit{getelementptr} in general, we define the following
 \label{lemma:interface-gep}
 Let $s \triangleq \symstate{\location}{\symlocalstore}{\symstack}{\symmemory}{\pc}$,
 where \textup{$\instrat{\location} = \codequote{x~\texttt{=}~\tgep~\pointertypeof{\tau}~e~\overline{(\tau_i, e_i)}}$}.
-If there exist $\widebar{k_i}$, $\symlocalstore'$, and $t$ such that:
+Then $\safeet(\tree(s, [t]))$ if there exist $\widebar{k_i}$, $\symlocalstore'$, and $t$ such that:
 \begin{enumerate}
     \item $\evalexprty{e_i}{\symlocalstore}{\tau_i} = k_i$
     \item $\unsat{\pc \land \overflowcond(\tau, \overline{k_i})}$
@@ -406,7 +404,6 @@ If there exist $\widebar{k_i}$, $\symlocalstore'$, and $t$ such that:
     \item $t.\attrstate = \symstate{\nextinstr{\location}}{\symlocalstore'_{opt}}{\symstack}{\symmemory}{\pc}$
     \item $\safeet(t)$
 \end{enumerate}
-then $\safeet(\tree(s, [t]))$.
 \end{interfacelemma}
 
 \subsubsection{Example: Load}
@@ -464,7 +461,7 @@ To handle the case of \textit{load} in general, we define the following interfac
 \label{lemma:interface-load}
 Let $s \triangleq \symstate{\location}{\symlocalstore}{\symstack}{\symmemory}{\pc}$,
 where \textup{$\instrat{\location} = \codequote{x~\texttt{=}~\tload^{\tau}~e}$}.
-If there exist $\mo$, $\symlocalstore'$, and $t$ such that:
+Then $\safeet(\tree(s, [t]))$ if there exist $\mo$, $\symlocalstore'$, and $t$ such that:
 \begin{enumerate}
     \item $\symmemory$ is well-formed
     \item $\mo \in \symmemory$
@@ -474,5 +471,4 @@ If there exist $\mo$, $\symlocalstore'$, and $t$ such that:
     \item $t.\attrstate = \symstate{\nextinstr{\location}}{\symlocalstore'}{\symstack}{\symmemory}{\pc}$
     \item $\safeet(t)$
 \end{enumerate}
-then $\safeet(\tree(s, [t]))$.
 \end{interfacelemma}
