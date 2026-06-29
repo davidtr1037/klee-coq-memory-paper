@@ -251,17 +251,17 @@ the symbolic version always returns an SMT expression.
 \label{alg:symbolic-gep}
 \begin{algorithmic}[1]
 
-\Function{compute-internal}{$\tau, o, c, \overline{j}$}
+\Function{compute-internal}{$\tau, o, \textcolor{markcolor}{c}, \overline{j}$}
     \If {$|\overline{j}| = 0$}
-        \State \Return $\langle o, c \rangle$
+        \State \Return $\langle o, \textcolor{markcolor}{c} \rangle$
     \EndIf
     \State $j_1 :: \overline{j'} \gets \overline{j}$
     \If {$\tau = \arraytype{\tau'}{n}$}
-        \State $c_1 \gets \mathit{trunc\_overflow}(j_1)$
-        \State $c_2 \gets \mathit{mul\_overflow}(\bvsext{\indexwidth}{j_1}, \bvconst{\indexwidth}{|\tau'|})$
-        \State $c_3 \gets \mathit{add\_overflow}(o, \bvmul{\bvsort{\indexwidth}}{\bvsext{\indexwidth}{j_1}}{\bvconst{\indexwidth}{|\tau'|}})$
+        \State \textcolor{markcolor}{$c_1 \gets \mathit{trunc\_overflow}(j_1)$}
+        \State \textcolor{markcolor}{$c_2 \gets \mathit{mul\_overflow}(\bvsext{\indexwidth}{j_1}, \bvconst{\indexwidth}{|\tau'|})$}
+        \State \textcolor{markcolor}{$c_3 \gets \mathit{add\_overflow}(o, \bvmul{\bvsort{\indexwidth}}{\bvsext{\indexwidth}{j_1}}{\bvconst{\indexwidth}{|\tau'|}})$}
         \State $o \gets \bvadd{\bvsort{\indexwidth}}{o}{\bvmul{\bvsort{\indexwidth}}{\bvsext{\indexwidth}{j_1}}{\bvconst{\indexwidth}{|\tau'|}}}$ \label{line:array-index}
-        \State \Return \Call{compute-internal}{$\tau', o, c \lor c_1 \lor c_2 \lor c_3, \overline{j'}$}
+        \State \Return \Call{compute-internal}{$\tau', o, \textcolor{markcolor}{c \lor c_1 \lor c_2 \lor c_3}, \overline{j'}$}
     \EndIf
 \EndFunction
 
