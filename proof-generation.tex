@@ -329,7 +329,7 @@ Instead, we use additional definitions and lemmas that help generating this proo
 
 First, we define the function $\overflowcond$,
 which computes an SMT formula encoding the fact that an overflow occured during the address calculations in $\tgep$.
-The pseudo-code of this function is given in~\Cref{alg:symbolic-gep}.
+The pseudo-code of this function is given in~\Cref{alg:symbolic-gep} (function \textsc{compute-overflow}).
 The auxiliary functions \textit{trunc\_overflow}, \textit{mul\_overflow}, and \textit{add\_overflow} are used to handle overflows for specific operations.
 For example, \textit{trunc\_overflow} returns an SMT formula encoding the fact that the truncation does not preserve the unsigned value.
 For brevity, the definitions of these functions are omitted.\footnote{

@@ -241,7 +241,9 @@ we call the $\symmowritefunc{\tau}$ function (\Cref{sec:symbolic-memory-modeling
 \textbf{\textit{GetElementPtr.}}
 The symbolic semantics of $\tgep$ mirrors the concrete semantics,
 while using SMT expressions for offset and address calculations.
-The function $\symevalgep$ defines the symbolic semantics of the $\tgep$ instruction based on~\Cref{alg:symbolic-gep} (function \textsc{symbolic-gep}).
+The function $\symevalgep$ defines the symbolic semantics of the $\tgep$ instruction based on~\Cref{alg:symbolic-gep} (function \textsc{symbolic-gep}).\footnote{
+For now, ignore the components highlighted in gray within the function \textsc{compute-internal}.
+}
 While the concrete version may return $\tundef$ or $\tpoison$,
 the symbolic version always returns an SMT expression.
 
