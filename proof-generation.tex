@@ -319,37 +319,6 @@ s_8 \triangleq \symstate
 %where:
 \[ e \triangleq \bvadd{\bvsort{64}}{\bvconst{64}{\addr}}{\bvzext{64}{\bvsext{32}{\bvzext{64}{n}}}} \]
 
-\begin{algorithm}[t]
-\small
-\caption{Overflow condition computation in \tgep.}
-\label{alg:gep-overflow}
-\begin{algorithmic}[1]
-
-\Function{compute-overflow-internal}{$\tau, o, c, \overline{j}$}
-    \If {$|\overline{j}| = 0$}
-        \State \Return $c$
-    \EndIf
-    \State $j_1 :: \overline{j'} \gets \overline{j}$
-    \If {$\tau = \arraytype{\tau'}{n}$}
-        \State $c_1 \gets \mathit{trunc\_overflow}(j_1)$
-        \State $c_2 \gets \mathit{mul\_overflow}(\bvsext{\indexwidth}{j_1}, \bvconst{\indexwidth}{|\tau'|})$
-        \State $c_3 \gets \mathit{add\_overflow}(o, \bvmul{\bvsort{\indexwidth}}{\bvsext{\indexwidth}{j_1}}{\bvconst{\indexwidth}{|\tau'|}})$
-        \State $o \gets \bvadd{\bvsort{\indexwidth}}{o}{\bvmul{\bvsort{\indexwidth}}{\bvsext{\indexwidth}{j_1}}{\bvconst{\indexwidth}{|\tau'|}}}$ \label{line:array-index}
-        \State \Return \Call{compute-overflow-internal}{$\tau', o, c \lor c_1 \lor c_2 \lor c_3, \overline{j'}$}
-    \EndIf
-\EndFunction
-
-\Function{compute-overflow}{$\tau, \overline{j}$}
-    \State $j_1 :: \overline{j'} \gets \overline{j}$
-    \State $c_1 \gets \mathit{trunc\_overflow}(j_1)$
-    \State $c_2 \gets \mathit{mul\_overflow}(\bvsext{\indexwidth}{j_1}, \bvconst{\indexwidth}{|\tau|})$
-    \State $o \gets \bvmul{\bvsort{\indexwidth}}{\bvsext{\indexwidth}{j_1}}{\bvconst{\indexwidth}{|\tau|}}$
-    \State \Return \Call{compute-overflow-internal}{$\tau, o, c_1 \lor c_2, \overline{j'}$}
-\EndFunction
-
-\end{algorithmic}
-\end{algorithm}
-
 Based on~\Cref{def:sym-error-state},
 in order to prove that $s_7$ is not an error state,
 we need to prove that there is no model $m$ such that:
@@ -360,7 +329,7 @@ Instead, we use additional definitions and lemmas that help generating this proo
 
 First, we define the function $\overflowcond$,
 which computes an SMT formula encoding the fact that an overflow occured during the address calculations in $\tgep$.
-The pseudo-code of this function is given in~\Cref{alg:gep-overflow}.
+The pseudo-code of this function is given in~\Cref{alg:symbolic-gep}.
 The auxiliary functions \textit{trunc\_overflow}, \textit{mul\_overflow}, and \textit{add\_overflow} are used to handle overflows for specific operations.
 For example, \textit{trunc\_overflow} returns an SMT formula encoding the fact that the truncation does not preserve the unsigned value.
 For brevity, the definitions of these functions are omitted.\footnote{
