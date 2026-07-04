@@ -324,8 +324,8 @@ in order to prove that $s_7$ is not an error state,
 we need to prove that there is no model $m$ such that:
 \[ m \models n < \bvconst{32}{2} \ \land \ \evalgep(\bvsort{8}, m[\bvconst{64}{\addr}], [m[\bvzext{64}{n}]]) = \tpoison \]
 % since gep operates over concrete values
-Automatically generating this proof requires reasoning on the level of the concrete domain, which is challenging in this case.
-Instead, we use additional definitions and lemmas that help generating this proof by reducing the problem back to the symbolic domain.
+Automatically proving such propositions requires reasoning on the level of the concrete semantics, which is challenging in this case.
+Instead, we use additional definitions and lemmas that help generating this proof by reducing the problem back to the symbolic semantics.
 
 First, we define the function $\overflowcond$,
 which computes an SMT formula encoding the fact that an overflow occured during the address calculations in $\tgep$.
