@@ -176,10 +176,10 @@ and we will refine it in~\Cref{def:safe-et}.
 \begin{definition}
 \label{def:safe-et-strict}
 Let $s$ be a symbolic state and $l$ a list of execution trees.
-We say that $tree(s, l)$ is \emph{safe}, denoted by $\safeetstrict(\tree(s, l))$ if:
+We say that $tree(s, l)$ is \emph{safe}, denoted by $\safeetstrict(\tree(s, l))$, if:
 \begin{enumerate}
     \item $s$ is not an error state
-    \item if $s \symstep s'$ then either the path constraints of $s'$ are unsatisfiable or there exists a subtree $t \in l$ such that $\safeet(t)$ and $s' = t.\attrstate$.
+    \item if $s \symstep s'$ then either the path constraints of $s'$ are unsatisfiable or there exists a subtree $t \in l$ such that $\safeetstrict(t)$ and $s' = t.\attrstate$.
 \end{enumerate}
 \end{definition}
 
@@ -239,7 +239,7 @@ Now, the refined version of the safety properties of execution trees is defined 
 \begin{definition}
 \label{def:safe-et}
 Let $s$ be a symbolic state and $l$ a list of execution trees.
-We say that $tree(s, l)$ is \emph{safe}, denoted by $\safeet(\tree(s, l))$ if:
+We say that $tree(s, l)$ is \emph{safe}, denoted by $\safeet(\tree(s, l))$, if:
 \begin{enumerate}
     \item $s$ is not an error state
     \item if $s \symstep s'$ then either the path constraints of $s'$ are unsatisfiable or there exists a subtree $t \in l$ such that $\safeet(t)$ and $s' \equivstate t.\attrstate$.
