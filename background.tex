@@ -78,7 +78,7 @@ According to the \llvm reference~\cite{llvmref}, a \emph{data layout} specifies 
 %including endianness, alignment rules, \etc
 In particular, it defines various properties related to pointers, such as \emph{pointer type} and \emph{index type}.
 The pointer type specifies the integral type used to represent pointer values.
-The index type specifies the integral type used for address calculations (\eg in \tgep).
+The index type specifies the integral type used for address calculations (\eg in the $\tgep$ instruction).
 The size of the index type may not exceed the size of the pointer type.
 An allocated object is a region of the address space reserved by a memory-allocation operation,
 such as \textsf{alloca}, a heap allocation call (\eg \textit{malloc}), or a global variable definition.
