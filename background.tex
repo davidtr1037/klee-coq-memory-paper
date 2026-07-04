@@ -62,7 +62,7 @@ We define $\Vals^{\bvsort{w}}$ as the set containing all bit-vectors of type $\b
 Then, we define $\Vals$ as the set of all values, \ie the union of $\Vals^{\bvsort{w}}$ over all $w$.
 
 \paragraph{Notations}
-We denote by $\bvval{n}{w}$ a bit-vector of type $\bvsort{$w$}$ whose numerical value is $n$.
+We denote by $\bvval{n}{w}$ a bit-vector of type $\bvsort{$w$}$ whose numerical value is $n$ (indicated in \textcolor{bvcolor}{red} throughout the paper).
 We denote by $|\tau|$ the size of the type $\tau$ in bytes.
 We denote by $\zeroext{w}{\bvval{n}{w'}}$ ($\signext{w}{\bvval{n}{w'}}$) a function that returns a bit-vector of type $\bvsort{w}$, defined as follows:
 if $w' < w$ then it performs zero-extension (sign-extension),
@@ -125,5 +125,5 @@ A formula $\varphi$ is unsatisfiable, denoted by $\unsat{\varphi}$, if $m[\varph
 We denote by $\bvzextfunc{w}$ ($\bvsextfunc{w}$) a function that performs zero-extension (sign-extension) or truncation to return a bit-vector of sort $\smtsort{w}$.
 We denote by $\bvextractfunc{w}$ a function that performs truncation to return a bit-vector of sort $\smtsort{w}$.
 We use $\arrayselect{a}{i}$ and $\arraystore{a}{i}{v}$ as shorthands for $\mathit{select}(a, i)$ and $\mathit{store}(a, i, v)$.
-We denote by $\bvconst{w}{n}$ a constant bit-vector of sort $\smtsort{w}$ whose numerical value is $n$.
+We denote by $\bvconst{w}{n}$ a constant bit-vector of sort $\smtsort{w}$ whose numerical value is $n$ (indicated in \textcolor{smtcolor}{blue} throughout the paper).
 \end{paragraph}
