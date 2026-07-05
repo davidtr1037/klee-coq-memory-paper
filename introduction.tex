@@ -26,7 +26,7 @@ Proof logging~\cite{lundberg2024proof,klee-rocq,de2008proofs,marx2013proof,flipp
 is an alternative approach inspired by \emph{translation validation}~\cite{samet,pnueli1998translation}.
 In the context of \SE,
 applying this approach means that the \SE engine generates a machine-checked safety proof tailored to each analyzed program,
-bypassing the need for a verified implementation.
+thus bypassing the need for a verified implementation.
 Proof-logging \SE has been recently applied in the context of P4~\cite{lundberg2024proof} (a domain-specific language for network devices) and a subset of \llvm IR with integers~\cite{klee-rocq},
 however, it has not yet been demonstrated on memory-manipulating programs.
 
@@ -34,9 +34,7 @@ however, it has not yet been demonstrated on memory-manipulating programs.
 In this paper, we apply proof logging to memory-manipulating programs in \llvm IR.
 To the best of our knowledge,
 this is the first tool that generates machine-checked safety proofs for this subset of \llvm IR.
-Our approach builds on the framework of~\cite{klee-rocq} and introduces several substantial extensions,
-requiring significant theoretical and engineering efforts.
-The high-level architecture of our approach is illustrated in~\Cref{fig:diagram}.
+The high-level architecture of our approach, which builds on the framework of~\cite{klee-rocq}, is illustrated in~\Cref{fig:diagram}.
 Our theoretical framework formalizes the \emph{mechanized} concrete and symbolic semantics,
 where the latter specifies how instructions operate over symbolic values.
 Based on the mechanized semantics,
@@ -60,7 +58,7 @@ we first extend the concrete and symbolic semantics to support memory-related in
 and then extend the theoretical foundation, which allows proving program safety based on properties of execution trees.
 Extending the instrumentation of the \SE engine raises additional challenges.
 \SE engines use various optimizations for memory modeling, which complicate proof generation.
-For example, \klee~\cite{klee} uses multiple representations for memory objects and applies SMT encoding optimizations.
+For example, \klee uses multiple representations for memory objects and applies SMT encoding optimizations.
 % TODO: why are they important: reduce proof size/time
 % TODO: efficiently interact / by/while reducing the size/time
 To bridge the gap between the mechanized symbolic semantics and the heavily-optimized behavior in \klee,
