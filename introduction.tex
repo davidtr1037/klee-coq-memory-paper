@@ -56,7 +56,7 @@ and then generalize the theoretical foundation to allow proving program safety b
 Extending the instrumentation of the \SE engine introduces additional challenges.
 \SE engines use various memory-modeling optimizations that complicate proof generation.
 For example, \klee uses multiple representations for memory objects and applies SMT encoding optimizations.
-To bridge the gap between the mechanized symbolic semantics and the heavily-optimized behavior in \klee, we introduce \emph{interface lemmas}.
+To bridge the gap between the mechanized symbolic semantics and the heavily-optimized behavior in the \SE engine, we introduce \emph{interface lemmas}.
 These lemmas help to efficiently interact with various components of our framework,
 while reducing the complexity of the resulting proofs.
 Our theoretical framework is developed in \coq and comprises approximately 40,000 lines of code (LOC),
