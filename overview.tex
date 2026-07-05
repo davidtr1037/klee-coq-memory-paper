@@ -87,10 +87,10 @@ Our theoretical framework defines the concrete (\Cref{sec:concrete-semantics}) a
 %where each node represents a symbolic state computed by the \SE engine.
 The main result of our theoretical framework is the \emph{program safety} theorem (\Cref{theorem:safety-via-et}).
 Intuitively, this theorem states that if the execution tree of the program satisfies certain inductive \emph{safety properties},
-then the program is safe with respect to the concrete \llvm semantics.
+then the program is safe with respect to the concrete semantics.
 More specifically, the required safety properties are \emph{error-freeness} and \emph{completeness} (\Cref{def:safe-et}).
 The former requires that the execution tree must not contain error symbolic states.
-The latter requires that the execution tree over-approximates all the feasible symbolic states derivable by the symbolic \llvm semantics.
+The latter requires that the execution tree over-approximates all the feasible symbolic states derivable by the symbolic semantics.
 This theorem bridges the concrete and symbolic domains,
 providing a foundation for automating proof generation.
 
@@ -135,7 +135,11 @@ In this case,
 we need to show that the address given by \code{p} cannot point to an out-of-bounds address.
 Here, this address points to a single object,
 the one allocated at~\cref{line:overview-llvm-malloc},
-so it will suffice to prove that the constraint $n / 2 = 4 \land \neg (0 \leq n < 10)$ is unsatisfiable.
+so it will suffice to prove that the constraint $n / 2 = 4 \land \neg (0 \leq n < 10)$ is unsatisfiable.\footnote{
+In this work,
+we do not explicitly prove unsatisfiability of queries,
+but rather assume that the trusted computing base contains the SMT solver (see~\Cref{sec:proof-generation}).
+}
 
 Second, we need to prove that this subtree is \emph{complete}.
 More specifically,
