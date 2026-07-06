@@ -136,7 +136,7 @@ we need to show that the address given by \code{p} cannot point to an out-of-bou
 Here, this address points to a single object,
 the one allocated at~\cref{line:overview-llvm-malloc},
 so it will suffice to prove that the constraint $n / 2 = 4 \land \neg (0 \leq n < 10)$ is unsatisfiable.\footnote{
-In this work, we determine unsatisfiability using the SMT solver and consider it part of the TCB (for more details, see~\Cref{sec:proof-generation}).
+In this work, we determine unsatisfiability using the SMT solver and consider it part of the trusted computing base (for more details, see~\Cref{sec:proof-generation}).
 Formal validation of SMT results~\cite{armand2011modular,ekici2017smtcoq} is outside the scope of this work.
 }
 
