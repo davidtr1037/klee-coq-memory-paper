@@ -1,41 +1,37 @@
 \section{Related Work}
 \label{sec:related}
 
+\textit{Proof Logging.}
 The proof-logging approach proposed by Trabish et al.~\cite{klee-rocq} is restricted to a subset of \llvm with integers.
 Lundberg et al.~\cite{lundberg2024proof} use \SE to produce functional correctness proofs for P4 programs using HOL4.
 % TODO: no memory modeling...
 %They devise a symbolic execution algorithm that outputs a collection of theorems that can be used to prove properties about the analysis results.
 Our approach extends support to memory operations, thus making it applicable to more realistic programs.
 
+\textit{Verified \SE Engines.}
 % TODO: shorten
 Correnson et al.~\cite{fse23wise} develop a formally verified symbolic bug finder for a toy WHILE-style language in \coq.
 Their formalization does not support memory operations,
 and it is coupled with a specific search heuristic (BFS).
 
+\textit{Auto-generated \SE Engines.}
+% Gillian
+Gillian~\cite{gillian} is a memory-parametric framework for constructing \SE engines that has been instantiated to JavaScript and C.
+However, the resulting \SE engines are unverified as they are implemented in OCaml,
+leaving a trust gap with respect to the intended semantics.
+
+\textit{Other Foundational Tools.}
 % TODO: needed?
 %The approach proposed by~\cite{icfp22:keuchel} is similar to the work mentioned above,
 %but based on axiomatic semantics instead.
-
 % TODO: foundational tools: WISE, Veil, Loom, ...
 % Verification tools that are proven sound in a general-purpose proof assistant with a small trusted core are commonly referred to as foundational.
 % foundational: provide strong guarantees that the result of successful verification they report is consistent with the runtime behaviour of the respective program that has been verified in it
-
-% veil
-
-% providing both pushbutton verification for decidable fragments of first-order logic and the full power
-% of a modern higher-order proof assistant for when automation falls short.
-
-% Veil allows for seamless interaction between automated and human-assisted proofs, all done in Lean, 
-% allowing one to establish system specifications that are not expressible in first-order logic, and, thus, are beyond the reach of existing automated tools.
-
 Veil~\cite{veil} is a foundational program verifier developed in Lean~\cite{moura2021lean}.
 It provides automated verification for decidable fragments of first-order logic,
 and when automation fails, it fallbacks to an interactive verification mode.
 It was evaluated on concurrent and distributed algorithms.
-
 % LOOM
-% Symbolic Execution with Angelic Non-Determinism
-
 Loom~\cite{loom-popl26} is a framework that allows to construct foundational program verifiers.
 The derived program verifier provides support for proof automation using SMT solvers,
 and when automation fails, it fallbacks to an interactive proof mode, similarly to~\cite{veil}.
@@ -43,8 +39,3 @@ They derive Velvet, a Dafny-style verifier for a prototype imperative language w
 However, Loom has not been demonstrated on a real-world programming language with full memory support (\eg \llvm IR).
 To the best of our knowledge,
 deriving a foundational program verifier for such programming languages using Loom requires non-trivial changes to its underlying theoretical foundations.
-
-% Gillian
-Gillian~\cite{gillian} is a memory-parametric framework for constructing \SE engines that has been instantiated to JavaScript and C.
-However, the resulting \SE engines are unverified as they are implemented in OCaml,
-leaving a trust gap with respect to the intended semantics.
