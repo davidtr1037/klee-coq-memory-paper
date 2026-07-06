@@ -19,6 +19,10 @@ and it is coupled with a specific search heuristic (BFS).
 Gillian~\cite{gillian} is a memory-parametric framework for constructing \SE engines that has been instantiated to JavaScript and C.
 However, the resulting \SE engines are unverified as they are implemented in OCaml,
 leaving a trust gap with respect to the intended semantics.
+L\"{o}\"{o}w et al.~\cite{cse-oopsla25} extend the framework in~\cite{gillian} and mechanize it in \coq,
+while instantiating it on a broad collection of memory models.
+However, they do not provide an executable implementation at all, \ie an \SE engine,
+as their work is focused on theoretical foundations.
 
 \textit{Deductive Verification.}
 % TODO: needed?
