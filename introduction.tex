@@ -21,8 +21,6 @@ On the other hand,
 verified implementations extracted from proof assistants~\cite{fse23wise,icfp22:keuchel} are restricted to simple programming languages,
 and they lack advanced features such as search heuristics, constraint solving optimizations, and other performance optimizations.
 
-% TODO: explain here what is the execution tree? or in the next para?
-% TODO: what does this proof consists of / how it works
 Proof logging~\cite{lundberg2024proof,klee-rocq,de2008proofs,marx2013proof,flippo2024multi,mcilree2024proof,van2025efficient}
 is an alternative approach inspired by \emph{translation validation}~\cite{samet,pnueli1998translation}.
 In the context of \SE,
@@ -61,7 +59,7 @@ Extending the instrumentation of the \SE engine introduces additional challenges
 \SE engines use various memory-modeling optimizations that complicate proof generation.
 For example, \klee uses multiple representations for memory objects and applies SMT encoding optimizations.
 To bridge the gap between the mechanized symbolic semantics and the heavily-optimized behavior in the \SE engine, we introduce \emph{interface lemmas}.
-These lemmas help to efficiently interact with various components of our framework,
+These lemmas encode proof patterns that help automate proof generation, %help to efficiently interact with various components of our framework,
 while reducing the complexity of the resulting proofs.
 Our theoretical framework is developed in \coq and comprises approximately 40,000 lines of code (LOC),
 which more than doubles the 18,000 LOC framework of~\cite{klee-rocq}.
