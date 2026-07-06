@@ -12,7 +12,7 @@ such as test generation, bug finding, and verification~\cite{CadarSen13,klee,exe
 While \SE can perform verification~\cite{verifast,viper} via exhaustive path exploration,
 unverified \SE engines (\eg \klee~\cite{klee}, Manticore~\cite{mossberg2019manticore}, ANGR~\cite{angr}) cannot provide formal safety guarantees.
 %Indeed, as recently demonstrated by~\cite{klee-rocq},
-Indeed, recent work by~\cite{klee-rocq} demonstrates the risk of excluding the \SE engine itself from the trusted computing base (TCB).
+Indeed, recent work by~\cite{klee-rocq} demonstrates the risk of including the \SE engine itself in the trusted computing base (TCB).
 Obtaining a verified \SE engine that remains practical is highly challenging.
 On the one hand,
 verifying existing implementations requires immense effort,
