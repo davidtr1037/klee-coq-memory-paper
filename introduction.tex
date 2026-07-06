@@ -40,7 +40,9 @@ The high-level architecture of our approach, which builds on the framework of~\c
 Our theoretical framework formalizes the \emph{mechanized} concrete and symbolic semantics,
 where the latter specifies how instructions operate over symbolic values.
 Based on the mechanized semantics,
-our theoretical framework establishes a theorem stating that if the execution tree of the program satisfies certain safety properties then the program is safe with respect to the concrete semantics.
+our theoretical framework establishes a theorem stating that if the \emph{execution tree} of the program,
+a data structure recording the explored paths,
+satisfies certain safety properties, then the program is safe with respect to the concrete semantics.
 To leverage this theorem, %one must provide an execution tree that satisfies those properties,
 the \SE engine is instrumented to generate a compliant execution tree.
 The resulting proof thus comprises of two components:
