@@ -275,8 +275,7 @@ Let $s \triangleq \symstate{\location}{\symlocalstore}{\symstack}{\symmemory}{\p
 where \textup{$\instrat{\location} = \codequote{\tstore^{\tau}~e_1~e_2}$}.
 Then $\safeet(\tree(s, [t]))$ if there exist $p$, $\mo$, $\mo_{new}$, and $t$ such that:
 \begin{enumerate}
-    \item $\symmemory$ is well-formed
-    \item $\mo \in \symmemory$
+    \item $\mo \in \symmemory$ and $\symmemory$ is well-formed
     \item \textup{$\evalexprty{e_1}{\symlocalstore}{\tau} = v$} and \textup{$\evalexprty{e_2}{\symlocalstore}{\bvsort{64}} = \bvconst{64}{p}$}
     \item \textup{$\isinbounds{\bvval{p}{64}}{|\tau|}{\mo}$}
     \item \textup{$\mo_{new} \equiv \symmowrite{\tau}{\mo}{\bvconst{64}{p}}{v}$}
@@ -373,8 +372,7 @@ Let $s \triangleq \symstate{\location}{\symlocalstore}{\symstack}{\symmemory}{\p
 where \textup{$\instrat{\location} = \codequote{x~\texttt{=}~\tgep~\pointertypeof{\tau}~e~\overline{(\tau_i, e_i)}}$}.
 Then $\safeet(\tree(s, [t]))$ if there exist $\widebar{k_i}$, $\symlocalstore'$, and $t$ such that:
 \begin{enumerate}
-    \item $\evalexprty{e_i}{\symlocalstore}{\tau_i} = k_i$
-    \item $\unsat{\pc \land \overflowcond(\tau, \overline{k_i})}$
+    \item $\evalexprty{e_i}{\symlocalstore}{\tau_i} = k_i$ and $\unsat{\pc \land \overflowcond(\tau, \overline{k_i})}$
     \item \textup{$\symlocalstore[x \mapsto \evalexprty{\tgep~\pointertypeof{\tau}~e~\overline{(\tau_i, e_i)}}{\symlocalstore}{\tau^{*}}] \equiv \symlocalstore'$}
     \item $t.\attrstate = \symstate{\nextinstr{\location}}{\symlocalstore'}{\symstack}{\symmemory}{\pc}$
     \item $\safeet(t)$
@@ -438,8 +436,7 @@ Let $s \triangleq \symstate{\location}{\symlocalstore}{\symstack}{\symmemory}{\p
 where \textup{$\instrat{\location} = \codequote{x~\texttt{=}~\tload^{\tau}~e}$}.
 Then $\safeet(\tree(s, [t]))$ if there exist $\mo$, $\symlocalstore'$, and $t$ such that:
 \begin{enumerate}
-    \item $\symmemory$ is well-formed
-    \item $\mo \in \symmemory$
+    \item $\mo \in \symmemory$ and $\symmemory$ is well-formed
     \item \textup{$\evalexprty{e}{\symlocalstore}{\bvsort{64}} = p$}
     \item $\unsat{\pc \land \neg \rangecond(p, |\tau|, \mo)}$
     \item $\symlocalstore[x \mapsto \symmoread{\tau}{\mo}{p}] \equiv \symlocalstore'$
