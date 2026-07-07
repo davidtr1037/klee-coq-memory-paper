@@ -33,15 +33,17 @@ since our approach currently does not model the environment (command-line argume
 %so our goal is to evaluate it on memory-manipulating programs.
 For this, we selected several benchmarks that were used in the past in the context of \SE~\cite{klee,symsize-model,compact-s-e,pinaka,klee-rocq}:
 \libtasn~\cite{libtasn1}, \libosip~\cite{libosip}, \coreutils~\cite{coreutils-misc}, and \svcomp~\cite{svcomp}.
-In \libtasn and \libosip, we selected a set of APIs,
+We selected a set of APIs from \libtasn, \libosip, and the library of \coreutils,
 and for each API we constructed a test driver that runs it with symbolic inputs (integers, arrays, strings, \etc).
-To symbolically execute the programs in \coreutils,
-one needs to support external calls and model the environment (command-line arguments, file system, \etc).
-As our implementation currently does not support these features,
-we could not evaluate those programs directly.
-However, \coreutils contains a library of APIs, some of which can be tested in isolation.
-We selected a subset of such APIs,
-and constructed test drivers that run these APIs with symbolic inputs.
+%In \libtasn and \libosip, we selected a set of APIs,
+%and for each API we constructed a test driver that runs it with symbolic inputs (integers, arrays, strings, \etc).
+%To symbolically execute the programs in \coreutils,
+%one needs to support external calls and model the environment (command-line arguments, file system, \etc).
+%As our implementation currently does not support these features,
+%we could not evaluate those programs directly.
+%However, \coreutils contains a library of APIs, some of which can be tested in isolation.
+%We selected a subset of such APIs,
+%and constructed test drivers that run these APIs with symbolic inputs.
 In \svcomp, we selected a subset of programs from the \textit{array-memsafety} section.
 Most of these programs perform memory allocations with symbolic sizes,
 which are currently unsupported by both \klee and our approach.
