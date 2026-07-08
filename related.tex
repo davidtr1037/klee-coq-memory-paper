@@ -18,12 +18,11 @@ and instantiated it on several memory models.
 Based on this framework,
 they built a prototype \SE engine that provides soundness and completeness guarantees.
 However,
-their \SE engine has limitations (\eg, no support for recursion) and has not been evaluated on real-world programming languages.
-To obtain theoretical results regarding \llvm IR using their framework,
-one would need to modify their underlying IR language (and core theory), and mechanize the memory model of \llvm IR,
-which is expected to require a significant effort.
-There exist more realistic \SE engines~\cite{gillian} (for C and Java) which are based on a similar theory,
-but they remain unverified and do not produce machine-checked proofs.
+their \SE engine lacks support for features like recursion and has not been evaluated on real-world programming languages.
+Adapting their core theory to \llvm IR requires modifying their underlying IR language (and core theory) and formalizing the memory model of \llvm IR,
+which would demand a significant effort.
+There exist \SE engines~\cite{gillian} (for C and Java) which are based on a similar theory,
+but they are unverified and do not produce machine-checked proofs.
 
 %\textit{Auto-Generated \SE Engines.}
 %Gillian~\cite{gillian} is a memory-parametric framework for constructing \SE engines that has been instantiated to JavaScript and C.
