@@ -45,8 +45,8 @@ and for each API we constructed a test driver that runs it with symbolic inputs 
 %However, \coreutils contains a library of APIs, some of which can be tested in isolation.
 %We selected a subset of such APIs,
 %and constructed test drivers that run these APIs with symbolic inputs.
-In \svcomp, we selected a subset of programs from the \textit{array-memsafety} section.
-Since some programs in that section are intentionally unsafe,
+In \svcomp, we selected a subset of programs from the \textit{array-memsafety} category.
+Since some programs in that category are intentionally unsafe,
 we restricted our selection to safe programs, \ie those that can be verified in principle.
 Most of these programs perform memory allocations with symbolic sizes,
 which are currently unsupported by both \klee and our approach.
