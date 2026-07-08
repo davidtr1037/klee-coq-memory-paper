@@ -13,28 +13,26 @@ Our approach extends support to memory operations, thus making it applicable to 
 Correnson et al.~\cite{fse23wise} develop a formally verified symbolic bug finder for a toy WHILE-style language in \coq.
 Their formalization does not support memory operations,
 and it is coupled with a specific search heuristic (BFS).
-L\"{o}\"{o}w et al.~\cite{cse-oopsla25} mechanized in \coq a memory-parametric framework for a \textit{while}-like IR language,
+L\"{o}\"{o}w et al.~\cite{cse-oopsla25} mechanized a memory-parametric framework in \coq for a \textit{while}-like IR language,
 and instantiated it on several memory models.
-Based in this framework,
+Based on this framework,
 they built a prototype \SE engine that provides soundness and completeness guarantees.
 However,
-their prototype \SE engine comes with limitations (\eg, no support for recursion),
-and it was not evaluated on any real-world programming language.
+their \SE engine has limitations (\eg, no support for recursion) and has not been evaluated on real-world programming languages.
 To obtain theoretical results regarding \llvm IR using their framework,
-one would need to modify the underlying IR language (and core theory), and mechanize the memory model of \llvm IR,
+one would need to modify their underlying IR language (and core theory), and mechanize the memory model of \llvm IR,
 which is expected to require a significant effort.
 There exist more realistic \SE engines~\cite{gillian} (for C and Java) which are based on a similar theory,
-but they are not verified and do not produce mechanized proofs.
+but they remain unverified and do not produce machine-checked proofs.
 
-\textit{Auto-Generated \SE Engines.}
-% Gillian
-Gillian~\cite{gillian} is a memory-parametric framework for constructing \SE engines that has been instantiated to JavaScript and C.
-However, the resulting \SE engines are unverified as they are implemented in OCaml,
-leaving a trust gap with respect to the intended semantics.
-L\"{o}\"{o}w et al.~\cite{cse-oopsla25} extend the framework in~\cite{gillian} and mechanize it in \coq,
-while instantiating it on a broad collection of memory models.
-However, they do not provide an executable implementation at all, \ie an \SE engine,
-as their work is focused on theoretical foundations.
+%\textit{Auto-Generated \SE Engines.}
+%Gillian~\cite{gillian} is a memory-parametric framework for constructing \SE engines that has been instantiated to JavaScript and C.
+%However, the resulting \SE engines are unverified as they are implemented in OCaml,
+%leaving a trust gap with respect to the intended semantics.
+%L\"{o}\"{o}w et al.~\cite{cse-oopsla25} extend the framework in~\cite{gillian} and mechanize it in \coq,
+%while instantiating it on a broad collection of memory models.
+%However, they do not provide an executable implementation at all, \ie an \SE engine,
+%as their work is focused on theoretical foundations.
 
 \textit{Deductive Verification.}
 % TODO: needed?
