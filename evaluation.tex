@@ -27,14 +27,15 @@ equipped with Intel Core i9-9900 and 32GB of RAM.
 
 \textbf{\textit{Benchmarks.}}
 %Our implementation supports memory operations,
-We selected memory-manipulating programs that do not invoke external calls,
-since our approach currently does not model the environment (command-line arguments, file system, networking, \etc).
+To evaluate our approach,
+we selected memory-manipulating programs that do not invoke external calls,
+as our framework currently does not model the environment (command-line arguments, file system, networking, \etc).
 %Our implementation supports memory operations,
 %so our goal is to evaluate it on memory-manipulating programs.
-For this, we selected several benchmarks that were used in the past in the context of \SE~\cite{klee,symsize-model,compact-s-e,pinaka,klee-rocq}:
+We chose several benchmarks that were used in the past in the context of \SE~\cite{klee,symsize-model,compact-s-e,pinaka,klee-rocq}:
 \libtasn~\cite{libtasn1}, \libosip~\cite{libosip}, \coreutils~\cite{coreutils-misc}, and \svcomp~\cite{svcomp}.
 We selected a set of APIs from \libtasn, \libosip, and the library of \coreutils,
-and for each API we constructed a test driver that runs it with symbolic inputs (integers, arrays, strings, \etc).
+and for each API we constructed a test driver that runs it with symbolic inputs (\eg integers, arrays, and strings).
 %In \libtasn and \libosip, we selected a set of APIs,
 %and for each API we constructed a test driver that runs it with symbolic inputs (integers, arrays, strings, \etc).
 %To symbolically execute the programs in \coreutils,
@@ -44,7 +45,9 @@ and for each API we constructed a test driver that runs it with symbolic inputs 
 %However, \coreutils contains a library of APIs, some of which can be tested in isolation.
 %We selected a subset of such APIs,
 %and constructed test drivers that run these APIs with symbolic inputs.
-In \svcomp, we selected a subset of programs from the \textit{array-memsafety} section.
+In \svcomp, we selected a subset of safe programs from the \textit{array-memsafety} section,
+Since some programs in that section are intentionally unsafe,
+we restricted our selection to safe programs, \ie those that can be verified in principle.
 Most of these programs perform memory allocations with symbolic sizes,
 which are currently unsupported by both \klee and our approach.
 To overcome this, we modified the relevant parts in these programs to perform fixed-size memory allocations instead.
