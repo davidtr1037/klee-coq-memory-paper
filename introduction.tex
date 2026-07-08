@@ -9,10 +9,10 @@
 
 Symbolic execution (\SE) is a program analysis technique with many applications,
 such as test generation, bug finding, and verification~\cite{CadarSen13,klee,exe,spf,bugredux,se-java-2004,se-numerical-2006,syminfer}.
-While \SE can perform verification tasks~\cite{puasuareanu2004verification,verifast,viper,c0-symex} via exhaustive path exploration,
+Although \SE can perform verification tasks~\cite{puasuareanu2004verification,verifast,viper,c0-symex} via exhaustive path exploration,
 unverified \SE engines (\eg \klee~\cite{klee}, ANGR~\cite{angr}) cannot provide formal safety guarantees.
 %Indeed, as recently demonstrated by~\cite{klee-rocq},
-Indeed, recent work by~\cite{klee-rocq} demonstrates the risk of including the \SE engine itself in the trusted computing base (TCB).
+Indeed, recent work by~\cite{klee-rocq} demonstrates the risk of including the \SE engine itself in the trusted computing base.
 Obtaining a verified \SE engine that remains practical is highly challenging.
 On the one hand,
 verifying existing implementations requires immense effort,
