@@ -182,7 +182,7 @@ Note that this lemma assumes that the size argument of \textit{malloc} is evalua
 If that is not the case,
 then the \SE engine typically concretizes the symbolic expression,
 and then the analysis may be incomplete and a safety proof may not be derivable.
-There exist \SE engines that support symbolic-size allocations (\eg \cite{symsize-model}),
+There exist \SE engines that support symbolic-size allocations (\eg \cite{uc-klee,symsize-model}),
 however, it is not the focus of this work.
 
 \subsubsection{Example: Store}
@@ -272,7 +272,9 @@ To handle the case of \textit{store} in general, we define the following interfa
 \label{lemma:interface-store}
 Let $s \triangleq \symstate{\location}{\symlocalstore}{\symstack}{\symmemory}{\pc}$,
 where \textup{$\instrat{\location} = \codequote{\tstore^{\tau}~e_1~e_2}$}.
-Then $\safeet(\tree(s, [t]))$ if there exist $p$, $\mo$, $\mo_{new}$, and $t$ such that:
+Then $\safeet(\tree(s, [t]))$ if there exist $p$, $\mo$, $\mo_{new}$, and $t$ such that:\footnote{
+The definition of well-formedness for symbolic memory mirrors its concrete counterpart (\Cref{def:well-formed}).
+}
 \begin{enumerate}
     \item $\mo \in \symmemory$ and $\symmemory$ is well-formed
     \item \textup{$\evalexprty{e_1}{\symlocalstore}{\tau} = v$} and \textup{$\evalexprty{e_2}{\symlocalstore}{\bvsort{64}} = \bvconst{64}{p}$}
@@ -388,8 +390,10 @@ s_8 \triangleq \symstate
     {n < \bvconst{32}{2}}
 \]
 %where:
-\[ e \triangleq \bvadd{\bvsort{64}}{\bvconst{64}{\addr}}{\bvzext{64}{\bvextract{32}{\bvzext{64}{n}}}} \]
-\[ \mo \triangleq \mobj{\bvval{\addr}{64}}{\bvval{2}{32}}{\arrayvalue}, \ \arrayvalue \triangleq \arraystore{\arraystore{\arrayconst{\arrayinitvalue}}{\bvconst{32}{0}}{\bvconst{8}{7}}}{\bvconst{32}{1}}{\arrayinitvalue} \]
+\[
+    e \triangleq \bvadd{\bvsort{64}}{\bvconst{64}{\addr}}{\bvzext{64}{\bvextract{32}{\bvzext{64}{n}}}}, \
+    \mo \triangleq \mobj{\bvval{\addr}{64}}{\bvval{2}{32}}{\arrayvalue}, \ \arrayvalue \triangleq \arraystore{\arraystore{\arrayconst{\arrayinitvalue}}{\bvconst{32}{0}}{\bvconst{8}{7}}}{\bvconst{32}{1}}{\arrayinitvalue}
+\]
 
 According to the symbolic semantics,
 if $\mech{s}_9$ is derived from $s_8$ then there exist a model $m$ and a memory object $\mo' \triangleq \mobj{\addr'}{\size'}{\arrayvalue'}$ such that
