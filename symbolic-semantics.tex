@@ -12,7 +12,7 @@ At a high level, this model mirrors its concrete counterpart (\Cref{sec:memory-m
 
 \begin{definition}
 A symbolic memory object is defined as a tuple:
-\[ (\addr, \size, \smtarray) \in \SymMemoryObjects \quad \quad \SymMemoryObjects \triangleq \pointertype \times \indextype \times \arraysort{\smtsort{\indexwidth}}{\smtsort{8}} \]
+\[ \mobj{\addr}{\size}{\smtarray} \in \SymMemoryObjects \quad \quad \SymMemoryObjects \triangleq \pointertype \times \indextype \times \arraysort{\smtsort{\indexwidth}}{\smtsort{8}} \]
 where $\addr$ is its base address, $\size$ is its size,
 and $\smtarray$ is an SMT array that tracks the stored \emph{symbolic bytes} (\ie SMT expressions of sort $\smtsort{8}$).
 A symbolic heap $\symmemory \in \SymHeaps$ is defined as a set of symbolic memory objects.
