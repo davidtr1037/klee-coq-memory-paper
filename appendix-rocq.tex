@@ -1,0 +1,28 @@
+\section{\coq Formalization}
+\label{appendix:rocq}
+
+\Cref{table:rocq} associates the main definitions from our paper to their corresponding definitions in our \coq formalization.
+
+\begin{table}
+\centering
+\caption{Additional details about our \coq formalization.}
+\label{table:rocq}
+\begin{tabular}{lll}
+\textbf{Informal Definition} & \textbf{\coq Definition} & \textbf{Source File} \\
+\hline
+Figure 5 (concrete semantics) & step & Concrete.v \\
+\hline
+Figure 6 (symbolic semantics) & sym\_step & Symbolic.v \\
+\hline
+Definition 6.1 (module assumptions) & is\_supported\_module & ModuleAssumptions.v \\
+\hline
+Theorem 6.9 (completeness) & completeness\_multi\_step & Completeness.v \\
+\hline
+Definition 6.15 (execution tree safety) & safe\_et & ExecutionTree.v \\
+\hline
+Theorem 6.16 (program safety) & program\_safety\_via\_et & ExecutionTree.v \\
+\hline
+Section 7.3 (interface lemmas) & safe\_subtree\_* & Automation/ProofGeneration.v \\
+\hline
+\end{tabular}
+\end{table}
