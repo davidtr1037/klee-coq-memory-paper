@@ -128,7 +128,7 @@ The formal definition is given below.
 \begin{definition}
 \label{def:well-formed}
 A memory object $\mobj{\addr}{\size}{\arrayvalue}$ is \emph{well-formed} if its address interval does not wrap around the address space,
-\ie $\addr + \zeroext{\bvsort{64}}{\size}$ does not overflow.
+\ie $\addr + \zeroext{\pointerwidth}{\size}$ does not overflow.
 A heap $\memory$ is \emph{well-formed} if all its memory objects are well-formed and there are no memory objects with overlapping address intervals.
 A state $\progstate{\location}{\localstore}{\stack}{\memory}$ is well-formed if $\memory$ is well-formed.
 \end{definition}
@@ -201,7 +201,6 @@ If $c \nsstep c'$, then from~\Cref{theorem:completeness},
 it follows that there exists $s'$ such that $s \symstep s'$ and $s' \overapprox c'$.
 From~\Cref{def:safe-et-strict}, it follows that $s'$ is not an error state,
 and since $s' \overapprox c'$, then $c'$ is not an error state.
-
 Now, let $c_0 \triangleq \initstate(\module)$ be the initial concrete state.
 If $\issafens(\module)$, then no error states can be derived from $c_0$.
 Next, if $c_0 \step c$,
@@ -219,7 +218,7 @@ If $\safeetstrict(\tree(s_0, l))$, then $\issafe(\module)$.
 However, the formulation of~\Cref{lemma:safety-via-et-strict} is not practical enough.
 In general, the symbolic states computed by the \SE engine may differ from those derived by the mechanized symbolic semantics,
 and in that case, the precondition of~\Cref{lemma:safety-via-et-strict} will not hold.
-The address this,
+To address this,
 we refine~\Cref{def:safe-et-strict} by requiring \emph{equivalence} instead of \emph{equality}.
 
 In the following, we formally define equivalence between symbolic states.

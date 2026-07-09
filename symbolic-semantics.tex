@@ -214,7 +214,7 @@ otherwise, it might be constrained by the path constraints, which is undesired.
 According to the symbolic memory model (\Cref{sec:symbolic-memory-modeling}),
 the size of a symbolic memory object must be concrete.
 However, as the allocation size $e$ can be evaluated into a symbolic expression,
-we concretize it using an SMT model that satisfies the path constraints $\pc$.
+we concretize it using an SMT model $m$ that satisfies the path constraints $\pc$.
 Then, if the $\symallocate$ function (\Cref{sec:symbolic-memory-modeling}) succeeds,
 we update the local store and the heap accordingly.
 Otherwise, the result is undefined behavior.
@@ -225,7 +225,7 @@ When deallocating a pointer $p$, which is a symbolic expression,
 we check if there exists an SMT model $m$ satisfying $\pc$ and a memory object $\symmo$ in the heap $\symmemory$ such that $m[p]$ points to the base address of $\symmo$.
 If that is the case, we remove $\symmo$ from $\symmemory$ using the $\symdeallocate$ function (\Cref{sec:symbolic-memory-modeling}) and extend $\pc$ with the condition $\baseaddrcond(p, \symmo)$.
 Otherwise, the result is undefined behavior.
-This rule might have multiple derivations, since $p$ may point to different memory objects depending on the SMT model.
+This rule might have multiple derivations, since $p$ may point to multiple memory objects depending on the SMT model.
 
 \textbf{\textit{Load and Store.}}
 % TODO: mentions the assumptions about n?
