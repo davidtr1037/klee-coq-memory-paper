@@ -200,7 +200,7 @@ s_5 \triangleq \symstate
     {n < \bvconst{32}{2}}
 \]
 %where:
-\[ \mo \triangleq (\bvval{\addr}{64}, \bvval{2}{32}, \arrayvalue), \ \arrayvalue \triangleq \arraystore{\arraystore{\arrayconst{\arrayinitvalue}}{\bvconst{32}{0}}{\arrayinitvalue}}{\bvconst{32}{1}}{\arrayinitvalue} \]
+\[ \mo \triangleq \mobj{\bvval{\addr}{64}}{\bvval{2}{32}}{\arrayvalue}, \ \arrayvalue \triangleq \arraystore{\arraystore{\arrayconst{\arrayinitvalue}}{\bvconst{32}{0}}{\arrayinitvalue}}{\bvconst{32}{1}}{\arrayinitvalue} \]
 
 According to the symbolic semantics,
 if $\mech{s}_6$ is derived from $s_5$ then there exist a model $m$ and a memory object $\mo'$ such that
@@ -221,7 +221,7 @@ there is a single derivation in this case.
 When extending the SMT array of $\arrayvalue$,
 the offset of the additional \textit{store} expression is computed by subtracting the base address from the pointer and then casting the result to an expression of sort $\smtsort{\indexwidth}$.
 Therefore, in this case:
-\[ \symmowrite{\smtsort{8}}{\mo'}{\bvconst{64}{\addr}}{\bvconst{8}{7}} = (\bvval{\addr}{64}, \bvval{2}{32}, \arraystore{\arrayvalue}{\bvextract{32}{\bvsub{\bvsort{64}}{\bvconst{64}{\addr}}{\bvconst{64}{\addr}}}}{\bvconst{8}{7}}) \]
+\[ \symmowrite{\smtsort{8}}{\mo'}{\bvconst{64}{\addr}}{\bvconst{8}{7}} = \mobj{\bvval{\addr}{64}}{\bvval{2}{32}}{\arraystore{\arrayvalue}{\bvextract{32}{\bvsub{\bvsort{64}}{\bvconst{64}{\addr}}{\bvconst{64}{\addr}}}}{\bvconst{8}{7}}} \]
 
 The symbolic state computed by the \SE engine is:
 \[
@@ -233,7 +233,7 @@ s_6 \triangleq \symstate
     {n < \bvconst{32}{2}}
 \]
 %where:
-\[ \mo_{new} \triangleq (\bvval{\addr}{64}, \bvval{2}{32}, \arrayvalue_{new}), \ \arrayvalue_{new} \triangleq \arraystore{\arraystore{\arrayconst{\arrayinitvalue}}{\bvconst{32}{0}}{\bvconst{8}{7}}}{\bvconst{32}{1}}{\arrayinitvalue} \]
+\[ \mo_{new} \triangleq \mobj{\bvval{\addr}{64}}{\bvval{2}{32}}{\arrayvalue_{new}}, \ \arrayvalue_{new} \triangleq \arraystore{\arraystore{\arrayconst{\arrayinitvalue}}{\bvconst{32}{0}}{\bvconst{8}{7}}}{\bvconst{32}{1}}{\arrayinitvalue} \]
 Now, we have to prove that the subtree of $s_5$ is safe.
 Based on~\Cref{def:sym-error-state},
 $s_5$ is not an error state,
