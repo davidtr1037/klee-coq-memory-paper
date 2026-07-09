@@ -174,8 +174,7 @@ Then $\safeet(\tree(s, [t]))$ if there exist $n$, $\mo$, and $t$ such that:
 \begin{enumerate}
     \item \textup{$\evalexprty{e}{\symlocalstore}{\bvsort{64}} \equiv \bvconst{64}{n}$} and \textup{$\bvval{n}{64} < \bvval{(2^{\indexwidth - 1} - 1)}{64}$}
     \item \textup{$\mo \equiv (\bvval{\addr}{64}, \bvval{n}{32}, \arrayconst{\arrayinitvalue})$}
-    \item \textup{$t.\attrstate = \symstate{\nextinstr{\location}}{\symlocalstore[x \mapsto \bvconst{64}{\addr}]}{\symstack}{\symmemory \cup \{\mo\}}{\pc}$}
-    \item $\safeet(t)$
+    \item \textup{$t.\attrstate = \symstate{\nextinstr{\location}}{\symlocalstore[x \mapsto \bvconst{64}{\addr}]}{\symstack}{\symmemory \cup \{\mo\}}{\pc}$} and $\safeet(t)$
 \end{enumerate}
 \end{interfacelemma}
 
@@ -279,8 +278,7 @@ Then $\safeet(\tree(s, [t]))$ if there exist $p$, $\mo$, $\mo_{new}$, and $t$ su
     \item \textup{$\evalexprty{e_1}{\symlocalstore}{\tau} = v$} and \textup{$\evalexprty{e_2}{\symlocalstore}{\bvsort{64}} = \bvconst{64}{p}$}
     \item \textup{$\isinbounds{\bvval{p}{64}}{|\tau|}{\mo}$}
     \item \textup{$\mo_{new} \equiv \symmowrite{\tau}{\mo}{\bvconst{64}{p}}{v}$}
-    \item $t.\attrstate = \symstate{\nextinstr{\location}}{\symlocalstore}{\symstack}{\heapreplace{\symmemory}{\mo}{\mo_{new}}}{\pc}$
-    \item $\safeet(t)$
+    \item $t.\attrstate = \symstate{\nextinstr{\location}}{\symlocalstore}{\symstack}{\heapreplace{\symmemory}{\mo}{\mo_{new}}}{\pc}$ and $\safeet(t)$
 \end{enumerate}
 \end{interfacelemma}
 
@@ -374,8 +372,7 @@ Then $\safeet(\tree(s, [t]))$ if there exist $\widebar{k_i}$, $\symlocalstore'$,
 \begin{enumerate}
     \item $\evalexprty{e_i}{\symlocalstore}{\tau_i} = k_i$ and $\unsat{\pc \land \overflowcond(\tau, \overline{k_i})}$
     \item \textup{$\symlocalstore[x \mapsto \evalexprty{\tgep~\pointertypeof{\tau}~e~\overline{(\tau_i, e_i)}}{\symlocalstore}{\tau^{*}}] \equiv \symlocalstore'$}
-    \item $t.\attrstate = \symstate{\nextinstr{\location}}{\symlocalstore'}{\symstack}{\symmemory}{\pc}$
-    \item $\safeet(t)$
+    \item $t.\attrstate = \symstate{\nextinstr{\location}}{\symlocalstore'}{\symstack}{\symmemory}{\pc}$ and $\safeet(t)$
 \end{enumerate}
 \end{interfacelemma}
 
@@ -440,7 +437,6 @@ Then $\safeet(\tree(s, [t]))$ if there exist $\mo$, $\symlocalstore'$, and $t$ s
     \item \textup{$\evalexprty{e}{\symlocalstore}{\bvsort{64}} = p$}
     \item $\unsat{\pc \land \neg \rangecond(p, |\tau|, \mo)}$
     \item $\symlocalstore[x \mapsto \symmoread{\tau}{\mo}{p}] \equiv \symlocalstore'$
-    \item $t.\attrstate = \symstate{\nextinstr{\location}}{\symlocalstore'}{\symstack}{\symmemory}{\pc}$
-    \item $\safeet(t)$
+    \item $t.\attrstate = \symstate{\nextinstr{\location}}{\symlocalstore'}{\symstack}{\symmemory}{\pc}$ and $\safeet(t)$
 \end{enumerate}
 \end{interfacelemma}
