@@ -24,8 +24,9 @@ Adapting their core theory to \llvm IR requires modifying the underlying IR lang
 which would demand a significant effort.
 There exist \SE engines~\cite{gillian} (for C and Java) which are based on a similar theory,
 but they are unverified and do not produce machine-checked proofs.
-Keuchel et al.~\cite{icfp22:keuchel} built a mechanized \SE engine for a simplified subset of SAIL~\cite{sail},
+Keuchel et al.~\cite{icfp22:keuchel} built a prototype \SE engine for a subset of SAIL~\cite{sail},
 % say more about the logical framework
+% was not demonstrated on real-world use cases
 but it does not model core memory features (\eg pointers and dynamic allocations) required by real-world programming languages.
 %Katamaran~\cite{icfp22:keuchel} is a mechanized \SE engine for a simplified subset of SAIL~\cite{sail},
 %but it lacks support for core memory features (\eg pointers and dynamic allocations) required by real-world programming languages.
