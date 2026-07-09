@@ -283,7 +283,7 @@ and then jump to the corresponding location based on the resulting value.
 \textbf{\textit{Make-Symbolic.}}
 The \intrinsicfunc{make\_symbolic} function is an intrinsic function provided by the symbolic execution environment to introduce fresh symbolic values.
 In the concrete semantics,
-we model this behavior by non-deterministically assigning the variable $x$ to an arbitrary concrere value $\bvval{n}{32}$.
+we model this behavior by non-deterministically assigning the variable $x$ to an arbitrary concrete value $\bvval{n}{32}$.
 
 \textbf{\textit{Malloc.}}
 When allocating a memory object,
@@ -343,7 +343,7 @@ The first argument of $\evalgep$ is the type of the base pointer,
 the second argument is the base pointer to start from,
 and the remaining arguments are indices that indicate which of the elements of the aggregate object are indexed.
 All the indices are first converted to values of the index type (sign-extended or truncated), and then translated into offsets (\cref{line:gep:array-index,line:gep:first-index}).
-The first index is used to move accross the elements corresponding to the base pointer type,
+The first index is used to move across the elements corresponding to the base pointer type,
 so it is multiplied by the type size of the element type of the base pointer type (\cref{line:gep:first-index}).
 The remaining indices are translated into offsets based on the indexed type.
 If the indexed type is an array type,
