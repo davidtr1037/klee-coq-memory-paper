@@ -78,7 +78,7 @@ In this paper,
 we assume a linear memory allocator that allocates memory objects consecutively while maintaining a fixed gap between them,
 commonly referred to as a \emph{red-zone}.
 Modeling a generic memory allocator that allows arbitrary locations for memory objects would be far more challenging.
-First, modeling such memory allocators requires developing a more complex theory of memory (\Cref{sec:symbolic-semantics,sec:overview,sec:program-safety,sec:proof-generation}).
+First, modeling such memory allocators requires developing a more complex theory of memory (\Cref{sec:concrete-semantics,sec:symbolic-semantics,sec:program-safety,sec:proof-generation}).
 Second, existing \SE engines do not support such memory allocators,
 so generating safety proofs using these tools would require significant modifications to their implementations (\Cref{sec:proof-generation}).
 Therefore, we leave the modeling of such memory allocators to future work.
@@ -229,7 +229,7 @@ Therefore, we leave the modeling of such memory allocators to future work.
 \\[2em]
 \scalebox{0.8}{$
 \begin{array}{l@{\quad}l}
-\module & \mbox{module} \\
+\module & \mbox{\llvm module} \\
 \instrat{\location} & \mbox{instruction at location $\location$ in $\module$} \\
 \nextinstr{\location} & \mbox{next location} \\
 \instratlabel{\location}{b} & \mbox{location at label $b$} \\
@@ -273,6 +273,7 @@ and their semantics are functions whose domains and ranges depend on those types
 In the following, we discuss the derivation rules in more detail.\footnote{
 The full definition can be found in our \coq framework.
 }
+To simplify the notations, the \llvm module $\module$ is implicitly global.
 
 \textbf{\textit{Branch.}}
 The instruction $\tbr$ follows standard operational semantics.
