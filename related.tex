@@ -1,12 +1,13 @@
 \section{Related Work}
 \label{sec:related}
 
-\textit{Proof Logging.}
-The proof-logging approach proposed by Trabish et al.~\cite{klee-rocq} is restricted to a subset of \llvm with integers.
-Lundberg et al.~\cite{lundberg2024proof} use \SE to produce functional correctness proofs for P4 programs using HOL4.
+\textit{Proof Logging for Symbolic Execution.}
+%The proof-logging approach proposed by Trabish et al.~\cite{klee-rocq} is restricted to a subset of \llvm with integers.
+Trabish et al.~\cite{klee-rocq} propose a proof-logging approach based on symbolic execution for a subset of \llvm with integers.
+Lundberg et al.~\cite{lundberg2024proof} use symbolic execution to produce functional correctness proofs for P4 (a DSL for network devices) programs using HOL4.
 % TODO: no memory modeling...
 %They devise a symbolic execution algorithm that outputs a collection of theorems that can be used to prove properties about the analysis results.
-Our approach extends support to memory operations, thus making it applicable to more realistic programs.
+In contrast, our approach extends support to memory operations, thus making it applicable to more realistic programs.
 
 \textit{Verified \SE Engines.}
 % TODO: shorten
@@ -53,3 +54,8 @@ Loom was evaluated via Velvet, a Dafny-style verifier for a prototype imperative
 However, Loom has yet to be demonstrated on real-world programming languages with full memory support (\eg \llvm IR).
 To the best of our knowledge,
 extending Loom to support such programming languages requires non-trivial changes to its underlying theoretical foundations.
+
+\textit{Proof Logging for SMT.}
+Modern SMT solvers~\cite{armand2011modular,ekici2017smtcoq,de2008proofs,marx2013proof,flippo2024multi,mcilree2024proof,van2025efficient} increasingly rely on proof logging to guarantee correctness.
+Rather than blindly trusting the SMT solver, a proof-logging framework forces it to produce a formal justification of its reasoning.
+Proof logging for SMT solvers is orthogonal to our approach and can be combined with it.
