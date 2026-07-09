@@ -347,7 +347,7 @@ The first index is used to move accross the elements corresponding to the base p
 so it is multiplied by the type size of the element type of the base pointer type (\cref{line:gep:first-index}).
 The remaining indices are translated into offsets based on the indexed type.
 If the indexed type is an array type,
-then the index is multiplied by the type size of the indexed type (\cref{line:gep:array-index}).
+then the index is multiplied by the type size of the element type (\cref{line:gep:array-index}).
 %If the indexed type is a struct type,
 %then the index is translated into a field selector.
 The computed offsets are sequentially summed up,
@@ -416,11 +416,11 @@ Then $c$ is an error state, denoted by $\errorstate(c)$, if one of the following
     \item $\instrat{\location} = \textup{$\codequote{x \ \texttt{=} \ \tcall^{\pointertypeof{\bvsort{8}}} \ \intrinsicfunc{malloc}(\bvsort{64} \ e)}$}$,
           and \textup{$\evalexprty{e}{\localstore}{\bvsort{64}} > \bvval{(2^{\indexwidth - 1} - 1)}{64}$}.
     \item $\instrat{\location} = \textup{$\codequote{\tcall~\intrinsicfunc{free}(\pointertypeof{\bvsort{8}} \ e)}$}$, \textup{$\evalexprty{e}{\localstore}{\pointertypeof{\bvsort{8}}} = p$},
-          and there is no $\mo \in \memory$ s.t. $\isbaseaddr{p}{\mo}$.
+          and there is no $\mo \in \memory$ such that $\isbaseaddr{p}{\mo}$.
     \item $\instrat{\location} = \textup{$\codequote{x \ \texttt{=} \ \tload^{\tau} \ e}$}$, \textup{$\evalexprty{e}{\localstore}{\pointertypeof{\tau}} = p$},
-          and there is no $\mo \in \memory$ s.t. $\isinbounds{p}{|\tau|}{\mo}$.
+          and there is no $\mo \in \memory$ such that $\isinbounds{p}{|\tau|}{\mo}$.
     \item $\instrat{\location} = \textup{$\codequote{\tstore^{\tau} \ e_1 \ e_2}$}$, \textup{$\evalexprty{e_2}{\localstore}{\pointertypeof{\tau}} = p$},
-          and there is no $\mo \in \memory$ s.t. $\isinbounds{p}{|\tau|}{\mo}$.
+          and there is no $\mo \in \memory$ such that $\isinbounds{p}{|\tau|}{\mo}$.
     % TODO: $|\overline{(\tau_i, e_i)}| > 0$
     \item $\instrat{\location} = \textup{$\codequote{x \ \texttt{=} \ \tgep~\pointertypeof{\tau} \ e \ \overline{(\tau_i, e_i)}}$}$ and $\evalgep(\tau, p, \overline{v_i}) = \tpoison$
           (where \textup{$p \triangleq \evalexprty{e}{\localstore}{\pointertypeof{\tau}}$} and $v_i \triangleq \evalexprty{e_i}{\localstore}{\tau_i}$).
@@ -434,5 +434,5 @@ The \emph{initial state} of $\module$, denoted by $\initstate(\module)$,
 is defined as $\progstate{\location}{\{\}}{[]}{[]}$.
 Now, let $c_0 \triangleq \initstate(\module)$.
 Then the module $\module$ is \emph{safe}, denoted by $\issafe(\module)$,
-if for every $c$ s.t. $c_{0} \multistep c$, $c$ is not an error state (the relation $\multistep$ is the reflexive-transitive closure of $\step$).
+if for every $c$ such that $c_{0} \multistep c$, $c$ is not an error state (the relation $\multistep$ is the reflexive-transitive closure of $\step$).
 \end{definition}
