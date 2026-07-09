@@ -389,10 +389,10 @@ s_8 \triangleq \symstate
 \]
 %where:
 \[ e \triangleq \bvadd{\bvsort{64}}{\bvconst{64}{\addr}}{\bvzext{64}{\bvextract{32}{\bvzext{64}{n}}}} \]
-\[ \mo \triangleq (\bvval{\addr}{64}, \bvval{2}{32}, \arrayvalue), \ \arrayvalue \triangleq \arraystore{\arraystore{\arrayconst{\arrayinitvalue}}{\bvconst{32}{0}}{\bvconst{8}{7}}}{\bvconst{32}{1}}{\arrayinitvalue} \]
+\[ \mo \triangleq \mobj{\bvval{\addr}{64}}{\bvval{2}{32}}{\arrayvalue}, \ \arrayvalue \triangleq \arraystore{\arraystore{\arrayconst{\arrayinitvalue}}{\bvconst{32}{0}}{\bvconst{8}{7}}}{\bvconst{32}{1}}{\arrayinitvalue} \]
 
 According to the symbolic semantics,
-if $\mech{s}_9$ is derived from $s_8$ then there exist a model $m$ and a memory object $\mo' \triangleq (\addr', \size', \arrayvalue')$ such that
+if $\mech{s}_9$ is derived from $s_8$ then there exist a model $m$ and a memory object $\mo' \triangleq \mobj{\addr'}{\size'}{\arrayvalue'}$ such that
 $m \models n < \bvconst{32}{2}$, $\mo' \in \symmemory$, and $\symisinbounds{e}{\bvsort{8}}{\mo'}{m}$, and then:
 % TODO: should add 0_{32}?
 \[
