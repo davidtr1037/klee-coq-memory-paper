@@ -133,7 +133,7 @@ and suppose that we want to prove that the subtree of $s_0$ is safe.
 In general, the \rulenameref{Malloc} rule (\Cref{sec:symbolic-semantics}) may derive multiple symbolic states.
 Here, however, the size argument of \textit{malloc} is evaluated to a constant SMT expression,
 so the only derived symbolic state is:
-\[ \mech{s}_1 \triangleq \symstate{\location_2}{\{ \nameid{p} \mapsto \bvconst{64}{\addr} \}}{[]}{[(\bvval{\addr}{64}, \bvval{2}{32}, \arrayconst{\arrayinitvalue})]}{\true} \]
+\[ \mech{s}_1 \triangleq \symstate{\location_2}{\{ \nameid{p} \mapsto \bvconst{64}{\addr} \}}{[]}{[\mobj{\bvval{\addr}{64}}{\bvval{2}{32}}{\arrayconst{\arrayinitvalue}}]}{\true} \]
 %\[
 %s' \triangleq \symstate
 %    {\location_2}
@@ -150,7 +150,7 @@ s_1 \triangleq \symstate
     {\location_2}
     {\{ \nameid{p} \mapsto \bvconst{64}{\addr} \}}
     {[]}
-    {[(\bvval{\addr}{64}, \bvval{2}{32}, \arraystore{\arraystore{\arrayconst{\arrayinitvalue}}{\bvconst{32}{0}}{\arrayinitvalue}}{\bvconst{32}{1}}{\arrayinitvalue})]}
+    {[\mobj{\bvval{\addr}{64}}{\bvval{2}{32}}{\arraystore{\arraystore{\arrayconst{\arrayinitvalue}}{\bvconst{32}{0}}{\arrayinitvalue}}{\bvconst{32}{1}}{\arrayinitvalue}}]}
     {\true}
 \]
 Now, we have to prove that the subtree of $s_0$ is safe.
@@ -173,7 +173,7 @@ and let $\bvval{\addr}{64}$ be the allocated base address.
 Then $\safeet(\tree(s, [t]))$ if there exist $n$, $\mo$, and $t$ such that:
 \begin{enumerate}
     \item \textup{$\evalexprty{e}{\symlocalstore}{\bvsort{64}} \equiv \bvconst{64}{n}$} and \textup{$\bvval{n}{64} < \bvval{(2^{\indexwidth - 1} - 1)}{64}$}
-    \item \textup{$\mo \equiv (\bvval{\addr}{64}, \bvval{n}{32}, \arrayconst{\arrayinitvalue})$}
+    \item \textup{$\mo \equiv \mobj{\bvval{\addr}{64}}{\bvval{n}{32}}{\arrayconst{\arrayinitvalue}}$}
     \item \textup{$t.\attrstate = \symstate{\nextinstr{\location}}{\symlocalstore[x \mapsto \bvconst{64}{\addr}]}{\symstack}{\symmemory \cup \{\mo\}}{\pc}$} and $\safeet(t)$
 \end{enumerate}
 \end{interfacelemma}
