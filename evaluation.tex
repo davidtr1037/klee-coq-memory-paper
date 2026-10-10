@@ -60,26 +60,31 @@ The average subject size is 127 \llvm IR instructions, with a maximum of 548 and
 %To so do, we run each subject using the \proofopt and \base modes.
 %In this experiment,
 %we run each subject using the \proofopt and \base modes.
-The results of our experiments are given in~\Cref{figure:results} and discussed below.\footnote{
-A detailed breakdown of the results for each subject is given in Appendix A.
-}
+The results of our experiments are given in~\Cref{figure:results-time} and~\Cref{figure:results-proof} and discussed below.
+%\footnote{
+%A detailed breakdown of the results for each subject is given in Appendix A.
+%}
 
-\textbf{\text{RQ1.}}
+\subsubsection{Results: RQ1}
+%\textbf{\text{RQ1.}}
 Our approach was able to generate valid proofs for all the subjects,
 which means that those programs are safe w.r.t. the concrete \llvm semantics formalized in~\Cref{sec:concrete-semantics}.
 
-\textbf{\text{RQ2.}}
+\subsubsection{Results: RQ2}
+%\textbf{\text{RQ2.}}
 To evaluate the overhead of proof logging during the symbolic execution,
 we compare the analysis times of \proofopt and \base.
-The results are shown in the scatter plot from~\Cref{figure:time},
+The results are shown in the scatter plot from~\Cref{figure:results-time},
 where the x-axis and y-axis represent the analysis times with \base and \proofopt, respectively.
-The average slowdown is 1.33\x and the median slowdown is 1.26\x.
+The average slowdown is 1.5\x and the median slowdown is 1.3\x,
+which indicates that the overhead of proof generation during symbolic execution remains modest.
 % TODO: discuss more?
 % The maximum slowdown is obtained in the \textit{strintcmp} API from \coreutils (2.30\x).
 
-\textbf{\text{RQ3.}}
-The scatter plot from~\Cref{figure:proof-time-size} shows the proof time and the proof size for each subject.
-The average and median proof times are 119.5 seconds and 23.1 seconds, respectively.
+\subsubsection{Results: RQ3}
+%\textbf{\text{RQ3.}}
+The scatter plot from~\Cref{figure:results-proof} shows the proof time and the proof size for each subject.
+The average and median proof times are 149.3 seconds and 26.5 seconds, respectively.
 The average and median proof sizes are approximately 15,000 KB and 5,000 KB, respectively.
 % TODO: improve
 In general,
@@ -90,44 +95,36 @@ There were two cases (\textit{test\_osip\_hash} and \textit{test\_hash\_pjw}) in
 This occurred due to the presence of complex SMT array terms in the definitions of the symbolic states and in the application of the interface lemmas for $\tload$ and $\tstore$.
 We leave the optimization of such cases for future work.
 
+%\begin{figure*}
+%    \centering
+%    \begin{subfigure}[b]{0.48\textwidth}
+%        \centering
+%        \includegraphics[width=0.75\textwidth]{images/time.pdf}
+%        \caption{Analysis time.}
+%        \label{figure:time}
+%    \end{subfigure}
+%    \begin{subfigure}[b]{0.48\textwidth}
+%        \centering
+%        \includegraphics[width=0.75\textwidth]{images/proof-scatter.pdf}
+%        \caption{Proof time and proof size.}
+%        \label{figure:proof-time-size}
+%    \end{subfigure}
+%    \hfill
+%    \caption{Experimental results.}
+%    \label{figure:results}
+%\end{figure*}
+
 \begin{figure*}
-    \centering
-    \begin{subfigure}[b]{0.48\textwidth}
-        \centering
-        \includegraphics[width=0.75\textwidth]{images/time.pdf}
-        \caption{Analysis time.}
-        \label{figure:time}
-    \end{subfigure}
-    \begin{subfigure}[b]{0.48\textwidth}
-        \centering
-        \includegraphics[width=0.75\textwidth]{images/proof-scatter.pdf}
-        \caption{Proof time and proof size.}
-        \label{figure:proof-time-size}
-    \end{subfigure}
-    \hfill
-    \caption{Experimental results.}
-    \label{figure:results}
+\centering
+\centering
+\includegraphics[height=0.30\textheight]{images/time.pdf}
+\caption{Analysis time with \proofopt and \base.}
+\label{figure:results-time}
 \end{figure*}
 
-%\begin{table*}[t]
-%\caption{...}
-%\label{table:results}
-%\centering
-%\scriptsize{
-%\begin{tabular}{|l|r|r|r|r|r|r|}
-%\cline{1-7}
-%\multicolumn{1}{|c|}{} &
-%\multicolumn{2}{c|}{\textbf{Time}} &
-%\multicolumn{1}{c|}{\textbf{Proof Time}} &
-%\multicolumn{1}{c|}{\textbf{Proof Size}} &
-%\multicolumn{1}{c|}{\textbf{\#Paths}} &
-%\multicolumn{1}{c|}{\textbf{\#Inst}} \\
-%\cline{2-7}
-%\multicolumn{1}{|c|}{} &
-%\multicolumn{1}{c|}{\makecell{\textbf{Base}}} &
-%\multicolumn{1}{c|}{\makecell{\textbf{PG}}} & & & & \\
-%\hline
-%A & 0.1 & 0.1 & 1.4 & 1.9 & 4 & 82 \\ \hline
-%\end{tabular}
-%}
-%\end{table*}
+\begin{figure*}
+\centering
+\includegraphics[height=0.30\textheight]{images/proof-scatter.pdf}
+\caption{Proof time and proof size.}
+\label{figure:results-proof}
+\end{figure*}
