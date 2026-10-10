@@ -19,8 +19,20 @@ excluding third-party dependencies (\eg CompCert~\cite{CompCert}).
 For comparison,
 this is more than twice the size of the framework of~\cite{klee-rocq}, which consists of approximately 18,000 LOC.
 %This substantial extension reflects the additional complexity of our framework.
-To the best of our knowledge,
-our \coq framework is one of the largest \coq formalizations in programming language theory (\eg CompCert~\cite{CompCert}, VST~\cite{vst}, Iris~\cite{irisproject}, and $CH_2O$~\cite{krebbers2015typed}).
+%To the best of our knowledge,
+%our \coq framework is one of the largest \coq formalizations in programming language theory (\eg CompCert~\cite{CompCert}, VST~\cite{vst}, Iris~\cite{irisproject}, and $CH_2O$~\cite{krebbers2015typed}).
+Below, we summarize the key differences between our framework and the framework proposed by~\cite{klee-rocq}:
+\begin{enumerate}
+\item \textit{Reused Components}:
+    We adopt the semantics of scalar computations and the call-stack modeling from~\cite{klee-rocq}.
+\item \textit{Generalized Components}:
+    We generalize the reachability completeness (\Cref{theorem:completeness}) and program safety (\Cref{theorem:safety-via-et}) theorems to account for memory.
+\item \textit{New Components}:
+    We introduce a memory model and semantics for memory-manipulating instructions,
+    develop interface lemmas that bridge \klee's optimized symbolic semantics with the mechanized symbolic semantics,
+    and instrument \klee to generate safety proofs based on our formalized framework.
+\end{enumerate}
+
 % main theorem: 3.5K
 % completeness: 6.2K
 % simplification theory: 8.1K
@@ -34,13 +46,36 @@ The main theorem (\Cref{theorem:safety-via-et}),
 the completeness theorem (\Cref{theorem:completeness}),
 the SMT simplification theory (\Cref{sec:proof-et}),
 and the interface lemmas (\Cref{sec:proof-et}) approximately consist of 3,500 LOC, 6,200 LOC, 8,100 LOC, and 6,700 LOC, respectively.
-Appendix B provides additional details on the mapping between the various definitions introduced in this paper and their corresponding formalizations in \coq.
-%\begin{itemize}
-%    \item Main theorem (\Cref{theorem:safety-via-et}): $\approx$3,500 LOC
-%    \item Completeness theorem (\Cref{theorem:completeness}): $\approx$6,200 LOC
-%    \item SMT simplification theory (\Cref{sec:proof-et}): $\approx$8,100 LOC
-%    \item Interface lemmas (\Cref{sec:proof-et}): $\approx$6,700 LOC
-%\end{itemize}
+For the interested reader, \Cref{table:rocq} maps the main definitions in this paper to their counterparts in our \coq formalization.
+
+\begin{table}
+\small{
+\centering
+\begin{tabular}{|l|l|l|}
+\hline
+\textbf{Informal Definition} & \textbf{\coq Definition} & \textbf{Source File} \\
+\hline
+\Cref{figure:llvm-semantics} (concrete semantics) & step & Concrete.v \\
+\hline
+\Cref{figure:symbolic-semantics} (symbolic semantics) & sym\_step & Symbolic.v \\
+\hline
+\Cref{def:supported} (module assumptions) & is\_supported\_module & ModuleAssumptions.v \\
+\hline
+\Cref{theorem:completeness} (completeness) & completeness\_multi\_step & Completeness.v \\
+\hline
+\Cref{def:safe-et} (execution tree safety) & safe\_et & ExecutionTree.v \\
+\hline
+\Cref{theorem:safety-via-et} (program safety) & program\_safety\_via\_et & ExecutionTree.v \\
+\hline
+\Cref{sec:proof-et} (interface lemmas) & safe\_subtree\_* & Automation/ProofGeneration.v \\
+\hline
+SMT simplification theory & equiv\_smt\_expr\_normalize\_simplify & SMT/Simplification.v \\
+\hline
+\end{tabular}
+\caption{Additional details about our \coq formalization.}
+\label{table:rocq}
+}
+\end{table}
 
 \subsection{Implementation Issues in \klee}
 Thanks to our formalization efforts,
