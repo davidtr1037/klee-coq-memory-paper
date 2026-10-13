@@ -73,7 +73,11 @@ if the allocation size exceeds the largest \emph{signed integer} representable b
 then the result is undefined behavior.
 However, \klee currently does not check this condition.
 
-\textit{Issue 4: Silent Truncation in Memory Allocations.}
+\textit{Issue 4: Incorrect Interpretation of Allocation Alignment.}
+When \klee executes dynamic memory allocations (\eg \textit{malloc}),
+it uses a pre-defined alignment instead of the alignment specified by the \code{align} attribute of the corresponding instruction.
+
+\textit{Issue 5: Silent Truncation in Memory Allocations.}
 \klee silently truncates the allocation size to the \code{uint32\_t} type,
 without reporting any error to the user, which may lead to unexpected behavior.
 For example, if we allocate an object of size $2^{32} + 10$,
