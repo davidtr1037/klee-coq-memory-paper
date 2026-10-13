@@ -66,7 +66,7 @@ we define the symbolic state and the derivation rules of the symbolic operationa
 \label{def:symbolic-state}
 A symbolic state is a tuple $\symstate{\location}{\symlocalstore}{\symstack}{\symmemory}{\pc}$.
 The location $\location \in \Locs$ is defined as before.
-The concrete store $\localstore \in \Stores$ is replaced with a symbolic store $\symlocalstore \in \SymStores$ that maps variables to SMT expressions.
+The concrete store $\localstore \in \Stores$ is replaced with a symbolic store $\symlocalstore \in \SymStores$ mapping variables to SMT expressions.
 The concrete heap $\memory \in \Heaps$ is replaced with a symbolic one $\symmemory \in \SymHeaps$.
 The path constraint $\pc$ is a formula of sort $\Bool$ that accumulates assumptions along the execution path.
 \end{definition}
@@ -93,37 +93,37 @@ In the following, we discuss the derivation rules in more detail.
 \begin{figure}[t]
 \[
 \begin{array}{c}
-\ruledefsmall{Branch-True}{
-  \instrat{\location} = \codequote{\tbr ~ e ~ b_1 ~ b_2}
-  \quad
-  \evalexprty{e}{\symlocalstore}{\bvsort{1}} \neq \bot
-}
-{
-  \symstate{\location}{\symlocalstore}{\symstack}{\pc}{\symmemory}
-  \symstep
-  \symstate{\instratlabel{\location}{b_1}}{\symlocalstore}{\symstack}{\pc \land \evalexprty{e}{\symlocalstore}{\bvsort{1}}}{\symmemory}
-}
-\\[5pt]
-\ruledefsmall{Branch-False}{
-  \instrat{\location} = \codequote{\tbr ~ e ~ b_1 ~ b_2}
-  \quad
-  \evalexprty{e}{\symlocalstore}{\bvsort{1}} \neq \bot
-}
-{
-  \symstate{\location}{\symlocalstore}{\symstack}{\pc}{\symmemory}
-  \symstep
-  \symstate{\instratlabel{\location}{b_2}}{\symlocalstore}{\symstack}{\pc \land \lnot\evalexprty{e}{\symlocalstore}{\bvsort{1}}}{\symmemory}
-}
-\\[5pt]
-\ruledefsmall{Make-Symbolic}{
-  \instrat{\location} = \codequote{x ~\texttt{=}~ \tcall^{\bvsort{32}} ~ \intrinsicfunc{make\_symbolic}()}
-}
-{
-  \symstate{\location}{\symlocalstore}{\symstack}{\pc}{\symmemory}
-  \symstep
-  \symstate{\nextinstr{\location}}{\symlocalstore[x \mapsto \alpha]}{\symstack}{\pc}{\symmemory}
-}
-\\[5pt]
+%\ruledefsmall{Branch-True}{
+%  \instrat{\location} = \codequote{\tbr ~ e ~ b_1 ~ b_2}
+%  \quad
+%  \evalexprty{e}{\symlocalstore}{\bvsort{1}} \neq \bot
+%}
+%{
+%  \symstate{\location}{\symlocalstore}{\symstack}{\pc}{\symmemory}
+%  \symstep
+%  \symstate{\instratlabel{\location}{b_1}}{\symlocalstore}{\symstack}{\pc \land \evalexprty{e}{\symlocalstore}{\bvsort{1}}}{\symmemory}
+%}
+%\\[5pt]
+%\ruledefsmall{Branch-False}{
+%  \instrat{\location} = \codequote{\tbr ~ e ~ b_1 ~ b_2}
+%  \quad
+%  \evalexprty{e}{\symlocalstore}{\bvsort{1}} \neq \bot
+%}
+%{
+%  \symstate{\location}{\symlocalstore}{\symstack}{\pc}{\symmemory}
+%  \symstep
+%  \symstate{\instratlabel{\location}{b_2}}{\symlocalstore}{\symstack}{\pc \land \lnot\evalexprty{e}{\symlocalstore}{\bvsort{1}}}{\symmemory}
+%}
+%\\[5pt]
+%\ruledefsmall{Make-Symbolic}{
+%  \instrat{\location} = \codequote{x ~\texttt{=}~ \tcall^{\bvsort{32}} ~ \intrinsicfunc{make\_symbolic}()}
+%}
+%{
+%  \symstate{\location}{\symlocalstore}{\symstack}{\pc}{\symmemory}
+%  \symstep
+%  \symstate{\nextinstr{\location}}{\symlocalstore[x \mapsto \alpha]}{\symstack}{\pc}{\symmemory}
+%}
+%\\[5pt]
 \ruledefsmall{Malloc}{
   \instrat{\location} = \codequote{x~\texttt{=}~\tcall^{\pointertypeof{\bvsort{8}}}~\intrinsicfunc{malloc}(\bvsort{64} ~ e)} \quad
   \evalexprty{e}{\symlocalstore}{\bvsort{64}} = n \quad
@@ -195,15 +195,15 @@ In the following, we discuss the derivation rules in more detail.
 
 % TODO: mention the defined operation functions
 
-\textbf{\textit{Branch.}}
-The rules \rulenameref{Branch-True} and \rulenameref{Branch-False} express the state-forking semantics of symbolic execution.
-We derive two symbolic states,
-where the path constraints in each state are updated with the appropriate branch condition.
-
-\textbf{\textit{Make-Symbolic.}}
-We introduce a fresh symbolic value $\alpha$ and assign it to the variable $x$.
-Note that we need to make sure that $\alpha$ does not appear in the original symbolic state,
-otherwise, it might be constrained by the path constraints, which is undesired.
+%\textbf{\textit{Branch.}}
+%The rules \rulenameref{Branch-True} and \rulenameref{Branch-False} express the state-forking semantics of symbolic execution.
+%We derive two symbolic states,
+%where the path constraints in each state are updated with the appropriate branch condition.
+%
+%\textbf{\textit{Make-Symbolic.}}
+%We introduce a fresh symbolic value $\alpha$ and assign it to the variable $x$.
+%Note that we need to make sure that $\alpha$ does not appear in the original symbolic state,
+%otherwise, it might be constrained by the path constraints, which is undesired.
 
 \textbf{\textit{Malloc.}}
 According to the symbolic memory model (\Cref{sec:symbolic-memory-modeling}),
