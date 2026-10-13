@@ -16,6 +16,8 @@ a \emph{state-of-the-art} \SE engine operating on \llvm IR~\cite{llvm}.
 %Currently, some of the SMT transformations used in \klee are not supported by our implementation,
 %but we plan to support them in future versions.
 %In the $\tgep$ instruction, our implementation currently supports the \opcode{nuw} attribute.
+Thanks to our formalization efforts,
+we found several implementation issues in \klee that relate to memory modeling, which we outline next.
 
 \ignore{
 \subsection{\coq Framework}
@@ -48,9 +50,7 @@ Appendix B provides additional details on the mapping between the various defini
 %\end{itemize}
 }
 
-\subsection{Implementation Issues in \klee}
-Thanks to our formalization efforts,
-we found several implementation issues in \klee that relate to memory modeling, which we discuss next.
+%\subsection{Implementation Issues in \klee}
 
 \textit{Issue 1: Inconsistent Modeling of the Index Type.}
 On one hand,
