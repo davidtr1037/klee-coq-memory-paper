@@ -244,7 +244,7 @@ In the following,
 we define the concrete state and the derivation rules of the operational small-step semantics.
 In this paper,
 we consider a concrete state with a local store and a heap.
-However, our framework (in \coq) and implementation (on top of \klee) support also stack frames, stack allocations (\ie $\talloca$), and global variables.
+However, our implementation support also stack frames, stack allocations (\ie $\talloca$), and global variables.
 
 % TODO: define a frame
 \begin{definition}
@@ -253,9 +253,9 @@ However, our framework (in \coq) and implementation (on top of \klee) support al
 %and an optional previous-block identifier.
 A \emph{concrete state} is a tuple $\progstate{\location}{\localstore}{\stack}{\memory}$,
 where $\location \in \Locs$ is a program location,
-$\localstore \in \Stores$ is a \emph{local store} that maps variables to values in $\Vals$,
+$\localstore \in \Stores$ is a \emph{local store} mapping variables to values in $\Vals$,
 and $\memory \in \Heaps$ is a heap.
-To simplify the notations, the \llvm module, denoted by $\module$, is implicitly global.
+For simplicity, the \llvm module, denoted by $\module$, is implicitly global.
 \end{definition}
 
 \Cref{figure:expr-semantics} defines the evaluation semantics of \llvm expressions.
