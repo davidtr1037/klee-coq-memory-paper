@@ -2,35 +2,46 @@
 \label{sec:related}
 
 \textit{Proof Logging for Symbolic Execution.}
-%The proof-logging approach proposed by Trabish et al.~\cite{klee-rocq} is restricted to a subset of \llvm with integers.
-Trabish et al.~\cite{klee-rocq} propose a proof-logging approach for a subset of \llvm with integers.
-Lundberg et al.~\cite{lundberg2024proof} produce functional correctness proofs for P4 (a DSL for network devices) programs using HOL4.
-% TODO: no memory modeling...
-%They devise a symbolic execution algorithm that outputs a collection of theorems that can be used to prove properties about the analysis results.
-Our approach extends support to memory operations, thus making it applicable to more realistic programs.
+Trabish et al.~\cite{klee-rocq} propose proof logging for an integer-only subset of \llvm,
+while Lundberg et al.~\cite{lundberg2024proof} generate HOL4 functional-correctness proofs for P4 programs.
+Our approach supports memory operations and thus applies to more realistic programs.
+%Trabish et al.~\cite{klee-rocq} propose a proof-logging approach for a subset of \llvm with integers.
+%Lundberg et al.~\cite{lundberg2024proof} produce functional correctness proofs for P4 (a DSL for network devices) programs using HOL4.
+%% TODO: no memory modeling...
+%%They devise a symbolic execution algorithm that outputs a collection of theorems that can be used to prove properties about the analysis results.
+%Our approach extends support to memory operations, thus making it applicable to more realistic programs.
 
 \textit{Verified \SE Engines.}
-% TODO: shorten
-Correnson et al.~\cite{fse23wise} develop a formally verified symbolic bug finder for a toy WHILE-style language in \coq.
-Their formalization does not support memory operations,
-and it is coupled with a specific search heuristic (BFS).
-L\"{o}\"{o}w et al.~\cite{cse-oopsla25} mechanized a memory-parametric framework in \coq for a \textit{while}-like IR language,
-and instantiated it on several memory models.
-Based on this framework,
-they built a prototype \SE engine that provides soundness and completeness guarantees.
+Correnson et al.~\cite{fse23wise} develop a formally verified symbolic bug finder in \coq for a toy WHILE-style language.
+Their formalization does not support memory operations, and it is coupled with a specific search heuristic (BFS).
+Loow et al.~\cite{cse-oopsla25} mechanize a memory-parametric framework for a \textit{while}-like IR in \coq,
+instantiate it with several memory models, and build a prototype \SE engine with soundness and completeness guarantees.
 However,
 their \SE engine lacks support for features like recursion and has not been evaluated on real-world programming languages.
 Adapting their core theory to \llvm IR requires modifying the underlying IR language (and core theory) and formalizing the memory model of \llvm IR,
 which would demand a significant effort.
-There exist \SE engines~\cite{gillian} (for C and Java) which are based on a similar theory,
-but they are unverified and do not produce machine-checked proofs.
-Keuchel et al.~\cite{icfp22:keuchel} built Katamaran, a prototype \SE engine for verifying ISA specifications in a subset of SAIL~\cite{sail} based on separation logic.
-However, Katamaran is only semi-automated:
-it relies on an interactive proof mode,
-requires user-provided lemmas,
-and does not support proof automation for bit-vectors.
-%Katamaran~\cite{icfp22:keuchel} is a mechanized \SE engine for a simplified subset of SAIL~\cite{sail},
-%but it lacks support for core memory features (\eg pointers and dynamic allocations) required by real-world programming languages.
+Gillian~\cite{gillian} applies a similar theory to C and Java but is unverified and does not produce machine-checked proofs.
+Katamaran~\cite{icfp22:keuchel} uses separation logic to verify ISA specifications written in a subset of SAIL~\cite{sail},
+but requires interactive proofs and user-provided lemmas and lacks automated bit-vector reasoning.
+
+%Correnson et al.~\cite{fse23wise} develop a formally verified symbolic bug finder for a toy WHILE-style language in \coq.
+%Their formalization does not support memory operations,
+%and it is coupled with a specific search heuristic (BFS).
+%L\"{o}\"{o}w et al.~\cite{cse-oopsla25} mechanized a memory-parametric framework in \coq for a \textit{while}-like IR language,
+%and instantiated it on several memory models.
+%Based on this framework,
+%they built a prototype \SE engine that provides soundness and completeness guarantees.
+%However,
+%their \SE engine lacks support for features like recursion and has not been evaluated on real-world programming languages.
+%Adapting their core theory to \llvm IR requires modifying the underlying IR language (and core theory) and formalizing the memory model of \llvm IR,
+%which would demand a significant effort.
+%There exist \SE engines~\cite{gillian} (for C and Java) which are based on a similar theory,
+%but they are unverified and do not produce machine-checked proofs.
+%Keuchel et al.~\cite{icfp22:keuchel} built Katamaran, a prototype \SE engine for verifying ISA specifications in a subset of SAIL~\cite{sail} based on separation logic.
+%However, Katamaran is only semi-automated:
+%it relies on an interactive proof mode,
+%requires user-provided lemmas,
+%and does not support proof automation for bit-vectors.
 
 %\textit{Auto-Generated \SE Engines.}
 %Gillian~\cite{gillian} is a memory-parametric framework for constructing \SE engines that has been instantiated to JavaScript and C.
@@ -42,23 +53,27 @@ and does not support proof automation for bit-vectors.
 %as their work is focused on theoretical foundations.
 
 \textit{Deductive Verification.}
-% TODO: needed?
-%The approach proposed by~\cite{icfp22:keuchel} is similar to the work mentioned above,
-%but based on axiomatic semantics instead.
-Veil~\cite{veil} is a foundational program verifier developed in Lean~\cite{moura2021lean}.
-It provides automated verification for decidable fragments of first-order logic,
-falling back to an interactive proof mode when automation fails.
-It was evaluated on concurrent and distributed algorithms.
-% LOOM
-Loom~\cite{loom-popl26} is a framework for constructing foundational verifiers.
-It integrates SMT-based proof automation with an interactive fallback mechanism.
-The derived program verifier provides support for proof automation using SMT solvers, similarly to~\cite{veil}.
-Loom was evaluated via Velvet, a Dafny-style verifier for a prototype imperative language with support for arrays.
-However, Loom has yet to be demonstrated on real-world programming languages with full memory support (\eg \llvm IR).
-To the best of our knowledge,
-extending Loom to support such programming languages requires non-trivial changes to its underlying theoretical foundations.
+Veil~\cite{veil} is a foundational verifier in Lean~\cite{moura2021lean} that automates decidable fragments of first-order logic and falls back to interactive proofs;
+it was evaluated on concurrent and distributed algorithms.
+Loom~\cite{loom-popl26} similarly combines SMT-based automation with interactive proofs to construct foundational verifiers.
+Its evaluation uses Velvet, a Dafny-style verifier for a prototype imperative language with arrays.
+Loom has not yet been demonstrated on real-world languages with full memory support (\eg \llvm IR).
+To the best of our knowledge, extending Loom to support such programming languages requires non-trivial changes to its underlying theoretical foundations.
+
+%Veil~\cite{veil} is a foundational program verifier developed in Lean~\cite{moura2021lean}.
+%It provides automated verification for decidable fragments of first-order logic,
+%falling back to an interactive proof mode when automation fails.
+%It was evaluated on concurrent and distributed algorithms.
+%% LOOM
+%Loom~\cite{loom-popl26} is a framework for constructing foundational verifiers.
+%It integrates SMT-based proof automation with an interactive fallback mechanism.
+%The derived program verifier provides support for proof automation using SMT solvers, similarly to~\cite{veil}.
+%Loom was evaluated via Velvet, a Dafny-style verifier for a prototype imperative language with support for arrays.
+%However, Loom has yet to be demonstrated on real-world programming languages with full memory support (\eg \llvm IR).
 
 \textit{Proof Logging for SMT.}
-Modern SMT solvers~\cite{armand2011modular,ekici2017smtcoq,de2008proofs,marx2013proof,flippo2024multi,mcilree2024proof,van2025efficient} increasingly rely on proof logging to guarantee correctness.
-Rather than blindly trusting the SMT solver, a proof-logging framework forces it to produce a formal justification of its reasoning.
-Proof logging for SMT solvers is orthogonal to our approach and can be combined with it.
+Modern SMT solvers~\cite{armand2011modular,ekici2017smtcoq,de2008proofs,marx2013proof,flippo2024multi,mcilree2024proof,van2025efficient} increasingly use proof logging to justify their reasoning rather than requiring blind trust.
+This technique is orthogonal to our approach and can be combined with it.
+%Modern SMT solvers~\cite{armand2011modular,ekici2017smtcoq,de2008proofs,marx2013proof,flippo2024multi,mcilree2024proof,van2025efficient} increasingly rely on proof logging to guarantee correctness.
+%Rather than blindly trusting the SMT solver, a proof-logging framework forces it to produce a formal justification of its reasoning.
+%Proof logging for SMT solvers is orthogonal to our approach and can be combined with it.
