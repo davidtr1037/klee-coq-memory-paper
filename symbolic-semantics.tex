@@ -239,50 +239,11 @@ we call the $\symmowritefunc{\tau}$ function (\Cref{sec:symbolic-memory-modeling
 \textbf{\textit{GetElementPtr.}}
 The symbolic semantics of $\tgep$ mirrors the concrete semantics,
 while using SMT expressions for offset and address calculations.
-The function $\symevalgep$ defines the symbolic semantics of the $\tgep$ instruction based on~\Cref{alg:symbolic-gep} (function \textsc{symbolic-gep}).\footnote{
+The function $\symevalgep$ defines the symbolic semantics of the $\tgep$ instruction based on~\Cref{alg:gep-all} (function \textsc{symbolic-gep}).\footnote{
 For now, ignore the components highlighted in gray within the function \textsc{compute-internal}.
 }
 %While the concrete version may return $\tundef$ or $\tpoison$,
 %the symbolic version always returns an SMT expression.
-
-\begin{algorithm}[t]
-\small
-\caption{Simplified symbolic semantics of $\tgep$.}
-\label{alg:symbolic-gep}
-\begin{algorithmic}[1]
-
-\Function{compute-internal}{$\tau, o, \overline{j}$}
-    \If {$|\overline{j}| = 0$}
-        \State \Return $o$
-    \EndIf
-    \State $j_1 :: \overline{j'} \gets \overline{j}$
-    \If {$\tau = \arraytype{\tau'}{n}$}
-        %\State \textcolor{markcolor}{$c_1 \gets \mathit{trunc\_overflow}(j_1)$}
-        %\State \textcolor{markcolor}{$c_2 \gets \mathit{mul\_overflow}(\bvsext{\indexwidth}{j_1}, \bvconst{\indexwidth}{|\tau'|})$}
-        %\State \textcolor{markcolor}{$c_3 \gets \mathit{add\_overflow}(o, \bvmul{\bvsort{\indexwidth}}{\bvsext{\indexwidth}{j_1}}{\bvconst{\indexwidth}{|\tau'|}})$}
-        \State $o \gets \bvadd{\bvsort{\indexwidth}}{o}{\bvmul{\bvsort{\indexwidth}}{\bvsext{\indexwidth}{j_1}}{\bvconst{\indexwidth}{|\tau'|}}}$ \label{line:array-index}
-        \State \Return \Call{compute-internal}{$\tau', o, \overline{j'}$}
-    \EndIf
-\EndFunction
-
-\Function{symbolic-gep}{$\tau, p, \overline{j}$}
-    \State $j_1 :: \overline{j'} \gets \overline{j}$
-    \State $o \gets \bvmul{\bvsort{\indexwidth}}{\bvsext{\indexwidth}{j_1}}{\bvconst{\indexwidth}{|\tau|}}$ \label{line:first-index}
-    \State $r \gets \Call{compute-internal}{\tau, o, \overline{j'}}$
-    \State \Return $\bvadd{\bvsort{\pointerwidth}}{p}{\bvzext{\pointerwidth}{r}}$
-\EndFunction
-
-%\Function{compute-overflow}{$\tau, \overline{j}$}
-%    \State $j_1 :: \overline{j'} \gets \overline{j}$
-%    \State $c_1 \gets \mathit{trunc\_overflow}(j_1)$
-%    \State $c_2 \gets \mathit{mul\_overflow}(\bvsext{\indexwidth}{j_1}, \bvconst{\indexwidth}{|\tau|})$
-%    \State $o \gets \bvmul{\bvsort{\indexwidth}}{\bvsext{\indexwidth}{j_1}}{\bvconst{\indexwidth}{|\tau|}}$
-%    \State $\_, c \gets \Call{compute-internal}{\tau, o, c_1 \lor c_2, \overline{j'}}$
-%    \State \Return $c$
-%\EndFunction
-
-\end{algorithmic}
-\end{algorithm}
 
 %\begin{algorithm}[t]
 %\small
