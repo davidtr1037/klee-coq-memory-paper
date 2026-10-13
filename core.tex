@@ -48,7 +48,7 @@ Therefore, the assumptions described in~\Cref{def:supported} are well-justified 
 In this section,
 we establish the \emph{reachability completeness} of the symbolic semantics with respect to the concrete semantics.
 More specifically, our main result is~\Cref{theorem:completeness},
-which states that any sequence of derivations in the concrete semantics that does not introduce $\tpoison$ values can be simulated by a corresponding sequence of derivations in the symbolic semantics.
+which states that any sequence of derivations in the concrete semantics that does not introduce $\tpoison$ values can be simulated by a sequence of derivations in the symbolic semantics.
 Ultimately, this correspondence will help us prove the main theorem of~\Cref{sec:program-safety} (\Cref{theorem:safety-via-et}).
 
 To establish reachability completeness,
@@ -109,8 +109,8 @@ then $\module$ is \emph{safe} with respect to the restricted concrete semantics,
 (The relation $\multinsstep$ is the reflexive-transitive closure of the relation $\nsstep$.)
 \end{definition}
 
-In general, some derivations are disallowed by the restricted concrete semantics but allowed by the full concrete semantics.
-However, under certain conditions, the restricted and full concrete semantics coincide.
+In general, some derivations are disallowed by the restricted concrete semantics but allowed by the complete concrete semantics.
+However, under certain conditions, the restricted and complete concrete semantics coincide.
 This is formulated in the following lemma.
 
 \begin{lemma}
