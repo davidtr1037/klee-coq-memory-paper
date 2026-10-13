@@ -371,7 +371,7 @@ To handle the case of \textit{getelementptr} in general, we define the following
 \label{lemma:interface-gep}
 Let $s \triangleq \symstate{\location}{\symlocalstore}{\symstack}{\symmemory}{\pc}$,
 where \textup{$\instrat{\location} = \codequote{x~\texttt{=}~\tgep~\pointertypeof{\tau}~e~\overline{(\tau_i, e_i)}}$}.
-Then $\safeet(\tree(s, [t]))$ if there exist $\widebar{k_i}$, $\symlocalstore'$, and $t$ such that:
+Then $\safeet(\tree(s, [t]))$ if there exist $\overline{k_i}$, $\symlocalstore'$, and $t$ such that:
 \begin{enumerate}
     \item $\evalexprty{e_i}{\symlocalstore}{\tau_i} = k_i$ and $\unsat{\pc \land \overflowcond(\tau, \overline{k_i})}$
     \item \textup{$\symlocalstore[x \mapsto \evalexprty{\tgep~\pointertypeof{\tau}~e~\overline{(\tau_i, e_i)}}{\symlocalstore}{\tau^{*}}] \equiv \symlocalstore'$}
