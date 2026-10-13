@@ -21,6 +21,10 @@ A symbolic heap $\symmemory \in \SymHeaps$ is defined as a set of symbolic memor
 %Now, we define the operations provided by the symbolic memory model:
 %allocation, deallocation, read, and write.
 
+The \emph{allocation} and \emph{deallocation} operations $\symallocate$ and $\symdeallocate$ are defined similarly to their concrete counterparts,
+while operating over symbolic memory objects and symbolic heaps.
+
+\ignore{
 The \emph{allocation} and \emph{deallocation} operations are defined using these functions:
 \[ \symallocate : \SymHeaps \times \bvsort{\indexwidth} \to \SymHeaps \times \bvsort{\pointerwidth}, \ \symdeallocate : \SymHeaps \times \SymMemoryObjects \to \SymHeaps \]
 The function $\symallocate$ receives a symbolic heap $\symmemory$ and an allocation size $\size$,
@@ -39,6 +43,7 @@ The SMT array $\smtarray$ is set to the constant array $\arrayconst{\arrayinitva
 %\[ \symdeallocate : \SymHeaps \times \SymMemoryObjects \to \SymHeaps \]
 The function $\symdeallocate$ receives a heap $\symmemory$ and a memory object $\symmo$,
 and returns $\symmemory \setminus \{\symmo\}$.
+}
 
 The \emph{read} and \emph{write} operations are defined using these functions ($w$ is the bit-width of $\tau$):\footnote{
 As in~\Cref{sec:memory-modeling}, we assume that $\tau$ is one of the built-in integer types (\bvsort{8}, \bvsort{16}, \bvsort{32}, \bvsort{64}).
