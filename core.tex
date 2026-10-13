@@ -160,14 +160,71 @@ As we will see next,
 In this section,
 we establish the \emph{program safety} theorem,
 which states that a program is safe with respect to the concrete semantics if the execution tree of the program satisfies certain safety properties.
+First, we formally define \emph{execution trees}.
 
-The formal definition of \emph{execution trees} is given below.
 \begin{definition}
 The \emph{execution tree} of a program records the paths explored by the \SE engine during the analysis of that program,
 where each node corresponds to a symbolic state computed by the \SE engine.
 An execution tree $t$ with a root symbolic state $t.\attrstate$ and a list of successor subtrees $t.\attrchildren$ is denoted by $\tree(s, l)$,
 where $s$ and $l$ correspond to the respective attributes.
 \end{definition}
+
+Next, we formally define the notion of equivalence between symbolic states,
+which is then used to define the safety properties for execution trees.
+
+\begin{definition}
+The symbolic stores $\symlocalstore_1$ and $\symlocalstore_2$ are \emph{equivalent}, denoted by $\symlocalstore_1\equiv \symlocalstore_2$, if they are defined over the same variables,
+and for each such variable $x$, $\mapaccess{\symlocalstore_1}{x} \equiv \mapaccess{\symlocalstore_2}{x}$.
+The memory objects $\mobj{\addr}{\size}{\smtarray_1}$ and $\mobj{\addr}{\size}{\smtarray_2}$ are equivalent if $\smtarray_1 \equiv \smtarray_2$.
+The heaps $\symmemory_1$ and $\symmemory_2$ are equivalent, denoted by $\symmemory_1 \equiv \symmemory_2$,
+if their memory objects are equivalent.
+The states $s_1 \triangleq \symstate{\location_1}{\symlocalstore_1}{\symstack_1}{\symmemory_1}{\pc_1}$ and $s_2 \triangleq \symstate{\location_2}{\symlocalstore_2}{\symstack_2}{\symmemory_2}{\pc_2}$ are equivalent,
+denoted by $s_1 \equiv s_2$, if $\location_1 = \location_2$, $\symlocalstore_1 \equiv \symlocalstore_2$, $\symmemory_1 \equiv \symmemory_2$, and $\pc_1 \equiv \pc_2$.
+\end{definition}
+
+\begin{definition}
+\label{def:safe-et}
+Let $s$ be a symbolic state and $l$ a list of execution trees.
+We say that $tree(s, l)$ is \emph{safe}, denoted by $\safeet(\tree(s, l))$, if:
+\begin{enumerate}
+    \item $s$ is not an error state
+    \item if $s \symstep s'$ then either the path constraints of $s'$ are unsatisfiable or there exists a subtree $t \in l$ such that $\safeet(t)$ and $s' \equivstate t.\attrstate$.
+\end{enumerate}
+\end{definition}
+
+Based on this definition,
+we establish a weaker version of the \emph{program safety} theorem,
+which guarantees safety with respect to the restricted concrete semantics.
+The formal definition is given below.
+
+\begin{lemma}
+\label{lemma:safety-via-et-strict-ns}
+Let $\module$ be a supported module, let $s_0 \triangleq \initsymstate(\module)$, and let $l$ be a list of execution trees.
+If $\safeet(\tree(s_0, l))$, then $\issafens(\module)$.
+\end{lemma}
+
+Based on the lemma above, we finally establish the desired \emph{program safety} theorem, which is given below.
+
+\begin{theorem}
+\label{theorem:safety-via-et}
+Let $\module$ be a supported module, let $s_0 \triangleq \initsymstate(\module)$, and let $l$ be a list of execution trees.
+If $\safeet(\tree(s_0, l))$, then $\issafe(\module)$.
+\end{theorem}
+
+To see intuitively why this theorem holds, consider the single-step case.
+Let $s$ be a symbolic state and $c$ be a concrete state such that $s \overapprox c$,
+and suppose that the subtree $\tree(s, l)$ is safe.
+If $c \nsstep c'$, then from~\Cref{theorem:completeness},
+it follows that there exists $s'$ such that $s \symstep s'$ and $s' \overapprox c'$.
+From~\Cref{def:safe-et}, it follows that $s'$ is not an error state,
+and since $s' \overapprox c'$, then $c'$ is not an error state.
+Now, let $c_0 \triangleq \initstate(\module)$ be the initial concrete state.
+If $\issafens(\module)$, then no error states can be derived from $c_0$.
+Next, if $c_0 \step c$,
+then based on~\Cref{lemma:multi-ns-step-relative-completeness}, it follows that $c_0 \nsstep c$.
+Finally, we know that $c$ is not an error state, so $\issafe(\module)$.
+
+\ignore{
 
 Our initial definition of the safety properties for execution trees is given below.
 As we will see later, this definition will turn out to be too restrictive for practical use,
@@ -260,3 +317,4 @@ we can apply the reasoning from~\Cref{lemma:safety-via-et-strict} to establish t
 Let $\module$ be a supported module, let $s_0 \triangleq \initsymstate(\module)$, and let $l$ be a list of execution trees.
 If $\safeet(\tree(s_0, l))$, then $\issafe(\module)$.
 \end{theorem}
+}
