@@ -115,9 +115,9 @@ In this example,
 assume that $\location_n$ is the program location corresponding to line $n$,
 $s_n$ is the symbolic state after the execution of line $n$,
 and $s_0$ is the initial symbolic state.
-In addition,
-we assume that the index type is $\bvsort{32}$ and the pointer type is $\bvsort{64}$.
+In addition, we assume that the index and pointer types are $\bvsort{32}$ and $\bvsort{64}$, respectively.
 
+\ignore{
 % TODO: say that there is not overflow in the interval
 \subsubsection{Example: Malloc}
 Let $s_0 \triangleq \symstate{\location_1}{\{ \}}{[]}{[]}{\true}$ by the initial symbolic state at~\cref{line:llvm-malloc},
@@ -184,6 +184,7 @@ Otherwise, the \SE engine typically concretizes the symbolic expression,
 and then the analysis may be incomplete and a safety proof may not be derivable.
 There exist \SE engines that support symbolic-size allocations (\eg \cite{uc-klee,symsize-model}),
 however, it is not the focus of this work.
+}
 
 \subsubsection{Example: Store}
 \label{sec:example-store}
@@ -285,6 +286,7 @@ The definition of well-formedness for symbolic memory mirrors its concrete count
 \end{enumerate}
 \end{interfacelemma}
 
+\ignore{
 \subsubsection{Example: GetElementPtr}
 % TODO: explain how to prove that this is not an error state
 Consider the symbolic state before the execution of~\cref{line:llvm-gep}:
@@ -378,6 +380,7 @@ Then $\safeet(\tree(s, [t]))$ if there exist $\overline{k_i}$, $\symlocalstore'$
     \item $t.\attrstate = \symstate{\nextinstr{\location}}{\symlocalstore'}{\symstack}{\symmemory}{\pc}$ and $\safeet(t)$
 \end{enumerate}
 \end{interfacelemma}
+}
 
 \subsubsection{Example: Load}
 % TODO: remind that the repr is non-opt now
