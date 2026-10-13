@@ -125,38 +125,38 @@ Therefore, we leave the modeling of such memory allocators to future work.
 \begin{figure}
 \[
 \begin{array}{cl}
-\ruledefsmall{Branch-True}
-{
-  \instrat{\location} = \codequote{\tbr ~ e ~ b_1 ~ b_2} \quad
-  \evalexprty{e}{\localstore}{\bvsort{1}} = \bvval{1}{1}
-}
-{
-  \progstate{\location}{\localstore}{\stack}{\memory}
-  \step
-  \progstate{\instratlabel{\location}{b_1}}{\localstore}{\stack}{\memory}
-}
-\\[5pt]
-\ruledefsmall{Branch-False}
-{
-  \instrat{\location} = \codequote{\tbr ~ e ~ b_1 ~ b_2} \quad
-  \evalexprty{e}{\localstore}{\bvsort{1}} = \bvval{0}{1}
-}
-{
-  \progstate{\location}{\localstore}{\stack}{\memory}
-  \step
-  \progstate{\instratlabel{\location}{b_2}}{\localstore}{\stack}{\memory}
-}
-\\[5pt]
-\ruledefsmall{Make-Symbolic}{
-  \instrat{\location} = \codequote{x ~\texttt{=}~ \tcall^{\bvsort{32}} ~ \intrinsicfunc{make\_symbolic}()} \quad
-  n \in \Z
-}
-{
-  \progstate{\location}{\localstore}{\stack}{\memory}
-  \step
-  \progstate{\nextinstr{\location}}{\localstore[x \mapsto \bvval{n}{32}]}{\stack}{\memory}
-}
-\\[5pt]
+%\ruledefsmall{Branch-True}
+%{
+%  \instrat{\location} = \codequote{\tbr ~ e ~ b_1 ~ b_2} \quad
+%  \evalexprty{e}{\localstore}{\bvsort{1}} = \bvval{1}{1}
+%}
+%{
+%  \progstate{\location}{\localstore}{\stack}{\memory}
+%  \step
+%  \progstate{\instratlabel{\location}{b_1}}{\localstore}{\stack}{\memory}
+%}
+%\\[5pt]
+%\ruledefsmall{Branch-False}
+%{
+%  \instrat{\location} = \codequote{\tbr ~ e ~ b_1 ~ b_2} \quad
+%  \evalexprty{e}{\localstore}{\bvsort{1}} = \bvval{0}{1}
+%}
+%{
+%  \progstate{\location}{\localstore}{\stack}{\memory}
+%  \step
+%  \progstate{\instratlabel{\location}{b_2}}{\localstore}{\stack}{\memory}
+%}
+%\\[5pt]
+%\ruledefsmall{Make-Symbolic}{
+%  \instrat{\location} = \codequote{x ~\texttt{=}~ \tcall^{\bvsort{32}} ~ \intrinsicfunc{make\_symbolic}()} \quad
+%  n \in \Z
+%}
+%{
+%  \progstate{\location}{\localstore}{\stack}{\memory}
+%  \step
+%  \progstate{\nextinstr{\location}}{\localstore[x \mapsto \bvval{n}{32}]}{\stack}{\memory}
+%}
+%\\[5pt]
 \ruledefsmall{Malloc}{
   \instrat{\location} = \codequote{x~\texttt{=}~\tcall^{\pointertypeof{\bvsort{8}}}~\intrinsicfunc{malloc}(\bvsort{64} ~ e)} \quad
   \evalexprty{e}{\localstore}{\bvsort{64}} = \bvval{n}{64} \quad
