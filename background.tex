@@ -40,16 +40,12 @@ $
 
 In this paper,
 we focus on a subset of \llvm IR with memory operations, whose syntax is given in~\Cref{figure:llvm-syntax}.
-
-\paragraph{Types}
 We define the following types: integers, pointers, and arrays.\footnote{
 Our implementation supports \textit{struct} types as well, however, we omit them here for simplicity.
 }
 Integers are represented as bit-vectors of type $\bvsort{w}$, where \textsf{w} denotes the bit width.
 Pointer types ($\pointertypeof{\tau}$) are parameterized by an element type $\tau$.
 Array types ($\arraytype{\tau}{n}$) are parameterized by an element type $\tau$ and a dimension $n$.
-
-\paragraph{Values}
 The \llvm reference~\cite{llvmref} defines the special values $\tundef$ and $\tpoison$.
 The $\tundef$ value represents an unspecified bit-pattern.
 Such values are useful for compiler optimizations, since $\tundef$ can be substituted by an arbitrary value.
@@ -61,13 +57,13 @@ the result is either $\tpoison$ or undefined behavior.
 We define $\Vals^{\bvsort{w}}$ as the set containing all bit-vectors of type $\bvsort{w}$, along with $\tundef$ and $\tpoison$.
 Then, we define $\Vals$ as the set of all values, \ie the union of $\Vals^{\bvsort{w}}$ over all $w$.
 
-\paragraph{Notations}
-We denote by $\bvval{n}{w}$ a bit-vector of type $\bvsort{$w$}$ whose numerical value is $n$ (indicated in \textcolor{bvcolor}{red} throughout the paper).
+\textbf{\textit{Notations.}}
+We denote by $\bvval{n}{w}$ a bit-vector of type $\bvsort{$w$}$ whose numerical value is $n$ (marked in \textcolor{bvcolor}{red} throughout the paper).
 We denote by $|\tau|$ the size of the type $\tau$ in bytes.
 We denote by $\zeroext{w}{\bvval{n}{w'}}$ ($\signext{w}{\bvval{n}{w'}}$) a function that returns a bit-vector of type $\bvsort{w}$, defined as follows:
-if $w' < w$ then it performs zero-extension (sign-extension),
-if $w' > w$ then it performs truncation,
-and otherwise if returns $\bvval{n}{w'}$.
+if $w' < w$ it performs zero-extension (sign-extension),
+if $w' > w$ it performs truncation,
+and otherwise it returns $\bvval{n}{w'}$.
 
 \subsubsection{\textit{LLVM Memory Model.}}
 
