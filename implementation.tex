@@ -5,14 +5,19 @@
 
 Our implementation consists of two main components:
 a framework in \coq (9.0.1) and an extension of the \SE engine.
-Our framework is based on~\cite{klee-rocq},
+Our \coq framework is based on~\cite{klee-rocq},
 and it includes the definitions of the semantics (\Cref{sec:concrete-semantics,sec:symbolic-semantics}) and the theoretical foundation (\Cref{sec:program-safety,sec:proof-generation}).
+It consists of approximately 40,000 lines of code (LOC),
+excluding third-party dependencies (\eg CompCert~\cite{CompCert}).
+For comparison,
+this is more than twice the size of the framework of~\cite{klee-rocq}, which consists of approximately 18,000 LOC.
 Our proof generation approach (\Cref{sec:proof-generation}) is implemented on top of \klee~\cite{klee},
 a \emph{state-of-the-art} \SE engine operating on \llvm IR~\cite{llvm}.
-Currently, some of the SMT transformations used in \klee are not supported by our implementation,
-but we plan to support them in future versions.
-In the $\tgep$ instruction, our implementation currently supports the \opcode{nuw} attribute.
+%Currently, some of the SMT transformations used in \klee are not supported by our implementation,
+%but we plan to support them in future versions.
+%In the $\tgep$ instruction, our implementation currently supports the \opcode{nuw} attribute.
 
+\ignore{
 \subsection{\coq Framework}
 Our \coq framework consists of approximately 40,000 lines of code (LOC),
 excluding third-party dependencies (\eg CompCert~\cite{CompCert}).
@@ -41,6 +46,7 @@ Appendix B provides additional details on the mapping between the various defini
 %    \item SMT simplification theory (\Cref{sec:proof-et}): $\approx$8,100 LOC
 %    \item Interface lemmas (\Cref{sec:proof-et}): $\approx$6,700 LOC
 %\end{itemize}
+}
 
 \subsection{Implementation Issues in \klee}
 Thanks to our formalization efforts,
