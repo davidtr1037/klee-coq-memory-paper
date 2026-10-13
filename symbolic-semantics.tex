@@ -45,9 +45,7 @@ The function $\symdeallocate$ receives a heap $\symmemory$ and a memory object $
 and returns $\symmemory \setminus \{\symmo\}$.
 }
 
-The \emph{read} and \emph{write} operations are defined using these functions ($w$ is the bit-width of $\tau$):\footnote{
-As in~\Cref{sec:memory-modeling}, we assume that $\tau$ is one of the built-in integer types (\bvsort{8}, \bvsort{16}, \bvsort{32}, \bvsort{64}).
-}
+The \emph{read} and \emph{write} operations are defined using these functions ($w$ is the bit-width of $\tau$):
 \[ \symmoreadfunc{\tau} : \SymMemoryObjects \times \smtsort{\pointerwidth} \to \smtsort{w}, \ \symmowritefunc{\tau} : \SymMemoryObjects \times \pointertype \times \smtsort{w} \to \SymMemoryObjects \]
 The $\symmoreadfunc{\tau}$ function receives a memory object $\symmo$ and a pointer $p$.
 First, it reads the consecutive $|\tau|$ cells starting from $p$ into a sequence of symbolic bytes.
@@ -79,7 +77,7 @@ The path constraint $\pc$ is a formula of sort $\Bool$ that accumulates assumpti
 The symbolic evaluation semantics of expressions, denoted by $\evalexprty{e}{\symlocalstore}{\tau}$, mirrors the concrete evaluation semantics (\Cref{figure:expr-semantics}).
 Here, however, $\sem{\toper^\tau}$ and $\sem{\tcast^{\tau\to\tau'}}$ are \emph{function symbols} that construct SMT expressions.
 
-\Cref{figure:symbolic-semantics} defines the symbolic operational small-step semantics for a subset of the instructions introduced in~\Cref{figure:llvm-syntax}.
+\Cref{figure:symbolic-semantics} defines the symbolic operational small-step semantics for memory-related instructions introduced in~\Cref{figure:llvm-syntax}.
 In some of the derivation rules, we use the following definitions (where $\symmo \triangleq \mobj{\bvval{\addr}{\pointerwidth}}{\bvval{\size}{\indexwidth}}{\smtarray}$):
 \[
 \baseaddrcond(p, \symmo) \triangleq p = \bvconst{\pointerwidth}{\addr}
@@ -244,8 +242,8 @@ while using SMT expressions for offset and address calculations.
 The function $\symevalgep$ defines the symbolic semantics of the $\tgep$ instruction based on~\Cref{alg:symbolic-gep} (function \textsc{symbolic-gep}).\footnote{
 For now, ignore the components highlighted in gray within the function \textsc{compute-internal}.
 }
-While the concrete version may return $\tundef$ or $\tpoison$,
-the symbolic version always returns an SMT expression.
+%While the concrete version may return $\tundef$ or $\tpoison$,
+%the symbolic version always returns an SMT expression.
 
 \begin{algorithm}[t]
 \small
@@ -253,35 +251,35 @@ the symbolic version always returns an SMT expression.
 \label{alg:symbolic-gep}
 \begin{algorithmic}[1]
 
-\Function{compute-internal}{$\tau, o, \textcolor{markcolor}{c}, \overline{j}$}
+\Function{compute-internal}{$\tau, o, \overline{j}$}
     \If {$|\overline{j}| = 0$}
-        \State \Return $\langle o, \textcolor{markcolor}{c} \rangle$
+        \State \Return $o$
     \EndIf
     \State $j_1 :: \overline{j'} \gets \overline{j}$
     \If {$\tau = \arraytype{\tau'}{n}$}
-        \State \textcolor{markcolor}{$c_1 \gets \mathit{trunc\_overflow}(j_1)$}
-        \State \textcolor{markcolor}{$c_2 \gets \mathit{mul\_overflow}(\bvsext{\indexwidth}{j_1}, \bvconst{\indexwidth}{|\tau'|})$}
-        \State \textcolor{markcolor}{$c_3 \gets \mathit{add\_overflow}(o, \bvmul{\bvsort{\indexwidth}}{\bvsext{\indexwidth}{j_1}}{\bvconst{\indexwidth}{|\tau'|}})$}
+        %\State \textcolor{markcolor}{$c_1 \gets \mathit{trunc\_overflow}(j_1)$}
+        %\State \textcolor{markcolor}{$c_2 \gets \mathit{mul\_overflow}(\bvsext{\indexwidth}{j_1}, \bvconst{\indexwidth}{|\tau'|})$}
+        %\State \textcolor{markcolor}{$c_3 \gets \mathit{add\_overflow}(o, \bvmul{\bvsort{\indexwidth}}{\bvsext{\indexwidth}{j_1}}{\bvconst{\indexwidth}{|\tau'|}})$}
         \State $o \gets \bvadd{\bvsort{\indexwidth}}{o}{\bvmul{\bvsort{\indexwidth}}{\bvsext{\indexwidth}{j_1}}{\bvconst{\indexwidth}{|\tau'|}}}$ \label{line:array-index}
-        \State \Return \Call{compute-internal}{$\tau', o, \textcolor{markcolor}{c \lor c_1 \lor c_2 \lor c_3}, \overline{j'}$}
+        \State \Return \Call{compute-internal}{$\tau', o, \overline{j'}$}
     \EndIf
 \EndFunction
 
 \Function{symbolic-gep}{$\tau, p, \overline{j}$}
     \State $j_1 :: \overline{j'} \gets \overline{j}$
     \State $o \gets \bvmul{\bvsort{\indexwidth}}{\bvsext{\indexwidth}{j_1}}{\bvconst{\indexwidth}{|\tau|}}$ \label{line:first-index}
-    \State $r, \_ \gets \Call{compute-internal}{\tau, o, \overline{j'}}$
+    \State $r \gets \Call{compute-internal}{\tau, o, \overline{j'}}$
     \State \Return $\bvadd{\bvsort{\pointerwidth}}{p}{\bvzext{\pointerwidth}{r}}$
 \EndFunction
 
-\Function{compute-overflow}{$\tau, \overline{j}$}
-    \State $j_1 :: \overline{j'} \gets \overline{j}$
-    \State $c_1 \gets \mathit{trunc\_overflow}(j_1)$
-    \State $c_2 \gets \mathit{mul\_overflow}(\bvsext{\indexwidth}{j_1}, \bvconst{\indexwidth}{|\tau|})$
-    \State $o \gets \bvmul{\bvsort{\indexwidth}}{\bvsext{\indexwidth}{j_1}}{\bvconst{\indexwidth}{|\tau|}}$
-    \State $\_, c \gets \Call{compute-internal}{\tau, o, c_1 \lor c_2, \overline{j'}}$
-    \State \Return $c$
-\EndFunction
+%\Function{compute-overflow}{$\tau, \overline{j}$}
+%    \State $j_1 :: \overline{j'} \gets \overline{j}$
+%    \State $c_1 \gets \mathit{trunc\_overflow}(j_1)$
+%    \State $c_2 \gets \mathit{mul\_overflow}(\bvsext{\indexwidth}{j_1}, \bvconst{\indexwidth}{|\tau|})$
+%    \State $o \gets \bvmul{\bvsort{\indexwidth}}{\bvsext{\indexwidth}{j_1}}{\bvconst{\indexwidth}{|\tau|}}$
+%    \State $\_, c \gets \Call{compute-internal}{\tau, o, c_1 \lor c_2, \overline{j'}}$
+%    \State \Return $c$
+%\EndFunction
 
 \end{algorithmic}
 \end{algorithm}
