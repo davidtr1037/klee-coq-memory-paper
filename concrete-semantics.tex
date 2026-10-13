@@ -30,12 +30,11 @@ which can be either bit-vectors of type $\bvsort{8}$ (\ie a \emph{byte}) or one 
 A heap $\memory \in \Heaps$ is defined as a set of memory objects.
 \end{definition}
 
-Now, we define the operations provided by the memory model:
-allocation, deallocation, read, and write.
+%Now, we define the operations provided by the memory model:
+%allocation, deallocation, read, and write.
 
-\paragraph{Allocation}
-The \emph{allocation} operation is defined using the following function:
-\[ \allocate : \Heaps \times \indextype \to \Heaps \times \pointertype \]
+The \emph{allocation} and \emph{deallocation} operations are defined using these functions:
+\[ \allocate : \Heaps \times \indextype \to \Heaps \times \pointertype, \ \deallocate : \Heaps \times \MemoryObjects \to \Heaps \]
 The function $\allocate$ receives a heap $\memory$ and an allocation size $\size$,
 and attempts to provide a memory object $\mobj{\addr}{\size}{\arrayvalue}$ that satisfies the following:
 \begin{enumerate}
@@ -46,16 +45,13 @@ and attempts to provide a memory object $\mobj{\addr}{\size}{\arrayvalue}$ that 
 If such a memory object can be provided, then the result is the tuple $\langle \memory \cup \mobj{\addr}{\size}{\arrayvalue}, \addr \rangle$.
 Otherwise, the result is $\none$.
 The mapping $\arrayvalue$ of the newly allocated memory object is set to a function that maps all the indices to $\bvval{0}{8}$.
-
-\paragraph{Deallocation}
-The \emph{deallocation} operation is defined using the following function:
-\[ \deallocate : \Heaps \times \MemoryObjects \to \Heaps \]
+%The \emph{deallocation} operation is defined using the following function:
+%\[ \deallocate : \Heaps \times \MemoryObjects \to \Heaps \]
 The function $\deallocate$ receives a heap $\memory$ and a memory object $\mo$,
 and returns $\memory \setminus \{\mo\}$.
 
-\paragraph{Read}
-The \emph{read} operation is defined using the following function:
-\[ \moreadfunc{\tau} : \MemoryObjects \times \pointertype \to \Vals^{\tau} \]
+The \emph{read} and \emph{write} operations are defined using these functions:
+\[ \moreadfunc{\tau} : \MemoryObjects \times \pointertype \to \Vals^{\tau}, \ \mowritefunc{\tau} : \MemoryObjects \times \pointertype \times \Vals^{\tau} \to \MemoryObjects \]
 The $\moreadfunc{\tau}$ function receives a memory object $\mo$ and a pointer $p$.\footnote{
 We assume that $\tau$ is one of the built-in integer types: $\bvsort{8}$, $\bvsort{16}$, $\bvsort{32}$, $\bvsort{64}$.
 }
@@ -63,17 +59,15 @@ First, it reads the consecutive $|\tau|$ cells starting from $p$ into a sequence
 If one of these values is $\tpoison$, then the result is $\tpoison$,
 and otherwise, if one of these values is $\tundef$, then the result is $\tundef$.
 Otherwise, we deserialize this sequence of values (bytes) into an integer of type $\tau$.
-
-\paragraph{Write}
-The \emph{write} operation is defined using the following function:
-\[ \mowritefunc{\tau} : \MemoryObjects \times \pointertype \times \Vals^{\tau} \to \MemoryObjects \]
+%The \emph{write} operation is defined using the following function:
+%\[ \mowritefunc{\tau} : \MemoryObjects \times \pointertype \times \Vals^{\tau} \to \MemoryObjects \]
 The $\mowritefunc{\tau}$ function receives a memory object $\mo$ (\ie $\mobj{\addr}{\size}{\arrayvalue}$), a pointer $p$, and a value $v$.
 First, it serializes the value $v$ into a sequence of bytes.
 %Then, it uses these bytes to update the corresponding cells of the array $\arrayvalue$ starting from $p$.
 Then, it uses these bytes to create a new memory object $\mobj{\addr}{\size}{\arrayvalue'}$,
 where $\arrayvalue'$ is derived from $\arrayvalue$ by updating the corresponding cells of $\arrayvalue$ starting from $p$.
 
-\paragraph{Memory Allocation Scheme}
+\textit{Memory Allocation Scheme.}
 In this paper,
 we assume a linear memory allocator that allocates memory objects consecutively while maintaining a fixed gap between them,
 commonly referred to as a \emph{red-zone}.
