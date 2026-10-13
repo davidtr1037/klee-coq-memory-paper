@@ -51,55 +51,55 @@ Appendix B provides additional details on the mapping between the various defini
 }
 
 %\subsection{Implementation Issues in \klee}
-
 \textit{Issue 1: Inconsistent Modeling of the Index Type.}
-On one hand,
-\klee uses SMT arrays of sort $\arraysort{\smtsort{32}}{\smtsort{8}}$ to represent the contents of memory objects,
-which suggests that the modeled index type is $\bvsort{32}$.
-On the other hand,
-\klee computes the offsets in the interpretation of $\tgep$ using SMT expressions of sort $\smtsort{64}$,
-which suggests that the modeled index type is $\bvsort{64}$.
+\klee represents memory contents using SMT arrays of sort $\arraysort{\smtsort{32}}{\smtsort{8}}$, implying a 32-bit index type, but computes $\tgep$ offsets using 64-bit SMT expressions, implying a 64-bit index type.
 
 \textit{Issue 2: Incorrect Interpretation of \textup{$\tgep$}.}
-\klee does not account for overflows in the offset computation, thus not fully compliant with the \llvm reference.
-To fix this,
-we modified the offset computation to conform to the index type $\bvsort{32}$,
-ensuring consistency with the index sort $\smtsort{32}$ used in the SMT arrays,
-and we report an error when such overflows occur.
+\klee does not account for overflows when computing $\tgep$ offsets and is therefore not fully compliant with the \llvm reference.
+We fixed the offset computation to use the right index type ($\bvsort{32}$) and report an error upon overflow.
 
 \textit{Issue 3: Incorrect Interpretation of Memory Allocations.}
-According to the \llvm semantics,
-if the allocation size exceeds the largest \emph{signed integer} representable by the index type,
-then the result is undefined behavior.
-However, \klee currently does not check this condition.
+The \llvm semantics define an allocation as undefined behavior when its size exceeds the largest signed integer representable by the index type, but \klee does not check this condition.
 
 \textit{Issue 4: Incorrect Interpretation of Allocation Alignment.}
-When \klee executes dynamic memory allocations (\eg \textit{malloc}),
-it uses a pre-defined alignment instead of the alignment specified by the \code{align} attribute of the corresponding instruction.
+For dynamic allocations (\eg \textit{malloc}), \klee uses a predefined alignment rather than the alignment specified by the corresponding instruction's \code{align} attribute.
 
 \textit{Issue 5: Silent Truncation in Memory Allocations.}
-\klee silently truncates the allocation size to the \code{uint32\_t} type,
-without reporting any error to the user, which may lead to unexpected behavior.
-For example, if we allocate an object of size $2^{32} + 10$,
-then the allocation size is internally cast to $10$,
-and if later we access that object at offset $10$, then we will get an out-of-bounds error, which is a false positive.
+\klee silently truncates allocation sizes to \code{uint32\_t}, potentially causing false positives.
+For example, a requested size of $2^{32}+10$ is truncated to $10$, causing an access at offset $10$—valid for the requested allocation—to be incorrectly reported as out of bounds.
 
-%To fix this, we modified the interpretation of $\tgep$ as follows:
-%First, we modified the offset computation to conform to the index type $\bvsort{32}$,
-%ensuring consistency with the index sort $\smtsort{32}$ used in the SMT arrays.
-%Second, if the \code{nuw} attribute is enabled, we report an error when an overflow occurs.
 
-%The lack of overflow checks has some additional consequences,
-%as can be demonstrated by~\Cref{figure:klee-issue}.
-%After executing the $\tgep$ instruction at~\cref{line:issue-llvm-gep}, the value of \code{p2} is $a + 4294967296$,
-%assuming that the value of \code{p1} is $a$.
-%Since \klee ignores the overflow in this case, it continues to the next instruction at~\cref{line:issue-llvm-store}.
-%When \klee accesses a memory object (\ie $\tload$ and $\tstore$),
-%the SMT expression of the offset is always truncated to an SMT expression of sort $\smtsort{32}$.
-%So in this case,
-%the SMT expression $4294967296$ (of sort $\smtsort{64}$) is truncated to the SMT expression $0$ (of sort $\smtsort{32}$).
-%Therefore, this $\tstore$ instruction actually updates the first byte of the memory object allocated at~\cref{line:issue-llvm-malloc}.
-%We note that this behavior occurs in \klee without reporting any errors to the user.
+%\textit{Issue 1: Inconsistent Modeling of the Index Type.}
+%On one hand,
+%\klee uses SMT arrays of sort $\arraysort{\smtsort{32}}{\smtsort{8}}$ to represent the contents of memory objects,
+%which suggests that the modeled index type is $\bvsort{32}$.
+%On the other hand,
+%\klee computes the offsets in the interpretation of $\tgep$ using SMT expressions of sort $\smtsort{64}$,
+%which suggests that the modeled index type is $\bvsort{64}$.
+%
+%\textit{Issue 2: Incorrect Interpretation of \textup{$\tgep$}.}
+%\klee does not account for overflows in the offset computation, thus not fully compliant with the \llvm reference.
+%To fix this,
+%we modified the offset computation to conform to the index type $\bvsort{32}$,
+%ensuring consistency with the index sort $\smtsort{32}$ used in the SMT arrays,
+%and we report an error when such overflows occur.
+%
+%\textit{Issue 3: Incorrect Interpretation of Memory Allocations.}
+%According to the \llvm semantics,
+%if the allocation size exceeds the largest \emph{signed integer} representable by the index type,
+%then the result is undefined behavior.
+%However, \klee currently does not check this condition.
+%
+%\textit{Issue 4: Incorrect Interpretation of Allocation Alignment.}
+%When \klee executes dynamic memory allocations (\eg \textit{malloc}),
+%it uses a pre-defined alignment instead of the alignment specified by the \code{align} attribute of the corresponding instruction.
+%
+%\textit{Issue 5: Silent Truncation in Memory Allocations.}
+%\klee silently truncates the allocation size to the \code{uint32\_t} type,
+%without reporting any error to the user, which may lead to unexpected behavior.
+%For example, if we allocate an object of size $2^{32} + 10$,
+%then the allocation size is internally cast to $10$,
+%and if later we access that object at offset $10$, then we will get an out-of-bounds error, which is a false positive.
 
 %\begin{figure}[t]
 %\begin{minipage}[t]{0.44\columnwidth}
