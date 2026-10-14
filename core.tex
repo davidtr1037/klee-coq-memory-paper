@@ -150,23 +150,20 @@ then there exists a symbolic state $s$ such that $s_{0} \symmultistep s$ and $s 
 \end{theorem}
 
 As we will see next,
-\Cref{lemma:multi-ns-step-relative-completeness} and \Cref{theorem:completeness} will helps us establish the \emph{program safety} theorem.
+\Cref{lemma:multi-ns-step-relative-completeness} and \Cref{theorem:completeness} will help us establish the \emph{program safety} theorem.
 
 \subsection{Program Safety Theorem}
-In this section,
-we establish the \emph{program safety} theorem,
-which states that a program is safe with respect to the concrete semantics if the execution tree of the program satisfies certain safety properties.
-First, we formally define \emph{execution trees}.
-
-\begin{definition}
-The \emph{execution tree} of a program records the paths explored by the \SE engine during the analysis of that program,
+%In this section,
+%we establish the \emph{program safety} theorem,
+%which states that a program is safe with respect to the concrete semantics if the execution tree of the program satisfies certain safety properties.
+To establish the \emph{program safety} theorem, we will rely on \emph{execution trees}.
+The execution tree of a program records the paths explored by the \SE engine during the analysis,
 where each node corresponds to a symbolic state computed by the \SE engine.
 An execution tree $t$ with a root symbolic state $t.\attrstate$ and a list of successor subtrees $t.\attrchildren$ is denoted by $\tree(s, l)$,
 where $s$ and $l$ correspond to the respective attributes.
-\end{definition}
 
 Next, we formally define the notion of equivalence between symbolic states,
-which is then used to define the safety properties for execution trees.
+which is then used to define safety properties for execution trees.
 
 \begin{definition}
 The symbolic stores $\symlocalstore_1$ and $\symlocalstore_2$ are \emph{equivalent}, denoted by $\symlocalstore_1\equiv \symlocalstore_2$, if they are defined over the same variables,
