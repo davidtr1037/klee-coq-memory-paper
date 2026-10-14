@@ -91,8 +91,9 @@ if $w' > w$ it performs truncation,
 and otherwise it returns $\bvval{n}{w'}$.
 We denote by $m[t]$ the interpretation of the term $t$ in a model $m$.
 We denote by $t_1\equiv t_2$ the assertion that $m[t_1] = m[t_2]$ for any model $m$.
-A formula $\varphi$ is satisfiable, denoted by $\sat{\varphi}$, if there is a model $m$ such that $m[\varphi] = \true$.
-A formula $\varphi$ is unsatisfiable, denoted by $\unsat{\varphi}$, if $m[\varphi] = \false$ for any model $m$.
-We denote by $\bvzextfunc{w}$ ($\bvsextfunc{w}$) a function that performs zero-extension (sign-extension) or truncation to return a bit-vector of sort $\smtsort{w}$.
+If there is a model $m$ such that $m[\varphi] = \true$,
+then $\varphi$ is satisfiable, denoted by $\sat{\varphi}$,
+and otherwise $\varphi$ is unsatisfiable, denoted by $\unsat{\varphi}$.
+We denote by $\bvzextfunc{w}$ ($\bvsextfunc{w}$) a function that performs zero-extension (sign-extension) to return a bit-vector of sort $\smtsort{w}$.
 We denote by $\bvextractfunc{w}$ a function that performs truncation to return a bit-vector of sort $\smtsort{w}$.
-We denote by $\bvconst{w}{n}$ a constant bit-vector of sort $\smtsort{w}$ whose numerical value is $n$ (indicated in \textcolor{smtcolor}{blue} throughout the paper).
+We denote by $\bvconst{w}{n}$ a constant bit-vector of sort $\smtsort{w}$ whose numerical value is $n$.
