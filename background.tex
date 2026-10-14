@@ -35,8 +35,6 @@ Then, we define $\Vals$ as the union of $\Vals^{\bvsort{w}}$ over all $w$.
 %if $w' > w$ it performs truncation,
 %and otherwise it returns $\bvval{n}{w'}$.
 
-\input{syntax.tex}
-
 \textit{\textbf{LLVM Memory Model.}}
 % TODO: mention address space
 % TODO: add citation
@@ -64,6 +62,8 @@ and their corresponding integral types by \textsf{iptr} and \textsf{iidx}.
 %A memory $\memory$ is well-formed if all the memory objects are well-formed and there are no memory objects with overlapping address intervals.
 %A concrete state $\progstate{\location}{\localstore}{\stack}{\memory}$ is well-formed if $\memory$ is well-formed.
 %\end{definition}
+
+\input{syntax.tex}
 
 \textit{\textbf{SMT}}
 %We consider quantifier-free first-order logic modulo the theory of bit-vectors and arrays (QFABV),
