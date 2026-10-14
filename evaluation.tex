@@ -10,12 +10,9 @@ The following research questions guide our evaluation:
 \end{itemize}
 
 \textbf{\textit{Setup.}}
-In our evaluation, we use the following modes:
-\proofopt is the proof-logging mode, and \base is vanilla \klee.
-Each mode is run using the following configuration:
-The search heuristic is set to DFS,
-the timeout is set to one hour,
-and the memory limit is set to 4GB.
+We evaluate two modes:
+\proofopt is our proof-logging approach, and \base is vanilla \klee.
+Each mode is run with the DFS search heuristic, an one-hour timeout, and a 4GB memory limit.
 %and the SMT solver is set to STP~\cite{stp}.
 We measure the following metrics:
 analysis time, number of explored paths, and number of executed instructions.
