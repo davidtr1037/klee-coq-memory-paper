@@ -37,11 +37,9 @@ The \emph{allocation} and \emph{deallocation} operations are defined using these
 \[ \allocate : \Heaps \times \indextype \to \Heaps \times \pointertype, \ \deallocate : \Heaps \times \MemoryObjects \to \Heaps \]
 The function $\allocate$ receives a heap $\memory$ and an allocation size $\size$,
 and attempts to provide a memory object $\mobj{\addr}{\size}{\arrayvalue}$ that satisfies the following:
-\begin{enumerate}
-    \item $[\addr, \addr + \size)$ is fully contained within the address space (\ie $\addr < \addr + \size$)
-    \item $[\addr, \addr + \size)$ does not overlap with address intervals of existing memory objects
-    \item $s \geq 0$ and does not exceed the largest signed integer representable by the index type
-\end{enumerate}
+(1) $[\addr, \addr + \size)$ is fully contained within the address space (\ie $\addr < \addr + \size$),
+(2) $[\addr, \addr + \size)$ does not overlap with address intervals of existing memory objects,
+and (3) $s \geq 0$ and does not exceed the largest signed integer representable by the index type.
 If such a memory object can be provided, then the result is the tuple $\langle \memory \cup \mobj{\addr}{\size}{\arrayvalue}, \addr \rangle$.
 Otherwise, the result is $\none$.
 The mapping $\arrayvalue$ of the newly allocated memory object is set to a function that maps all the indices to $\bvval{0}{8}$.
@@ -56,8 +54,8 @@ The $\moreadfunc{\tau}$ function receives a memory object $\mo$ and a pointer $p
 We assume that $\tau$ is one of the built-in integer types: $\bvsort{8}$, $\bvsort{16}$, $\bvsort{32}$, $\bvsort{64}$.
 }
 First, it reads the consecutive $|\tau|$ cells starting from $p$ into a sequence of values of type $\Vals^{\bvsort{8}}$.
-If one of these values is $\tpoison$, then the result is $\tpoison$,
-and otherwise, if one of these values is $\tundef$, then the result is $\tundef$.
+If one of these values is $\tpoison$ ($\tundef$), then the result is $\tpoison$ ($\tundef$).
+%and otherwise, if one of these values is $\tundef$, then the result is $\tundef$.
 Otherwise, we deserialize this sequence of values (bytes) into an integer of type $\tau$.
 %The \emph{write} operation is defined using the following function:
 %\[ \mowritefunc{\tau} : \MemoryObjects \times \pointertype \times \Vals^{\tau} \to \MemoryObjects \]
@@ -69,8 +67,7 @@ where $\arrayvalue'$ is derived from $\arrayvalue$ by updating the corresponding
 
 \textit{Memory Allocation Scheme.}
 In this paper,
-we assume a linear memory allocator that allocates memory objects consecutively while maintaining a fixed gap between them,
-commonly referred to as a \emph{red-zone}.
+we assume a linear memory allocator that allocates memory objects consecutively while maintaining a fixed gap between them.
 Modeling a generic memory allocator that allows arbitrary locations for memory objects would be far more challenging.
 First, modeling such memory allocators requires developing a more complex theory of memory (\Cref{sec:concrete-semantics,sec:symbolic-semantics,sec:program-safety,sec:proof-generation}).
 Second, existing \SE engines do not support such memory allocators,
