@@ -105,8 +105,8 @@ $\issafens(\module)$ denotes that the program is safe with respect to the restri
 %(The relation $\multinsstep$ is the reflexive-transitive closure of the relation $\nsstep$.)
 %\end{definition}
 
-In general, some derivations are disallowed by the restricted concrete semantics but allowed by the complete concrete semantics.
-However, under certain conditions, the restricted and complete concrete semantics coincide.
+%In general, some derivations are disallowed by the restricted concrete semantics but allowed by the complete concrete semantics.
+Under certain conditions, the restricted and complete concrete semantics coincide.
 This is formulated in the following lemma.
 
 \begin{lemma}
@@ -116,10 +116,10 @@ If $\module$ is supported, $c$ is poison-free, no error states can be derived fr
 then $c \multinsstep c'$.
 \end{lemma}
 
-We first establish single-step reachability completeness.
+Next, we establish single-step reachability completeness.
 To do so, we must assume that the concrete states are \emph{well-formed}.
 Intuitively, this means that the address intervals in the heap do not overflow and do not intersect.
-The formal definition is given below.
+%The formal definition is given below.
 
 \begin{definition}
 \label{def:well-formed}
