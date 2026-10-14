@@ -60,15 +60,16 @@ The average subject size is 127 \llvm IR instructions, with a maximum of 548 and
 %To so do, we run each subject using the \proofopt and \base modes.
 %In this experiment,
 %we run each subject using the \proofopt and \base modes.
-The results of our experiments are given in~\Cref{figure:results} and discussed below.\footnote{
-A detailed breakdown of the results for each subject is given in Appendix A.
-}
+%The results of our experiments are given in~\Cref{figure:results} and discussed below.
+%\footnote{
+%A detailed breakdown of the results for each subject is given in Appendix A.
+%}
 
-\textbf{\text{RQ1.}}
+\paragraph{\textbf{\text{RQ1.}}}
 Our approach was able to generate valid proofs for all the subjects,
 which means that those programs are safe w.r.t. the concrete \llvm semantics formalized in~\Cref{sec:concrete-semantics}.
 
-\textbf{\text{RQ2.}}
+\paragraph{\textbf{\text{RQ2.}}}
 To evaluate the overhead of proof logging during the symbolic execution,
 we compare the analysis times of \proofopt and \base.
 The results are shown in the scatter plot from~\Cref{figure:time},
@@ -77,7 +78,7 @@ The average slowdown is 1.33\x and the median slowdown is 1.26\x.
 % TODO: discuss more?
 % The maximum slowdown is obtained in the \textit{strintcmp} API from \coreutils (2.30\x).
 
-\textbf{\text{RQ3.}}
+\paragraph{\textbf{\text{RQ3.}}}
 The scatter plot from~\Cref{figure:proof-time-size} shows the proof time and the proof size for each subject.
 The average and median proof times are 119.5 seconds and 23.1 seconds, respectively.
 The average and median proof sizes are approximately 15,000 KB and 5,000 KB, respectively.
@@ -89,22 +90,3 @@ which in turn results in higher proof time.
 There were two cases (\textit{test\_osip\_hash} and \textit{test\_hash\_pjw}) in which the proof time was rather high despite the number of executed instructions being relatively low.
 This occurred due to the presence of complex SMT array terms in the definitions of the symbolic states and in the application of the interface lemmas for $\tload$ and $\tstore$.
 We leave the optimization of such cases for future work.
-
-\begin{figure*}
-    \centering
-    \begin{subfigure}[b]{0.48\textwidth}
-        \centering
-        \includegraphics[width=0.75\textwidth]{images/time.pdf}
-        \caption{Analysis time.}
-        \label{figure:time}
-    \end{subfigure}
-    \begin{subfigure}[b]{0.48\textwidth}
-        \centering
-        \includegraphics[width=0.75\textwidth]{images/proof-scatter.pdf}
-        \caption{Proof time and proof size.}
-        \label{figure:proof-time-size}
-    \end{subfigure}
-    \hfill
-    \caption{Experimental results.}
-    \label{figure:results}
-\end{figure*}
