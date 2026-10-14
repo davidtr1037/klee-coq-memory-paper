@@ -3,59 +3,29 @@
 
 % TODO: explain bit-vectors
 
-In this section,
-we provide background on \llvm IR~\cite{llvm} and on satisfiability modulo theories (SMT).
+%In this section,
+%we provide background on \llvm IR~\cite{llvm} and on satisfiability modulo theories (SMT).
 
-\subsection{LLVM IR}
-\label{sec:llvm-ir}
-
-\llvm IR is a low-level intermediate representation for languages such as C, C++, and Rust.
-Beyond its role in compilation,
-\llvm IR is widely used in program analysis techniques such as symbolic execution, model checking, and static analysis.
-In the following,
-we describe the aspects of \llvm IR that are relevant for our development.
-% TODO: The semantics presented here are largely based on~\cite{klee-rocq}, and we further extend them to memory operations.
-
-\subsubsection{\textit{Syntax.}}
-
-\begin{figure}
-\scalebox{0.9}{
-$
-\begin{array}{l@{~}r@{~{}~}l}
-\tau & ~::={} & \bvsort{$w$} \ | \ \pointertypeof{\tau} \ | \ \arraytype{\tau}{n} \ | \ \structtype{\tau}{n} \\
-%\tbinop & ~::={} & \opcode{add} ~|~ \opcode{sub} ~|~ \opcode{mul} ~|~ \opcode{urem} ~|~ \sdots \\
-%\tcmpop & ~::={} & \opcode{eq} ~|~ \opcode{ne} ~|~ \opcode{ugt} ~|~ \opcode{uge} ~|~ \opcode{ult} ~|~ \opcode{ule} ~|~ \sdots \\
-\toper & ~::={} & \opcode{add} ~|~ \opcode{sub} ~|~ \opcode{icmp}_{eq} ~|~ \opcode{icmp}_{ne} ~|~ \sdots, \quad \tcast ~::={} \opcode{zext} ~|~ \opcode{sext} ~|~ \opcode{trunc} ~|~ \opcode{bitcast} \\
-%\tcast & ~::={} & \opcode{zext} ~|~ \opcode{sext} ~|~ \opcode{trunc} ~|~ \opcode{bitcast} \\
-e & ~::={} & n ~|~ x ~|~ \toper^\tau~e_1~e_2 ~|~ \tcast^{\tau\to\tau'}~e ~|~ \tgep~\pointertypeof{\tau}~e~\overline{(\tau_i, e_i)} \\
-\tinstr & ~::={} & x ~\texttt{=}~ e \ | \ x ~\texttt{=}~ \tphi^\tau~\{\,\overline{b_i\mapsto e_i}\,\} \ | \ \tbr~b \ | \ \tbr~e~b_1~b_2 \ | \ \tcall~\tid~(\overline{\tau_i~e_i}) \ | \ x ~\texttt{=}~ \tcall^{\tau}~\tid~(\overline{\tau_i~e_i}) \ | \\
-        & & \tret \ | \ \tret^{\tau}~e \ | \ \tunreachable \ | \ x ~\texttt{=}~ \tload^{\tau}~e \ | \ \tstore^{\tau}~e_1~e_2 \\
-\tblk & ~::={} & \tid{:}~\overline{\tinstr}, \quad \tfunc ~::={} \tdef~\tau~\tid(\overline{\tau_i~x_i}) ~ \{~\overline{\tblk}~\}, \quad \tmodule ~::={} \overline{\tfunc}
-\end{array}
-$
-}
-\caption{A simplified syntax of \llvm IR.}
-\label{figure:llvm-syntax}
-\end{figure}
-
+\textit{\textbf{LLVM IR.}}
+\llvm IR is a low-level intermediate representation for languages such as C, C++, and Rust,
+which is also widely used in program analysis techniques (\eg symbolic execution and model checking).
+%In the following, we describe the aspects of \llvm IR that are relevant for our development.
 In this paper,
 we focus on a subset of \llvm IR with memory operations, whose syntax is given in~\Cref{figure:llvm-syntax}.
 We define the following types: integers, pointers, and arrays.\footnote{
-Our implementation supports \textit{struct} types as well, however, we omit them here for simplicity.
+Our implementation supports also \textit{struct} types, but we omit them here for simplicity.
 }
 Integers are represented as bit-vectors of type $\bvsort{w}$, where \textsf{w} denotes the bit width.
 Pointer types ($\pointertypeof{\tau}$) are parameterized by an element type $\tau$.
 Array types ($\arraytype{\tau}{n}$) are parameterized by an element type $\tau$ and a dimension $n$.
-The \llvm reference~\cite{llvmref} defines the special values $\tundef$ and $\tpoison$.
-The $\tundef$ value represents an unspecified bit-pattern.
-Such values are useful for compiler optimizations, since $\tundef$ can be substituted by an arbitrary value.
-The $\tpoison$ value represents a value that arises from invalid operations (\eg invalid shift).
-Such values enable speculative execution,
-which allows the compiler to perform additional optimizations.
-When one of the operands of an operation is $\tpoison$,
-the result is either $\tpoison$ or undefined behavior.
+The \llvm reference~\cite{llvmref} defines the special values $\tundef$ and $\tpoison$,
+which are used for compiler optimizations.
+The $\tundef$ value represents an unspecified bit-pattern
+and the $\tpoison$ value represents a value that arises from invalid operations (\eg invalid shift).
+%When one of the operands of an operation is $\tpoison$,
+%the result is either $\tpoison$ or undefined behavior.
 We define $\Vals^{\bvsort{w}}$ as the set containing all bit-vectors of type $\bvsort{w}$, along with $\tundef$ and $\tpoison$.
-Then, we define $\Vals$ as the set of all values, \ie the union of $\Vals^{\bvsort{w}}$ over all $w$.
+Then, we define $\Vals$ as the union of $\Vals^{\bvsort{w}}$ over all $w$.
 
 \textbf{\textit{Notations.}}
 We denote by $\bvval{n}{w}$ a bit-vector of type $\bvsort{$w$}$ whose numerical value is $n$ (marked in \textcolor{bvcolor}{red} throughout the paper).
@@ -64,6 +34,8 @@ We denote by $\zeroext{w}{\bvval{n}{w'}}$ ($\signext{w}{\bvval{n}{w'}}$) a funct
 if $w' < w$ it performs zero-extension (sign-extension),
 if $w' > w$ it performs truncation,
 and otherwise it returns $\bvval{n}{w'}$.
+
+\input{syntax.tex}
 
 \subsubsection{\textit{LLVM Memory Model.}}
 

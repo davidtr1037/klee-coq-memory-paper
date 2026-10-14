@@ -332,7 +332,7 @@ In general, the $\tgep$ instruction computes the address of a subelement of an a
 The function $\evalgep$ defines the semantics of the $\tgep$ instruction based on~\Cref{alg:gep-all} (function \textsc{gep}).\footnote{
 The semantics presented here consider only arrays, however, our framework and implementation support also structs.
 }
-The algorithm uses the functions $\signextfunc{\indexwidth}$ and $\zeroextfunc{\indexwidth}$ defined in~\Cref{sec:llvm-ir}.
+The algorithm uses the functions $\signextfunc{\indexwidth}$ and $\zeroextfunc{\indexwidth}$ defined in~\Cref{sec:background}.
 The first argument of $\evalgep$ is the type of the base pointer,
 the second argument is the base pointer to start from,
 and the remaining arguments are indices that indicate which of the elements of the aggregate object are indexed.
