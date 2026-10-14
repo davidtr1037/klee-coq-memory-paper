@@ -22,7 +22,7 @@ A symbolic heap $\symmemory \in \SymHeaps$ is defined as a set of symbolic memor
 %allocation, deallocation, read, and write.
 
 The \emph{allocation} and \emph{deallocation} operations $\symallocate$ and $\symdeallocate$ mirror their concrete counterparts,
-while operating over symbolic memory objects and symbolic heaps.
+while operating over symbolic memory objects and heaps.
 
 \ignore{
 The \emph{allocation} and \emph{deallocation} operations are defined using these functions:
@@ -56,7 +56,7 @@ Then, it deserializes them into a \textit{concat} expression of the appropriate 
 The $\symmowritefunc{\tau}$ function receives a memory object $\symmo$ (\ie $\mobj{\addr}{\size}{\smtarray}$), a pointer $p$, and an SMT expression $e$.
 First, it serializes $e$ into a sequence of symbolic bytes.
 Then, it uses these symbolic bytes to create a new symbolic memory object $\mobj{\addr}{\size}{\smtarray'}$,
-where $\smtarray'$ is obtained by extending $\smtarray$ with additional store expressions at the corresponding offsets.
+where $\smtarray'$ is obtained by extending $\smtarray$ with additional store expressions. % at the corresponding offsets.
 
 The symbolic memory allocator operates linearly, mirroring the concrete memory allocator defined in~\Cref{sec:memory-modeling}.
 
@@ -71,7 +71,7 @@ A symbolic state is a tuple $\symstate{\location}{\symlocalstore}{\symstack}{\sy
 The location $\location \in \Locs$ is defined as before.
 The concrete store $\localstore \in \Stores$ is replaced with a symbolic store $\symlocalstore \in \SymStores$ mapping variables to SMT expressions.
 The concrete heap $\memory \in \Heaps$ is replaced with a symbolic one $\symmemory \in \SymHeaps$.
-The path constraint $\pc$ is a formula of sort $\Bool$ that accumulates assumptions along the execution path.
+The path constraint $\pc$ accumulates assumptions along the execution path.
 \end{definition}
 
 The symbolic evaluation semantics of expressions, denoted by $\evalexprty{e}{\symlocalstore}{\tau}$, mirrors the concrete evaluation semantics (\Cref{figure:expr-semantics}).
@@ -81,7 +81,7 @@ Here, however, $\sem{\toper^\tau}$ and $\sem{\tcast^{\tau\to\tau'}}$ are \emph{f
 In some of the derivation rules, we use the following definitions (where $\symmo \triangleq \mobj{\bvval{\addr}{\pointerwidth}}{\bvval{\size}{\indexwidth}}{\smtarray}$):
 \[
 \baseaddrcond(p, \symmo) \triangleq p = \bvconst{\pointerwidth}{\addr}
-\quad \quad
+\quad
 \rangecond(p, n, \symmo) \triangleq p < \bvadd{\pointerwidth}{p}{n} \land p \geq \bvconst{\pointerwidth}{\addr} \land \bvadd{\pointerwidth}{p}{n} < \bvadd{\pointerwidth}{\bvconst{\pointerwidth}{\addr}}{\bvconst{\pointerwidth}{\size}}
 %\begin{array}{ll}
 %\baseaddrcond(p, \symmo) & \triangleq p = \bvconst{\pointerwidth}{\addr} \\
@@ -89,8 +89,8 @@ In some of the derivation rules, we use the following definitions (where $\symmo
 %\end{array}
 \]
 Intuitively,
-$\baseaddrcond$ defines an SMT formula asserting that $p$ points to the base address of $\symmo$,
-and $\rangecond$ defines an SMT formula asserting that the interval $[p, p + n)$ is fully contained within the address interval of $\symmo$.
+$\baseaddrcond$ encodes the fact that $p$ points to the base address of $\symmo$,
+and $\rangecond$ encodes the fact that the interval $[p, p + n)$ is fully contained within the address interval of $\symmo$.
 In the following, we discuss the derivation rules in more detail.
 
 \begin{figure}[t]
