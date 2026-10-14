@@ -42,9 +42,9 @@ More specifically, our main result is~\Cref{theorem:completeness},
 which states that any sequence of derivations in the concrete semantics that does not introduce $\tpoison$ values can be simulated by a sequence of derivations in the symbolic semantics.
 Ultimately, this correspondence will help us prove the main theorem of~\Cref{sec:program-safety} (\Cref{theorem:safety-via-et}).
 
-To establish reachability completeness,
-we first define a relation between concrete and symbolic states.
-Informally, we say that a symbolic state $s$ \emph{represents} a concrete state $c$ if $c$ can be obtained from $s$ via concretization using a model that satisfies the path constraints of $s$.
+%To establish reachability completeness,
+We first define a relation between concrete and symbolic states.
+Informally, a symbolic state $s$ \emph{represents} a concrete state $c$ if $c$ can be obtained from $s$ via concretization using a model that satisfies the path constraints of $s$.
 The formal definition is given below.
 
 % TODO: same number of memory objects
@@ -68,37 +68,42 @@ if $s \overapproxvia{m} c$ for some model $m$.
 
 Based on~\Cref{def:over-approx-state},
 one can see that a concrete state containing a $\tpoison$ value cannot be represented by a symbolic state.
-This implies that we cannot establish the reachability completeness of the symbolic semantics with respect to the concrete semantics.
-%Therefore, a sequence of derivations in the concrete semantics involving $\tpoison$ values cannot be simulated by a sequence of derivations in the symbolic semantics.
-Instead, we establish the reachability completeness with respect to a subset of the concrete semantics restricted to concrete states that do not contain $\tpoison$ values.
-%Formally, it is defined as follows:
+%Therefore, we cannot establish the reachability completeness of the symbolic semantics with respect to the concrete semantics.
+%Instead, we establish the reachability completeness with respect to a subset of the concrete semantics restricted to concrete states that do not contain $\tpoison$ values.
+Therefore, we establish the reachability completeness with respect to a subset of the concrete semantics restricted to concrete states that do not contain $\tpoison$ values.
+In the following, we formally define the restricted concrete semantics.
 
-In the following,
-we formally define the restricted concrete semantics.
-We first define \emph{poison-free} states, and then define the corresponding step relation.
-
-\begin{definition}
-A concrete state $c \triangleq \progstate{\location}{\localstore}{\stack}{\memory}$ is \emph{poison-free}
-if $\localstore$ and $\memory$ do not contain $\tpoison$ values.
-\end{definition}
+%In the following,
+%we formally define the restricted concrete semantics.
+%We first define \emph{poison-free} states, and then define the corresponding step relation.
 
 \begin{definition}
 \label{def:ns-step}
-We say that there is a \emph{poison-free} step between two concrete states $c$ and $c'$, denoted by $c \nsstep c'$,
+A concrete state $c \triangleq \progstate{\location}{\localstore}{\stack}{\memory}$ is \emph{poison-free}
+if both $\localstore$ and $\memory$ do not contain $\tpoison$ values.
+Then, we say that there is a \emph{poison-free} step between two concrete states $c$ and $c'$, denoted by $c \nsstep c'$,
 if $c \step c'$ and both $c$ and $c'$ are poison-free.
-\end{definition}
-
 Similarly to~\Cref{def:safety},
-we define when a program, \ie an \llvm module, is considered safe with respect to the restricted concrete semantics.
-The formal definition is given below.
-
-\begin{definition}
-\label{def:issafe-ns-step}
-Let $c_0 \triangleq \initstate(\module)$,
-then $\module$ is \emph{safe} with respect to the restricted concrete semantics, denoted by $\issafens(\module)$, if:
-\[ \forall c. \ c_{0} \multinsstep c \implies \neg \errorstate(c) \]
-(The relation $\multinsstep$ is the reflexive-transitive closure of the relation $\nsstep$.)
+$\issafens(\module)$ denotes that the program is safe with respect to the restricted concrete semantics ($\nsstep$).
 \end{definition}
+
+%\begin{definition}
+%\label{def:ns-step}
+%We say that there is a \emph{poison-free} step between two concrete states $c$ and $c'$, denoted by $c \nsstep c'$,
+%if $c \step c'$ and both $c$ and $c'$ are poison-free.
+%\end{definition}
+%
+%Similarly to~\Cref{def:safety},
+%we define when a program, \ie an \llvm module, is considered safe with respect to the restricted concrete semantics.
+%The formal definition is given below.
+%
+%\begin{definition}
+%\label{def:issafe-ns-step}
+%Let $c_0 \triangleq \initstate(\module)$,
+%then $\module$ is \emph{safe} with respect to the restricted concrete semantics, denoted by $\issafens(\module)$, if:
+%\[ \forall c. \ c_{0} \multinsstep c \implies \neg \errorstate(c) \]
+%(The relation $\multinsstep$ is the reflexive-transitive closure of the relation $\nsstep$.)
+%\end{definition}
 
 In general, some derivations are disallowed by the restricted concrete semantics but allowed by the complete concrete semantics.
 However, under certain conditions, the restricted and complete concrete semantics coincide.
