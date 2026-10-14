@@ -76,10 +76,12 @@ Therefore, we leave the modeling of such memory allocators to future work.
 \subsection{Operational Small-Step Semantics}
 
 In the following,
-we define the concrete state and the derivation rules of the operational small-step semantics.
-In this paper,
-we consider a concrete state with a local store and a heap.
-However, our implementation support also stack frames, stack allocations (\ie $\talloca$), and global variables.
+we define the concrete state and the derivation rules of the operational small-step semantics.\footnote{
+Our implementation support also stack frames, stack allocations (\ie $\talloca$), and global variables.
+}
+%In this paper,
+%we consider a concrete state with a local store and a heap.
+%However, our implementation support also stack frames, stack allocations (\ie $\talloca$), and global variables.
 
 % TODO: define a frame
 \begin{definition}
@@ -104,9 +106,9 @@ and their semantics are functions whose domains and ranges depend on those types
 \input{rules-concrete.tex}
 
 \Cref{figure:llvm-semantics} defines the operational small-step semantics for memory-related instructions introduced in~\Cref{figure:llvm-syntax}.
-In the following, we discuss the derivation rules in more detail.\footnote{
-The full definition can be found in our \coq framework.
-}
+%In the following, we discuss the derivation rules in more detail.\footnote{
+%The full definition can be found in our \coq framework.
+%}
 
 %\textbf{\textit{Branch.}}
 %The instruction $\tbr$ follows standard operational semantics.
@@ -120,7 +122,7 @@ The full definition can be found in our \coq framework.
 
 \textbf{\textit{Malloc.}}
 When allocating a memory object,
-we call the $\allocate$ function (\Cref{sec:memory-modeling}).
+we call $\allocate$ (\Cref{sec:memory-modeling}).
 If $\allocate$ succeeds, then we update the local store and the heap accordingly.
 Otherwise, the result is undefined behavior.
 
@@ -135,7 +137,7 @@ Otherwise, the result is undefined behavior.
 When deallocating a pointer $p$,
 we first check if there exists a memory object $\mobj{\addr}{\size}{\arrayvalue}$ in the heap $\memory$ such that $p = \addr$.
 %If that is the case, then we update the heap using the $\deallocate$ function.
-If that is the case, we remove that memory object from $\memory$ using the $\deallocate$ function (\Cref{sec:memory-modeling}).
+If that is the case, we remove that memory object from $\memory$ using $\deallocate$ (\Cref{sec:memory-modeling}).
 Otherwise, the result is undefined behavior.
 
 \textbf{\textit{Load and Store.}}
@@ -151,11 +153,11 @@ Otherwise, we perform a read or write operation.
 %and otherwise, if one of these values is $\tundef$, we return $\tundef$.
 %Otherwise, we deserialize this sequence of values (bytes) into an integer of the appropriate type.
 For a read operation,
-we call the $\moreadfunc{\tau}$ function (\Cref{sec:memory-modeling}) to read the value from $\mo$ and update the local store accordingly.
+we call $\moreadfunc{\tau}$ (\Cref{sec:memory-modeling}) to read the value from $\mo$ and update the local store accordingly.
 %For a write operation,
 %we serialize the value $v$ into a sequence of bytes and update the array $\arrayvalue$ accordingly.
 For a write operation,
-we call the $\mowritefunc{\tau}$ function (\Cref{sec:memory-modeling}) to update the contents of $\mo$ accordingly.
+we call $\mowritefunc{\tau}$ (\Cref{sec:memory-modeling}) to update the contents of $\mo$ accordingly.
 
 %\textbf{\textit{Store.}}
 %% TODO: what happens if p/v is undef/poison?
