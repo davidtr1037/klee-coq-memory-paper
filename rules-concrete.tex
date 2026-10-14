@@ -1,0 +1,117 @@
+\begin{figure}
+\[
+\begin{array}{cl}
+%\ruledefsmall{Branch-True}
+%{
+%  \instrat{\location} = \codequote{\tbr ~ e ~ b_1 ~ b_2} \quad
+%  \evalexprty{e}{\localstore}{\bvsort{1}} = \bvval{1}{1}
+%}
+%{
+%  \progstate{\location}{\localstore}{\stack}{\memory}
+%  \step
+%  \progstate{\instratlabel{\location}{b_1}}{\localstore}{\stack}{\memory}
+%}
+%\\[5pt]
+%\ruledefsmall{Branch-False}
+%{
+%  \instrat{\location} = \codequote{\tbr ~ e ~ b_1 ~ b_2} \quad
+%  \evalexprty{e}{\localstore}{\bvsort{1}} = \bvval{0}{1}
+%}
+%{
+%  \progstate{\location}{\localstore}{\stack}{\memory}
+%  \step
+%  \progstate{\instratlabel{\location}{b_2}}{\localstore}{\stack}{\memory}
+%}
+%\\[5pt]
+%\ruledefsmall{Make-Symbolic}{
+%  \instrat{\location} = \codequote{x ~\texttt{=}~ \tcall^{\bvsort{32}} ~ \intrinsicfunc{make\_symbolic}()} \quad
+%  n \in \Z
+%}
+%{
+%  \progstate{\location}{\localstore}{\stack}{\memory}
+%  \step
+%  \progstate{\nextinstr{\location}}{\localstore[x \mapsto \bvval{n}{32}]}{\stack}{\memory}
+%}
+%\\[5pt]
+\ruledefsmall{Malloc}{
+  \instrat{\location} = \codequote{x~\texttt{=}~\tcall^{\pointertypeof{\bvsort{8}}}~\intrinsicfunc{malloc}(\bvsort{64} ~ e)} \quad
+  \evalexprty{e}{\localstore}{\bvsort{64}} = \bvval{n}{64} \quad
+  \allocate(\memory, \valoftype{n}{\indextype}) = (\memory', p)
+}
+{
+  \progstate{\location}{\localstore}{\stack}{\memory}
+  \step
+  \progstate{\nextinstr{\location}}{\localstore[x \mapsto p]}{\stack}{\memory'}
+}
+\\[5pt]
+\ruledefsmall{Free}{
+  \instrat{\location} = \codequote{\tcall~\intrinsicfunc{free}(\pointertypeof{\bvsort{8}} ~ e)} \quad
+  \evalexprty{e}{\localstore}{\pointertypeof{\bvsort{8}}} = p \quad
+  \mo \in \memory \quad
+  \isbaseaddr{p}{\mo} \quad
+  \deallocate(\memory, \mo) = \memory'
+}
+{
+  \progstate{\location}{\localstore}{\stack}{\memory}
+  \step
+  \progstate{\nextinstr{\location}}{\localstore}{\stack}{\memory'}
+}
+\\[5pt]
+\ruledefsmall{Load}{
+  \instrat{\location} = \codequote{x~\texttt{=}~\tload^{\tau}~e} \quad
+  \evalexprty{e}{\localstore}{\pointertypeof{\tau}} = p \quad
+  \mo \in \memory \quad
+  \isinbounds{p}{\tau}{\mo}
+}
+{
+  \progstate{\location}{\localstore}{\stack}{\memory}
+  \step
+  \progstate{\nextinstr{\location}}
+    {\localstore[x \mapsto \moread{\tau}{\mo}{p}]}
+    {\stack}{\memory}
+}
+\\[5pt]
+\ruledefsmall{Store}{
+  \instrat{\location} = \codequote{\tstore^{\tau}~e_1~e_2} \quad
+  \evalexprty{e_1}{\localstore}{\tau} = v \quad
+  \evalexprty{e_2}{\localstore}{\pointertypeof{\tau}} = p \quad
+  \mo \in \memory \quad
+  \isinbounds{p}{\tau}{\mo}
+}
+{
+  \progstate{\location}{\localstore}{\stack}{\memory}
+  \step
+  \progstate{\nextinstr{\location}}{\localstore}{\stack}{\heapreplace{\memory}{\mo}{\mowrite{\tau}{\mo}{p}{v}}}
+}
+\\[5pt]
+\ruledefsmall{GEP}{
+  \instrat{\location} = \codequote{x~\texttt{=}~\tgep~\pointertypeof{\tau}~e~\overline{(\tau_i, e_i)}} \quad
+  \evalexprty{e}{\localstore}{\pointertypeof{\tau}} = p \quad
+  \evalexprty{e_i}{\localstore}{\tau_i} = v_i
+}
+{
+  \progstate{\location}{\localstore}{\stack}{\memory}
+  \step
+  \progstate{\nextinstr{\location}}
+    {\localstore[x \mapsto \evalgep(\tau, p, \overline{v_i})]}
+    {\stack}{\memory}
+}
+\\[2em]
+\scalebox{0.8}{$
+\begin{array}{l@{\quad}l}
+\module & \mbox{\llvm module} \\
+\instrat{\location} & \mbox{instruction at location $\location$ in $\module$} \\
+\nextinstr{\location} & \mbox{next location} \\
+\instratlabel{\location}{b} & \mbox{location at label $b$} \\
+\isbaseaddr{p}{\mo} & \mbox{$p$ is equal to the base address of $\mo$} \\
+\isinbounds{p}{\tau}{\mo} & \mbox{interval $[p, p + \sizeof{\tau})$ is contained within the address interval of $\mo$} \\
+\moread{\tau}{\mo}{p} & \mbox{read a value of type $\tau$ from memory object $\mo$ starting from address $p$} \\
+\mowrite{\tau}{\mo}{p}{v} & \mbox{write value $v$ into memory object $\mo$ at address $p$} \\
+\heapreplace{\memory}{\mo}{\mo'} & \mbox{update $\memory$ by replacing memory object $\mo$ with $mo'$}
+\end{array}
+$}
+\end{array}
+\]
+\caption{Operational small-step semantics of \llvm IR.}
+\label{figure:llvm-semantics}
+\end{figure}

@@ -1,0 +1,42 @@
+\begin{figure}
+\[
+\begin{array}{c}
+\ruledefnonamesmall
+{
+    n \in \Z
+}
+{
+    \evalexprty{n}{\localstore}{\tau} = \valoftype{n}{\tau}
+}
+\quad\quad
+\ruledefnonamesmall
+{
+    \mapaccess{\localstore}{x} \in \Vals^{\tau}
+}
+{
+    \evalexprty{x}{\localstore}{\tau} = \mapaccess{\localstore}{x}
+}
+\\[5pt]
+\ruledefnonamesmall
+{
+    \evalexprty{e_1}{\localstore}{\tau} \in \Vals^{\tau}, \
+    \evalexprty{e_2}{\localstore}{\tau} \in \Vals^{\tau}, \
+    \sem{\toper^{\tau}} : \Vals^{\tau} \times \Vals^{\tau} \to \Vals^{\tau'}
+}
+{
+    \evalexprty{\toper^\tau~e_1~e_2}{\localstore}{\tau'} = \sem{\toper^\tau}\big(\evalexprty{e_1}{\localstore}{\tau}, \evalexprty{e_2}{\localstore}{\tau}\big)
+}
+\quad\quad
+\ruledefnonamesmall
+{
+    \evalexprty{e}{\localstore}{\tau} \in \Vals^{\tau}, \
+    \sem{\tcast^{\tau\to\tau'}} : \Vals^{\tau} \to \Vals^{\tau'}
+}
+{
+    \evalexprty{\tcast^{\tau\to\tau'}~e}{\localstore}{\tau'} = \sem{\tcast^{\tau\to\tau'}}\big(\evalexprty{e}{\localstore}{\tau}\big)
+}
+\end{array}
+\]
+\caption{Evaluation semantics of \llvm expressions.}
+\label{figure:expr-semantics}
+\end{figure}
