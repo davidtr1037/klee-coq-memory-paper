@@ -27,13 +27,13 @@ and the $\tpoison$ value represents a value that arises from invalid operations 
 We define $\Vals^{\bvsort{w}}$ as the set containing all bit-vectors of type $\bvsort{w}$, along with $\tundef$ and $\tpoison$.
 Then, we define $\Vals$ as the union of $\Vals^{\bvsort{w}}$ over all $w$.
 
-\textbf{\textit{Notations.}}
-We denote by $\bvval{n}{w}$ a bit-vector of type $\bvsort{$w$}$ whose numerical value is $n$.
-We denote by $|\tau|$ the size of the type $\tau$ in bytes.
-We denote by $\zeroext{w}{\bvval{n}{w'}}$ ($\signext{w}{\bvval{n}{w'}}$) a function that returns a bit-vector of type $\bvsort{w}$, defined as follows:
-if $w' < w$ it performs zero-extension (sign-extension),
-if $w' > w$ it performs truncation,
-and otherwise it returns $\bvval{n}{w'}$.
+%\textbf{\textit{Notations.}}
+%We denote by $\bvval{n}{w}$ a bit-vector of type $\bvsort{$w$}$ whose numerical value is $n$.
+%We denote by $|\tau|$ the size of the type $\tau$ in bytes.
+%We denote by $\zeroext{w}{\bvval{n}{w'}}$ ($\signext{w}{\bvval{n}{w'}}$) a function that returns a bit-vector of type $\bvsort{w}$, defined as follows:
+%if $w' < w$ it performs zero-extension (sign-extension),
+%if $w' > w$ it performs truncation,
+%and otherwise it returns $\bvval{n}{w'}$.
 
 \input{syntax.tex}
 
@@ -73,10 +73,9 @@ The array theory defines the array sort $\arraysort{I}{V}$, parameterized by an 
 %which is interpreted as a total map of the appropriate type.\footnote{
 %In our context, we assume that both $I$ and $V$ are bit-vector sorts.
 %}
-and defines the interpreted function symbols \textit{select}, \textit{store}, and \textit{K}.
-Semantically,
-$\mathit{select}(a, i)$ returns the value stored at index $i$ in $a$,
-$\mathit{store}(a, i, v)$ returns the array obtained from $a$ by updating the value at index $i$ to $v$,
+and defines the following interpreted function symbols: % \textit{select}, \textit{store}, and \textit{K}.
+$\arrayselect{a}{i}$ returns the value stored at index $i$ in $a$,
+$\arraystore{a}{i}{v}$ returns the array obtained from $a$ by updating the value at index $i$ to $v$,
 $K(v)$ returns a constant array that maps all the indices to $v$.
 %A \emph{model} $m$ must map interpreted function symbols to their accepted functions over $\{0{,}1\}^w$.
 %As is typically done \SE engines,
@@ -84,11 +83,16 @@ $K(v)$ returns a constant array that maps all the indices to $v$.
 %such that $\true$ and $\false$ correspond to $1$ and $0$, respectively.
 
 \textbf{\textit{Notations.}}
+We denote by $\bvval{n}{w}$ a bit-vector of type $\bvsort{$w$}$ whose numerical value is $n$.
+We denote by $|\tau|$ the size of the type $\tau$ in bytes.
+We denote by $\zeroext{w}{\bvval{n}{w'}}$ ($\signext{w}{\bvval{n}{w'}}$) a function that returns a bit-vector of type $\bvsort{w}$, defined as follows:
+if $w' < w$ it performs zero-extension (sign-extension),
+if $w' > w$ it performs truncation,
+and otherwise it returns $\bvval{n}{w'}$.
 We denote by $m[t]$ the interpretation of the term $t$ in a model $m$.
 We denote by $t_1\equiv t_2$ the assertion that $m[t_1] = m[t_2]$ for any model $m$.
 A formula $\varphi$ is satisfiable, denoted by $\sat{\varphi}$, if there is a model $m$ such that $m[\varphi] = \true$.
 A formula $\varphi$ is unsatisfiable, denoted by $\unsat{\varphi}$, if $m[\varphi] = \false$ for any model $m$.
 We denote by $\bvzextfunc{w}$ ($\bvsextfunc{w}$) a function that performs zero-extension (sign-extension) or truncation to return a bit-vector of sort $\smtsort{w}$.
 We denote by $\bvextractfunc{w}$ a function that performs truncation to return a bit-vector of sort $\smtsort{w}$.
-We use $\arrayselect{a}{i}$ and $\arraystore{a}{i}{v}$ as shorthands for $\mathit{select}(a, i)$ and $\mathit{store}(a, i, v)$.
 We denote by $\bvconst{w}{n}$ a constant bit-vector of sort $\smtsort{w}$ whose numerical value is $n$ (indicated in \textcolor{smtcolor}{blue} throughout the paper).
