@@ -75,6 +75,23 @@ if one of the following holds:
 %where $\overflowcond(\tau, \overline{k_i})$ constructs a condition that encodes the fact that there are no overlfows when evaluating the $\tgep$ instruction,
 \end{definition}
 
+\subsection{Proof Sketch for \Cref{theorem:safety-via-et}}
+\label{appendix:proof-sketch}
+
+To see intuitively why this theorem holds, consider the single-step case.
+Let $s$ be a symbolic state and $c$ be a concrete state such that $s \overapprox c$,
+and suppose that the subtree $\tree(s, l)$ is safe.
+If $c \nsstep c'$, then from~\Cref{theorem:completeness},
+it follows that there exists $s'$ such that $s \symstep s'$ and $s' \overapprox c'$.
+From~\Cref{def:safe-et}, it follows that $s'$ is not an error state,
+and since $s' \overapprox c'$, then $c'$ is not an error state.
+Now, let $c_0 \triangleq \initstate(\module)$ be the initial concrete state.
+If $\issafens(\module)$, then no error states can be derived from $c_0$.
+Next, if $c_0 \step c$,
+then based on~\Cref{lemma:multi-ns-step-relative-completeness}, it follows that $c_0 \nsstep c$.
+Finally, we know that $c$ is not an error state, so $\issafe(\module)$.
+
+
 \section{Evaluation Results}
 
 \begin{figure*}
@@ -95,3 +112,4 @@ if one of the following holds:
     \caption{Experimental results.}
     \label{figure:results}
 \end{figure*}
+

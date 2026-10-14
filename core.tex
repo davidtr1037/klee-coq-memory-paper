@@ -194,26 +194,14 @@ Let $\module$ be a supported module, let $s_0 \triangleq \initsymstate(\module)$
 If $\safeet(\tree(s_0, l))$, then $\issafens(\module)$.
 \end{lemma}
 
-Based on the lemma above, we finally establish the desired \emph{program safety} theorem, which is given below.
+Based on the lemma above, we finally establish the desired \emph{program safety} theorem,
+which is given below (a proof sketch is given in~\Cref{appendix:proof-sketch}).
 
 \begin{theorem}
 \label{theorem:safety-via-et}
 Let $\module$ be a supported module, let $s_0 \triangleq \initsymstate(\module)$, and let $l$ be a list of execution trees.
 If $\safeet(\tree(s_0, l))$, then $\issafe(\module)$.
 \end{theorem}
-
-To see intuitively why this theorem holds, consider the single-step case.
-Let $s$ be a symbolic state and $c$ be a concrete state such that $s \overapprox c$,
-and suppose that the subtree $\tree(s, l)$ is safe.
-If $c \nsstep c'$, then from~\Cref{theorem:completeness},
-it follows that there exists $s'$ such that $s \symstep s'$ and $s' \overapprox c'$.
-From~\Cref{def:safe-et}, it follows that $s'$ is not an error state,
-and since $s' \overapprox c'$, then $c'$ is not an error state.
-Now, let $c_0 \triangleq \initstate(\module)$ be the initial concrete state.
-If $\issafens(\module)$, then no error states can be derived from $c_0$.
-Next, if $c_0 \step c$,
-then based on~\Cref{lemma:multi-ns-step-relative-completeness}, it follows that $c_0 \nsstep c$.
-Finally, we know that $c$ is not an error state, so $\issafe(\module)$.
 
 \ignore{
 
