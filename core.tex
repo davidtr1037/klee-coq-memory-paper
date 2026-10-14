@@ -178,11 +178,9 @@ denoted by $s_1 \equiv s_2$, if $\location_1 = \location_2$, $\symlocalstore_1 \
 \begin{definition}
 \label{def:safe-et}
 Let $s$ be a symbolic state and $l$ a list of execution trees.
-We say that $tree(s, l)$ is \emph{safe}, denoted by $\safeet(\tree(s, l))$, if:
-\begin{enumerate}
-    \item $s$ is not an error state
-    \item if $s \symstep s'$ then either the path constraints of $s'$ are unsatisfiable or there exists a subtree $t \in l$ such that $\safeet(t)$ and $s' \equivstate t.\attrstate$.
-\end{enumerate}
+We say that $tree(s, l)$ is \emph{safe}, denoted by $\safeet(\tree(s, l))$, if
+(1) $s$ is not an error state and
+(2) if $s \symstep s'$ then either the path constraints of $s'$ are unsatisfiable or there exists a subtree $t \in l$ such that $\safeet(t)$ and $s' \equivstate t.\attrstate$.
 \end{definition}
 
 Based on this definition,
