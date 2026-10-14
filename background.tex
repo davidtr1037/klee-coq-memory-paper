@@ -28,7 +28,7 @@ We define $\Vals^{\bvsort{w}}$ as the set containing all bit-vectors of type $\b
 Then, we define $\Vals$ as the union of $\Vals^{\bvsort{w}}$ over all $w$.
 
 \textbf{\textit{Notations.}}
-We denote by $\bvval{n}{w}$ a bit-vector of type $\bvsort{$w$}$ whose numerical value is $n$ (marked in \textcolor{bvcolor}{red} throughout the paper).
+We denote by $\bvval{n}{w}$ a bit-vector of type $\bvsort{$w$}$ whose numerical value is $n$.
 We denote by $|\tau|$ the size of the type $\tau$ in bytes.
 We denote by $\zeroext{w}{\bvval{n}{w'}}$ ($\signext{w}{\bvval{n}{w'}}$) a function that returns a bit-vector of type $\bvsort{w}$, defined as follows:
 if $w' < w$ it performs zero-extension (sign-extension),
@@ -37,24 +37,23 @@ and otherwise it returns $\bvval{n}{w'}$.
 
 \input{syntax.tex}
 
-\subsubsection{\textit{LLVM Memory Model.}}
-
+\textit{\textbf{LLVM Memory Model.}}
 % TODO: mention address space
 % TODO: add citation
-According to the \llvm reference~\cite{llvmref}, a \emph{data layout} specifies how data is to be laid out in memory.
+Based on the \llvm reference~\cite{llvmref}, a \emph{data layout} specifies how data is to be laid out in memory.
 %The data layout consists of a list of specifications,
 %including endianness, alignment rules, \etc
 In particular, it defines various properties related to pointers, such as \emph{pointer type} and \emph{index type}.
 The pointer type specifies the integral type used to represent pointer values.
 The index type specifies the integral type used for address calculations (\eg in the $\tgep$ instruction).
 The size of the index type may not exceed the size of the pointer type.
-An allocated object is a region of the address space reserved by a memory-allocation operation,
-such as \textsf{alloca}, a heap allocation call (\eg \textit{malloc}), or a global variable definition.
+An allocated object is a region in the address space reserved by an allocation operation,
+such as \textsf{alloca}, a heap allocation (\eg \textit{malloc}), or a global variable definition.
 An allocated object may not cross the unsigned boundary of the address space,
 and its size may not exceed the largest signed integer representable by the index type.
 % In addition, the index type also specifies the type used to represent the size of allocated objects.
-In the remainder of this paper,
-we denote the bit-widths of the pointer and index types by \textsf{ptr} and \textsf{idx}, respectively,
+%In the remainder of this paper,
+We denote the bit-widths of the pointer and index types by \textsf{ptr} and \textsf{idx}, respectively,
 and their corresponding integral types by \textsf{iptr} and \textsf{iidx}.
 
 % TODO: needed only internally
