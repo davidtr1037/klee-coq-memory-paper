@@ -35,13 +35,12 @@ we give some background about the internals of the memory modeling in \klee.
 % TODO: unique interval?
 In \klee, the memory of a symbolic state is represented as a linear address space containing memory objects,
 each associated with a concrete base address and a concrete size.
-To encode the contents of a memory object,
-\klee uses two representations: \emph{optimized} and \emph{non-optimized}.
+\klee encodes the contents of a memory object using two representations: \emph{optimized} and \emph{non-optimized}.
 If all the stores to a memory object were performed with a concrete offset,
 then \klee uses the optimized representation:
 it encodes the contents of that memory object as a mapping between constant offsets and symbolic values.
 Otherwise, if there is at least one store with a symbolic offset,
-\klee uses to the non-optimized representation:
+\klee uses the non-optimized representation:
 it translates the optimized representation into an SMT array, \ie a sequence of store expressions.
 Once the representation of a memory object is switched to the non-optimized one, it cannot be switched back to the optimized one.
 
