@@ -65,9 +65,9 @@ and their corresponding integral types by \textsf{iptr} and \textsf{iidx}.
 %A concrete state $\progstate{\location}{\localstore}{\stack}{\memory}$ is well-formed if $\memory$ is well-formed.
 %\end{definition}
 
-\subsection{SMT}
-We consider quantifier-free first-order logic modulo the theory of bit-vectors and arrays (QFABV),
-which is standard in symbolic execution.
+\textit{\textbf{SMT}}
+%We consider quantifier-free first-order logic modulo the theory of bit-vectors and arrays (QFABV),
+We consider the QFABV logic fragment, which is standard in symbolic execution.
 The bit-vector theory defines the $\mathsf{BV}[w]$ sort, which is interpreted as the set $\{0{,}1\}^w$,
 and it defines interpreted function symbols such as $\textit{bvadd}$.
 The array theory defines the array sort $\arraysort{I}{V}$ parameterized by an index sort $I$ and a value sort $V$,
