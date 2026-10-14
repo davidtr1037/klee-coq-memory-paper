@@ -169,20 +169,20 @@ we call $\mowritefunc{\tau}$ (\Cref{sec:memory-modeling}) to update the contents
 %This procedure serializes the value $v$ into a sequence of bytes and updates the array $\arrayvalue$ accordingly.
 
 \textbf{\textit{GetElementPtr.}}
-In general, the $\tgep$ instruction computes the address of a subelement of an aggregate data structure (array, struct, \etc).
-The function $\evalgep$ defines the semantics of the $\tgep$ instruction based on~\Cref{alg:gep-all} (function \textsc{gep}).\footnote{
+The $\tgep$ instruction computes the address of a subelement of an aggregate data structure (\eg array and struct).
+The function $\evalgep$ defines the semantics of $\tgep$ based on~\Cref{alg:gep-all} (function \textsc{gep}).\footnote{
 The semantics presented here consider only arrays, however, our framework and implementation support also structs.
 }
-The algorithm uses the functions $\signextfunc{\indexwidth}$ and $\zeroextfunc{\indexwidth}$ defined in~\Cref{sec:background}.
+%The algorithm uses the functions $\signextfunc{\indexwidth}$ and $\zeroextfunc{\indexwidth}$ defined in~\Cref{sec:background}.
 The first argument of $\evalgep$ is the type of the base pointer,
 the second argument is the base pointer to start from,
 and the remaining arguments are indices that indicate which of the elements of the aggregate object are indexed.
 All the indices are first converted to values of the index type (sign-extended or truncated), and then translated into offsets (\cref{line:gep:array-index,line:gep:first-index}).
-The first index is used to move across the elements corresponding to the base pointer type,
-so it is multiplied by the type size of the element type of the base pointer type (\cref{line:gep:first-index}).
+The first index is used to move across the elements corresponding to the base pointer type.
+%so it is multiplied by the type size of the element type of the base pointer type (\cref{line:gep:first-index}).
 The remaining indices are translated into offsets based on the indexed type.
-If the indexed type is an array type,
-then the index is multiplied by the type size of the element type (\cref{line:gep:array-index}).
+%If the indexed type is an array type,
+%then the index is multiplied by the type size of the element type (\cref{line:gep:array-index}).
 %If the indexed type is a struct type,
 %then the index is translated into a field selector.
 The computed offsets are sequentially summed up,
