@@ -111,7 +111,7 @@ This is formulated in the following lemma.
 
 \begin{lemma}
 \label{lemma:multi-ns-step-relative-completeness}
-Let $c$ and $c'$ be concrete states.
+%Let $c$ and $c'$ be concrete states.
 If $\module$ is supported, $c$ is poison-free, no error states can be derived from $c$ using the $\multinsstep$ relation, and $c \multistep c'$,
 then $c \multinsstep c'$.
 \end{lemma}
@@ -134,13 +134,13 @@ we formally define the lemma that establishes single-step reachability completen
 
 \begin{lemma}
 \label{lemma:completeness-step}
-Let $c$ be a concrete state and $s$ be a symbolic state.
-If $c$ is well-formed, $s \overapprox c$ and $c \nsstep c'$,
+Let $c$ and $s$ be concrete and symbolic states.
+If $c$ is well-formed, $s \overapprox c$, and $c \nsstep c'$,
 then there exists a symbolic state $s'$ such that $s \symstep s'$ and $s' \overapprox c'$.
 \end{lemma}
 
 Finally, we extend~\Cref{lemma:completeness-step} to establish reachability completeness for arbitrary sequences of derivations starting from the initial state.
-The formal definition is given below.
+%The formal definition is given below.
 
 \begin{theorem}
 \label{theorem:completeness}
