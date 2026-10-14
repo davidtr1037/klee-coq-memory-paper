@@ -232,16 +232,15 @@ we check if there exists an SMT model $m$ satisfying $\pc$ and a memory object $
 If that is not the case, the result is undefined behavior.
 Otherwise, we perform a read or write operation.
 For a read operation,
-we first call the $\symmoreadfunc{\tau}$ function (\Cref{sec:symbolic-memory-modeling}) to read the corresponding value from $\symmo$, and then update the local store accordingly.
+we first call $\symmoreadfunc{\tau}$ (\Cref{sec:symbolic-memory-modeling}) to read the corresponding value from $\symmo$,
+and then update the local store accordingly.
 For a write operation,
-we call the $\symmowritefunc{\tau}$ function (\Cref{sec:symbolic-memory-modeling}) to update the contents of $\symmo$ accordingly.
+we call $\symmowritefunc{\tau}$ (\Cref{sec:symbolic-memory-modeling}) to update the contents of $\symmo$ accordingly.
 
 \textbf{\textit{GetElementPtr.}}
 The symbolic semantics of $\tgep$ mirrors the concrete semantics,
 while using SMT expressions for offset and address calculations.
-The function $\symevalgep$ defines the symbolic semantics of the $\tgep$ instruction based on~\Cref{alg:gep-all} (function \textsc{symbolic-gep}).\footnote{
-For now, ignore the components highlighted in gray within the function \textsc{compute-internal}.
-}
+The function $\symevalgep$ defines the symbolic semantics of $\tgep$ based on~\Cref{alg:gep-all} (function \textsc{symbolic-gep}).
 %While the concrete version may return $\tundef$ or $\tpoison$,
 %the symbolic version always returns an SMT expression.
 
