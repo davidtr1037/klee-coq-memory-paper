@@ -46,7 +46,7 @@ and returns $\symmemory \setminus \{\symmo\}$.
 }
 
 The \emph{read} and \emph{write} operations are defined using these functions ($w$ is the bit-width of $\tau$):
-\[ \symmoreadfunc{\tau} : \SymMemoryObjects \times \smtsort{\pointerwidth} \to \smtsort{w}, \ \symmowritefunc{\tau} : \SymMemoryObjects \times \pointertype \times \smtsort{w} \to \SymMemoryObjects \]
+\[ \symmoreadfunc{\tau} : \SymMemoryObjects \times \smtsort{\pointerwidth} \to \smtsort{w}, \ \symmowritefunc{\tau} : \SymMemoryObjects \times \smtsort{\pointerwidth} \times \smtsort{w} \to \SymMemoryObjects \]
 The $\symmoreadfunc{\tau}$ function receives a memory object $\symmo$ and a pointer $p$.
 First, it reads the consecutive $|\tau|$ cells starting from $p$ into a sequence of symbolic bytes.
 Then, it deserializes them into a \textit{concat} expression of the appropriate sort.
