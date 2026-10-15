@@ -12,7 +12,7 @@ The following research questions guide our evaluation:
 \textbf{\textit{Setup.}}
 We evaluate two modes:
 \proofopt is our proof-logging approach, and \base is vanilla \klee~\cite{klee}.
-Each mode is run with the DFS search heuristic, an one-hour timeout, and a 4GB memory limit.
+Each mode is run with the DFS search heuristic, a one-hour timeout, and a 4 GB memory limit.
 %and the SMT solver is set to STP~\cite{stp}.
 We measure the following metrics:
 analysis time, number of explored paths, and number of executed instructions.
@@ -23,7 +23,7 @@ In the \proofopt mode,
 we also measure the time required to validate the generated proof using \coqc,
 and the size of the generated proof (\code{.v} file).
 We performed our experiments on Ubuntu 24.04,
-equipped with Intel Core i9-9900 and 32GB of RAM.
+equipped with Intel Core i9-9900 and 32 GB of RAM.
 
 \textbf{\textit{Benchmarks.}}
 %Our implementation supports memory operations,
@@ -73,14 +73,14 @@ Detailed results for each subject are provided in~\Cref{table:extended-results} 
 \paragraph{\textbf{\text{RQ2.}}}
 To evaluate the overhead of proof logging during the symbolic execution,
 we compare the analysis times of \proofopt and \base.
-The results are shown in the scatter plot from~\Cref{figure:time} (\Cref{appendix:evaluation}),
+The results are shown in the scatter plot in~\Cref{figure:time} (\Cref{appendix:evaluation}),
 where the x-axis and y-axis represent the analysis times with \base and \proofopt, respectively.
 The average slowdown is 1.33\x and the median slowdown is 1.26\x.
 % TODO: discuss more?
 % The maximum slowdown is obtained in the \textit{strintcmp} API from \coreutils (2.30\x).
 
 \paragraph{\textbf{\text{RQ3.}}}
-The scatter plot from~\Cref{figure:proof-time-size} shows the proof time and the proof size for each subject.
+The scatter plot in~\Cref{figure:proof-time-size} shows the proof time and the proof size for each subject.
 The average and median proof times are 119.5 seconds and 23.1 seconds, respectively.
 The average and median proof sizes are approximately 15,000 KB and 5,000 KB, respectively.
 % TODO: improve

@@ -95,7 +95,7 @@ and it also makes the proof checking inefficient,
 as such proofs require expensive \coq tactics (\eg \textit{inversion} and \textit{subst}).
 Instead, we create for each instruction type a generic lemma that helps inferring execution tree safety.
 We call these lemmas \emph{interface} lemmas,
-as they facilitate an effective interaction between the static and dynamic sections of the proof.
+as they facilitate an effective interaction between the pre-defined and auto-generated sections of the proof.
 By using such interface lemmas,
 we accelerate both proof generation and proof checking,
 as we generate smaller proofs that rely on simple \coq tactics (\eg \textit{apply} and \textit{reflexivity}).

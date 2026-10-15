@@ -17,10 +17,10 @@ Modern SMT solvers~\cite{armand2011modular,ekici2017smtcoq,de2008proofs,marx2013
 \noindent \textbf{\textit{Verified \SE Engines.}}
 Correnson et al.~\cite{fse23wise} develop a formally verified symbolic bug finder in \coq for a toy WHILE-style language,
 but their formalization does not support memory operations. %, and it is coupled with a specific search heuristic (BFS).
-Loow et al.~\cite{cse-oopsla25} mechanize a memory-parametric framework for a \textit{while}-like IR in \coq,
+L\"{o}\"{o}w et al.~\cite{cse-oopsla25} mechanize a memory-parametric framework for a \textit{while}-like IR in \coq,
 instantiate it with several memory models, and build a prototype \SE engine with soundness and completeness guarantees.
 However,
-their \SE engine lacks support for features like recursion and has not been evaluated on real-world programming languages.
+their \SE engine lacks support for recursion and has not been evaluated on real-world programming languages.
 Adapting their core theory to \llvm IR requires modifying the underlying IR language (and core theory) and formalizing the memory model of \llvm IR,
 which would demand a significant effort.
 Gillian~\cite{gillian} applies a similar theory to C and Java but is unverified and does not produce machine-checked proofs.
