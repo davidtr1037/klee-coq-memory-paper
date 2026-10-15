@@ -58,7 +58,7 @@ First, it serializes $e$ into a sequence of symbolic bytes.
 Then, it uses these symbolic bytes to create a new symbolic memory object $\mobj{\addr}{\size}{\smtarray'}$,
 where $\smtarray'$ is obtained by extending $\smtarray$ with additional store expressions. % at the corresponding offsets.
 
-The symbolic memory allocator operates linearly, mirroring the concrete memory allocator defined in~\Cref{sec:memory-modeling}.
+The symbolic memory allocator operates linearly, similarly to the concrete memory allocator defined in~\Cref{sec:memory-modeling}.
 
 \subsection{Symbolic Operational Small-Step Semantics}
 
@@ -67,11 +67,11 @@ we define the symbolic state and the derivation rules of the symbolic operationa
 
 \begin{definition}
 \label{def:symbolic-state}
-A symbolic state is a tuple $\symstate{\location}{\symlocalstore}{\symstack}{\symmemory}{\pc}$.
-The location $\location \in \Locs$ is defined as before.
-The concrete store $\localstore \in \Stores$ is replaced with a symbolic store $\symlocalstore \in \SymStores$ mapping variables to SMT expressions.
-The concrete heap $\memory \in \Heaps$ is replaced with a symbolic one $\symmemory \in \SymHeaps$.
-The path constraint $\pc$ accumulates assumptions along the execution path.
+A symbolic state is a tuple $\symstate{\location}{\symlocalstore}{\symstack}{\symmemory}{\pc}$,
+where $\location \in \Locs$ is a program location,
+$\symlocalstore \in \SymStores$ is a symbolic store mapping variables to SMT expressions,
+$\symmemory \in \SymHeaps$ is a symbolic heap,
+and $\pc$ accumulates path constraints along the execution path.
 \end{definition}
 
 The symbolic evaluation semantics of expressions, denoted by $\evalexprty{e}{\symlocalstore}{\tau}$, mirrors the concrete evaluation semantics (\Cref{figure:expr-semantics}).
