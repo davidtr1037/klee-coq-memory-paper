@@ -50,7 +50,9 @@ To handle the case of $\tload$ in general, we define the following interface lem
 \label{lemma:interface-load}
 Let $s \triangleq \symstate{\location}{\symlocalstore}{\symstack}{\symmemory}{\pc}$,
 where \textup{$\instrat{\location} = \codequote{x~\texttt{=}~\tload^{\tau}~e}$}.
-Then $\safeet(\tree(s, [t]))$ if there exist $\mo$, $\symlocalstore'$, and $t$ such that:
+Then $\safeet(\tree(s, [t]))$ if there exist $\mo$, $\symlocalstore'$, and $t$ such that:\footnote{
+The definition of well-formedness for symbolic memory mirrors~\Cref{def:well-formed}.
+}
 (1) $\mo \in \symmemory$,
 (2) $\symmemory$ is well-formed,
 (3) \textup{$\evalexprty{e}{\symlocalstore}{\bvsort{64}} = p$},

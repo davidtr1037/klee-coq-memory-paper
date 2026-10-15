@@ -86,9 +86,7 @@ To handle the case of $\tstore$ in general, we define the following interface le
 \label{lemma:interface-store}
 Let $s \triangleq \symstate{\location}{\symlocalstore}{\symstack}{\symmemory}{\pc}$,
 where \textup{$\instrat{\location} = \codequote{\tstore^{\tau}~e_1~e_2}$}.
-Then $\safeet(\tree(s, [t]))$ if there exist $p$, $\mo$, $\mo_{new}$, and $t$ such that:\footnote{
-The definition of well-formedness for symbolic memory mirrors its concrete counterpart (\Cref{def:well-formed}).
-}
+Then $\safeet(\tree(s, [t]))$ if there exist $p$, $\mo$, $\mo_{new}$, and $t$ such that:
 \begin{enumerate}
     \item $\mo \in \symmemory$ and $\symmemory$ is well-formed
     \item \textup{$\evalexprty{e_1}{\symlocalstore}{\tau} = v$} and \textup{$\evalexprty{e_2}{\symlocalstore}{\bvsort{64}} = \bvconst{64}{p}$}
