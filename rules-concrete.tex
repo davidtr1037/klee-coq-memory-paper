@@ -98,17 +98,31 @@
 }
 \\[2em]
 \scalebox{0.8}{$
-\begin{array}{l@{\quad}l}
-\module & \mbox{\llvm module} \\
-\instrat{\location} & \mbox{instruction at location $\location$ in $\module$} \\
-\nextinstr{\location} & \mbox{next location} \\
-\instratlabel{\location}{b} & \mbox{location at label $b$} \\
-\isbaseaddr{p}{\mo} & \mbox{$p$ is equal to the base address of $\mo$} \\
-\isinbounds{p}{\tau}{\mo} & \mbox{interval $[p, p + \sizeof{\tau})$ is contained within the address interval of $\mo$} \\
-\moread{\tau}{\mo}{p} & \mbox{read a value of type $\tau$ from memory object $\mo$ starting from address $p$} \\
-\mowrite{\tau}{\mo}{p}{v} & \mbox{write value $v$ into memory object $\mo$ at address $p$} \\
-\heapreplace{\memory}{\mo}{\mo'} & \mbox{update $\memory$ by replacing memory object $\mo$ with $mo'$}
+\begin{array}{@{}l@{\quad}l@{\qquad}l@{\quad}l@{}}
+\module & \text{\llvm module} &
+\instrat{\location} & \text{instruction at $\location$}
+\\[-1pt]
+\nextinstr{\location} & \text{next instruction location} &
+\isbaseaddr{p}{\mo} & \text{$p$ is the base address of $\mo$}
+\\[-1pt]
+\isinbounds{p}{\tau}{\mo} & \text{$[p,p+\sizeof{\tau})$ lies within $\mo$} &
+\moread{\tau}{\mo}{p} & \text{read a $\tau$-value from $\mo$ at $p$}
+\\[-1pt]
+\mowrite{\tau}{\mo}{p}{v} & \text{write $v$ to $\mo$ at $p$} &
+\heapreplace{\memory}{\mo}{\mo'} & \text{replace $\mo$ with $\mo'$ in $\memory$}
+\\[-1pt]
 \end{array}
+%\begin{array}{l@{\quad}l}
+%\module & \mbox{\llvm module} \\
+%\instrat{\location} & \mbox{instruction at location $\location$ in $\module$} \\
+%\nextinstr{\location} & \mbox{next location} \\
+%\instratlabel{\location}{b} & \mbox{location at label $b$} \\
+%\isbaseaddr{p}{\mo} & \mbox{$p$ is equal to the base address of $\mo$} \\
+%\isinbounds{p}{\tau}{\mo} & \mbox{interval $[p, p + \sizeof{\tau})$ is contained within the address interval of $\mo$} \\
+%\moread{\tau}{\mo}{p} & \mbox{read a value of type $\tau$ from memory object $\mo$ starting from address $p$} \\
+%\mowrite{\tau}{\mo}{p}{v} & \mbox{write value $v$ into memory object $\mo$ at address $p$} \\
+%\heapreplace{\memory}{\mo}{\mo'} & \mbox{update $\memory$ by replacing memory object $\mo$ with $mo'$}
+%\end{array}
 $}
 \end{array}
 \]
