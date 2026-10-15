@@ -83,11 +83,10 @@ Accordingly, we translate the internal heap into a list of memory objects in \co
 % TODO: explain the UNSAT query in gep
 % TODO: explain the UNSAT query in symbolic load/store
 
-The most challenging part in the proof generation process is proving that the execution tree of the program is safe.
-This eventually enables us to prove program safety using~\Cref{theorem:safety-via-et}.
-In this section, we describe in detail how to generate this part of the proof.
-
-First, we generate the definition of the execution tree in a bottom-up manner.
+The most challenging part in the proof generation process is proving execution tree safety,
+which eventually enables proving program safety using~\Cref{theorem:safety-via-et}.
+%In this section, we describe in detail how to generate this part of the proof.
+To do so, we first generate the definition of the execution tree in a bottom-up manner.
 Then, we have to prove that the resulting execution tree satisfies the $\safeet$ relation (\Cref{def:safe-et}).
 We generate this proof in a bottom-up manner as well, showing that each subtree satisfies the required relation.
 The proof of each subtree corresponds to a single instruction executed during the analysis.
