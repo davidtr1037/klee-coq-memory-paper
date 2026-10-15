@@ -16,9 +16,12 @@ Each mode is run with the DFS search heuristic, an one-hour timeout, and a 4GB m
 %and the SMT solver is set to STP~\cite{stp}.
 We measure the following metrics:
 analysis time, number of explored paths, and number of executed instructions.
+%In the \proofopt mode,
+%we also measure the \emph{proof time}, \ie the time required to validate the generated proof using \coqc,
+%and the \emph{proof size}, \ie the size of the generated proof file (\code{.v} file).
 In the \proofopt mode,
-we also measure the \emph{proof time}, \ie the time required to validate the generated proof using \coqc,
-and the \emph{proof size}, \ie the size of the generated proof file (\code{.v} file).
+we also measure the time required to validate the generated proof using \coqc,
+and the size of the generated proof (\code{.v} file).
 We performed our experiments on Ubuntu 24.04,
 equipped with Intel Core i9-9900 and 32GB of RAM.
 
