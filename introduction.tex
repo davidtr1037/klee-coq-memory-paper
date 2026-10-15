@@ -65,6 +65,15 @@ Our theoretical framework is developed in \coq and comprises approximately 40,00
 which more than doubles the 18,000 LOC framework of~\cite{klee-rocq}.
 This substantial extension reflects the complexity of transitioning to a memory-aware framework.
 
+\noindent \textbf{\textit{Main Contributions:}}
+\begin{itemize}
+    \item We developed a \coq framework consisting of a concrete and symbolic semantics for a subset of \llvm IR with memory operations and a theoretical foundation for constructing safety proofs.
+\item We implemented an extension of \klee that generates safety proofs based on our framework.
+\item We evaluated our approach on APIs from real-world benchmarks, and found previously unknown issues in the memory modeling in \klee.\footnote{
+These issues were confirmed by the maintainers of \klee. The link is omitted due to double-blind reviewing.
+}
+\end{itemize}
+
 %The entire development of this paper comes with proofs in \coq~\cite{rocq}.
 
 %Proof logging~\cite{lundberg2024proof,klee-rocq,de2008proofs,marx2013proof,flippo2024multi,mcilree2024proof,van2025efficient}
@@ -121,15 +130,6 @@ This substantial extension reflects the complexity of transitioning to a memory-
 % TODO: mechanized concrete semantics? better modeling of GEP, etc.
 % TODO: theory for program safety based on execution trees
 % TODO: implemented ...
-\begin{paragraph}{\textbf{Main Contributions:}}
-\begin{itemize}
-\item We developed a \coq framework consisting of a concrete and symbolic semantics for a subset of \llvm IR with memory operations and a theoretical foundation for constructing safety proofs.
-\item We implemented an extension of \klee that generates safety proofs based on our framework.
-\item We evaluated our approach on APIs from real-world benchmarks, and found previously unknown issues in the memory modeling in \klee.\footnote{
-      These issues were confirmed by the maintainers of \klee. The link is omitted due to double-blind reviewing.
-      }
-\end{itemize}
-\end{paragraph}
 
 %This paper is organized as follows.
 %In~\Cref{sec:overview}, we provide an overview of our approach.
