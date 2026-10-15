@@ -2,11 +2,10 @@
 \label{sec:related}
 
 \noindent \textbf{\textit{Proof Logging.}}
-Trabish et al.~\cite{klee-rocq} propose proof logging for an integer-only subset of \llvm,
-while Lundberg et al.~\cite{lundberg2024proof} generate HOL4 functional-correctness proofs for P4 programs.
+Trabish et al.~\cite{klee-rocq} generate \coq proofs for an integer-only subset of \llvm,
+while Lundberg et al.~\cite{lundberg2024proof} generate HOL4 proofs for P4 programs.
 Our approach supports memory operations and thus applies to more realistic programs.
-Modern SMT solvers~\cite{armand2011modular,ekici2017smtcoq,de2008proofs,marx2013proof,flippo2024multi,mcilree2024proof,van2025efficient} increasingly use proof logging to justify their reasoning rather than requiring blind trust.
-This technique is orthogonal to our approach and can be combined with it.
+Modern SMT solvers~\cite{armand2011modular,ekici2017smtcoq,de2008proofs,marx2013proof,flippo2024multi,mcilree2024proof,van2025efficient} increasingly use proof logging to justify their reasoning, which is orthogonal to our approach.
 %Modern SMT solvers~\cite{armand2011modular,ekici2017smtcoq,de2008proofs,marx2013proof,flippo2024multi,mcilree2024proof,van2025efficient} increasingly rely on proof logging to guarantee correctness.
 
 %Trabish et al.~\cite{klee-rocq} propose a proof-logging approach for a subset of \llvm with integers.
