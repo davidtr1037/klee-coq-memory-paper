@@ -6,7 +6,7 @@
 %In this section,
 %we provide background on \llvm IR~\cite{llvm} and on satisfiability modulo theories (SMT).
 
-\textit{\textbf{LLVM IR.}}
+\noindent \textit{\textbf{LLVM IR.}}
 \llvm IR is a low-level intermediate representation for languages such as C, C++, and Rust,
 which is also widely used in program analysis techniques (\eg symbolic execution and model checking).
 %In the following, we describe the aspects of \llvm IR that are relevant for our development.
@@ -35,7 +35,7 @@ Then, we define $\Vals$ as the union of $\Vals^{\bvsort{w}}$ over all $w$.
 %if $w' > w$ it performs truncation,
 %and otherwise it returns $\bvval{n}{w'}$.
 
-\textit{\textbf{LLVM Memory Model.}}
+\noindent \textit{\textbf{LLVM Memory Model.}}
 % TODO: mention address space
 % TODO: add citation
 Based on the \llvm reference~\cite{llvmref}, a \emph{data layout} specifies how data is to be laid out in memory.
@@ -52,7 +52,7 @@ and its size may not exceed the largest signed integer representable by the inde
 % In addition, the index type also specifies the type used to represent the size of allocated objects.
 %In the remainder of this paper,
 We denote the bit-widths of the pointer and index types by \textsf{ptr} and \textsf{idx}, respectively,
-and their corresponding integral types by \textsf{iptr} and \textsf{iidx}.
+and their matching integral types by \textsf{iptr} and \textsf{iidx}.
 
 % TODO: needed only internally
 %\begin{definition}
@@ -65,7 +65,7 @@ and their corresponding integral types by \textsf{iptr} and \textsf{iidx}.
 
 \input{syntax.tex}
 
-\textit{\textbf{SMT}}
+\noindent \textit{\textbf{SMT.}}
 %We consider quantifier-free first-order logic modulo the theory of bit-vectors and arrays (QFABV),
 We consider the QFABV logic fragment, which is standard in symbolic execution.
 The bit-vector theory defines the $\mathsf{BV}[w]$ sort and defines interpreted function symbols such as $\textit{bvadd}$.
@@ -82,7 +82,7 @@ $K(v)$ returns a constant array that maps all the indices to $v$.
 %we identify the $\Bool$ sort with $\mathsf{BV}[1]$,
 %such that $\true$ and $\false$ correspond to $1$ and $0$, respectively.
 
-\textbf{\textit{Notations.}}
+\noindent \textbf{\textit{Notations.}}
 We denote by $\bvval{n}{w}$ a bit-vector of type $\bvsort{$w$}$ whose numerical value is $n$.
 We denote by $|\tau|$ the size of the type $\tau$ in bytes.
 We denote by $\zeroext{w}{\bvval{n}{w'}}$ ($\signext{w}{\bvval{n}{w'}}$) a function that returns a bit-vector of type $\bvsort{w}$, defined as follows:
