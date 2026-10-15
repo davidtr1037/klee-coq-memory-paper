@@ -40,7 +40,7 @@ Then $c$ is an error state, denoted by $\errorstate(c)$, if one of the following
 
 \subsection{Symbolic Error States}
 
-In the following, we define when a symbolic state is considered to be an error state.
+Below, we define symbolic error states.
 To do so, we use the following definitions:
 \[
 \begin{array}{ll}
@@ -95,12 +95,17 @@ Next, if $c_0 \step c$,
 then based on~\Cref{lemma:multi-ns-step-relative-completeness}, it follows that $c_0 \nsstep c$.
 Finally, we know that $c$ is not an error state, so $\issafe(\module)$.
 
-\section{Proof Generation: Examples}
+\section{Interface Lemmas: Examples}
 \label{appendix:proof-generation}
+
+Below, we exemplify how to prove execution tree safety using interface lemmas for $\tstore$ instructions.
+This example is based on the \llvm IR program on the left of~\Cref{figure:example-llvm}.
 
 \input{example-store.tex}
 
 \section{Evaluation Results}
+\Cref{figure:time} shows the analysis time with \proofopt and \base on each subject.
+\Cref{figure:proof-time-size} shows the proof size and proof time for each subject.
 
 \begin{figure*}
     \centering
