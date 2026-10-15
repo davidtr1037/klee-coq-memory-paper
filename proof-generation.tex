@@ -22,11 +22,11 @@ For each instruction executed by the \SE engine,
 we generate a lemma that proves the safety property (\Cref{def:safe-et}) for the corresponding subtree in the execution tree.
 After we generate the proof showing that the whole execution tree satisfies that safety property, we apply~\Cref{theorem:safety-via-et}.
 
-Here, we present our approach using \klee~\cite{klee}, a \emph{state-of-the-art} \SE engine.
+Here, we present our approach using \klee~\cite{klee}. %, a \emph{state-of-the-art} \SE engine.
 % TODO: improve
-However, we note that our approach can be adapted to other \SE implementations as well.
+We note that our approach can be adapted to other \SE implementations as well.
 Before diving into the details,
-we give some background about the internals of the memory modeling in \klee.
+we give background about the memory modeling in \klee.
 
 \subsection{Memory Modeling in \klee}
 %In this section,
