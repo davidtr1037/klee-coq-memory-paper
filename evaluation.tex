@@ -32,7 +32,7 @@ we selected memory-manipulating programs that do not invoke external calls,
 as our framework currently does not model the environment (command-line arguments, file system, \etc).
 %Our implementation supports memory operations,
 %so our goal is to evaluate it on memory-manipulating programs.
-We chose several benchmarks that were used in the past in the context of \SE~\cite{klee,symsize-model,compact-s-e,pinaka,klee-rocq}:
+We chose several benchmarks that were used in the past in the context of \SE~\cite{klee,symsize-model,compact-s-e,klee-rocq}:
 \libtasn~\cite{libtasn1}, \libosip~\cite{libosip}, \coreutils~\cite{coreutils-misc}, and \svcomp~\cite{svcomp}.
 We selected a set of APIs from \libtasn, \libosip, and the library of \coreutils,
 and for each API we constructed a test driver that runs it with symbolic inputs (\eg integers, arrays, and strings).
