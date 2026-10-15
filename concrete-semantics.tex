@@ -103,8 +103,6 @@ defines the value of $e$ given a local store $\localstore \in \Stores$ in a cont
 Operators are parameterized by bit-vector types,
 and their semantics are functions whose domains and ranges depend on those types (\eg $\sem{\textsf{add}^\tau} : \Vals^\tau\times\Vals^\tau\to\Vals^\tau$).
 
-\input{rules-concrete.tex}
-
 \Cref{figure:llvm-semantics} defines the operational small-step semantics for memory-related instructions introduced in~\Cref{figure:llvm-syntax}.
 %In the following, we discuss the derivation rules in more detail.\footnote{
 %The full definition can be found in our \coq framework.
@@ -194,6 +192,8 @@ For example, when the \opcode{nuw} attribute is enabled, the following condition
 (2) the multiplication of an index by the type size does not cause an unsigned overflow of the index type, and
 (3) the successive addition of each offset does not cause an unsigned overflow of the index type.
 If any of these conditions is violated, the result is $\tpoison$.
+
+\input{rules-concrete.tex}
 
 %In the following,
 %we define when a concrete state is considered to be an error state.
