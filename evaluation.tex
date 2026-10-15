@@ -47,7 +47,7 @@ and for each API we constructed a test driver that runs it with symbolic inputs 
 %and constructed test drivers that run these APIs with symbolic inputs.
 In \svcomp, we selected a subset of programs from the \textit{array-memsafety} category.
 Some programs in that category are intentionally unsafe,
-so we restricted our selection to programs that can be verified in principle.
+so we restricted our selection to those labeled as verifiable.
 Some of those programs perform memory allocations with symbolic sizes,
 which is unsupported by both \klee and our approach.
 To overcome this, we modified the relevant parts in these programs to perform fixed-size memory allocations instead.
