@@ -44,8 +44,10 @@ Below, we define symbolic error states.
 To do so, we use the following definitions:
 \[
 \begin{array}{ll}
-    \syminvalidpointer(\symmemory, \pc, p, n) & \triangleq \exists m. \ \forall \symmo \in \symmemory. \ m \not \models (\pc \land \rangecond(p, n, \symmo)) \\
-    \syminvalidbaseaddress(\symmemory, \pc, p) & \triangleq \exists m. \ \forall \symmo \in \symmemory. \ m \not \models (\pc \land \baseaddrcond(p, \symmo))
+\syminvalidpointer(\symmemory, \pc, p, n) & \triangleq \exists m. \
+    m \models \pc \land \forall \symmo \in \symmemory. \ m \not \models \rangecond(p, n, \symmo) \\
+\syminvalidbaseaddress(\symmemory, \pc, p) & \triangleq \exists m. \
+    m \models \pc \land \forall \symmo \in \symmemory. \ m \not \models \baseaddrcond(p, \symmo)
 \end{array}
 \]
 Intuitively,
