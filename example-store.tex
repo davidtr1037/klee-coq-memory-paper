@@ -1,0 +1,99 @@
+\subsubsection{Example: Store}
+\label{sec:example-store}
+% TODO: explain how to prove that this is not an error state
+% TODO: the type is i8, so we add a single store expression
+% TODO: fix the index expression
+Consider the symbolic state before the execution of~\cref{line:llvm-store}:
+\[
+s_5 \triangleq \symstate
+    {\location_6}
+    {\{ ..., \nameid{gep1} \mapsto \bvconst{64}{\addr} \}}
+    {[]}
+    {[\mo]}
+    {n < \bvconst{32}{2}}
+\]
+%where:
+\[ \mo \triangleq \mobj{\bvval{\addr}{64}}{\bvval{2}{32}}{\arrayvalue}, \ \arrayvalue \triangleq \arraystore{\arraystore{\arrayconst{\arrayinitvalue}}{\bvconst{32}{0}}{\arrayinitvalue}}{\bvconst{32}{1}}{\arrayinitvalue} \]
+
+According to the symbolic semantics,
+if $\mech{s}_6$ is derived from $s_5$ then there exist a model $m$ and a memory object $\mo'$ such that
+$m \models (n < \bvconst{32}{2})$, $\mo' \in \symmemory$, and $\symisinbounds{\bvconst{64}{\addr}}{\bvsort{8}}{\mo'}{m}$, and then:
+\[
+\mech{s}_6 \triangleq \symstate
+    {\location_7}
+    {\{ ..., \nameid{gep1} \mapsto \bvconst{64}{\addr} \}}
+    {[]}
+    {[\symmowrite{\bvsort{8}}{\mo'}{\bvconst{64}{\addr}}{\bvconst{8}{7}}]}
+    {n < \bvconst{32}{2} \land \rangecond(\bvconst{64}{\addr}, 1, \mo'))}
+\]
+Recall that we assume that address intervals of memory objects do not overlap.
+Since $m[\bvconst{64}{\addr}]$ is the base address of both $\mo$ and $\mo'$, and $\bvconst{64}{\addr}$ is a constant SMT expression,
+then it must hold that $\mo = \mo'$.
+Therefore, although the \rulenameref{Store} rule (\Cref{sec:symbolic-semantics}) may have multiple derivations in general,
+there is a single derivation in this case.
+When extending the SMT array of $\arrayvalue$,
+the offset of the additional \textit{store} expression is computed by subtracting the base address from the pointer and then casting the result to an expression of sort $\smtsort{\indexwidth}$.
+Therefore, in this case:
+\[ \symmowrite{\smtsort{8}}{\mo'}{\bvconst{64}{\addr}}{\bvconst{8}{7}} = \mobj{\bvval{\addr}{64}}{\bvval{2}{32}}{\arraystore{\arrayvalue}{\bvextract{32}{\bvsub{\bvsort{64}}{\bvconst{64}{\addr}}{\bvconst{64}{\addr}}}}{\bvconst{8}{7}}} \]
+
+The symbolic state computed by the \SE engine is:
+\[
+s_6 \triangleq \symstate
+    {\location_7}
+    {\{ ..., \nameid{gep1} \mapsto \bvconst{64}{\addr} \}}
+    {[]}
+    {[\mo_{new}]}
+    {n < \bvconst{32}{2}}
+\]
+%where:
+\[ \mo_{new} \triangleq \mobj{\bvval{\addr}{64}}{\bvval{2}{32}}{\arrayvalue_{new}}, \ \arrayvalue_{new} \triangleq \arraystore{\arraystore{\arrayconst{\arrayinitvalue}}{\bvconst{32}{0}}{\bvconst{8}{7}}}{\bvconst{32}{1}}{\arrayinitvalue} \]
+Now, we have to prove that the subtree of $s_5$ is safe.
+Based on~\Cref{def:sym-error-state},
+$s_5$ is not an error state,
+since $\evalexprty{\nameid{gep1}}{\symlocalstore}{\bvsort{64}} = \bvconst{64}{\addr}$ and $m[\bvconst{64}{\addr}] = \bvval{\addr}{64}$ for every model $m$.
+To prove that $\mech{s}_6 \equiv s_6$, it suffices to prove the equivalence of their memory and path constraints.
+
+As for the memory, it suffices to prove that:
+\[ \arraystore{\arrayvalue}{\bvextract{32}{\bvconst{64}{\addr} - \bvconst{64}{\addr}}}{\bvconst{8}{7}} \equiv \arrayvalue_{new} \]
+and more specifically:
+\[
+  \arraystore{\arraystore{\arraystore{\arrayconst{\arrayinitvalue}}{\bvconst{32}{0}}{\arrayinitvalue}}{\bvconst{32}{1}}{\arrayinitvalue}}{\bvextract{32}{\bvconst{64}{\addr} - \bvconst{64}{\addr}}}{\bvconst{8}{7}} \equiv
+  \arraystore{\arraystore{\arrayconst{\arrayinitvalue}}{\bvconst{32}{0}}{\bvconst{8}{7}}}{\bvconst{32}{1}}{\arrayinitvalue}
+\]
+To prove such cases automatically, we define the lemma below, which can be applied when storing an expression of sort $\bvsort{8}$.
+In our case, we can apply this lemma since $\bvextract{32}{\bvsub{\bvsort{64}}{\bvconst{64}{\addr}}{\bvconst{64}{\addr}}} \equiv \bvconst{32}{0}$ and $\bvconst{8}{7} \equiv \bvconst{8}{7}$.
+\begin{lemma}
+\label{lemma:store-i8}
+Let $v$, $v_{new}$, and $v'_{new}$ be SMT expressions of sort $\smtsort{8}$,
+let $k$ be an SMT expression of sort $\smtsort{32}$,
+and let $\bvconst{32}{i}$, ..., $\bvconst{32}{(i + n)}$ be subsequent constant SMT expressions.
+If $k \equiv \bvconst{32}{i}$ and $v_{new} \equiv v'_{new}$, then:
+\[ \arraystore{\arraystore{\arraystore{a}{\bvconst{32}{i}}{v}[...]}{\bvconst{32}{(i + n)}}{t_n}}{k}{v_{new}} \equiv \arraystore{\arraystore{a}{\bvconst{32}{i}}{v'_{new}}[...]}{\bvconst{32}{(i + n)}}{t_n} \]
+\end{lemma}
+
+As for the path constraints,
+note that $\rangecond(\bvconst{64}{\addr}, 1, \mo) \equiv \true$, so the equivalence follows easily.
+
+The SMT simplifications employed by the \SE engine yield SMT encodings that diverge from those derived from the symbolic semantics.
+To prove SMT equivalences automatically,
+we develop a \emph{simplification theory} that proves that the SMT simplifications employed by the \SE engine are equivalence-preserving.
+In particular, this theory includes~\Cref{lemma:store-i8},
+as well as analogous lemmas that support stores of other types (\bvsort{16}, \bvsort{32}, and \bvsort{64}).
+
+To handle the case of \textit{store} in general, we define the following interface lemma:
+
+\begin{interfacelemma}
+\label{lemma:interface-store}
+Let $s \triangleq \symstate{\location}{\symlocalstore}{\symstack}{\symmemory}{\pc}$,
+where \textup{$\instrat{\location} = \codequote{\tstore^{\tau}~e_1~e_2}$}.
+Then $\safeet(\tree(s, [t]))$ if there exist $p$, $\mo$, $\mo_{new}$, and $t$ such that:\footnote{
+The definition of well-formedness for symbolic memory mirrors its concrete counterpart (\Cref{def:well-formed}).
+}
+\begin{enumerate}
+    \item $\mo \in \symmemory$ and $\symmemory$ is well-formed
+    \item \textup{$\evalexprty{e_1}{\symlocalstore}{\tau} = v$} and \textup{$\evalexprty{e_2}{\symlocalstore}{\bvsort{64}} = \bvconst{64}{p}$}
+    \item \textup{$\isinbounds{\bvval{p}{64}}{|\tau|}{\mo}$}
+    \item \textup{$\mo_{new} \equiv \symmowrite{\tau}{\mo}{\bvconst{64}{p}}{v}$}
+    \item $t.\attrstate = \symstate{\nextinstr{\location}}{\symlocalstore}{\symstack}{\heapreplace{\symmemory}{\mo}{\mo_{new}}}{\pc}$ and $\safeet(t)$
+\end{enumerate}
+\end{interfacelemma}
