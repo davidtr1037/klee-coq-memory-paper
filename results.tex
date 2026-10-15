@@ -1,0 +1,58 @@
+\begin{table*}[t]
+\scriptsize{
+\begin{tabular}{|l|l|r|r|r|r|r|r|}
+\hline
+\textbf{Benchmark} & \textbf{Subject} & \makecell{\textbf{Time}} & \makecell{\textbf{Time}} & \makecell{\textbf{Proof}} & \makecell{\textbf{Proof}} & \textbf{\#Inst} & \textbf{\#Path} \\
+& & \makecell{\textbf{\base}} & \makecell{\textbf{\proofopt}} & \makecell{\textbf{Time}} & \makecell{\textbf{Size}} & & \\
+\hline
+\libtasn & test\_asn1\_bit\_der & 13.4 & 14.6 & 198.4 & 32112 & 10004 & 301 \\
+& test\_asn1\_get\_length\_ber & 0.7 & 0.9 & 33.7 & 6530 & 1985 & 31 \\
+& test\_asn1\_get\_length\_der & 2.5 & 3.0 & 37.5 & 6856 & 1897 & 92 \\
+& test\_asn1\_get\_object\_id\_der & 8.0 & 14.7 & 849.3 & 136633 & 44573 & 266 \\
+& test\_asn1\_get\_octet\_der & 13.2 & 13.8 & 206.9 & 32013 & 9619 & 282 \\
+& test\_asn1\_get\_tag\_der & 1.6 & 1.9 & 57.1 & 10981 & 2412 & 51 \\
+\hline
+\libosip & test\_osip\_dequote & 0.2 & 0.3 & 23.1 & 5038 & 1997 & 32 \\
+& test\_osip\_hash & 0.1 & 0.5 & 1429.2 & 1158 & 532 & 21 \\
+& test\_osip\_str\_append & 0.1 & 0.6 & 9.5 & 2007 & 769 & 21 \\
+& test\_osip\_strcasecmp & 0.8 & 0.7 & 19.1 & 4135 & 1844 & 41 \\
+& test\_osip\_strncasecmp & 1.0 & 0.9 & 17.7 & 3817 & 1397 & 40 \\
+& test\_osip\_strncpy & 0.1 & 0.3 & 26.2 & 5916 & 1933 & 21 \\
+& test\_osip\_tolower & 0.1 & 0.1 & 7.1 & 1400 & 628 & 21 \\
+\hline
+\coreutils & test\_base32 & 0.1 & 0.3 & 28.7 & 5090 & 665 & 1 \\
+& test\_base64 & 0.1 & 0.2 & 22.7 & 4578 & 709 & 1 \\
+& test\_base\_len & 0.2 & 0.4 & 34.1 & 7280 & 3629 & 211 \\
+& test\_hash\_pjw & 0.1 & 0.1 & 1452.1 & 1474 & 663 & 21 \\
+& test\_last\_component & 0.1 & 0.1 & 13.0 & 2838 & 1218 & 63 \\
+& test\_strintcmp & 2.6 & 3.4 & 192.1 & 42529 & 13517 & 275 \\
+& test\_strip\_trailing\_slashes & 0.1 & 0.3 & 44.8 & 9570 & 4842 & 63 \\
+\hline
+\svcomp & bubblesort-alloca-2 & 0.8 & 1.0 & 28.6 & 5584 & 1910 & 24 \\
+& cstrchr-alloca-2 & 0.8 & 0.7 & 5.6 & 1121 & 513 & 38 \\
+& cstrcmp-alloca-2 & 0.5 & 1.0 & 8.6 & 1869 & 761 & 37 \\
+& cstrcpy-alloca-1 & 0.1 & 0.2 & 3.6 & 609 & 258 & 10 \\
+& cstrcspn-alloca-1 & 14.5 & 18.2 & 176.5 & 34292 & 12848 & 460 \\
+& cstrlen-alloca-2 & 0.1 & 0.1 & 3.2 & 525 & 252 & 10 \\
+& cstrncat-alloca-2 & 0.1 & 0.1 & 1.6 & 114 & 24 & 3 \\
+& cstrncmp-alloca-1 & 0.8 & 1.0 & 9.4 & 2036 & 780 & 41 \\
+& cstrncpy-alloca-2 & 0.1 & 0.2 & 8.3 & 1748 & 716 & 10 \\
+& cstrpbrk-alloca-2 & 1.8 & 2.6 & 19.8 & 4318 & 1662 & 64 \\
+& cstrspn-alloca-1 & 1.6 & 2.4 & 22.3 & 4990 & 1918 & 64 \\
+& diff-alloca-2 & 16.6 & 23.3 & 490.1 & 96115 & 32558 & 625 \\
+& insertionsort-alloca-1 & 0.5 & 0.7 & 14.5 & 2736 & 955 & 24 \\
+& java\_BubbleSort-alloca-1 & 0.8 & 0.9 & 26.8 & 5213 & 1764 & 24 \\
+& lis-alloca-1 & 0.9 & 1.2 & 54.2 & 12737 & 3292 & 24 \\
+& mult\_array-alloca-1 & 0.1 & 0.2 & 48.0 & 10789 & 1526 & 1 \\
+& rec\_strlen-alloca-1 & 0.1 & 0.2 & 3.9 & 751 & 401 & 10 \\
+& selectionsort-alloca-1 & 1.0 & 1.2 & 41.3 & 7861 & 2540 & 33 \\
+& stroeder1-alloca-1 & 0.1 & 0.1 & 3.7 & 648 & 258 & 1 \\
+& strreplace-alloca-2 & 20.4 & 29.5 & 170.7 & 35977 & 15466 & 1023 \\
+& subseq-alloca-2 & 5.2 & 9.5 & 418.5 & 85773 & 33988 & 1790 \\
+& substring-alloca-2 & 0.6 & 0.9 & 13.0 & 2702 & 1037 & 32 \\
+\hline
+\end{tabular}
+}
+\caption{Detailed results for each subject.}
+\label{table:extended-results}
+\end{table*}
