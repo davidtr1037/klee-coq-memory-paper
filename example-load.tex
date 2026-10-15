@@ -49,18 +49,17 @@ To prove that $\mech{s}_9 \equiv s_9$, it suffices to prove the equivalence of t
 Since $n < \bvconst{32}{2} \land \neg \rangecond(e, 1, \mo)$ is unsatisfiable,
 this implies that $n < \bvconst{32}{2} \land \rangecond(e, 1, \mo) \equiv n < \bvconst{32}{2}$.
 
-To handle the case of \textit{load} in general, we define the following interface lemma:
-
+To handle the case of $\tload$ in general, we define the following interface lemma:
 \begin{interfacelemma}
 \label{lemma:interface-load}
 Let $s \triangleq \symstate{\location}{\symlocalstore}{\symstack}{\symmemory}{\pc}$,
 where \textup{$\instrat{\location} = \codequote{x~\texttt{=}~\tload^{\tau}~e}$}.
 Then $\safeet(\tree(s, [t]))$ if there exist $\mo$, $\symlocalstore'$, and $t$ such that:
-\begin{enumerate}
-    \item $\mo \in \symmemory$ and $\symmemory$ is well-formed
-    \item \textup{$\evalexprty{e}{\symlocalstore}{\bvsort{64}} = p$}
-    \item $\unsat{\pc \land \neg \rangecond(p, |\tau|, \mo)}$
-    \item $\symlocalstore[x \mapsto \symmoread{\tau}{\mo}{p}] \equiv \symlocalstore'$
-    \item $t.\attrstate = \symstate{\nextinstr{\location}}{\symlocalstore'}{\symstack}{\symmemory}{\pc}$ and $\safeet(t)$
-\end{enumerate}
+(1) $\mo \in \symmemory$,
+(2) $\symmemory$ is well-formed,
+(3) \textup{$\evalexprty{e}{\symlocalstore}{\bvsort{64}} = p$},
+(4) $\unsat{\pc \land \neg \rangecond(p, |\tau|, \mo)}$,
+(5) $\symlocalstore[x \mapsto \symmoread{\tau}{\mo}{p}] \equiv \symlocalstore'$,
+(6) $t.\attrstate = \symstate{\nextinstr{\location}}{\symlocalstore'}{\symstack}{\symmemory}{\pc}$, and
+(7) $\safeet(t)$.
 \end{interfacelemma}
