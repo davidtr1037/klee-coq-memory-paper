@@ -64,7 +64,7 @@ To prove such cases automatically, we define the lemma below, which can be appli
 In our case, we can apply this lemma since $\bvextract{32}{\bvsub{\bvsort{64}}{\bvconst{64}{\addr}}{\bvconst{64}{\addr}}} \equiv \bvconst{32}{0}$ and $\bvconst{8}{7} \equiv \bvconst{8}{7}$.
 \begin{lemma}
 \label{lemma:store-i8}
-Let $v$, $v_{new}$, and $v'_{new}$ be SMT expressions of sort $\smtsort{8}$,
+Let $v$, $v_{new}$, $v'_{new}$, and $t_1$, ..., $t_n$ be SMT expressions of sort $\smtsort{8}$,
 let $k$ be an SMT expression of sort $\smtsort{32}$,
 and let $\bvconst{32}{i}$, ..., $\bvconst{32}{(i + n)}$ be subsequent constant SMT expressions.
 If $k \equiv \bvconst{32}{i}$ and $v_{new} \equiv v'_{new}$, then:
@@ -86,7 +86,7 @@ To handle the case of $\tstore$ in general, we define the following interface le
 \label{lemma:interface-store}
 Let $s \triangleq \symstate{\location}{\symlocalstore}{\symstack}{\symmemory}{\pc}$,
 where \textup{$\instrat{\location} = \codequote{\tstore^{\tau}~e_1~e_2}$}.
-Then $\safeet(\tree(s, [t]))$ if there exist $p$, $\mo$, $\mo_{new}$, and $t$ such that:
+Then $\safeet(\tree(s, [t]))$ if there exist $v$, $p$, $\mo$, $\mo_{new}$, and $t$ such that:
 \begin{enumerate}
     \item $\mo \in \symmemory$ and $\symmemory$ is well-formed
     \item \textup{$\evalexprty{e_1}{\symlocalstore}{\tau} = v$} and \textup{$\evalexprty{e_2}{\symlocalstore}{\bvsort{64}} = \bvconst{64}{p}$}
