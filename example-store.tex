@@ -66,7 +66,7 @@ In our case, we can apply this lemma since $\bvextract{32}{\bvsub{\bvsort{64}}{\
 \label{lemma:store-i8}
 Let $v$, $v_{new}$, $v'_{new}$, and $t_1$, ..., $t_n$ be SMT expressions of sort $\smtsort{8}$,
 let $k$ be an SMT expression of sort $\smtsort{32}$,
-and let $\bvconst{32}{i}$, ..., $\bvconst{32}{(i + n)}$ be subsequent constant SMT expressions.
+and let $\bvconst{32}{i}$, ..., $\bvconst{32}{(i + n)}$ be consecutive constant SMT expressions.
 If $k \equiv \bvconst{32}{i}$ and $v_{new} \equiv v'_{new}$, then:
 \[ \arraystore{\arraystore{\arraystore{a}{\bvconst{32}{i}}{v}[...]}{\bvconst{32}{(i + n)}}{t_n}}{k}{v_{new}} \equiv \arraystore{\arraystore{a}{\bvconst{32}{i}}{v'_{new}}[...]}{\bvconst{32}{(i + n)}}{t_n} \]
 \end{lemma}

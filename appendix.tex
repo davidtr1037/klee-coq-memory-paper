@@ -70,7 +70,7 @@ if one of the following holds:
         \item \textup{$op \in \{\opcode{shl}, \opcode{lshr}, \opcode{ashr}\}$} and $\sat{\pc \land (t_2 \geq w)}$
     \end{enumerate}
     \item $\instrat{\location} = \textup{$\codequote{x \ \texttt{=} \ \tcall^{\pointertypeof{\bvsort{8}}} \ \intrinsicfunc{malloc}(\bvsort{64} \ e)}$}$ and
-        \textup{$\sat{\pc \land (t > \bvconst{64}{(2^{\indexwidth - 1} - 1)}}$} (where $t \triangleq \evalexprty{e}{\symlocalstore}{\tau}$).
+        \textup{$\sat{\pc \land (t > \bvconst{64}{(2^{\indexwidth - 1} - 1)})}$} (where $t \triangleq \evalexprty{e}{\symlocalstore}{\tau}$).
     \item $\instrat{\location} = \textup{$\codequote{\tcall~\intrinsicfunc{free}(\pointertypeof{\bvsort{8}} e)}$}$, \textup{$\evalexprty{e}{\symlocalstore}{\pointertypeof{\bvsort{8}}} = p$}, and $\syminvalidbaseaddress(\symmemory, \pc, p)$.
     \item $\instrat{\location} = \textup{$\codequote{x \ \texttt{=} \ \tload^{\tau} \ e}$}$, \textup{$\evalexprty{e}{\symlocalstore}{\pointertypeof{\tau}} = p$}, and $\syminvalidpointer(\symmemory, \pc, p, |\tau|)$.
     \item $\instrat{\location} = \textup{$\codequote{\tstore^{\tau} \ e_1 \ e_2}$}$, \textup{$\evalexprty{e_2}{\symlocalstore}{\pointertypeof{\tau}} = p$}, and $\syminvalidpointer(\symmemory, \pc, p, |\tau|)$.
@@ -78,7 +78,7 @@ if one of the following holds:
     %      (where $k_i \triangleq \evalexprty{e_i}{\localstore}{\tau_i}$).
     \item $\instrat{\location} = \textup{$\codequote{x \ \texttt{=} \ \tgep~\pointertypeof{\tau} \ e \ \overline{(\tau_i, e_i)}}$}$ and there exists an SMT model $m$ such that:
     \begin{enumerate}
-        \item $m \models \varphi$ and $\evalgep(\tau, p, \overline{v_i}) = \tpoison$ (where $p \triangleq m[\evalexprty{e}{\localstore}{\pointertypeof{\tau}}]$ and $v_i \triangleq m[\evalexprty{e_i}{\localstore}{\tau_i}]$).
+        \item $m \models \varphi$ and $\evalgep(\tau, p, \overline{v_i}) = \tpoison$ (where $p \triangleq m[\evalexprty{e}{\symlocalstore}{\pointertypeof{\tau}}]$ and $v_i \triangleq m[\evalexprty{e_i}{\symlocalstore}{\tau_i}]$).
     \end{enumerate}
 \end{enumerate}
 %where $\overflowcond(\tau, \overline{k_i})$ constructs a condition that encodes the fact that there are no overlfows when evaluating the $\tgep$ instruction,
