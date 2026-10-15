@@ -1,6 +1,6 @@
 \subsubsection{Example: Load}
 % TODO: remind that the repr is non-opt now
-Consider the symbolic state before the execution of~\cref{line:llvm-load}:
+Consider the symbolic state $s_8$ before the execution of~\cref{line:llvm-load}:
 \[
 \begin{array}{c}
 s_8 \triangleq \symstate
@@ -13,7 +13,6 @@ e \triangleq \bvadd{\bvsort{64}}{\bvconst{64}{\addr}}{\bvzext{64}{\bvextract{32}
 \mo \triangleq \mobj{\bvval{\addr}{64}}{\bvval{2}{32}}{\arrayvalue}, \ \arrayvalue \triangleq \arraystore{\arraystore{\arrayconst{\arrayinitvalue}}{\bvconst{32}{0}}{\bvconst{8}{7}}}{\bvconst{32}{1}}{\arrayinitvalue}
 \end{array}
 \]
-
 According to the symbolic semantics,
 if $\mech{s}_9$ is derived from $s_8$ then there exist a model $m$ and a memory object $\mo' \triangleq \mobj{\addr'}{\size'}{\arrayvalue'}$ such that
 $m \models n < \bvconst{32}{2}$, $\mo' \in \symmemory$, and $\symisinbounds{e}{\bvsort{8}}{\mo'}{m}$, and then:
@@ -27,11 +26,10 @@ $m \models n < \bvconst{32}{2}$, $\mo' \in \symmemory$, and $\symisinbounds{e}{\
     {n < \bvconst{32}{2} \land \rangecond(e, 1, \mo')}
 \]
 Before dereferencing $e$, the \SE engine checks if $e$ may point to other memory objects,
-by checking the satisfiability of $n < \bvconst{32}{2} \land \neg \rangecond(e, 1, \mo)$.
+by checking the satisfiability of: $n < \bvconst{32}{2} \land \neg \rangecond(e, 1, \mo)$.
 Here, this constraint is unsatisfiable,
 which means that $e$ points only to $\mo$.
 In particular, this implies that $\mo' = \mo$, and $\arrayvalue' = \arrayvalue$.
-
 The symbolic state computed by the \SE engine is:
 \[
 s_9 \triangleq \symstate
