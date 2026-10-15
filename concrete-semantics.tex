@@ -40,7 +40,8 @@ and attempts to provide a memory object $\mobj{\addr}{\size}{\arrayvalue}$ that 
 (1) $[\addr, \addr + \size)$ is fully contained within the address space (\ie $\addr < \addr + \size$),
 (2) $[\addr, \addr + \size)$ does not overlap with address intervals of existing memory objects,
 and (3) $s \geq 0$ and does not exceed the largest signed integer representable by the index type.
-If such a memory object can be provided, then the result is the tuple $\langle \memory \cup \mobj{\addr}{\size}{\arrayvalue}, \addr \rangle$.
+If such a memory object can be provided,
+then the result is the tuple $\langle \memory \cup \{\mobj{\addr}{\size}{\arrayvalue}\}, \addr \rangle$.
 Otherwise, the result is $\none$.
 The mapping $\arrayvalue$ of the newly allocated memory object is set to a function that maps all the indices to $\bvval{0}{8}$.
 %The \emph{deallocation} operation is defined using the following function:
