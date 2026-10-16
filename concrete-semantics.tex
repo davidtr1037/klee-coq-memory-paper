@@ -43,7 +43,12 @@ and (3) $s \geq 0$ and does not exceed the largest signed integer representable 
 If such a memory object can be provided,
 then the result is the tuple $\langle \memory \cup \{\mobj{\addr}{\size}{\arrayvalue}\}, \addr \rangle$.
 Otherwise, the result is $\none$.
-The mapping $\arrayvalue$ of the newly allocated memory object is set to a function that maps all the indices to $\bvval{0}{8}$.
+%
+We soundly refine uninitialized memory to concrete values ($\bvval{0}{8}$),
+as \llvm permits replacing $\tundef$ values by concrete values.
+%Accordingly, the mapping $\arrayvalue$ of each newly allocated object is initialized to the constant-zero function.
+%
+%The mapping $\arrayvalue$ of the newly allocated memory object is set to a function mapping all the indices to $\bvval{0}{8}$.
 %The \emph{deallocation} operation is defined using the following function:
 %\[ \deallocate : \Heaps \times \MemoryObjects \to \Heaps \]
 The function $\deallocate$ receives a heap $\memory$ and a memory object $\mo$,
